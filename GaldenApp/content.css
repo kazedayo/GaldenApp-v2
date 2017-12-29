@@ -1,0 +1,139 @@
+html {
+    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape while allowing user zoom */
+}
+
+body {
+	color: #aaaaaa;
+    background: transparent;
+	font-family:helvetica; 
+    font-size:15px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+} 
+
+img{ 
+	max-width:100%; 
+}
+
+a {
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+    color: gray;
+}
+
+.button {
+    border-radius: 4px;
+    background-color: transparent;
+    color: #aaaaaa;
+    border: 1px solid #aaaaaa;
+}
+
+.user {
+	height: 60px;
+}
+
+.righttext {
+	text-align: right;
+}
+
+.avatar {
+    height: 38px;
+    border-radius: 50%;
+}
+
+div#image.usertable {
+	float: left;
+	width: 12%;
+}
+
+.lefttext {
+    text-align: left;
+}
+
+div#text.usertable {
+    float:left;
+    width: 88%;
+	font-size: 12px;
+}
+
+.usertable {
+    height: 32px;
+}
+
+.comment {
+    display: block;
+    border-top: 1px dashed #454545;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.xbbcode-b {
+	font-weight:bold;
+} 
+.xbbcode-blockquote {
+    display: block;
+    margin-left: 10px;
+    padding-left: 5px;
+    border-left: 1px dotted gray;
+} 
+.xbbcode-center {
+	margin-left:auto;
+	margin-right:auto;
+	display: block;
+	text-align: center;
+} 
+.xbbcode-code {
+	white-space: pre-wrap;
+	font-family: monospace;
+} 
+.xbbcode-i {
+	font-style: italic;
+} 
+.xbbcode-justify {
+	display: block;
+	text-align: justify;
+} 
+.xbbcode-left {
+	display: block;
+	text-align: left;
+} 
+.xbbcode-right {
+	display: block;
+	text-align: right;
+} 
+.xbbcode-s {
+	text-decoration: line-through;
+} 
+.xbbcode-size-1 {
+	font-size:xx-small;
+} 
+
+.xbbcode-size-2 {
+	font-size:x-small;
+} 
+.xbbcode-size-3 {
+	font-size:medium;
+} 
+.xbbcode-size-4 {
+	font-size:large;
+} 
+.xbbcode-size-5 {
+	font-size:x-large;
+} 
+.xbbcode-size-6 {
+	font-size:xx-large;
+} 
+.xbbcode-u {
+	text-decoration: underline;
+} 
+.xbbcode-table {
+	border-collapse:collapse;
+} 
+.xbbcode-tr {} 
+.xbbcode-table , .xbbcode-th, .xbbcode-td {
+	border: 1px solid #666;
+} 
+.xbbcode-hide {
+	color: #ffccd5
+}
