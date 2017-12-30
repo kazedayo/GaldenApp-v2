@@ -56,6 +56,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
+        contentTextView.endEditing(true)
         if type == "newThread" {
             let destination = segue.destination as! PreviewViewController
             destination.channel = self.channel

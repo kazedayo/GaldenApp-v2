@@ -12,6 +12,7 @@
 		420983D01F822A8500375D05 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420983CF1F822A8500375D05 /* ContentViewController.swift */; };
 		421884B81F864300005D0BAA /* OP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421884B71F864300005D0BAA /* OP.swift */; };
 		421884BA1F86432E005D0BAA /* Replies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421884B91F86432E005D0BAA /* Replies.swift */; };
+		423331751FF6605F000FED6F /* ThreadListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423331741FF6605F000FED6F /* ThreadListViewController.swift */; };
 		423F296F1F98568000BA2351 /* UserDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F296E1F98568000BA2351 /* UserDetailViewController.swift */; };
 		4247D5031F82503A00809025 /* Channels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4247D5021F82503A00809025 /* Channels.swift */; };
 		4247D5051F82504800809025 /* ThreadList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4247D5041F82504800809025 /* ThreadList.swift */; };
@@ -39,7 +40,6 @@
 		42E7F89E1F7923E1002CC13F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89C1F7923E1002CC13F /* LaunchScreen.storyboard */; };
 		42E7F8A91F7923E2002CC13F /* GaldenAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */; };
 		42FA369D1FBEB91900635512 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FA369C1FBEB91900635512 /* PreviewViewController.swift */; };
-		42FABF1E1F888253008BC860 /* ThreadListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FABF1D1F888253008BC860 /* ThreadListViewController.swift */; };
 		FC90594C3730B959B436CB8A /* Pods_GaldenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 828E9ED55F96B03E4B9A8869 /* Pods_GaldenAppTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +58,7 @@
 		420983CF1F822A8500375D05 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		421884B71F864300005D0BAA /* OP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OP.swift; path = "GaldenApp/Custom Classes/OP.swift"; sourceTree = "<group>"; };
 		421884B91F86432E005D0BAA /* Replies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Replies.swift; path = "GaldenApp/Custom Classes/Replies.swift"; sourceTree = "<group>"; };
+		423331741FF6605F000FED6F /* ThreadListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadListViewController.swift; sourceTree = "<group>"; };
 		423F296E1F98568000BA2351 /* UserDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailViewController.swift; sourceTree = "<group>"; };
 		4247D5021F82503A00809025 /* Channels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Channels.swift; path = "GaldenApp/Custom Classes/Channels.swift"; sourceTree = "<group>"; };
 		4247D5041F82504800809025 /* ThreadList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreadList.swift; path = "GaldenApp/Custom Classes/ThreadList.swift"; sourceTree = "<group>"; };
@@ -89,7 +90,6 @@
 		42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaldenAppTests.swift; sourceTree = "<group>"; };
 		42E7F8AA1F7923E2002CC13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42FA369C1FBEB91900635512 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
-		42FABF1D1F888253008BC860 /* ThreadListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThreadListViewController.swift; path = "/Users/kinwalam/Documents/GaldenApp/GaldenApp/View Controllers/ThreadListViewController.swift"; sourceTree = "<absolute>"; };
 		5B7B510222D6376B5C1AC72E /* Pods-GaldenAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		828E9ED55F96B03E4B9A8869 /* Pods_GaldenAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		942DE77EB02A6F268231BAB2 /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -149,7 +149,7 @@
 				4202421B1F7BEC9400ECDD12 /* ChannelSelectViewController.swift */,
 				42C261F41F7CECEA00477479 /* ComposeViewController.swift */,
 				420983CF1F822A8500375D05 /* ContentViewController.swift */,
-				42FABF1D1F888253008BC860 /* ThreadListViewController.swift */,
+				423331741FF6605F000FED6F /* ThreadListViewController.swift */,
 				423F296E1F98568000BA2351 /* UserDetailViewController.swift */,
 				4262C2091F945AC7002EEC76 /* PageSelectViewController.swift */,
 			);
@@ -475,7 +475,6 @@
 			files = (
 				42942F231FA6CAC700171D8B /* Extensions.swift in Sources */,
 				42AF57AD1FB5CFA600C6497B /* Device-Extension.swift in Sources */,
-				42FABF1E1F888253008BC860 /* ThreadListViewController.swift in Sources */,
 				429A26F61FA4426E00B28B7E /* BlockedUserViewController.swift in Sources */,
 				4282161F1FB1ADB3003ACF0C /* EULAViewController.swift in Sources */,
 				4247D5071F82505300809025 /* HKGaldenAPI.swift in Sources */,
@@ -492,6 +491,7 @@
 				429A26F81FA4435600B28B7E /* BlockedUsers.swift in Sources */,
 				4202421C1F7BEC9400ECDD12 /* ChannelSelectViewController.swift in Sources */,
 				429A26FA1FA4481000B28B7E /* BlockedUserTableViewCell.swift in Sources */,
+				423331751FF6605F000FED6F /* ThreadListViewController.swift in Sources */,
 				428216211FB1AFA7003ACF0C /* FirstLoginViewController.swift in Sources */,
 				423F296F1F98568000BA2351 /* UserDetailViewController.swift in Sources */,
 				4247D5031F82503A00809025 /* Channels.swift in Sources */,

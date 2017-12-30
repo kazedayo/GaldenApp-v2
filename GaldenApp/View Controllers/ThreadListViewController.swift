@@ -10,7 +10,7 @@ import KeychainSwift
 import SideMenu
 import PKHUD
 
-class ThreadListViewController: UITableViewController {
+class ThreadListViewController: UITableViewController,UITableViewDataSourcePrefetching {
     
     //HKGaldenAPI.swift required (NOT included in GitHub repo)
     let api: HKGaldenAPI = HKGaldenAPI()
@@ -28,6 +28,7 @@ class ThreadListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.isToolbarHidden = true
+        tableView.prefetchDataSource = self
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
@@ -93,6 +94,10 @@ class ThreadListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return threads.count
+    }
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
