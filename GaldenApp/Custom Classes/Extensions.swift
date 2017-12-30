@@ -8,57 +8,6 @@
 
 import UIKit
 
-extension Data {
-    var attributedString: NSAttributedString? {
-        do {
-            return try NSAttributedString(data: self, options:[NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html, NSAttributedString.DocumentReadingOptionKey.characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
-        } catch {
-            print(error)
-        }
-        return nil
-    }
-}
-
-extension String {
-    var data: Data {
-        return Data(utf8)
-    }
-}
-
-extension NSPointerArray {
-    func addObject(_ object: AnyObject?) {
-        guard let strongObject = object else { return }
-        
-        let pointer = Unmanaged.passUnretained(strongObject).toOpaque()
-        addPointer(pointer)
-    }
-    
-    func insertObject(_ object: AnyObject?, at index: Int) {
-        guard index < count, let strongObject = object else { return }
-        
-        let pointer = Unmanaged.passUnretained(strongObject).toOpaque()
-        insertPointer(pointer, at: index)
-    }
-    
-    func replaceObject(at index: Int, withObject object: AnyObject?) {
-        guard index < count, let strongObject = object else { return }
-        
-        let pointer = Unmanaged.passUnretained(strongObject).toOpaque()
-        replacePointer(at: index, withPointer: pointer)
-    }
-    
-    func object(at index: Int) -> AnyObject? {
-        guard index < count, let pointer = self.pointer(at: index) else { return nil }
-        return Unmanaged<AnyObject>.fromOpaque(pointer).takeUnretainedValue()
-    }
-    
-    func removeObject(at index: Int) {
-        guard index < count else { return }
-        
-        removePointer(at: index)
-    }
-}
-
 extension String {
     func nsRange(from range: Range<Index>) -> NSRange {
         return NSRange(range, in: self)

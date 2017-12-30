@@ -300,13 +300,17 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         HUD.show(.progress)
-        let imageURL = info[UIImagePickerControllerImageURL] as! URL
-        api.imageUpload(imageURL: imageURL, completion: {
-            url in
-            HUD.flash(.success, delay: 1.0)
-            self.dismiss(animated: true, completion: nil)
-            self.contentTextView.insertText("[img]" + url + "[/img]\n")
-        })
+        if #available(iOS 11.0, *) {
+            let imageURL = info[UIImagePickerControllerImageURL] as! URL
+            api.imageUpload(imageURL: imageURL, completion: {
+                url in
+                HUD.flash(.success, delay: 1.0)
+                self.dismiss(animated: true, completion: nil)
+                self.contentTextView.insertText("[img]" + url + "[/img]\n")
+            })
+        } else {
+            // Fallback on earlier versions
+        }
     }
     
     func keyWasTapped(character: String) {
