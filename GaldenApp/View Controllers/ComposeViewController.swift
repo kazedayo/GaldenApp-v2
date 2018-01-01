@@ -18,6 +18,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var content = ""
     var topicID = ""
     var type = ""
+    var kheight: CGFloat?
     let api = HKGaldenAPI()
     
     let iconKeyboard = IconKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 265))
@@ -26,6 +27,37 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentTextView: IQTextView!
     @IBOutlet weak var bottomConstrain: NSLayoutConstraint!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
+                                               name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
+                                               name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    //MARK: - getKayboardHeight
+    @objc func keyboardWillShow(notification: Notification) {
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        // do whatever you want with this keyboard height
+        self.kheight = keyboardHeight
+        bottomConstrain.constant = (kheight! + 20)
+        self.view.layoutIfNeeded()
+    }
+    
+    @objc func keyboardWillHide(notification: Notification) {
+        // keyboard is dismissed/hidden from the screen
+        bottomConstrain.constant -= kheight!
+        self.view.layoutIfNeeded()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,11 +93,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             let destination = segue.destination as! PreviewViewController
             destination.channel = self.channel
             destination.threadTitle = self.titleTextField.text
-            destination.content = content
+            destination.content = contentTextView.text
             destination.type = "newThread"
         } else if type == "reply" {
             let destination = segue.destination as! PreviewViewController
-            destination.content = content
+            destination.content = contentTextView.text
             destination.topicID = topicID
             destination.type = "reply"
         }
@@ -328,16 +360,4 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             contentTextView.becomeFirstResponder()
         }
     }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        bottomConstrain.constant += 300
-        self.view.layoutIfNeeded()
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        bottomConstrain.constant -= 300
-        self.view.layoutIfNeeded()
-        content = textView.text
-    }
-    
 }

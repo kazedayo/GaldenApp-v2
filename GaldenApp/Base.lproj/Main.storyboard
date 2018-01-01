@@ -91,7 +91,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EULA" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ePp-s9-4EZ">
-                                <rect key="frame" x="20" y="40" width="74" height="36"/>
+                                <rect key="frame" x="20" y="40" width="374" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -168,7 +168,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="CTJ-zC-54G" firstAttribute="trailing" secondItem="ePp-s9-4EZ" secondAttribute="trailing" constant="320" id="1qw-gU-aW9"/>
+                            <constraint firstItem="CTJ-zC-54G" firstAttribute="trailing" secondItem="ePp-s9-4EZ" secondAttribute="trailing" constant="20" id="1qw-gU-aW9"/>
                             <constraint firstItem="CTJ-zC-54G" firstAttribute="trailing" secondItem="jhW-Sq-0iH" secondAttribute="trailing" constant="20" id="CKt-f3-rP5"/>
                             <constraint firstItem="ePp-s9-4EZ" firstAttribute="top" secondItem="CTJ-zC-54G" secondAttribute="top" constant="20" id="GQR-MD-wwj"/>
                             <constraint firstItem="6Wl-oq-kZ4" firstAttribute="leading" secondItem="CTJ-zC-54G" secondAttribute="leading" constant="20" id="Ho4-7t-NF2"/>
@@ -1319,7 +1319,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="CD3-dz-NYv"/>
-        <segue reference="3m0-Cb-r90"/>
+        <segue reference="dkd-6R-3yU"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>
