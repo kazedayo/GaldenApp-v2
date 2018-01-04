@@ -543,7 +543,47 @@ var XBBCODE = (function() {
            closeTag: function(params,content) {
                return '</span>'
            }
-       }
+       },
+       "red": {
+            openTag: function(params,content) {
+                return '<span class="xbbcode-red">';
+            },
+            closeTag: function(params,content) {
+                return '</span>';
+            }
+        },
+        "blue": {
+            openTag: function(params,content) {
+                return '<span class="xbbcode-blue">';
+            },
+            closeTag: function(params,content) {
+                return '</span>';
+            }
+        },
+        "green": {
+            openTag: function(params,content) {
+                return '<span class="xbbcode-green">';
+            },
+            closeTag: function(params,content) {
+                return '</span>';
+            }
+        },
+        "orange": {
+            openTag: function(params,content) {
+                return '<span class="xbbcode-orange">';
+            },
+            closeTag: function(params,content) {
+                return '</span>';
+            }
+        },
+        "purple": {
+            openTag: function(params,content) {
+                return '<span class="xbbcode-purple">';
+            },
+            closeTag: function(params,content) {
+                return '</span>';
+            }
+        },
     };
 
     // create tag list and lookup fields

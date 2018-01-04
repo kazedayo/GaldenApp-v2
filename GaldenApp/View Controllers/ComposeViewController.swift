@@ -225,7 +225,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let actionsheet = UIAlertController(title:"揀顏色", message: nil, preferredStyle: .actionSheet)
         actionsheet.addAction(UIAlertAction(title:"紅色",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[#ff0000]text[/#ff0000]")
+            self.contentTextView.insertText("[red]text[/red]")
             let range = self.contentTextView.text.range(of: "text")
             let nsRange = self.contentTextView.text.nsRange(from: range!)
             self.contentTextView.selectedRange = nsRange
@@ -233,15 +233,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         }))
         actionsheet.addAction(UIAlertAction(title:"橙色",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[#ffa500]text[/#ffa500]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
-        }))
-        actionsheet.addAction(UIAlertAction(title:"黃色",style:.default,handler: {
-            _ in
-            self.contentTextView.insertText("[#ffff00]text[/#ffff00]")
+            self.contentTextView.insertText("[orange]text[/orange]")
             let range = self.contentTextView.text.range(of: "text")
             let nsRange = self.contentTextView.text.nsRange(from: range!)
             self.contentTextView.selectedRange = nsRange
@@ -249,7 +241,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         }))
         actionsheet.addAction(UIAlertAction(title:"綠色",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[#008000]text[/#008000]")
+            self.contentTextView.insertText("[green]text[/green]")
             let range = self.contentTextView.text.range(of: "text")
             let nsRange = self.contentTextView.text.nsRange(from: range!)
             self.contentTextView.selectedRange = nsRange
@@ -257,15 +249,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         }))
         actionsheet.addAction(UIAlertAction(title:"藍色",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[#0000ff]text[/#0000ff]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
-        }))
-        actionsheet.addAction(UIAlertAction(title:"靛色",style:.default,handler: {
-            _ in
-            self.contentTextView.insertText("[#4b0082]text[/#4b0082]")
+            self.contentTextView.insertText("[blue]text[/blue]")
             let range = self.contentTextView.text.range(of: "text")
             let nsRange = self.contentTextView.text.nsRange(from: range!)
             self.contentTextView.selectedRange = nsRange
@@ -273,7 +257,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         }))
         actionsheet.addAction(UIAlertAction(title:"紫色",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[#800080]text[/#800080]")
+            self.contentTextView.insertText("[purple]text[/purple]")
             let range = self.contentTextView.text.range(of: "text")
             let nsRange = self.contentTextView.text.nsRange(from: range!)
             self.contentTextView.selectedRange = nsRange

@@ -137,3 +137,18 @@ div#text.usertable {
 .xbbcode-hide {
 	color: #ffccd5
 }
+.xbbcode-red {
+	color: red;
+}
+.xbbcode-blue {
+	color: blue;
+}
+.xbbcode-green {
+	color: green;
+}
+.xbbcode-orange {
+	color: orange;
+}
+.xbbcode-purple {
+	color: purple;
+}
