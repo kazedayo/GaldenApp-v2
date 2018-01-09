@@ -7,7 +7,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -564,6 +563,132 @@
             </objects>
             <point key="canvasLocation" x="6351" y="728"/>
         </scene>
+        <!--Content Side Menu View Controller-->
+        <scene sceneID="cG5-vP-mbA">
+            <objects>
+                <viewController id="RBm-nX-Z1d" customClass="ContentSideMenuViewController" customModule="GaldenApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="W9H-WJ-1Je">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0Oy-cU-Yna">
+                                <rect key="frame" x="0.0" y="20" width="414" height="526"/>
+                                <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="separatorColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PageSelectTableViewCell" id="ymK-w5-KFG" customClass="PageSelectTableViewCell" customModule="GaldenApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ymK-w5-KFG" id="hUT-7W-xYy">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="page" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZZ6-om-j58">
+                                                    <rect key="frame" x="15" y="11" width="384" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ZZ6-om-j58" firstAttribute="top" secondItem="hUT-7W-xYy" secondAttribute="topMargin" id="170-bm-K83"/>
+                                                <constraint firstItem="ZZ6-om-j58" firstAttribute="leading" secondItem="hUT-7W-xYy" secondAttribute="leadingMargin" id="FuK-JD-ilO"/>
+                                                <constraint firstItem="ZZ6-om-j58" firstAttribute="bottom" secondItem="hUT-7W-xYy" secondAttribute="bottomMargin" id="QBS-lg-B0U"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="ZZ6-om-j58" secondAttribute="trailing" id="i29-9n-QUU"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="pageNo" destination="ZZ6-om-j58" id="Waf-sh-Eys"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KmP-mz-gfW">
+                                <rect key="frame" x="10" y="566" width="394" height="150"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U2o-V8-B5l">
+                                        <rect key="frame" x="0.0" y="0.0" width="394" height="30"/>
+                                        <color key="backgroundColor" red="0.40000000000000002" green="0.80000000000000004" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="upvote"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="upvoteButtonPressed:" destination="RBm-nX-Z1d" eventType="touchUpInside" id="RZw-OX-PsD"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RAN-sH-5cr">
+                                        <rect key="frame" x="0.0" y="40" width="394" height="30"/>
+                                        <color key="backgroundColor" red="1" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="downvote"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="downvoteButtonPressed:" destination="RBm-nX-Z1d" eventType="touchUpInside" id="f49-6Y-hMa"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDi-Rx-Mp1">
+                                        <rect key="frame" x="0.0" y="80" width="394" height="30"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="一鍵留名"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="leaveNamePressed:" destination="RBm-nX-Z1d" eventType="touchUpInside" id="C1S-eN-dNN"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0qq-01-EEw">
+                                        <rect key="frame" x="0.0" y="120" width="394" height="30"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" title="些牙"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="shareButtonPressed:" destination="RBm-nX-Z1d" eventType="touchUpInside" id="0ab-XF-mYz"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="KmP-mz-gfW" firstAttribute="top" secondItem="0Oy-cU-Yna" secondAttribute="bottom" constant="20" id="HlT-Eq-qvf"/>
+                            <constraint firstItem="lOP-We-rY6" firstAttribute="trailing" secondItem="0Oy-cU-Yna" secondAttribute="trailing" id="KPk-90-6ki"/>
+                            <constraint firstItem="lOP-We-rY6" firstAttribute="bottom" secondItem="KmP-mz-gfW" secondAttribute="bottom" constant="20" id="O8V-Wl-f26"/>
+                            <constraint firstItem="0Oy-cU-Yna" firstAttribute="top" secondItem="lOP-We-rY6" secondAttribute="top" id="TKu-ez-QZM"/>
+                            <constraint firstItem="KmP-mz-gfW" firstAttribute="leading" secondItem="lOP-We-rY6" secondAttribute="leading" constant="10" id="e0O-zb-D3l"/>
+                            <constraint firstItem="0Oy-cU-Yna" firstAttribute="leading" secondItem="lOP-We-rY6" secondAttribute="leading" id="p3P-dc-QzN"/>
+                            <constraint firstItem="lOP-We-rY6" firstAttribute="trailing" secondItem="KmP-mz-gfW" secondAttribute="trailing" constant="10" id="ucE-Ot-ZbY"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="lOP-We-rY6"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="dgt-Lz-6TH"/>
+                    <connections>
+                        <outlet property="downvoteButton" destination="RAN-sH-5cr" id="Lrz-eh-3Uw"/>
+                        <outlet property="pageSelectTableView" destination="0Oy-cU-Yna" id="boj-ZY-QsA"/>
+                        <outlet property="upvoteButton" destination="U2o-V8-B5l" id="sua-0g-M9E"/>
+                        <segue destination="mUf-d2-Lnm" kind="unwind" identifier="unwindToContent" unwindAction="unwindToContentWithSegue:" id="4dh-iF-oTt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6aB-8l-VAB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="mUf-d2-Lnm" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="6351" y="1599"/>
+        </scene>
         <!--Page Select View Controller-->
         <scene sceneID="tWX-Sb-gHi">
             <objects>
@@ -708,52 +833,19 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1Ix-e5-7SW"/>
                     </view>
-                    <toolbarItems>
-                        <barButtonItem image="LeaveName" id="VAs-aP-B8z">
-                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <action selector="leaveNamePressed:" destination="wRo-r1-a2n" id="Y5i-A8-D5W"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem title="F5" id="2fN-Ik-4Mn">
-                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <action selector="f5buttonPressed:" destination="wRo-r1-a2n" id="jF0-qy-Ar5"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="5Lz-go-giQ"/>
-                        <barButtonItem width="16" style="plain" systemItem="fixedSpace" id="TRb-cq-9Fq"/>
-                        <barButtonItem title="撈緊..." id="5mw-mW-Dhw">
-                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <segue destination="H78-mD-SNj" kind="popoverPresentation" identifier="pageSelect" popoverAnchorBarButtonItem="5mw-mW-Dhw" id="jcy-Pf-r4u">
-                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                </segue>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="aQZ-lv-QsX">
-                        <rightBarButtonItems>
-                            <barButtonItem image="Reply" id="ajx-sK-dGV">
-                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <segue destination="7Na-LR-Vny" kind="custom" identifier="WriteReply" customClass="DeckSegue" customModule="DeckTransition" id="Hst-LI-0QW"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem image="Share" id="vUa-Co-B1f">
-                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <action selector="shareButtonPressed:" destination="wRo-r1-a2n" id="Yhy-0C-Lkx"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" image="Reply" id="ajx-sK-dGV">
+                            <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <segue destination="7Na-LR-Vny" kind="custom" identifier="WriteReply" customClass="DeckSegue" customModule="DeckTransition" id="Hst-LI-0QW"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="isHeroEnabled" value="YES"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
-                        <outlet property="leaveNameButton" destination="VAs-aP-B8z" id="Gm1-vj-9ud"/>
-                        <outlet property="pageButton" destination="5mw-mW-Dhw" id="6vZ-aC-jKr"/>
                         <outlet property="webView" destination="674-c3-bYp" id="jt0-M5-ffk"/>
                         <segue destination="SiJ-ir-6HP" kind="unwind" identifier="unwindToThreadListFromContent" unwindAction="unwindToThreadListFromContentWithSegue:" id="pm1-Fh-aZc"/>
                         <segue destination="7Na-LR-Vny" kind="custom" identifier="quote" customClass="DeckSegue" customModule="DeckTransition" id="mpy-Lr-nzq"/>
@@ -763,68 +855,6 @@
                 <exit id="SiJ-ir-6HP" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4159.420289855073" y="769.56521739130437"/>
-        </scene>
-        <!--Page Select View Controller-->
-        <scene sceneID="HjP-qg-FZi">
-            <objects>
-                <viewController id="H78-mD-SNj" customClass="PageSelectViewController" customModule="GaldenApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="9hK-X7-TY0">
-                        <rect key="frame" x="0.0" y="0.0" width="150" height="200"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="wqU-uE-NpR">
-                                <rect key="frame" x="0.0" y="0.0" width="150" height="200"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="separatorColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <prototypes>
-                                    <tableViewCell opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PageSelectTableViewCell" textLabel="4A3-Yb-Yve" style="IBUITableViewCellStyleDefault" id="6oN-0v-lal" customClass="PageSelectTableViewCell" customModule="GaldenApp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="150" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6oN-0v-lal" id="q8g-LP-9Lk">
-                                            <rect key="frame" x="0.0" y="0.0" width="150" height="43.666666666666664"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4A3-Yb-Yve">
-                                                    <rect key="frame" x="15" y="0.0" width="120" height="43.666666666666664"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <connections>
-                                            <outlet property="pageNo" destination="4A3-Yb-Yve" id="Bmv-Kx-QJd"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="XTw-wu-a1w" firstAttribute="bottom" secondItem="wqU-uE-NpR" secondAttribute="bottom" id="HOj-sb-KeB"/>
-                            <constraint firstItem="wqU-uE-NpR" firstAttribute="top" secondItem="9hK-X7-TY0" secondAttribute="top" id="eqm-qS-1vZ"/>
-                            <constraint firstAttribute="trailing" secondItem="wqU-uE-NpR" secondAttribute="trailing" id="gMf-i0-LRZ"/>
-                            <constraint firstItem="wqU-uE-NpR" firstAttribute="leading" secondItem="XTw-wu-a1w" secondAttribute="leading" id="pzg-jY-bgr"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="XTw-wu-a1w"/>
-                    </view>
-                    <value key="contentSizeForViewInPopover" type="size" width="150" height="200"/>
-                    <size key="freeformSize" width="150" height="200"/>
-                    <connections>
-                        <outlet property="tableView" destination="wqU-uE-NpR" id="TBG-31-2od"/>
-                        <segue destination="myr-oG-9Lu" kind="unwind" identifier="unwindToPage" unwindAction="unwindToPageWithSegue:" id="bgf-1d-EpC"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ebw-YV-u8r" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="myr-oG-9Lu" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="4812" y="1042"/>
         </scene>
         <!--設定-->
         <scene sceneID="eSH-4I-Ive">
@@ -1079,7 +1109,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Wr2-X7-hWI">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="zcM-t1-RVJ" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zcM-t1-RVJ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" translucent="NO" id="k10-gL-tzc">
                         <rect key="frame" x="0.0" y="20" width="414" height="44"/>
@@ -1094,7 +1124,6 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" id="jCL-33-BoC">
-                        <rect key="frame" x="0.0" y="692" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <userDefinedRuntimeAttributes>
@@ -1302,6 +1331,29 @@
             </objects>
             <point key="canvasLocation" x="4290" y="-1092"/>
         </scene>
+        <!--Side Menu Navigation Controller-->
+        <scene sceneID="r3V-Xn-KKJ">
+            <objects>
+                <navigationController storyboardIdentifier="ContentSideMenu" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="gfR-Fd-Qdu" customClass="UISideMenuNavigationController" customModule="SideMenu" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2wP-vg-QuL">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftSide" value="NO"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="menuWidth">
+                            <real key="value" value="150"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <segue destination="RBm-nX-Z1d" kind="relationship" relationship="rootViewController" id="qla-Fg-wEh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rcS-gY-Ts6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5528.985507246377" y="1599.4565217391305"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Add" width="25" height="25"/>
@@ -1311,15 +1363,13 @@
         <image name="FontStyle" width="20" height="20"/>
         <image name="Icon" width="20" height="20"/>
         <image name="Image" width="20" height="20"/>
-        <image name="LeaveName" width="25" height="25"/>
         <image name="Reply" width="25" height="25"/>
         <image name="Send" width="20" height="20"/>
-        <image name="Share" width="25" height="25"/>
         <image name="Url" width="20" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="CD3-dz-NYv"/>
-        <segue reference="dkd-6R-3yU"/>
+        <segue reference="mpy-Lr-nzq"/>
+        <segue reference="3m0-Cb-r90"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

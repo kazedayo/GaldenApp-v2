@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0D4DF28E868ACA62D44055C0 /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD7B1F9EFB94E38502D21A3C /* Pods_GaldenApp.framework */; };
+		42006A2B20036C410006602B /* ContentSideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42006A2A20036C410006602B /* ContentSideMenuViewController.swift */; };
 		4202421C1F7BEC9400ECDD12 /* ChannelSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202421B1F7BEC9400ECDD12 /* ChannelSelectViewController.swift */; };
 		420983D01F822A8500375D05 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420983CF1F822A8500375D05 /* ContentViewController.swift */; };
 		421884B81F864300005D0BAA /* OP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421884B71F864300005D0BAA /* OP.swift */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		42006A2A20036C410006602B /* ContentSideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSideMenuViewController.swift; sourceTree = "<group>"; };
 		4202421B1F7BEC9400ECDD12 /* ChannelSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSelectViewController.swift; sourceTree = "<group>"; };
 		420983CF1F822A8500375D05 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		421884B71F864300005D0BAA /* OP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OP.swift; path = "GaldenApp/Custom Classes/OP.swift"; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				42C261F41F7CECEA00477479 /* ComposeViewController.swift */,
 				420983CF1F822A8500375D05 /* ContentViewController.swift */,
 				423331741FF6605F000FED6F /* ThreadListViewController.swift */,
+				42006A2A20036C410006602B /* ContentSideMenuViewController.swift */,
 				423F296E1F98568000BA2351 /* UserDetailViewController.swift */,
 				4262C2091F945AC7002EEC76 /* PageSelectViewController.swift */,
 			);
@@ -485,6 +488,7 @@
 				4262C20A1F945AC8002EEC76 /* PageSelectViewController.swift in Sources */,
 				421884BA1F86432E005D0BAA /* Replies.swift in Sources */,
 				420983D01F822A8500375D05 /* ContentViewController.swift in Sources */,
+				42006A2B20036C410006602B /* ContentSideMenuViewController.swift in Sources */,
 				4247D5051F82504800809025 /* ThreadList.swift in Sources */,
 				42A394A21FBC3793008A5239 /* ChannelListTableViewCell.swift in Sources */,
 				42FA369D1FBEB91900635512 /* PreviewViewController.swift in Sources */,

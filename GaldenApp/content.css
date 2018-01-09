@@ -57,6 +57,23 @@ div#text.usertable {
 	font-size: 12px;
 }
 
+.refresh {
+	text-align: center;
+	padding : 20px;
+}
+
+.refresh-button {
+	background: url(https://i.imgur.com/i3fPsTh.png);
+	background-size: cover;
+	border: 0px;
+	width: 35px;
+	height: 35px;
+}
+
+.refresh-button:active {
+	transform: scale(0.9,0.9);
+}
+
 .usertable {
     height: 32px;
 }

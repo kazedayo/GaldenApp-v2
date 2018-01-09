@@ -14,8 +14,9 @@ import WebKit
 import AXPhotoViewer
 import Kingfisher
 import PKHUD
+import SideMenu
 
-class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler, UIScrollViewDelegate {
+class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,UISideMenuNavigationControllerDelegate {
 
     //MARK: Properties
     
@@ -36,35 +37,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var lastOffsetY :CGFloat = 0
     private var shadowImageView: UIImageView?
     
-    @IBOutlet weak var pageButton: UIBarButtonItem!
-    @IBOutlet weak var leaveNameButton: UIBarButtonItem!
     @IBOutlet weak var webView: WKWebView!
     
     //HKGalden API (NOT included in GitHub repo)
     var api = HKGaldenAPI()
     let keychain = KeychainSwift()
-    
-    private func findShadowImage(under view: UIView) -> UIImageView? {
-        if view is UIImageView && view.bounds.size.height <= 1 {
-            return (view as! UIImageView)
-        }
-        
-        for subview in view.subviews {
-            if let imageView = findShadowImage(under: subview) {
-                return imageView
-            }
-        }
-        return nil
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        if shadowImageView == nil {
-            shadowImageView = findShadowImage(under: navigationController!.toolbar)
-        }
-        shadowImageView?.isHidden = true
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,14 +57,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         navigationItem.titleView = title
         self.webView.scrollView.showsVerticalScrollIndicator = false
         self.webView.scrollView.showsHorizontalScrollIndicator = false
-        self.webView.scrollView.delegate = self
         self.webView.navigationDelegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
-        
-        if keychain.get("LeaveNameText") == nil {
-            leaveNameButton.isEnabled = false
-        }
         
         self.api.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
@@ -98,20 +70,31 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        navigationController?.setToolbarHidden(false, animated: true)
+        let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "ContentSideMenu") as! UISideMenuNavigationController
+        SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
         self.webView.configuration.userContentController.add(self, name: "quote")
         self.webView.configuration.userContentController.add(self, name: "block")
-        self.webView.configuration.userContentController.add(self, name: "rateup")
-        self.webView.configuration.userContentController.add(self, name: "ratedown")
+        self.webView.configuration.userContentController.add(self, name: "refresh")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setToolbarHidden(true, animated: true)
+        let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "RightMenuNavigationController") as! UISideMenuNavigationController
+        SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "quote")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
-        self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "rateup")
-        self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "ratedown")
+        self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
+    }
+    
+    func sideMenuWillAppear(menu: UISideMenuNavigationController, animated: Bool) {
+        let destination = menu.viewControllers.first as! ContentSideMenuViewController
+        destination.upvote = Int(self.op.good)!
+        destination.downvote = Int(self.op.bad)!
+        destination.opName = self.op.name
+        destination.threadTitle = self.op.title
+        destination.threadID = self.threadIdReceived
+        destination.pageCount = Int(self.pageCount)
+        destination.pageSelected = self.pageNow
     }
     
     override func didReceiveMemoryWarning() {
@@ -169,7 +152,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
     }
     
-    @IBAction func f5buttonPressed(_ sender: UIBarButtonItem) {
+    func f5buttonPressed() {
         self.f5 = true
         self.pageNow = Int(pageCount)
         HUD.show(.progress)
@@ -183,13 +166,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         switch segue.identifier {
-        case "pageSelect"?:
-            let popoverViewController = segue.destination as! PageSelectViewController
-            popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
-            popoverViewController.popoverPresentationController!.delegate = self
-            popoverViewController.popoverPresentationController?.backgroundColor = UIColor(red:0.14, green:0.14, blue:0.14, alpha:0.5)
-            popoverViewController.pageCount = self.pageCount
-            popoverViewController.type = "inPost"
         case "WriteReply"?:
             let destination = segue.destination as! ComposeViewController
             destination.topicID = self.threadIdReceived
@@ -204,13 +180,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
     }
     
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return UIModalPresentationStyle.none
-    }
-    
-    @IBAction func unwindToPage(segue: UIStoryboardSegue) {
-        let pageSelectViewController = segue.source as! PageSelectViewController
-        self.pageNow = pageSelectViewController.pageSelected
+    @IBAction func unwindToContent(segue: UIStoryboardSegue) {
+        let sideMenu = segue.source as! ContentSideMenuViewController
+        self.pageNow = sideMenu.pageSelected!
         self.api.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
@@ -228,30 +200,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         })
     }
     
-    func goodButtonTapped() {
-        HUD.show(.progress)
-        api.rate(threadID: threadIdReceived, rate: "g", completion: {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: {
-                self.updateSequence()
-                HUD.flash(.success, delay: 1.0)
-            })
-        })
-    }
-    
-    func badButtonTapped() {
-        HUD.show(.progress)
-        api.rate(threadID: threadIdReceived, rate: "b", completion: {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: {
-                self.updateSequence()
-                HUD.flash(.success, delay: 1.0)
-            })
-        })
-    }
-    
     //MARK: Private Functions
     
     private func updateSequence() {
-        self.pageButton.title = "第" + String(self.pageNow) + "頁"
         self.api.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
             [weak self] op,comments,rated,blocked,error in
             if (error == nil) {
@@ -303,6 +254,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     self?.convertedHTML.append((self?.comments[index].contentHTML)!)
                 }
                 
+                if(self?.pageNow==Int((self?.pageCount)!)) {
+                    self?.convertedHTML.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
+                }
+                
                 self?.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((self?.convertedHTML)!)</body></html>"
                 self?.webView.loadHTMLString((self?.pageHTML)!, baseURL: Bundle.main.bundleURL)
                 //print((self?.pageHTML)!)
@@ -340,11 +295,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "quotetype", with: "op")
         self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "blocktype", with: "op")
-        
-        self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "ratebutton", with: "<div style=\"float:left;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.rateup.postMessage('rateup')\">正皮: upcount</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.ratedown.postMessage('ratedown')\">負皮: downcount</button></td></tr></tbody></table></div>")
-        
-        self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "upcount", with: self.op.good)
-        self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "downcount", with: self.op.bad)
     }
     
     private func constructCommentHeader(index: Int) {
@@ -384,27 +334,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
     }
     
-    @IBAction func leaveNamePressed(_ sender: UIBarButtonItem) {
-        let keychain = KeychainSwift()
-        let alert = UIAlertController.init(title: "一鍵留名", message: "確定?", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
-            _ in
-            self.api.reply(topicID: self.threadIdReceived, content: keychain.get("LeaveNameText")!.replacingOccurrences(of: "\\n", with: "\n"), completion: {
-                [weak self] in
-                self?.updateSequence()
-            })
-        }))
-        alert.addAction(UIAlertAction.init(title: "不了", style: .cancel, handler: nil))
-        present(alert,animated: true)
-    }
-    
-    @IBAction func shareButtonPressed(_ sender: Any) {
-        let shared = op.title + " // by: " + op.name + "\nShared via 1080-SIGNAL \nhttps://hkgalden.com/view/" + threadIdReceived
-        let share = UIActivityViewController(activityItems:[shared],applicationActivities:nil)
-        share.excludedActivityTypes = [.airDrop,.addToReadingList,.assignToContact,.openInIBooks,.saveToCameraRoll]
-        present(share,animated: true,completion: nil)
-    }
-    
     //MARK: WebView Delegate
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
@@ -412,7 +341,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let height = result as! CGFloat
-                    let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height + (self.navigationController?.toolbar.frame.height)!)
+                    let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
                     self.replied = false
                     HUD.flash(.success, delay: 1.0)
@@ -422,7 +351,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let height = result as! CGFloat
-                    let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height + (self.navigationController?.toolbar.frame.height)!)
+                    let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
                     self.replied = false
                     HUD.flash(.success, delay: 1.0)
@@ -463,20 +392,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             }))
             alert.addAction(UIAlertAction.init(title: "不了", style: .cancel, handler: nil))
             present(alert,animated: true)
-        } else if message.name == "rateup" {
-            self.goodButtonTapped()
-        } else if message.name == "ratedown" {
-            self.badButtonTapped()
+        } else if message.name == "refresh" {
+            self.f5buttonPressed()
         }
-    }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView){
-        lastOffsetY = scrollView.contentOffset.y
-    }
-    
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView){
-        let hide = scrollView.contentOffset.y > self.lastOffsetY
-        self.navigationController?.setToolbarHidden(hide, animated: true)
     }
     
     //regex match function
@@ -549,7 +467,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     @objc func handleBBCodeToHTMLNotification(notification: Notification) {
         if let html = notification.object as? String {
-            let newContent = "<div class=\"comment\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"avatarurl\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\">uname</td><td class=\"righttext\">date</td></tr><tr><td class=\"lefttext\">label</td><td class=\"righttext\">count</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(html)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('quotetype')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('blocktype')\">封鎖/舉報</button></td></tr></tbody></table></div>ratebutton</div></div>"
+            let newContent = "<div class=\"comment\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"avatarurl\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\">uname</td><td class=\"righttext\">date</td></tr><tr><td class=\"lefttext\">label</td><td class=\"righttext\">count</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(html)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('quotetype')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('blocktype')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
             convertedText = newContent
         }
     }

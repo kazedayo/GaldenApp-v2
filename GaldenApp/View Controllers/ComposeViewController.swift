@@ -34,6 +34,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                                                name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
                                                name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        if type == "reply" {
+            contentTextView.becomeFirstResponder()
+        } else {
+            titleTextField.becomeFirstResponder()
+        }
     }
     
     //MARK: - getKayboardHeight
@@ -56,6 +61,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        resignFirstResponder()
         NotificationCenter.default.removeObserver(self)
     }
     

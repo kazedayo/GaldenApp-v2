@@ -27,10 +27,10 @@ class ThreadListViewController: UITableViewController,UITableViewDataSourcePrefe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.isToolbarHidden = true
         tableView.prefetchDataSource = self
         
         let refreshControl = UIRefreshControl()
+        refreshControl.backgroundColor = .clear
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
         tableView.refreshControl = refreshControl
         
