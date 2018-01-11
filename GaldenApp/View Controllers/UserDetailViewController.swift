@@ -23,12 +23,7 @@ class UserDetailViewController: UITableViewController,UINavigationControllerDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.api.getUserDetail(completion: {
-            [weak self] username, userid in
-            self?.keychain.set(username, forKey: "userName")
-            self?.keychain.set(userid, forKey: "userID")
-            self?.loggedIn()
-        })
+        self.loggedIn()
         // Do any additional setup after loading the view.
     }
     
@@ -68,9 +63,8 @@ class UserDetailViewController: UITableViewController,UINavigationControllerDele
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func confirmButtonPressed(_ sender: UIButton) {
-        leaveNameTextField.endEditing(true)
-        keychain.set(leaveNameTextField.text!, forKey: "LeaveNameText")
+    @IBAction func sourceButtonPressed(_ sender: UIButton) {
+        UIApplication.shared.open(URL(string: "https://github.com/kazedayo/GaldenApp-v2")!, options: [:], completionHandler: nil)
     }
     
     @IBAction func changeNameButtonPressed(_ sender: UIButton) {

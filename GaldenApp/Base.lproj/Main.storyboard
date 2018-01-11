@@ -572,7 +572,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0Oy-cU-Yna">
-                                <rect key="frame" x="0.0" y="20" width="414" height="526"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="536"/>
                                 <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -606,7 +606,7 @@
                                 </prototypes>
                             </tableView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KmP-mz-gfW">
-                                <rect key="frame" x="10" y="566" width="394" height="150"/>
+                                <rect key="frame" x="10" y="576" width="394" height="150"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U2o-V8-B5l">
                                         <rect key="frame" x="0.0" y="0.0" width="394" height="30"/>
@@ -668,7 +668,7 @@
                         <constraints>
                             <constraint firstItem="KmP-mz-gfW" firstAttribute="top" secondItem="0Oy-cU-Yna" secondAttribute="bottom" constant="20" id="HlT-Eq-qvf"/>
                             <constraint firstItem="lOP-We-rY6" firstAttribute="trailing" secondItem="0Oy-cU-Yna" secondAttribute="trailing" id="KPk-90-6ki"/>
-                            <constraint firstItem="lOP-We-rY6" firstAttribute="bottom" secondItem="KmP-mz-gfW" secondAttribute="bottom" constant="20" id="O8V-Wl-f26"/>
+                            <constraint firstItem="lOP-We-rY6" firstAttribute="bottom" secondItem="KmP-mz-gfW" secondAttribute="bottom" constant="10" id="O8V-Wl-f26"/>
                             <constraint firstItem="0Oy-cU-Yna" firstAttribute="top" secondItem="lOP-We-rY6" secondAttribute="top" id="TKu-ez-QZM"/>
                             <constraint firstItem="KmP-mz-gfW" firstAttribute="leading" secondItem="lOP-We-rY6" secondAttribute="leading" constant="10" id="e0O-zb-D3l"/>
                             <constraint firstItem="0Oy-cU-Yna" firstAttribute="leading" secondItem="lOP-We-rY6" secondAttribute="leading" id="p3P-dc-QzN"/>
@@ -679,6 +679,7 @@
                     <navigationItem key="navigationItem" id="dgt-Lz-6TH"/>
                     <connections>
                         <outlet property="downvoteButton" destination="RAN-sH-5cr" id="Lrz-eh-3Uw"/>
+                        <outlet property="lmButton" destination="TDi-Rx-Mp1" id="Khe-JG-5OU"/>
                         <outlet property="pageSelectTableView" destination="0Oy-cU-Yna" id="boj-ZY-QsA"/>
                         <outlet property="upvoteButton" destination="U2o-V8-B5l" id="sua-0g-M9E"/>
                         <segue destination="mUf-d2-Lnm" kind="unwind" identifier="unwindToContent" unwindAction="unwindToContentWithSegue:" id="4dh-iF-oTt"/>
@@ -1013,6 +1014,36 @@
                                                 <constraint firstAttribute="bottom" secondItem="i2K-W2-IvK" secondAttribute="bottom" constant="5" id="Tig-cn-3fv"/>
                                                 <constraint firstItem="i2K-W2-IvK" firstAttribute="leading" secondItem="6wN-Mh-QpA" secondAttribute="leading" constant="15" id="heY-Bg-dha"/>
                                                 <constraint firstItem="i2K-W2-IvK" firstAttribute="top" secondItem="6wN-Mh-QpA" secondAttribute="top" constant="5" id="tbs-on-WzZ"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Source Code" id="nJm-Be-kPJ">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="50" id="prT-9Y-6q6">
+                                        <rect key="frame" x="0.0" y="417.33333333333337" width="414" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="prT-9Y-6q6" id="p80-v3-hBo">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="49.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AcZ-iW-VXb">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="49.666666666666664"/>
+                                                    <state key="normal" title="GaldenApp-v2@GitHub">
+                                                        <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="sourceButtonPressed:" destination="A7p-nw-RbH" eventType="touchUpInside" id="YN5-c8-EpF"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="AcZ-iW-VXb" firstAttribute="top" secondItem="p80-v3-hBo" secondAttribute="top" id="ChR-gZ-Jzs"/>
+                                                <constraint firstItem="AcZ-iW-VXb" firstAttribute="leading" secondItem="p80-v3-hBo" secondAttribute="leading" id="YlQ-fZ-okq"/>
+                                                <constraint firstAttribute="bottom" secondItem="AcZ-iW-VXb" secondAttribute="bottom" id="lou-wW-3sD"/>
+                                                <constraint firstAttribute="trailing" secondItem="AcZ-iW-VXb" secondAttribute="trailing" id="yzT-5b-e7r"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

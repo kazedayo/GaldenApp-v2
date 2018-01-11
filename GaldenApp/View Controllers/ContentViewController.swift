@@ -215,17 +215,16 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 if self?.pageNow == 1 {
                     let urlExtract = self?.matches(for: "(?<=\\[url\\])(\\S*)(?=\\[\\/url\\])", in: (self?.op.content)!)
                     let imgExtract = self?.matches(for: "(?<=\\[img\\])(\\S*)(?=\\[\\/img\\])", in: (self?.op.content)!)
-                    for index in 0..<(urlExtract?.count)! {
+                    /*for index in 0..<(urlExtract?.count)! {
                         let converted = urlExtract![index].addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
                         self?.op.content = (self?.op.content.replacingOccurrences(of: urlExtract![index], with: converted!))!
                     }
                     for index in 0..<(imgExtract?.count)! {
                         let converted = imgExtract![index].addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
                         self?.op.content = (self?.op.content.replacingOccurrences(of: imgExtract![index], with: converted!))!
-                    }
+                    }*/
                     self?.convertBBCodeToHTML(text: op.content)
                     self?.op.contentHTML = (self?.convertedText)!
-                    self?.op.contentHTML = (self?.op.contentHTML.replacingOccurrences(of: "<img src=\"\" />", with: "[img]圖片網址[/img]"))!
                     self?.constructOPHeader()
                     if (self?.blockedUsers.contains((self?.op.userID)!))! {
                         self?.op.contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖會然</div>"
@@ -234,7 +233,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 }
                 
                 for index in 0..<(self?.comments.count)! {
-                    let urlExtract = self?.matches(for: "(?<=\\[url\\])(\\S*)(?=\\[\\/url\\])", in: (self?.comments[index].content)!)
+                    /*let urlExtract = self?.matches(for: "(?<=\\[url\\])(\\S*)(?=\\[\\/url\\])", in: (self?.comments[index].content)!)
                     let imgExtract = self?.matches(for: "(?<=\\[img\\])(\\S*)(?=\\[\\/img\\])", in: (self?.comments[index].content)!)
                     for i in 0..<(urlExtract?.count)! {
                         let converted = urlExtract![i].addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
@@ -243,10 +242,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     for i in 0..<(imgExtract?.count)! {
                         let converted = imgExtract![i].addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
                         self?.comments[index].content = (self?.comments[index].content.replacingOccurrences(of: imgExtract![i], with: converted!))!
-                    }
+                    }*/
                     self?.convertBBCodeToHTML(text: comments[index].content)
                     self?.comments[index].contentHTML = (self?.convertedText)!
-                    self?.comments[index].contentHTML = (self?.comments[index].contentHTML.replacingOccurrences(of: "<img src=\"\" />", with: "[img]圖片網址[/img]"))!
                     self?.constructCommentHeader(index: index)
                     if (self?.blockedUsers.contains((self?.comments[index].userID)!))! {
                         self?.comments[index].contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖會然</div>"

@@ -21,8 +21,10 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
     @IBOutlet weak var upvoteButton: UIButton!
     @IBOutlet weak var downvoteButton: UIButton!
     @IBOutlet weak var pageSelectTableView: UITableView!
+    @IBOutlet weak var lmButton: UIButton!
     
     let api = HKGaldenAPI()
+    let keychain = KeychainSwift()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +35,9 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if keychain.get("LeaveNameText") == "" {
+            lmButton.isHidden = true
+        }
         upvoteButton.setTitle("正皮: \(upvote)", for: .normal)
         downvoteButton.setTitle("負皮: \(downvote)", for: .normal)
         pageSelectTableView.selectRow(at: IndexPath.init(row: pageSelected!-1, section: 0), animated: true, scrollPosition: .top)
@@ -85,11 +90,10 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
     }
     
     @IBAction func leaveNamePressed(_ sender: UIButton) {
-        let keychain = KeychainSwift()
         let alert = UIAlertController.init(title: "一鍵留名", message: "確定?", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
             _ in
-            self.api.reply(topicID: self.threadID!, content: keychain.get("LeaveNameText")!.replacingOccurrences(of: "\\n", with: "\n"), completion: {
+            self.api.reply(topicID: self.threadID!, content: self.keychain.get("LeaveNameText")!.replacingOccurrences(of: "\\n", with: "\n"), completion: {
                 [weak self] in
                 self?.performSegue(withIdentifier: "unwindToContent", sender: self)
             })

@@ -223,9 +223,9 @@ var XBBCODE = (function() {
                 var myUrl = content;
 
                 urlPattern.lastIndex = 0;
-                if ( !urlPattern.test( myUrl ) ) {
+                /*if ( !urlPattern.test( myUrl ) ) {
                     myUrl = "";
-                }
+                }*/
 
                 return '<a href="' + myUrl + '"><img src="' + myUrl + '" /></a>';
             },
@@ -512,9 +512,9 @@ var XBBCODE = (function() {
                 }
 
                 urlPattern.lastIndex = 0;
-                if ( !urlPattern.test( myUrl ) ) {
+                /*if ( !urlPattern.test( myUrl ) ) {
                     myUrl = "#";
-                }
+                }*/
 
                 return '\n<a href="' + myUrl + '">';
             },

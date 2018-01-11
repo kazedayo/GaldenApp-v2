@@ -44,7 +44,7 @@ a {
 
 div#image.usertable {
 	float: left;
-	width: 12%;
+	width: 15%;
 }
 
 .lefttext {
@@ -53,7 +53,7 @@ div#image.usertable {
 
 div#text.usertable {
     float:left;
-    width: 88%;
+    width: 85%;
 	font-size: 12px;
 }
 
