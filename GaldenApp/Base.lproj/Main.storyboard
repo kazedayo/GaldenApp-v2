@@ -1020,10 +1020,40 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="回帶西" id="mD2-gQ-pdg">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="50" id="tpP-FF-e1k">
+                                        <rect key="frame" x="0.0" y="417.33333333333337" width="414" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tpP-FF-e1k" id="9ME-uy-8Xj">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="49.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="09h-Jl-J6g">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="49.666666666666664"/>
+                                                    <state key="normal" title="清除記錄">
+                                                        <color key="titleColor" red="1" green="0.41176470590000003" blue="0.3803921569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="clearButtonPressed:" destination="A7p-nw-RbH" eventType="touchUpInside" id="aU7-bp-rIX"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="09h-Jl-J6g" firstAttribute="leading" secondItem="9ME-uy-8Xj" secondAttribute="leading" id="lhX-2D-E4J"/>
+                                                <constraint firstItem="09h-Jl-J6g" firstAttribute="top" secondItem="9ME-uy-8Xj" secondAttribute="top" id="luP-sE-AzV"/>
+                                                <constraint firstAttribute="bottom" secondItem="09h-Jl-J6g" secondAttribute="bottom" id="pKx-yV-YyN"/>
+                                                <constraint firstAttribute="trailing" secondItem="09h-Jl-J6g" secondAttribute="trailing" id="vEa-1e-FhS"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                             <tableViewSection headerTitle="Source Code" id="nJm-Be-kPJ">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="50" id="prT-9Y-6q6">
-                                        <rect key="frame" x="0.0" y="417.33333333333337" width="414" height="50"/>
+                                        <rect key="frame" x="0.0" y="523.33333333333337" width="414" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="prT-9Y-6q6" id="p80-v3-hBo">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="49.666666666666664"/>

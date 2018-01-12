@@ -26,6 +26,7 @@
 		4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20E1F95FAE1002EEC76 /* xbbcode.js */; };
 		4282161F1FB1ADB3003ACF0C /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */; };
 		428216211FB1AFA7003ACF0C /* FirstLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */; };
+		429267632008C6DE00DF1314 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429267622008C6DE00DF1314 /* History.swift */; };
 		42942F231FA6CAC700171D8B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42942F221FA6CAC700171D8B /* Extensions.swift */; };
 		429A26F61FA4426E00B28B7E /* BlockedUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429A26F51FA4426E00B28B7E /* BlockedUserViewController.swift */; };
 		429A26F81FA4435600B28B7E /* BlockedUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429A26F71FA4435600B28B7E /* BlockedUsers.swift */; };
@@ -73,6 +74,7 @@
 		4262C20E1F95FAE1002EEC76 /* xbbcode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xbbcode.js; sourceTree = "<group>"; };
 		4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLoginViewController.swift; sourceTree = "<group>"; };
+		429267622008C6DE00DF1314 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = History.swift; path = "GaldenApp/Custom Classes/History.swift"; sourceTree = "<group>"; };
 		42942F221FA6CAC700171D8B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = "GaldenApp/Custom Classes/Extensions.swift"; sourceTree = "<group>"; };
 		429A26F51FA4426E00B28B7E /* BlockedUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedUserViewController.swift; sourceTree = "<group>"; };
 		429A26F71FA4435600B28B7E /* BlockedUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BlockedUsers.swift; path = "GaldenApp/Custom Classes/BlockedUsers.swift"; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 		427AD6771F81E74200305EEA /* Custom Classes */ = {
 			isa = PBXGroup;
 			children = (
+				429267622008C6DE00DF1314 /* History.swift */,
 				42AF57A81FB57DF300C6497B /* IconKeyboard.swift */,
 				42AF57AA1FB57E1F00C6497B /* IconKeyboard.xib */,
 				42942F221FA6CAC700171D8B /* Extensions.swift */,
@@ -429,6 +432,8 @@
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
@@ -446,6 +451,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SideMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
@@ -486,6 +493,7 @@
 				42AF57A91FB57DF300C6497B /* IconKeyboard.swift in Sources */,
 				42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */,
 				4262C20A1F945AC8002EEC76 /* PageSelectViewController.swift in Sources */,
+				429267632008C6DE00DF1314 /* History.swift in Sources */,
 				421884BA1F86432E005D0BAA /* Replies.swift in Sources */,
 				420983D01F822A8500375D05 /* ContentViewController.swift in Sources */,
 				42006A2B20036C410006602B /* ContentSideMenuViewController.swift in Sources */,

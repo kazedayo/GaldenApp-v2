@@ -14,11 +14,16 @@ PODS:
   - Hero (1.0.1)
   - IQKeyboardManagerSwift (5.0.7)
   - KeychainSwift (10.0.0)
-  - Kingfisher (4.5.0)
+  - Kingfisher (4.6.1)
   - MarqueeLabel (3.1.4):
     - MarqueeLabel/ObjC (= 3.1.4)
   - MarqueeLabel/ObjC (3.1.4)
   - PKHUD (5.0.0)
+  - Realm (3.0.2):
+    - Realm/Headers (= 3.0.2)
+  - Realm/Headers (3.0.2)
+  - RealmSwift (3.0.2):
+    - Realm (= 3.0.2)
   - SideMenu (3.1.5)
   - SwiftyJSON (4.0.0)
 
@@ -32,6 +37,7 @@ DEPENDENCIES:
   - KeychainSwift
   - MarqueeLabel
   - PKHUD (~> 5.0)
+  - RealmSwift
   - SideMenu
   - SwiftyJSON
 
@@ -45,12 +51,14 @@ SPEC CHECKSUMS:
   Hero: cee286821578e170d8c0c9c9cda7897357401112
   IQKeyboardManagerSwift: 30fb3a61de1af53a95e02b80fb54ed0a19d5ede5
   KeychainSwift: f9f7910449a0c0fd2cabc889121530dd2c477c33
-  Kingfisher: 26ae0473102b77b575da51960c932431e3745407
+  Kingfisher: 1f9157d9c02b380cbd0b7cc890161195164eb634
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
+  Realm: 6f23fd1f178a09342eac21bfa7c2bf4312a7a180
+  RealmSwift: 695393add1b8f9d5fa75dd16e6355cf3935f71e2
   SideMenu: 47dbf9e4d878062d8994aed43f6e4bf6c1fea30b
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 08669db4611ddeb36fa7f46a5c393c0c2c73f0c5
+PODFILE CHECKSUM: 4c22f27b0ff2c3632f741fcddbe4066c9127b91d
 
 COCOAPODS: 1.3.1

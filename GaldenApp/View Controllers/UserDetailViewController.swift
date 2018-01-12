@@ -10,6 +10,7 @@ import UIKit
 import KeychainSwift
 import SideMenu
 import PKHUD
+import RealmSwift
 
 class UserDetailViewController: UITableViewController,UINavigationControllerDelegate,UITextFieldDelegate {
 
@@ -65,6 +66,16 @@ class UserDetailViewController: UITableViewController,UINavigationControllerDele
     
     @IBAction func sourceButtonPressed(_ sender: UIButton) {
         UIApplication.shared.open(URL(string: "https://github.com/kazedayo/GaldenApp-v2")!, options: [:], completionHandler: nil)
+    }
+    
+    @IBAction func clearButtonPressed(_ sender: UIButton) {
+        let realm = try! Realm()
+        try! realm.write {
+            realm.deleteAll()
+        }
+        let alert = UIAlertController.init(title: "搞掂", message: "已清除回帶記錄", preferredStyle: .alert)
+        alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
+        present(alert,animated: true,completion: nil)
     }
     
     @IBAction func changeNameButtonPressed(_ sender: UIButton) {

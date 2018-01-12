@@ -216,6 +216,7 @@ class ThreadListViewController: UITableViewController,UITableViewDataSourcePrefe
                 self?.threads = threads
                 self?.blockedUsers = blocked
                 self?.tableView.reloadData()
+                self?.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
             }
         })
     }

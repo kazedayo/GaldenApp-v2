@@ -15,6 +15,7 @@ import AXPhotoViewer
 import Kingfisher
 import PKHUD
 import SideMenu
+import RealmSwift
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,UISideMenuNavigationControllerDelegate {
 
@@ -64,7 +65,19 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.api.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
-            self?.updateSequence()
+            let realm = try! Realm()
+            let thisPost = realm.object(ofType: History.self, forPrimaryKey: self?.threadIdReceived)
+            if thisPost != nil {
+                self?.pageNow = (thisPost?.page)!
+            }
+            DispatchQueue.main.async {
+                self?.updateSequence()
+            }
+            if thisPost != nil {
+                DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                    self?.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: true)
+                })
+            }
         })
     }
     
@@ -84,6 +97,16 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "quote")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
+        let history = History()
+        history.threadID = self.threadIdReceived
+        history.page = self.pageNow
+        history.position = self.webView.scrollView.contentOffset.y
+        
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(history,update: true)
+        }
+        //print(realm.objects(History.self))
     }
     
     func sideMenuWillAppear(menu: UISideMenuNavigationController, animated: Bool) {
@@ -213,16 +236,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self?.navigationController?.navigationBar.shadowImage = self?.api.channelColorFunc(ch: (self?.op.channel)!).as1ptImage()
                 self?.convertedHTML = ""
                 if self?.pageNow == 1 {
-                    let urlExtract = self?.matches(for: "(?<=\\[url\\])(\\S*)(?=\\[\\/url\\])", in: (self?.op.content)!)
-                    let imgExtract = self?.matches(for: "(?<=\\[img\\])(\\S*)(?=\\[\\/img\\])", in: (self?.op.content)!)
-                    /*for index in 0..<(urlExtract?.count)! {
-                        let converted = urlExtract![index].addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
-                        self?.op.content = (self?.op.content.replacingOccurrences(of: urlExtract![index], with: converted!))!
-                    }
-                    for index in 0..<(imgExtract?.count)! {
-                        let converted = imgExtract![index].addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
-                        self?.op.content = (self?.op.content.replacingOccurrences(of: imgExtract![index], with: converted!))!
-                    }*/
                     self?.convertBBCodeToHTML(text: op.content)
                     self?.op.contentHTML = (self?.convertedText)!
                     self?.constructOPHeader()
@@ -233,16 +246,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 }
                 
                 for index in 0..<(self?.comments.count)! {
-                    /*let urlExtract = self?.matches(for: "(?<=\\[url\\])(\\S*)(?=\\[\\/url\\])", in: (self?.comments[index].content)!)
-                    let imgExtract = self?.matches(for: "(?<=\\[img\\])(\\S*)(?=\\[\\/img\\])", in: (self?.comments[index].content)!)
-                    for i in 0..<(urlExtract?.count)! {
-                        let converted = urlExtract![i].addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
-                        self?.comments[index].content = (self?.comments[index].content.replacingOccurrences(of: urlExtract![i], with: converted!))!
-                    }
-                    for i in 0..<(imgExtract?.count)! {
-                        let converted = imgExtract![i].addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
-                        self?.comments[index].content = (self?.comments[index].content.replacingOccurrences(of: imgExtract![i], with: converted!))!
-                    }*/
                     self?.convertBBCodeToHTML(text: comments[index].content)
                     self?.comments[index].contentHTML = (self?.convertedText)!
                     self?.constructCommentHeader(index: index)
@@ -336,7 +339,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if replied == true {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: {
+            DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let height = result as! CGFloat
                     let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
@@ -346,7 +349,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 })
             })
         } else if f5 == true {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: {
+            DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let height = result as! CGFloat
                     let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)

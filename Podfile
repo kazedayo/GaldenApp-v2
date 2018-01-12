@@ -17,6 +17,7 @@ target 'GaldenApp' do
   pod 'AXPhotoViewer/Kingfisher'
   pod 'SideMenu'
   pod 'PKHUD', '~> 5.0'
+  pod 'RealmSwift'
 
   target 'GaldenAppTests' do
     inherit! :search_paths
