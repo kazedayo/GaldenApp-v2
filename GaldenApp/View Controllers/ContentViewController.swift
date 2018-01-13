@@ -35,7 +35,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var convertedHTML = ""
     var replied = false
     var f5 = false
-    var lastOffsetY :CGFloat = 0
+    var loaded = false
+    var scrollPosition: CGFloat = 0.0
     private var shadowImageView: UIImageView?
     
     @IBOutlet weak var webView: WKWebView!
@@ -70,14 +71,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             if thisPost != nil {
                 self?.pageNow = (thisPost?.page)!
             }
-            DispatchQueue.main.async {
-                self?.updateSequence()
-            }
-            if thisPost != nil {
-                DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
-                    self?.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: true)
-                })
-            }
+            self?.updateSequence()
         })
     }
     
@@ -177,6 +171,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func f5buttonPressed() {
         self.f5 = true
+        self.scrollPosition = self.webView.scrollView.contentOffset.y
         self.pageNow = Int(pageCount)
         HUD.show(.progress)
         self.updateSequence()
@@ -214,10 +209,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @IBAction func unwindAfterReply(segue: UIStoryboardSegue) {
-        self.pageNow = Int(pageCount)
         self.api.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
+            self?.pageNow = Int((self?.pageCount)!)
             self?.replied = true
             self?.updateSequence()
         })
@@ -351,13 +346,19 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         } else if f5 == true {
             DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
-                    let height = result as! CGFloat
-                    let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
+                    let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
-                    self.replied = false
+                    self.f5 = false
                     HUD.flash(.success, delay: 1.0)
                 })
             })
+        } else if loaded == false {
+            let realm = try! Realm()
+            let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
+            if thisPost != nil {
+                self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: true)
+            }
+            self.loaded = true
         }
     }
     
