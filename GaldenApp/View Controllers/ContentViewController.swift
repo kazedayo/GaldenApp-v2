@@ -365,6 +365,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             HUD.hide()
             self.webView.isHidden = false
             self.loaded = true
+        } else {
+            self.webView.isHidden = false
         }
     }
     
