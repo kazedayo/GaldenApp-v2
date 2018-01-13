@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NetworkActivityIndicatorManager.shared.isEnabled = true
         NetworkActivityIndicatorManager.shared.startDelay = 0.0
         NetworkActivityIndicatorManager.shared.completionDelay = 0.2
-        PKHUD.sharedHUD.dimsBackground = true
+        PKHUD.sharedHUD.dimsBackground = false
         PKHUD.sharedHUD.userInteractionOnUnderlyingViewsEnabled = false
         UIApplication.shared.statusBarStyle = .lightContent
         UIApplication.shared.isStatusBarHidden = false

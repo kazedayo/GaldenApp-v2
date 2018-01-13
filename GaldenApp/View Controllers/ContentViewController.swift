@@ -63,6 +63,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
         
+        HUD.show(.progress)
         self.api.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
@@ -221,6 +222,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: Private Functions
     
     private func updateSequence() {
+        self.webView.isHidden = true
         self.api.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
             [weak self] op,comments,rated,blocked,error in
             if (error == nil) {
@@ -341,6 +343,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
                     self.replied = false
                     HUD.flash(.success, delay: 1.0)
+                    self.webView.isHidden = false
                 })
             })
         } else if f5 == true {
@@ -349,7 +352,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
                     self.f5 = false
-                    HUD.flash(.success, delay: 1.0)
+                    HUD.hide()
+                    self.webView.isHidden = false
                 })
             })
         } else if loaded == false {
@@ -358,6 +362,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             if thisPost != nil {
                 self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: true)
             }
+            HUD.hide()
+            self.webView.isHidden = false
             self.loaded = true
         }
     }
