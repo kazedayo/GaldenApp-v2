@@ -63,7 +63,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
         
-        HUD.show(.progress)
         self.api.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
@@ -222,6 +221,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: Private Functions
     
     private func updateSequence() {
+        HUD.show(.progress)
         self.webView.isHidden = true
         self.api.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
             [weak self] op,comments,rated,blocked,error in
@@ -366,6 +366,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self.webView.isHidden = false
             self.loaded = true
         } else {
+            HUD.hide()
             self.webView.isHidden = false
         }
     }
