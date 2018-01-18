@@ -13,6 +13,7 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
     
     var upvote: Int = 0
     var downvote: Int = 0
+    var rated: String = "false"
     var threadTitle: String?
     var opName: String?
     var threadID: String?
@@ -37,6 +38,12 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
     override func viewWillAppear(_ animated: Bool) {
         if keychain.get("LeaveNameText") == "" {
             lmButton.isHidden = true
+        }
+        if rated == "true" {
+            upvoteButton.isEnabled = false
+            upvoteButton.backgroundColor = UIColor(red:0.52, green:0.68, blue:0.52, alpha:1.0)
+            downvoteButton.isEnabled = false
+            downvoteButton.backgroundColor = UIColor(red:0.91, green:0.49, blue:0.49, alpha:1.0)
         }
         upvoteButton.setTitle("正皮: \(upvote)", for: .normal)
         downvoteButton.setTitle("負皮: \(downvote)", for: .normal)
@@ -79,6 +86,10 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
         api.rate(threadID: threadID!, rate: "g", completion: {
             self.upvote += 1
             self.upvoteButton.setTitle("正皮: \(self.upvote)", for: .normal)
+            self.upvoteButton.isEnabled = false
+            self.upvoteButton.backgroundColor = UIColor(red:0.52, green:0.68, blue:0.52, alpha:1.0)
+            self.downvoteButton.isEnabled = false
+            self.downvoteButton.backgroundColor = UIColor(red:0.91, green:0.49, blue:0.49, alpha:1.0)
         })
     }
     
@@ -86,6 +97,10 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
         api.rate(threadID: threadID!, rate: "b", completion: {
             self.downvote += 1
             self.downvoteButton.setTitle("負皮: \(self.downvote)", for: .normal)
+            self.upvoteButton.isEnabled = false
+            self.upvoteButton.backgroundColor = UIColor(red:0.52, green:0.68, blue:0.52, alpha:1.0)
+            self.downvoteButton.isEnabled = false
+            self.downvoteButton.backgroundColor = UIColor(red:0.91, green:0.49, blue:0.49, alpha:1.0)
         })
     }
     

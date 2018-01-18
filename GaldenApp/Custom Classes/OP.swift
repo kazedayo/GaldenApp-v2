@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OP {
+struct OP {
     var title: String
     var name: String
     var level: String
@@ -23,7 +23,7 @@ class OP {
     var quoteID: String
     var userID: String
     
-    init(t: String,n: String,l: String,c: String,cH: String,a: String,d: String,gd: String,b: String,ge: String,ch: String,qid: String,uid: String) {
+    /*init(t: String,n: String,l: String,c: String,cH: String,a: String,d: String,gd: String,b: String,ge: String,ch: String,qid: String,uid: String) {
         title = t
         name = n
         level = l
@@ -37,5 +37,5 @@ class OP {
         channel = ch
         quoteID = qid
         userID = uid
-    }
+    }*/
 }

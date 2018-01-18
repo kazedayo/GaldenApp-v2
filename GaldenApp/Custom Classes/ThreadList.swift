@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ThreadList {
+struct ThreadList {
     
     //Properties
     var id: String
@@ -19,7 +19,7 @@ class ThreadList {
     var rate: String
     var userID: String
     
-    init(iD: String, iDent: String, tit: String, userN: String, cnt: String, rt: String,uid: String) {
+    /*init(iD: String, iDent: String, tit: String, userN: String, cnt: String, rt: String,uid: String) {
         id = iD
         ident = iDent
         title = tit
@@ -27,6 +27,6 @@ class ThreadList {
         count = cnt
         rate = rt
         userID = uid
-    }
+    }*/
     
 }

@@ -8,12 +8,12 @@
 
 import UIKit
 
-class BlockedUsers {
+struct BlockedUsers {
     var id: String
     var userName: String
     
-    init(ident: String, uname: String) {
+    /*init(ident: String, uname: String) {
         id = ident
         userName = uname
-    }
+    }*/
 }

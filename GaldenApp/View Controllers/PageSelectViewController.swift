@@ -13,8 +13,10 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
     var pageCount: Double = 0.0
     var type: String!
     var pageSelected: Int = 0
+    var titleText: String?
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var titleLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +29,9 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.tableFooterView = UIView()
+        if type == "threadList" {
+            self.titleLabel.text = titleText!
+        }
     }
 
     override func didReceiveMemoryWarning() {

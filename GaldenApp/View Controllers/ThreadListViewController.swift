@@ -10,7 +10,7 @@ import KeychainSwift
 import SideMenu
 import PKHUD
 
-class ThreadListViewController: UITableViewController,UITableViewDataSourcePrefetching {
+class ThreadListViewController: UITableViewController {
     
     //HKGaldenAPI.swift required (NOT included in GitHub repo)
     let api: HKGaldenAPI = HKGaldenAPI()
@@ -27,12 +27,13 @@ class ThreadListViewController: UITableViewController,UITableViewDataSourcePrefe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.prefetchDataSource = self
         
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
         tableView.refreshControl = refreshControl
+        tableView.estimatedRowHeight = 44
+        tableView.rowHeight = UITableViewAutomaticDimension
         
         let menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as! UISideMenuNavigationController
         SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
@@ -68,6 +69,7 @@ class ThreadListViewController: UITableViewController,UITableViewDataSourcePrefe
     }
     
     @objc func refresh(refreshControl: UIRefreshControl) {
+        self.pageNow = "1"
         api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
@@ -85,7 +87,7 @@ class ThreadListViewController: UITableViewController,UITableViewDataSourcePrefe
     }
 
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
@@ -96,27 +98,33 @@ class ThreadListViewController: UITableViewController,UITableViewDataSourcePrefe
         return threads.count
     }
     
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        
-    }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell", for: indexPath) as! ThreadListTableViewCell
-        let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
-        cell.selectedBackgroundView = bgColorView
         
         // Configure the cell...
-        if (blockedUsers.contains(threads[indexPath.row].userID)) {
-            cell.threadTitleLabel.text = "[已封鎖]"
-            cell.threadTitleLabel.textColor = .darkGray
-            cell.detailLabel.text = "//unknown identity//"
-        } else {
-            cell.threadTitleLabel.text = threads[indexPath.row].title
-            cell.threadTitleLabel.textColor = .lightGray
-            cell.detailLabel.text = threads[indexPath.row].userName + "  " + "回覆:" + threads[indexPath.row].count + "  " + "評分:" + threads[indexPath.row].rate
+        let queue = SerialOperationQueue()
+        queue.cancelAllOperations()
+        let operation = BlockOperation()
+        operation.addExecutionBlock {
+            [weak operation] in
+            let title = self.threads[indexPath.row].title
+            let uname = self.threads[indexPath.row].userName
+            let count = self.threads[indexPath.row].count
+            let rate = self.threads[indexPath.row].rate
+            DispatchQueue.main.async {
+                if let operation = operation, operation.isCancelled { return }
+                if (self.blockedUsers.contains(self.threads[indexPath.row].userID)) {
+                    cell.threadTitleLabel.text = "[已封鎖]"
+                    cell.threadTitleLabel.textColor = .darkGray
+                    cell.detailLabel.text = "//unknown identity//"
+                } else {
+                    cell.threadTitleLabel.text = title
+                    cell.threadTitleLabel.textColor = .lightGray
+                    cell.detailLabel.text = "\(uname) 回覆: \(count) 評分: \(rate)"
+                }
+            }
         }
-        
+        queue.addOperation(operation)
         return cell
     }
     
@@ -198,6 +206,7 @@ class ThreadListViewController: UITableViewController,UITableViewDataSourcePrefe
             let destination = segue.destination as! PageSelectViewController
             destination.type = "threadList"
             destination.pageCount = self.pageCount!
+            destination.titleText = self.selectedThreadTitle
         default:
             break
         }

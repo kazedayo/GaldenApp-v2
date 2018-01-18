@@ -38,8 +38,14 @@ class ChannelSelectViewController: UITableViewController {
         let bgColorView = UIView()
         bgColorView.backgroundColor = api.channelColorFunc(ch: cellIdentifiers[indexPath.row])
         cell.selectedBackgroundView = bgColorView
-        cell.channelIcon.image = UIImage(named: cellIdentifiers[indexPath.row])
-        cell.channelTitle.text = channelTitle[indexPath.row]
+        DispatchQueue.global(qos: .default).async {
+            let image = UIImage(named: self.cellIdentifiers[indexPath.row])
+            let text = self.channelTitle[indexPath.row]
+            DispatchQueue.main.async {
+                cell.channelIcon.image = image
+                cell.channelTitle.text = text
+            }
+        }
         
         return cell
     }

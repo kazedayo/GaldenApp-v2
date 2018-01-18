@@ -7,18 +7,28 @@
 //
 
 import UIKit
+import AttributedLabel
 
 class ThreadListTableViewCell: UITableViewCell {
+    
     
     //MARK: Properties
     
     
-    @IBOutlet weak var threadTitleLabel: UILabel!
-    @IBOutlet weak var detailLabel: UILabel!
+    @IBOutlet weak var threadTitleLabel: AttributedLabel!
+    @IBOutlet weak var detailLabel: AttributedLabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
+        selectedBackgroundView = bgColorView
+        threadTitleLabel.numberOfLines = 0
+        detailLabel.numberOfLines = 1
+        threadTitleLabel.usesIntrinsicContentSize = true
+        threadTitleLabel.font = UIFont.systemFont(ofSize: 15)
+        detailLabel.font = UIFont.systemFont(ofSize: 12)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

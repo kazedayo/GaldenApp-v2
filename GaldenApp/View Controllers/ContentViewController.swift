@@ -25,7 +25,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var isRated: String = ""
     var pageNow: Int = 1
     var convertedText: String = ""
-    var op = OP(t: "",n: "",l: "",c: "",cH: "",a: "",d: "",gd: "",b: "",ge: "",ch: "",qid:"",uid:"")
+    var op = OP(title: "",name: "",level: "",content: "",contentHTML: "",avatar: "",date: "",good: "",bad: "",gender: "",channel: "",quoteID:"",userID:"")
     var comments = [Replies]()
     var replyCount = 1
     var pageCount = 0.0
@@ -112,6 +112,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         destination.threadID = self.threadIdReceived
         destination.pageCount = Int(self.pageCount)
         destination.pageSelected = self.pageNow
+        destination.rated = self.isRated
     }
     
     override func didReceiveMemoryWarning() {

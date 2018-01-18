@@ -54,3 +54,10 @@ extension DispatchTime: ExpressibleByFloatLiteral {
         self = DispatchTime.now() + .milliseconds(Int(value * 1000))
     }
 }
+
+class SerialOperationQueue: OperationQueue {
+    override init() {
+        super.init()
+        maxConcurrentOperationCount = 1
+    }
+}

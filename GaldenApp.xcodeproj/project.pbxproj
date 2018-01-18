@@ -34,7 +34,6 @@
 		42A394A21FBC3793008A5239 /* ChannelListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A394A11FBC3793008A5239 /* ChannelListTableViewCell.swift */; };
 		42AF57A91FB57DF300C6497B /* IconKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AF57A81FB57DF300C6497B /* IconKeyboard.swift */; };
 		42AF57AB1FB57E1F00C6497B /* IconKeyboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42AF57AA1FB57E1F00C6497B /* IconKeyboard.xib */; };
-		42AF57AD1FB5CFA600C6497B /* Device-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AF57AC1FB5CFA600C6497B /* Device-Extension.swift */; };
 		42C261F51F7CECEA00477479 /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C261F41F7CECEA00477479 /* ComposeViewController.swift */; };
 		42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8931F7923E1002CC13F /* AppDelegate.swift */; };
 		42E7F8991F7923E1002CC13F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F8971F7923E1002CC13F /* Main.storyboard */; };
@@ -82,7 +81,6 @@
 		42A394A11FBC3793008A5239 /* ChannelListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChannelListTableViewCell.swift; path = "GaldenApp/Table View Cells/ChannelListTableViewCell.swift"; sourceTree = "<group>"; };
 		42AF57A81FB57DF300C6497B /* IconKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IconKeyboard.swift; path = "GaldenApp/Custom Classes/IconKeyboard.swift"; sourceTree = "<group>"; };
 		42AF57AA1FB57E1F00C6497B /* IconKeyboard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = IconKeyboard.xib; path = GaldenApp/IconKeyboard.xib; sourceTree = "<group>"; };
-		42AF57AC1FB5CFA600C6497B /* Device-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Device-Extension.swift"; path = "GaldenApp/Custom Classes/Device-Extension.swift"; sourceTree = "<group>"; };
 		42C261F41F7CECEA00477479 /* ComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
 		42E7F8901F7923E1002CC13F /* GaldenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaldenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8931F7923E1002CC13F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -174,7 +172,6 @@
 				421884B71F864300005D0BAA /* OP.swift */,
 				421884B91F86432E005D0BAA /* Replies.swift */,
 				4247D5061F82505300809025 /* HKGaldenAPI.swift */,
-				42AF57AC1FB5CFA600C6497B /* Device-Extension.swift */,
 			);
 			name = "Custom Classes";
 			path = ..;
@@ -424,6 +421,7 @@
 				"${BUILT_PRODUCTS_DIR}/AXStateButton/AXStateButton.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityIndicator/AlamofireNetworkActivityIndicator.framework",
+				"${BUILT_PRODUCTS_DIR}/AttributedLabel/AttributedLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/DeckTransition/DeckTransition.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
 				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
@@ -443,6 +441,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AXStateButton.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityIndicator.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AttributedLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeckTransition.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
@@ -484,7 +483,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				42942F231FA6CAC700171D8B /* Extensions.swift in Sources */,
-				42AF57AD1FB5CFA600C6497B /* Device-Extension.swift in Sources */,
 				429A26F61FA4426E00B28B7E /* BlockedUserViewController.swift in Sources */,
 				4282161F1FB1ADB3003ACF0C /* EULAViewController.swift in Sources */,
 				4247D5071F82505300809025 /* HKGaldenAPI.swift in Sources */,

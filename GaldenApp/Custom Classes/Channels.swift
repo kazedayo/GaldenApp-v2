@@ -8,12 +8,12 @@
 
 import UIKit
 
-class Channels {
+struct Channels {
     
     //MARK: Properties
     var channelName: String
     
-    init(channelName: String) {
+    /*init(channelName: String) {
         self.channelName = channelName
-    }
+    }*/
 }

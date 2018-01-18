@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Replies {
+struct Replies {
     var name: String
     var level: String
     var content: String
@@ -19,7 +19,7 @@ class Replies {
     var quoteID: String
     var userID: String
     
-    init(n: String,l: String,c: String,cH: String,a: String,d: String,g: String,qid: String,uid: String) {
+    /*init(n: String,l: String,c: String,cH: String,a: String,d: String,g: String,qid: String,uid: String) {
         name = n
         level = l
         content = c
@@ -29,5 +29,5 @@ class Replies {
         gender = g
         quoteID = qid
         userID = uid
-    }
+    }*/
 }

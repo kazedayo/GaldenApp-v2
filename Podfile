@@ -18,6 +18,7 @@ target 'GaldenApp' do
   pod 'SideMenu'
   pod 'PKHUD', '~> 5.0'
   pod 'RealmSwift'
+  pod 'AttributedLabel'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

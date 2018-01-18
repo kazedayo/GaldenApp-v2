@@ -45,7 +45,7 @@ class HKGaldenAPI {
                     let threadNo: String = subJson["id"].stringValue
                     let userid: String = subJson["uid"].stringValue
                     
-                    fetchedContent.append(ThreadList(iD: threadNo,iDent: channel,tit: topic,userN: user,cnt: reply,rt: rate,uid: userid))
+                    fetchedContent.append(ThreadList(id: threadNo,ident: channel,title: topic,userName: user, count: reply, rate: rate, userID: userid))
                 }
                 
                 var blockedUsers = [String]()
@@ -101,7 +101,7 @@ class HKGaldenAPI {
                 let userid = json["topic"]["uid"].stringValue
                 
                 
-                let op = OP(t: title,n: name,l: level,c: content,cH: "",a: avatar,d: date,gd: good,b: bad,ge: gender,ch: channel,qid: quoteid,uid: userid)
+                let op = OP(title: title,name: name,level: level,content: content,contentHTML: "",avatar: avatar,date: date,good: good,bad: bad,gender: gender,channel: channel,quoteID: quoteid,userID: userid)
                 
                 //fetch reply data
                 for (_,subJson):(String, JSON) in json["replys"] {
@@ -118,7 +118,7 @@ class HKGaldenAPI {
                     let quoteid = subJson["r_id"].stringValue
                     let userid = subJson["uid"].stringValue
                     
-                    comments.append(Replies(n: name,l: level,c: content,cH: "",a: avatar,d: date,g: gender,qid:quoteid,uid:userid))
+                    comments.append(Replies(name: name,level: level,content: content,contentHTML: "",avatar: avatar,date: date,gender: gender,quoteID:quoteid,userID:userid))
                     
                 }
                 
@@ -239,7 +239,7 @@ class HKGaldenAPI {
                     let id = subJson["id"].stringValue
                     let name = subJson["username"].stringValue
                     
-                    blockedUsers.append(BlockedUsers(ident: id,uname: name))
+                    blockedUsers.append(BlockedUsers(id: id,userName: name))
                 }
                 
                 completion(blockedUsers)
