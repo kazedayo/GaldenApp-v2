@@ -57,6 +57,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         title.marqueeType = .MLLeftRight
         title.fadeLength = 5
         navigationItem.titleView = title
+        
         self.webView.scrollView.showsVerticalScrollIndicator = false
         self.webView.scrollView.showsHorizontalScrollIndicator = false
         self.webView.navigationDelegate = self
@@ -341,7 +342,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let height = result as! CGFloat
                     let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
-                    webView.scrollView.setContentOffset(scrollPoint, animated: true)
+                    webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.replied = false
                     HUD.flash(.success, delay: 1.0)
                     self.webView.isHidden = false
@@ -351,21 +352,23 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
-                    webView.scrollView.setContentOffset(scrollPoint, animated: true)
+                    webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.f5 = false
                     HUD.hide()
                     self.webView.isHidden = false
                 })
             })
         } else if loaded == false {
-            let realm = try! Realm()
-            let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
-            if thisPost != nil {
-                self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: true)
-            }
-            HUD.hide()
-            self.webView.isHidden = false
-            self.loaded = true
+            DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                let realm = try! Realm()
+                let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
+                if thisPost != nil {
+                    self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: false)
+                }
+                HUD.hide()
+                self.webView.isHidden = false
+                self.loaded = true
+            })
         } else {
             HUD.hide()
             self.webView.isHidden = false

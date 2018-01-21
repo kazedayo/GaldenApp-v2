@@ -35,6 +35,7 @@
 		42AF57A91FB57DF300C6497B /* IconKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AF57A81FB57DF300C6497B /* IconKeyboard.swift */; };
 		42AF57AB1FB57E1F00C6497B /* IconKeyboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42AF57AA1FB57E1F00C6497B /* IconKeyboard.xib */; };
 		42C261F51F7CECEA00477479 /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C261F41F7CECEA00477479 /* ComposeViewController.swift */; };
+		42CD15A020118E9F00B722CD /* blazy.js in Resources */ = {isa = PBXBuildFile; fileRef = 42CD159F20118E9F00B722CD /* blazy.js */; };
 		42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8931F7923E1002CC13F /* AppDelegate.swift */; };
 		42E7F8991F7923E1002CC13F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F8971F7923E1002CC13F /* Main.storyboard */; };
 		42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89A1F7923E1002CC13F /* Assets.xcassets */; };
@@ -82,6 +83,7 @@
 		42AF57A81FB57DF300C6497B /* IconKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IconKeyboard.swift; path = "GaldenApp/Custom Classes/IconKeyboard.swift"; sourceTree = "<group>"; };
 		42AF57AA1FB57E1F00C6497B /* IconKeyboard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = IconKeyboard.xib; path = GaldenApp/IconKeyboard.xib; sourceTree = "<group>"; };
 		42C261F41F7CECEA00477479 /* ComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
+		42CD159F20118E9F00B722CD /* blazy.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = blazy.js; sourceTree = "<group>"; };
 		42E7F8901F7923E1002CC13F /* GaldenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaldenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8931F7923E1002CC13F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42E7F8981F7923E1002CC13F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				4262C20D1F95FAE0002EEC76 /* jssource.js */,
+				42CD159F20118E9F00B722CD /* blazy.js */,
 				4262C20E1F95FAE1002EEC76 /* xbbcode.js */,
 				424B61CA1FC06EFA000D71F0 /* content.css */,
 				427AD6761F81E6F900305EEA /* View Controllers */,
@@ -329,6 +332,7 @@
 				42E7F89E1F7923E1002CC13F /* LaunchScreen.storyboard in Resources */,
 				4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */,
 				424B61CB1FC06EFA000D71F0 /* content.css in Resources */,
+				42CD15A020118E9F00B722CD /* blazy.js in Resources */,
 				42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */,
 				42E7F8991F7923E1002CC13F /* Main.storyboard in Resources */,
 			);
