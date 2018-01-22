@@ -36,16 +36,20 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
         contentPreviewText = api.sizeTagCorrection(bbcode: contentPreviewText)
         contentPreviewText = api.iconParse(bbcode: contentPreviewText)
         convertBBCodeToHTML(text: contentPreviewText)
-        webView.isHidden = true
-        webView.frame = containerView.bounds
-        webView.navigationDelegate = self
-        webView.loadHTMLString(convertedText!, baseURL: Bundle.main.bundleURL)
-        containerView.addSubview(webView)
         viewTitle.text = threadTitle
         if type == "reply" {
             viewTitle.text = "回覆預覽"
         }
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        webView.isHidden = true
+        webView.navigationDelegate = self
+        webView.frame = containerView.bounds
+        webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((convertedText)!)</body></html>", baseURL: Bundle.main.bundleURL)
+        self.containerView.addSubview(webView)
     }
 
     override func didReceiveMemoryWarning() {

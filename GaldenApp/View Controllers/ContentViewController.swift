@@ -60,13 +60,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         title.textAlignment = .center
         navigationItem.titleView = title
         
-        self.webView.frame = CGRect.init(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height - 65)
-        self.webView.isHidden = true
-        self.webView.scrollView.showsVerticalScrollIndicator = false
-        self.webView.scrollView.showsHorizontalScrollIndicator = false
-        self.webView.navigationDelegate = self
-        self.view.addSubview(webView)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
         
         self.api.pageCount(postId: threadIdReceived, completion: {
@@ -88,6 +81,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.add(self, name: "quote")
         self.webView.configuration.userContentController.add(self, name: "block")
         self.webView.configuration.userContentController.add(self, name: "refresh")
+        self.webView.frame = self.view.bounds
+        self.webView.isHidden = true
+        self.webView.scrollView.showsVerticalScrollIndicator = false
+        self.webView.scrollView.showsHorizontalScrollIndicator = false
+        self.webView.navigationDelegate = self
+        self.view.addSubview(webView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
