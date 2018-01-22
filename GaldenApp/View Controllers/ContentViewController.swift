@@ -82,7 +82,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.add(self, name: "block")
         self.webView.configuration.userContentController.add(self, name: "refresh")
         self.webView.frame = self.view.bounds
-        self.webView.isHidden = true
+        //self.webView.isHidden = true
         self.webView.scrollView.showsVerticalScrollIndicator = false
         self.webView.scrollView.showsHorizontalScrollIndicator = false
         self.webView.navigationDelegate = self
