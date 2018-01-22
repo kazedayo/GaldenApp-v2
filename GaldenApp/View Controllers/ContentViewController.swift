@@ -56,9 +56,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         title.animationDelay = 1
         title.marqueeType = .MLLeftRight
         title.fadeLength = 5
-        title.frame = CGRect.init(x: 0, y: 0, width: 500, height: 44)
+        title.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
         title.textAlignment = .center
         navigationItem.titleView = title
+        
+        self.webView.isHidden = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
         
@@ -82,7 +84,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.add(self, name: "block")
         self.webView.configuration.userContentController.add(self, name: "refresh")
         self.webView.frame = self.view.bounds
-        //self.webView.isHidden = true
         self.webView.scrollView.showsVerticalScrollIndicator = false
         self.webView.scrollView.showsHorizontalScrollIndicator = false
         self.webView.navigationDelegate = self
