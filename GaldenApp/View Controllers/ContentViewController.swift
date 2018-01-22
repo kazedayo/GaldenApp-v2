@@ -41,8 +41,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     private var shadowImageView: UIImageView?
     private var webView = WKWebView()
     
-    @IBOutlet weak var containerView: UIView!
-    
     //HKGalden API (NOT included in GitHub repo)
     var api = HKGaldenAPI()
     let keychain = KeychainSwift()
@@ -67,7 +65,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.scrollView.showsVerticalScrollIndicator = false
         self.webView.scrollView.showsHorizontalScrollIndicator = false
         self.webView.navigationDelegate = self
-        self.containerView.addSubview(webView)
+        self.view.addSubview(webView)
         
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
         
