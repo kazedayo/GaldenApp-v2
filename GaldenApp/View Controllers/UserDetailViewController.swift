@@ -65,7 +65,12 @@ class UserDetailViewController: UITableViewController,UINavigationControllerDele
     }
     
     @IBAction func sourceButtonPressed(_ sender: UIButton) {
-        UIApplication.shared.open(URL(string: "https://github.com/kazedayo/GaldenApp-v2")!, options: [:], completionHandler: nil)
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(URL(string: "https://github.com/kazedayo/GaldenApp-v2")!, options: [:], completionHandler: nil)
+        } else {
+            // Fallback on earlier versions
+            UIApplication.shared.openURL(URL(string: "https://github.com/kazedayo/GaldenApp-v2")!)
+        }
     }
     
     @IBAction func clearButtonPressed(_ sender: UIButton) {

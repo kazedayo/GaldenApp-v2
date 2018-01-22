@@ -12,10 +12,10 @@ import MarqueeLabel
 import WebKit
 import PKHUD
 
-class PreviewViewController: UIViewController {
+class PreviewViewController: UIViewController,WKNavigationDelegate {
     
     @IBOutlet weak var viewTitle: MarqueeLabel!
-    @IBOutlet weak var previewContent: WKWebView!
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var submitButton: UIButton!
     
     var threadTitle: String?
@@ -24,6 +24,7 @@ class PreviewViewController: UIViewController {
     var convertedText: String?
     var topicID: String?
     var type: String?
+    var webView = WKWebView()
     
     let api = HKGaldenAPI()
     
@@ -35,7 +36,11 @@ class PreviewViewController: UIViewController {
         contentPreviewText = api.sizeTagCorrection(bbcode: contentPreviewText)
         contentPreviewText = api.iconParse(bbcode: contentPreviewText)
         convertBBCodeToHTML(text: contentPreviewText)
-        previewContent.loadHTMLString(convertedText!, baseURL: Bundle.main.bundleURL)
+        webView.isHidden = true
+        webView.frame = containerView.bounds
+        webView.navigationDelegate = self
+        webView.loadHTMLString(convertedText!, baseURL: Bundle.main.bundleURL)
+        containerView.addSubview(webView)
         viewTitle.text = threadTitle
         if type == "reply" {
             viewTitle.text = "回覆預覽"
@@ -135,6 +140,12 @@ class PreviewViewController: UIViewController {
             let newContent = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\(html)</body></html>"
             convertedText = newContent
         }
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+            self.webView.isHidden = false
+        })
     }
     
 }

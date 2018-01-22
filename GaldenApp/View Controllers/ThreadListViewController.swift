@@ -31,9 +31,12 @@ class ThreadListViewController: UITableViewController {
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
-        tableView.refreshControl = refreshControl
-        tableView.estimatedRowHeight = 44
-        tableView.rowHeight = UITableViewAutomaticDimension
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            // Fallback on earlier versions
+            tableView.addSubview(refreshControl)
+        }
         
         let menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as! UISideMenuNavigationController
         SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
@@ -192,6 +195,7 @@ class ThreadListViewController: UITableViewController {
                 let selectedThread = threads[(indexPath?.row)!].id
                 contentViewController.threadIdReceived = selectedThread
                 contentViewController.title = threads[(indexPath?.row)!].title
+                contentViewController.sender = "cell"
             }
             else {
                 contentViewController.threadIdReceived = selectedThread

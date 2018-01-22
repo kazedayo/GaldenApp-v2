@@ -21,6 +21,7 @@ class ChannelSelectViewController: UITableViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.contentInset = UIEdgeInsets.init(top: 20, left: 0, bottom: 0, right: 0)
         // Do any additional setup after loading the view.
     }
     

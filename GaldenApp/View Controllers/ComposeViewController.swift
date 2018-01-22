@@ -18,7 +18,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var content = ""
     var topicID = ""
     var type = ""
-    var kheight: CGFloat?
+    var kheight: CGFloat = 0
     let api = HKGaldenAPI()
     
     let iconKeyboard = IconKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 265))
@@ -49,13 +49,13 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let keyboardHeight = keyboardRectangle.height
         // do whatever you want with this keyboard height
         self.kheight = keyboardHeight
-        bottomConstrain.constant = (kheight! + 20)
+        bottomConstrain.constant = (kheight + 20)
         self.view.layoutIfNeeded()
     }
     
     @objc func keyboardWillHide(notification: Notification) {
         // keyboard is dismissed/hidden from the screen
-        bottomConstrain.constant -= kheight!
+        bottomConstrain.constant -= kheight
         self.view.layoutIfNeeded()
     }
     

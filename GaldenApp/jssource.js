@@ -19,7 +19,7 @@ var parseBBcodeColor = function (bbcode) {
 
 function convertBBCodeToHTML(source) {
     source = parseBBcodeColor(source)
-    var htmlResult = XBBCODE.process({text: source,removeMisalignedTags: true,addInLineBreaks: true});
+    var htmlResult = XBBCODE.process({text: source,removeMisalignedTags: false,addInLineBreaks: true});
     
     //consoleLog(htmlResult.html);
     

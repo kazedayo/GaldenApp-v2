@@ -37,9 +37,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var f5 = false
     var loaded = false
     var scrollPosition: CGFloat = 0.0
+    var sender = ""
     private var shadowImageView: UIImageView?
+    private var webView = WKWebView()
     
-    @IBOutlet weak var webView: WKWebView!
+    @IBOutlet weak var containerView: UIView!
     
     //HKGalden API (NOT included in GitHub repo)
     var api = HKGaldenAPI()
@@ -56,11 +58,16 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         title.animationDelay = 1
         title.marqueeType = .MLLeftRight
         title.fadeLength = 5
+        title.frame = CGRect.init(x: 0, y: 0, width: 500, height: 44)
+        title.textAlignment = .center
         navigationItem.titleView = title
         
+        self.webView.frame = CGRect.init(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height - 65)
+        self.webView.isHidden = true
         self.webView.scrollView.showsVerticalScrollIndicator = false
         self.webView.scrollView.showsHorizontalScrollIndicator = false
         self.webView.navigationDelegate = self
+        self.containerView.addSubview(webView)
         
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
         
@@ -69,7 +76,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self?.pageCount = count
             let realm = try! Realm()
             let thisPost = realm.object(ofType: History.self, forPrimaryKey: self?.threadIdReceived)
-            if thisPost != nil {
+            if thisPost != nil && self?.sender == "cell" {
                 self?.pageNow = (thisPost?.page)!
             }
             self?.updateSequence()
@@ -362,7 +369,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
                 let realm = try! Realm()
                 let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
-                if thisPost != nil {
+                if thisPost != nil && self.sender == "cell" {
                     self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: false)
                 }
                 HUD.hide()
@@ -388,7 +395,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 decisionHandler(.cancel)
             } else {
                 let url = navigationAction.request.url
-                UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+                } else {
+                    // Fallback on earlier versions
+                    UIApplication.shared.openURL(url!)
+                }
                 decisionHandler(.cancel)
             }
         } else {
