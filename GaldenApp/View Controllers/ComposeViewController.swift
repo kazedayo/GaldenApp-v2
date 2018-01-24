@@ -306,6 +306,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     @IBAction func sendButtonPressed(_ sender: UIButton) {
         self.view.endEditing(true)
+        if (type == "newThread" && titleTextField.text == "") {
+            let alert = UIAlertController.init(title: "注意", message: "標題不可爲空", preferredStyle: .alert)
+            alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
+            self.present(alert,animated: true,completion: nil)
+        }
         if (contentTextView.text == "") {
             let alert = UIAlertController.init(title: "注意", message: "內容不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
@@ -331,7 +336,21 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                 self.contentTextView.insertText("[img]" + url + "[/img]\n")
             })
         } else {
-            // Fallback on earlier versions
+            //obtaining saving path
+            let fileManager = FileManager.default
+            let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+            let imagePath = documentsPath?.appendingPathComponent("image.jpg")
+            
+            // extract image from the picker and save it
+            if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+                try! UIImageJPEGRepresentation(pickedImage, 1.0)?.write(to: imagePath!)
+            }
+            api.imageUpload(imageURL: imagePath!, completion: {
+                url in
+                HUD.flash(.success, delay: 1.0)
+                self.dismiss(animated: true, completion: nil)
+                self.contentTextView.insertText("[img]" + url + "[/img]\n")
+            })
         }
     }
     
