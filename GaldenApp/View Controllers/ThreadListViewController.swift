@@ -9,8 +9,9 @@ import UIKit
 import KeychainSwift
 import SideMenu
 import PKHUD
+import GoogleMobileAds
 
-class ThreadListViewController: UITableViewController {
+class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
     
     //HKGaldenAPI.swift required (NOT included in GitHub repo)
     let api: HKGaldenAPI = HKGaldenAPI()
@@ -24,9 +25,23 @@ class ThreadListViewController: UITableViewController {
     var blockedUsers = [String]()
     var selectedPage: Int?
     var selectedThreadTitle: String!
+    var adTest = true
+    lazy var adBannerView: GADBannerView = {
+        let adBannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
+        adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
+        adBannerView.delegate = self
+        adBannerView.rootViewController = self
+        
+        return adBannerView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if (adTest == false) {
+            adBannerView.removeFromSuperview()
+        } else {
+            adBannerView.load(GADRequest())
+        }
         
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear
@@ -82,6 +97,34 @@ class ThreadListViewController: UITableViewController {
                 refreshControl.endRefreshing()
             }
         })
+    }
+    
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        //print("Banner loaded successfully")
+        // Reposition the banner ad to create a slide down effect
+        let translateTransform = CGAffineTransform(translationX: 0, y: -bannerView.bounds.size.height)
+        bannerView.transform = translateTransform
+        
+        UIView.animate(withDuration: 0.5) {
+            bannerView.transform = CGAffineTransform.identity
+        }
+    }
+    
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+        //print("Fail to receive ads")
+        print(error)
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return adBannerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if (adTest == false) {
+            return 0
+        } else {
+            return adBannerView.frame.height
+        }
     }
     
     override func didReceiveMemoryWarning() {

@@ -12,6 +12,7 @@ PODS:
   - AXStateButton (1.1.4)
   - DeckTransition (2.0.0)
   - FLAnimatedImage (1.0.12)
+  - Google-Mobile-Ads-SDK (7.27.0)
   - Hero (1.0.1)
   - IQKeyboardManagerSwift (5.0.7)
   - KeychainSwift (10.0.0)
@@ -34,6 +35,7 @@ DEPENDENCIES:
   - AttributedLabel
   - AXPhotoViewer/Kingfisher
   - DeckTransition
+  - Google-Mobile-Ads-SDK
   - Hero
   - IQKeyboardManagerSwift
   - KeychainSwift
@@ -51,6 +53,7 @@ SPEC CHECKSUMS:
   AXStateButton: 6c515a433e37551505046429b5be04c12daa8c07
   DeckTransition: 2300694f94fbeca2c103f365dc9dc09ffae14a4f
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
+  Google-Mobile-Ads-SDK: 83f7f890e638ce8f1debd440ea363338c9f6be3b
   Hero: cee286821578e170d8c0c9c9cda7897357401112
   IQKeyboardManagerSwift: 30fb3a61de1af53a95e02b80fb54ed0a19d5ede5
   KeychainSwift: f9f7910449a0c0fd2cabc889121530dd2c477c33
@@ -62,6 +65,6 @@ SPEC CHECKSUMS:
   SideMenu: 47dbf9e4d878062d8994aed43f6e4bf6c1fea30b
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 694515c0c31dfadbc4db3f089227652bef31a57e
+PODFILE CHECKSUM: 1921c84e5fd8f95718372f842eea07483500196b
 
 COCOAPODS: 1.4.0

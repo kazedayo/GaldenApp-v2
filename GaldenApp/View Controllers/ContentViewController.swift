@@ -16,8 +16,9 @@ import Kingfisher
 import PKHUD
 import SideMenu
 import RealmSwift
+import GoogleMobileAds
 
-class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,UISideMenuNavigationControllerDelegate {
+class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,UISideMenuNavigationControllerDelegate,GADBannerViewDelegate {
 
     //MARK: Properties
     
@@ -38,6 +39,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var loaded = false
     var scrollPosition: CGFloat = 0.0
     var sender = ""
+    var adTest = true
     private var shadowImageView: UIImageView?
     private var webView = WKWebView()
     
@@ -45,10 +47,24 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var api = HKGaldenAPI()
     let keychain = KeychainSwift()
     
+    @IBOutlet weak var adBannerView: GADBannerView!
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var heightConstraint: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeJS()
         navigationController?.delegate = self
+        adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
+        adBannerView.delegate = self
+        adBannerView.rootViewController = self
+        
+        if (adTest == false) {
+            heightConstraint.constant = 0
+            adBannerView.layoutIfNeeded()
+        } else {
+            adBannerView.load(GADRequest())
+        }
         
         let title = MarqueeLabel.init()
         title.textColor = .lightGray
@@ -83,11 +99,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.add(self, name: "quote")
         self.webView.configuration.userContentController.add(self, name: "block")
         self.webView.configuration.userContentController.add(self, name: "refresh")
-        self.webView.frame = self.view.bounds
+        self.webView.frame = self.containerView.bounds
         self.webView.scrollView.showsVerticalScrollIndicator = false
         self.webView.scrollView.showsHorizontalScrollIndicator = false
         self.webView.navigationDelegate = self
-        self.view.addSubview(webView)
+        self.containerView.addSubview(webView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -124,6 +140,22 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        //print("Banner loaded successfully")
+        // Reposition the banner ad to create a slide down effect
+        let translateTransform = CGAffineTransform(translationX: 0, y: -bannerView.bounds.size.height)
+        bannerView.transform = translateTransform
+        
+        UIView.animate(withDuration: 0.5) {
+            bannerView.transform = CGAffineTransform.identity
+        }
+    }
+    
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+        //print("Fail to receive ads")
+        print(error)
     }
     
     func quoteButtonPressed(type: String) {

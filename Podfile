@@ -19,6 +19,7 @@ target 'GaldenApp' do
   pod 'PKHUD', '~> 5.0'
   pod 'RealmSwift'
   pod 'AttributedLabel'
+  pod 'Google-Mobile-Ads-SDK'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

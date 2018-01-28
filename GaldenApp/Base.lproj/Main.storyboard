@@ -808,7 +808,29 @@
                     <view key="view" contentMode="scaleToFill" id="o7u-Vh-hNN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aRk-m7-7vU" customClass="GADBannerView">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Dsd-nT-jwe"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kX0-Yt-cVH">
+                                <rect key="frame" x="0.0" y="50" width="414" height="622"/>
+                                <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" red="0.14901960780000001" green="0.14901960780000001" blue="0.14901960780000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="kX0-Yt-cVH" firstAttribute="leading" secondItem="1Ix-e5-7SW" secondAttribute="leading" id="3AW-Zj-4Ln"/>
+                            <constraint firstItem="kX0-Yt-cVH" firstAttribute="top" secondItem="aRk-m7-7vU" secondAttribute="bottom" id="QOS-SE-PdK"/>
+                            <constraint firstItem="aRk-m7-7vU" firstAttribute="leading" secondItem="1Ix-e5-7SW" secondAttribute="leading" id="XVt-AB-YVA"/>
+                            <constraint firstItem="aRk-m7-7vU" firstAttribute="top" secondItem="1Ix-e5-7SW" secondAttribute="top" id="b9s-O1-MeX"/>
+                            <constraint firstItem="1Ix-e5-7SW" firstAttribute="trailing" secondItem="aRk-m7-7vU" secondAttribute="trailing" id="fAe-pN-x4E"/>
+                            <constraint firstItem="1Ix-e5-7SW" firstAttribute="bottom" secondItem="kX0-Yt-cVH" secondAttribute="bottom" id="hWB-vD-6u5"/>
+                            <constraint firstItem="kX0-Yt-cVH" firstAttribute="trailing" secondItem="1Ix-e5-7SW" secondAttribute="trailing" id="mqF-fD-jWs"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="1Ix-e5-7SW"/>
                     </view>
                     <toolbarItems/>
@@ -824,6 +846,9 @@
                         <userDefinedRuntimeAttribute type="boolean" keyPath="isHeroEnabled" value="YES"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <outlet property="adBannerView" destination="aRk-m7-7vU" id="C2A-4v-ww6"/>
+                        <outlet property="containerView" destination="kX0-Yt-cVH" id="Feu-RA-02p"/>
+                        <outlet property="heightConstraint" destination="Dsd-nT-jwe" id="EuJ-6l-I6l"/>
                         <segue destination="SiJ-ir-6HP" kind="unwind" identifier="unwindToThreadListFromContent" unwindAction="unwindToThreadListFromContentWithSegue:" id="pm1-Fh-aZc"/>
                         <segue destination="7Na-LR-Vny" kind="custom" identifier="quote" customClass="DeckSegue" customModule="DeckTransition" id="mpy-Lr-nzq"/>
                     </connections>
@@ -1430,7 +1455,7 @@
         <image name="Url" width="20" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="CD3-dz-NYv"/>
+        <segue reference="mpy-Lr-nzq"/>
         <segue reference="3m0-Cb-r90"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
