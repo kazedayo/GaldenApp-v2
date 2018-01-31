@@ -12,7 +12,7 @@ import MarqueeLabel
 import WebKit
 import PKHUD
 
-class PreviewViewController: UIViewController,WKNavigationDelegate {
+class PreviewViewController: UIViewController {
     
     @IBOutlet weak var viewTitle: MarqueeLabel!
     @IBOutlet weak var containerView: UIView!
@@ -27,15 +27,19 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
     var webView = WKWebView()
     
     let api = HKGaldenAPI()
+    let indicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
         initializeJS()
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
         var contentPreviewText = content!
         contentPreviewText = api.sizeTagCorrection(bbcode: contentPreviewText)
         contentPreviewText = api.iconParse(bbcode: contentPreviewText)
         convertBBCodeToHTML(text: contentPreviewText)
+        webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((convertedText)!)</body></html>", baseURL: Bundle.main.bundleURL)
         viewTitle.text = threadTitle
         if type == "reply" {
             viewTitle.text = "回覆預覽"
@@ -45,10 +49,7 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        webView.isHidden = true
-        webView.navigationDelegate = self
         webView.frame = containerView.bounds
-        webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((convertedText)!)</body></html>", baseURL: Bundle.main.bundleURL)
         self.containerView.addSubview(webView)
     }
 
@@ -145,11 +146,4 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
             convertedText = newContent
         }
     }
-    
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
-            self.webView.isHidden = false
-        })
-    }
-    
 }

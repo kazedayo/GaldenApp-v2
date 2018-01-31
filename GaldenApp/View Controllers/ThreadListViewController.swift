@@ -10,6 +10,7 @@ import KeychainSwift
 import SideMenu
 import PKHUD
 import GoogleMobileAds
+import GradientLoadingBar
 
 class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
     
@@ -25,7 +26,8 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
     var blockedUsers = [String]()
     var selectedPage: Int?
     var selectedThreadTitle: String!
-    var adTest = true
+    var adTest = false
+    var navigationLoadingBar: BottomGradientLoadingBar?
     lazy var adBannerView: GADBannerView = {
         let adBannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
@@ -37,6 +39,10 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let navigationBar = navigationController?.navigationBar {
+            navigationLoadingBar = BottomGradientLoadingBar(onView: navigationBar)
+        }
+        navigationLoadingBar?.show()
         if (adTest == false) {
             adBannerView.removeFromSuperview()
         } else {
@@ -59,11 +65,6 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
         SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
         
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        spinner.startAnimating()
-        spinner.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 44)
-        self.tableView.tableFooterView = spinner;
-        
         channelNow = "bw"
         pageNow = "1"
         self.navigationItem.title = api.channelNameFunc(ch: channelNow!)
@@ -74,9 +75,17 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
-                self?.threads = threads
-                self?.blockedUsers = blocked
+                self?.threads = threads!
+                self?.blockedUsers = blocked!
                 self?.tableView.reloadData()
+                self?.navigationLoadingBar?.hide()
+                let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+                spinner.startAnimating()
+                spinner.frame = CGRect(x: 0, y: 0, width: (self?.tableView.frame.width)!, height: 44)
+                self?.tableView.tableFooterView = spinner;
+            } else {
+                self?.navigationLoadingBar?.hide()
+                HUD.flash(.error)
             }
         })
     }
@@ -91,9 +100,13 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
-                self?.threads = threads
-                self?.blockedUsers = blocked
+                self?.threads = threads!
+                self?.blockedUsers = blocked!
                 self?.tableView.reloadData()
+                refreshControl.endRefreshing()
+            } else {
+                self?.navigationLoadingBar?.hide()
+                HUD.flash(.error)
                 refreshControl.endRefreshing()
             }
         })
@@ -154,9 +167,10 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         operation.addExecutionBlock {
             [weak operation] in
             let title = self.threads[indexPath.row].title
-            let uname = self.threads[indexPath.row].userName
+            var uname = self.threads[indexPath.row].userName
             let count = self.threads[indexPath.row].count
             let rate = self.threads[indexPath.row].rate
+            uname = uname.replacingOccurrences(of: "\n", with: "")
             DispatchQueue.main.async {
                 if let operation = operation, operation.isCancelled { return }
                 if (self.blockedUsers.contains(self.threads[indexPath.row].userID)) {
@@ -197,9 +211,12 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
             api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
                 [weak self] threads,blocked,error in
                 if (error == nil) {
-                    self?.threads.append(contentsOf: threads)
-                    self?.blockedUsers = blocked
+                    self?.threads.append(contentsOf: threads!)
+                    self?.blockedUsers = blocked!
                     self?.tableView.reloadData()
+                } else {
+                    self?.navigationLoadingBar?.hide()
+                    HUD.flash(.error)
                 }
             }) // network request to get more data
         }
@@ -266,25 +283,35 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         self.pageNow = "1"
         self.navigationItem.title = api.channelNameFunc(ch: channelNow!)
         self.navigationController?.navigationBar.shadowImage = self.api.channelColorFunc(ch: self.channelNow!).as1ptImage()
+        self.navigationLoadingBar?.show()
         api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
-                self?.threads = threads
-                self?.blockedUsers = blocked
+                self?.threads = threads!
+                self?.blockedUsers = blocked!
                 self?.tableView.reloadData()
+                self?.navigationLoadingBar?.hide()
                 self?.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
+            } else {
+                self?.navigationLoadingBar?.hide()
+                HUD.flash(.error)
             }
         })
     }
     
     @IBAction func unwindToThreadListAfterNewPost(segue: UIStoryboardSegue) {
         HUD.flash(.success)
+        self.navigationLoadingBar?.show()
         api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
-                self?.threads = threads
-                self?.blockedUsers = blocked
+                self?.threads = threads!
+                self?.blockedUsers = blocked!
                 self?.tableView.reloadData()
+                self?.navigationLoadingBar?.hide()
+            } else {
+                self?.navigationLoadingBar?.hide()
+                HUD.flash(.error)
             }
         })
     }

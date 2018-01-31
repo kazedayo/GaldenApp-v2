@@ -13,7 +13,7 @@ import KeychainSwift
 
 class HKGaldenAPI {
     
-    func fetchThreadList(currentChannel: String,pageNumber: String, completion : @escaping (_ threads: [ThreadList],_ blockedUsers: [String], _ error: Error?)->Void) {
+    func fetchThreadList(currentChannel: String,pageNumber: String, completion : @escaping (_ threads: [ThreadList]?,_ blockedUsers: [String]?, _ error: Error?)->Void) {
         let par: Parameters = ["ident": currentChannel, "ofs": pageNumber]
         let keychain = KeychainSwift()
         let head:HTTPHeaders
@@ -59,6 +59,7 @@ class HKGaldenAPI {
                 
             case .failure(let error):
                 print(error)
+                completion(nil,nil,error)
             }
         }
     }

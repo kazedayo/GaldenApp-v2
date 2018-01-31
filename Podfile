@@ -20,6 +20,7 @@ target 'GaldenApp' do
   pod 'RealmSwift'
   pod 'AttributedLabel'
   pod 'Google-Mobile-Ads-SDK'
+  pod 'GradientLoadingBar'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

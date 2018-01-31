@@ -13,10 +13,11 @@ import MarqueeLabel
 import WebKit
 import AXPhotoViewer
 import Kingfisher
-import PKHUD
 import SideMenu
 import RealmSwift
 import GoogleMobileAds
+import GradientLoadingBar
+import PKHUD
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,UISideMenuNavigationControllerDelegate,GADBannerViewDelegate {
 
@@ -39,7 +40,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var loaded = false
     var scrollPosition: CGFloat = 0.0
     var sender = ""
-    var adTest = true
+    var adTest = false
+    var navigationLoadingBar: GradientLoadingBar?
     private var shadowImageView: UIImageView?
     private var webView = WKWebView()
     
@@ -53,6 +55,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationLoadingBar = GradientLoadingBar(onView: self.view)
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
         initializeJS()
         navigationController?.delegate = self
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
@@ -212,7 +217,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.f5 = true
         self.scrollPosition = self.webView.scrollView.contentOffset.y
         self.pageNow = Int(pageCount)
-        HUD.show(.progress)
+        navigationLoadingBar?.show()
         self.updateSequence()
     }
     
@@ -260,7 +265,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: Private Functions
     
     private func updateSequence() {
-        HUD.show(.progress)
+        navigationLoadingBar?.show()
         self.webView.isHidden = true
         self.api.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
             [weak self] op,comments,rated,blocked,error in
@@ -298,6 +303,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self?.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((self?.convertedHTML)!)</body></html>"
                 self?.webView.loadHTMLString((self?.pageHTML)!, baseURL: Bundle.main.bundleURL)
                 //print((self?.pageHTML)!)
+            } else {
+                self?.navigationLoadingBar?.hide()
+                HUD.flash(.error)
             }
         })
     }
@@ -382,6 +390,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.replied = false
                     HUD.flash(.success, delay: 1.0)
+                    self.navigationLoadingBar?.hide()
                     self.webView.isHidden = false
                 })
             })
@@ -391,7 +400,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
                     webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.f5 = false
-                    HUD.hide()
+                    self.navigationLoadingBar?.hide()
                     self.webView.isHidden = false
                 })
             })
@@ -402,12 +411,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 if thisPost != nil && self.sender == "cell" {
                     self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: false)
                 }
-                HUD.hide()
                 self.webView.isHidden = false
+                self.navigationLoadingBar?.hide()
                 self.loaded = true
             })
         } else {
-            HUD.hide()
+            self.navigationLoadingBar?.hide()
             self.webView.isHidden = false
         }
     }
