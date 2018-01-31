@@ -182,7 +182,6 @@
                     </view>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="isHeroEnabled" value="YES"/>
-                        <userDefinedRuntimeAttribute type="string" keyPath="heroModalAnimationTypeString" value="slide(left)"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="eulaContent" destination="6Wl-oq-kZ4" id="xZr-ZE-HwI"/>
@@ -285,7 +284,6 @@
                     </view>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="isHeroEnabled" value="YES"/>
-                        <userDefinedRuntimeAttribute type="string" keyPath="heroModalAnimationTypeString" value="zoom()"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="emailField" destination="Tgc-ux-R4m" id="JXj-lu-EDT"/>
@@ -1366,11 +1364,11 @@
                                             <rect key="frame" x="15" y="5" width="399" height="39.666666666666664"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="center" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="8Ad-Bj-zhy">
-                                                    <rect key="frame" x="0.0" y="0.0" width="44.333333333333336" height="39.666666666666664"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="49.333333333333336" height="39.666666666666664"/>
                                                     <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HQq-21-bm5" customClass="AttributedLabel" customModule="AttributedLabel">
-                                                    <rect key="frame" x="54.333333333333343" y="0.0" width="344.66666666666663" height="39.666666666666664"/>
+                                                    <rect key="frame" x="59.333333333333343" y="0.0" width="339.66666666666663" height="39.666666666666664"/>
                                                     <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="numberOfLines">
@@ -1456,7 +1454,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="mpy-Lr-nzq"/>
-        <segue reference="3m0-Cb-r90"/>
+        <segue reference="dkd-6R-3yU"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

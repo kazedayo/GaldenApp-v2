@@ -181,23 +181,31 @@ class HKGaldenAPI {
         }
     }
     
-    func reply(topicID: String, content: String, completion: @escaping ()->Void ) {
+    func reply(topicID: String, content: String, completion: @escaping (_ error: Error?)->Void ) {
         let keychain = KeychainSwift()
         let par = ["t_id": topicID,"content": content]
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
         Alamofire.request("https://api.hkgalden.com/f/r",method:.post,parameters:par,headers:head).response {
             response in
-            completion()
+            if response.error != nil {
+                completion(response.error)
+            } else {
+                completion(nil)
+            }
         }
     }
     
-    func submitPost(channel: String, title: String, content: String, completion: @escaping ()->Void ) {
+    func submitPost(channel: String, title: String, content: String, completion: @escaping (_ error: Error?)->Void ) {
         let keychain = KeychainSwift()
         let par = ["title": title, "content": content, "ident": channel]
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
         Alamofire.request("https://api.hkgalden.com/f/t",method:.post,parameters:par,headers:head).response {
             response in
-            completion()
+            if response.error != nil {
+                completion(response.error)
+            } else {
+                completion(nil)
+            }
         }
     }
     

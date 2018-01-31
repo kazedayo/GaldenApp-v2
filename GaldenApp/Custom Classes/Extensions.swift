@@ -71,7 +71,7 @@ class BottomGradientLoadingBar: GradientLoadingBar {
             gradientView.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
             gradientView.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
             
-            gradientView.bottomAnchor.constraint(equalTo: superview.bottomAnchor),
+            gradientView.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: 3),
             gradientView.heightAnchor.constraint(equalToConstant: CGFloat(height))
             ])
     }

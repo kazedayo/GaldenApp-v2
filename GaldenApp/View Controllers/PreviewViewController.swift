@@ -73,13 +73,21 @@ class PreviewViewController: UIViewController {
         HUD.show(.progress)
         if type == "newThread" {
             api.submitPost(channel: channel!, title: threadTitle!, content: content!, completion: {
-                [weak self] in
-                self?.performSegue(withIdentifier: "unwindToThreadListAfterNewPost", sender: self)
+                [weak self] error in
+                if error == nil {
+                    self?.performSegue(withIdentifier: "unwindToThreadListAfterNewPost", sender: self)
+                } else {
+                    HUD.flash(.error)
+                }
             })
         } else if type == "reply" {
             api.reply(topicID: topicID!, content: content!, completion: {
-                [weak self] in
-                self?.performSegue(withIdentifier: "unwindAfterReply", sender: self)
+                [weak self] error in
+                if error == nil {
+                    self?.performSegue(withIdentifier: "unwindAfterReply", sender: self)
+                } else {
+                    HUD.flash(.error)
+                }
             })
         }
     }
