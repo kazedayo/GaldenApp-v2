@@ -8,6 +8,7 @@
 
 import UIKit
 import KeychainSwift
+import PKHUD
 
 class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
@@ -109,8 +110,12 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
         alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
             _ in
             self.api.reply(topicID: self.threadID!, content: self.keychain.get("LeaveNameText")!.replacingOccurrences(of: "\\n", with: "\n"), completion: {
-                [weak self] in
-                self?.performSegue(withIdentifier: "unwindToContent", sender: self)
+                [weak self] error in
+                if error == nil {
+                    self?.performSegue(withIdentifier: "unwindToContent", sender: self)
+                } else {
+                    HUD.flash(.error)
+                }
             })
         }))
         alert.addAction(UIAlertAction.init(title: "不了", style: .cancel, handler: nil))
