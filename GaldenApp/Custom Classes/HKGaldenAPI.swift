@@ -13,6 +13,8 @@ import KeychainSwift
 
 class HKGaldenAPI {
     
+    static let shared = HKGaldenAPI()
+    
     func fetchThreadList(currentChannel: String,pageNumber: String, completion : @escaping (_ threads: [ThreadList]?,_ blockedUsers: [String]?, _ error: Error?)->Void) {
         let par: Parameters = ["ident": currentChannel, "ofs": pageNumber]
         let keychain = KeychainSwift()
@@ -325,7 +327,7 @@ class HKGaldenAPI {
         case "ca":
             return UIColor(red: 33/255, green: 136/255, blue: 101/255, alpha: 1)
         case "fn":
-            return UIColor(red: 33/255, green: 136/255, blue: 101/255, alpha: 1)
+            return UIColor(red: 86/255, green: 126/255, blue: 29/255, alpha: 1)
         case "gm":
             return UIColor(red: 37/255, green: 124/255, blue: 201/255, alpha: 1)
         case "ap":

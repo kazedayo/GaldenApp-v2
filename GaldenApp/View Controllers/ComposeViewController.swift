@@ -19,7 +19,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var topicID = ""
     var type = ""
     var kheight: CGFloat = 0
-    let api = HKGaldenAPI()
     
     let iconKeyboard = IconKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 265))
     
@@ -73,8 +72,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         titleTextField.delegate = self
         contentTextView.delegate = self
         contentTextView.placeholder = "內容"
-        channelLabel.setTitle(api.channelNameFunc(ch: channel), for: .normal)
-        channelLabel.backgroundColor = api.channelColorFunc(ch: channel)
+        channelLabel.setTitle(HKGaldenAPI.shared.channelNameFunc(ch: channel), for: .normal)
+        channelLabel.backgroundColor = HKGaldenAPI.shared.channelColorFunc(ch: channel)
         if type == "reply" {
             titleTextField.isHidden = true
             channelLabel.isHidden = true
@@ -329,7 +328,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         HUD.show(.progress)
         if #available(iOS 11.0, *) {
             let imageURL = info[UIImagePickerControllerImageURL] as! URL
-            api.imageUpload(imageURL: imageURL, completion: {
+            HKGaldenAPI.shared.imageUpload(imageURL: imageURL, completion: {
                 url in
                 HUD.flash(.success, delay: 1.0)
                 self.dismiss(animated: true, completion: nil)
@@ -345,7 +344,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
                 try! UIImageJPEGRepresentation(pickedImage, 1.0)?.write(to: imagePath!)
             }
-            api.imageUpload(imageURL: imagePath!, completion: {
+            HKGaldenAPI.shared.imageUpload(imageURL: imagePath!, completion: {
                 url in
                 HUD.flash(.success, delay: 1.0)
                 self.dismiss(animated: true, completion: nil)

@@ -26,7 +26,6 @@ class PreviewViewController: UIViewController {
     var type: String?
     var webView = WKWebView()
     
-    let api = HKGaldenAPI()
     let indicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
@@ -36,8 +35,8 @@ class PreviewViewController: UIViewController {
         initializeJS()
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
         var contentPreviewText = content!
-        contentPreviewText = api.sizeTagCorrection(bbcode: contentPreviewText)
-        contentPreviewText = api.iconParse(bbcode: contentPreviewText)
+        contentPreviewText = HKGaldenAPI.shared.sizeTagCorrection(bbcode: contentPreviewText)
+        contentPreviewText = HKGaldenAPI.shared.iconParse(bbcode: contentPreviewText)
         convertBBCodeToHTML(text: contentPreviewText)
         webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((convertedText)!)</body></html>", baseURL: Bundle.main.bundleURL)
         viewTitle.text = threadTitle
@@ -72,7 +71,7 @@ class PreviewViewController: UIViewController {
     @IBAction func submitButtonPressed(_ sender: UIButton) {
         HUD.show(.progress)
         if type == "newThread" {
-            api.submitPost(channel: channel!, title: threadTitle!, content: content!, completion: {
+            HKGaldenAPI.shared.submitPost(channel: channel!, title: threadTitle!, content: content!, completion: {
                 [weak self] error in
                 if error == nil {
                     self?.performSegue(withIdentifier: "unwindToThreadListAfterNewPost", sender: self)
@@ -81,7 +80,7 @@ class PreviewViewController: UIViewController {
                 }
             })
         } else if type == "reply" {
-            api.reply(topicID: topicID!, content: content!, completion: {
+            HKGaldenAPI.shared.reply(topicID: topicID!, content: content!, completion: {
                 [weak self] error in
                 if error == nil {
                     self?.performSegue(withIdentifier: "unwindAfterReply", sender: self)

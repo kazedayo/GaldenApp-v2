@@ -16,7 +16,6 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var passwordField: UITextField!
     
     let keychain = KeychainSwift()
-    let api = HKGaldenAPI()
     var window: UIWindow?
     
     var email = ""
@@ -43,9 +42,9 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
             alert.addAction(UIAlertAction(title:"OK",style:.cancel,handler:nil))
             present(alert,animated: true,completion: nil)
         } else {
-            api.login(email: email, password: password, completion: {
+            HKGaldenAPI.shared.login(email: email, password: password, completion: {
                 [weak self] in
-                self?.api.getUserDetail(completion: {
+                HKGaldenAPI.shared.getUserDetail(completion: {
                     [weak self] username, userid in
                     if (username == "") {
                         let alert = UIAlertController(title:"登入失敗",message:"請確認帳戶/密碼無誤",preferredStyle:.alert)

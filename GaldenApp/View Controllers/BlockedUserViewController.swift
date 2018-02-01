@@ -12,13 +12,11 @@ class BlockedUserViewController: UITableViewController {
     
     var blockedUsers = [BlockedUsers]()
     
-    let api = HKGaldenAPI()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-        api.getBlockedUsers(completion: {
+        HKGaldenAPI.shared.getBlockedUsers(completion: {
             blocked in
             self.blockedUsers = blocked
             self.tableView.reloadData()
@@ -54,7 +52,7 @@ class BlockedUserViewController: UITableViewController {
         let actionsheet = UIAlertController.init(title: blockedUsers[indexPath.row].userName, message: "你想...", preferredStyle: .actionSheet)
         actionsheet.addAction(UIAlertAction.init(title: "解扑", style: .default, handler: {
             _ in
-            self.api.unblockUser(uid: self.blockedUsers[indexPath.row].id, completion: {
+            HKGaldenAPI.shared.unblockUser(uid: self.blockedUsers[indexPath.row].id, completion: {
                 status,userName in
                 self.blockedUsers.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.middle)

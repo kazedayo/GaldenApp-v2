@@ -14,9 +14,6 @@ import GradientLoadingBar
 
 class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
     
-    //HKGaldenAPI.swift required (NOT included in GitHub repo)
-    let api: HKGaldenAPI = HKGaldenAPI()
-    
     //MARK: Properties
     var threads = [ThreadList]()
     var channelNow: String?
@@ -67,12 +64,12 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         
         channelNow = "bw"
         pageNow = "1"
-        self.navigationItem.title = api.channelNameFunc(ch: channelNow!)
+        self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow!)
         self.navigationController?.navigationBar.barTintColor = UIColor.init(red: 0.15, green: 0.15, blue: 0.15, alpha: 1.0)
         self.navigationController?.navigationBar.isTranslucent = false
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = self.api.channelColorFunc(ch: self.channelNow!).as1ptImage()
-        api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
+        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow!).as1ptImage()
+        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
                 self?.threads = threads!
@@ -92,12 +89,12 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.navigationBar.shadowImage = self.api.channelColorFunc(ch: self.channelNow!).as1ptImage()
+        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow!).as1ptImage()
     }
     
     @objc func refresh(refreshControl: UIRefreshControl) {
         self.pageNow = "1"
-        api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
+        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
                 self?.threads = threads!
@@ -208,7 +205,7 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         // At the bottom...
         if (indexPath.row == self.threads.count - 1) {
             pageNow = String(Int(pageNow!)! + 1)
-            api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
+            HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
                 [weak self] threads,blocked,error in
                 if (error == nil) {
                     self?.threads.append(contentsOf: threads!)
@@ -256,11 +253,13 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
                 contentViewController.threadIdReceived = selectedThread
                 contentViewController.title = threads[(indexPath?.row)!].title
                 contentViewController.sender = "cell"
+                contentViewController.navigationLoadingBar = self.navigationLoadingBar
             }
             else {
                 contentViewController.threadIdReceived = selectedThread
                 contentViewController.title = selectedThreadTitle
                 contentViewController.pageNow = self.selectedPage!
+                contentViewController.navigationLoadingBar = self.navigationLoadingBar
             }
         case "StartNewPost":
             let destination = segue.destination as! ComposeViewController
@@ -281,10 +280,10 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         let channelSelectViewController = segue.source as! ChannelSelectViewController
         self.channelNow = channelSelectViewController.channelSelected
         self.pageNow = "1"
-        self.navigationItem.title = api.channelNameFunc(ch: channelNow!)
-        self.navigationController?.navigationBar.shadowImage = self.api.channelColorFunc(ch: self.channelNow!).as1ptImage()
+        self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow!)
+        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow!).as1ptImage()
         self.navigationLoadingBar?.show()
-        api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
+        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
                 self?.threads = threads!
@@ -302,7 +301,7 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
     @IBAction func unwindToThreadListAfterNewPost(segue: UIStoryboardSegue) {
         HUD.flash(.success)
         self.navigationLoadingBar?.show()
-        api.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
+        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
                 self?.threads = threads!

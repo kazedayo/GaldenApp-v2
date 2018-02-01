@@ -19,7 +19,6 @@ class UserDetailViewController: UITableViewController,UINavigationControllerDele
     @IBOutlet weak var leaveNameTextField: UITextField!
     @IBOutlet weak var blocklistButton: UIButton!
     
-    let api = HKGaldenAPI()
     let keychain = KeychainSwift()
     
     override func viewDidLoad() {
@@ -51,7 +50,7 @@ class UserDetailViewController: UITableViewController,UINavigationControllerDele
     
     
     @IBAction func logoutButtonPressed(_ sender: UIButton) {
-        api.logout {
+        HKGaldenAPI.shared.logout {
             weak var pvc = self.presentingViewController
             self.keychain.delete("isLoggedIn")
             self.dismiss(animated: true, completion: {
@@ -97,7 +96,7 @@ class UserDetailViewController: UITableViewController,UINavigationControllerDele
             if textField?.text == "" {
                 self.present(empty,animated: true,completion: nil)
             } else {
-                self.api.changeName(name: (textField?.text)!, completion: {
+                HKGaldenAPI.shared.changeName(name: (textField?.text)!, completion: {
                     status,newName in
                     if status == "true" {
                         HUD.flash(.success,delay: 1.0)

@@ -41,12 +41,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var scrollPosition: CGFloat = 0.0
     var sender = ""
     var adTest = false
-    var navigationLoadingBar: GradientLoadingBar?
+    var navigationLoadingBar: BottomGradientLoadingBar?
     private var shadowImageView: UIImageView?
     private var webView = WKWebView()
     
     //HKGalden API (NOT included in GitHub repo)
-    var api = HKGaldenAPI()
     let keychain = KeychainSwift()
     
     @IBOutlet weak var adBannerView: GADBannerView!
@@ -55,7 +54,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationLoadingBar = GradientLoadingBar(onView: self.view)
         webView.isOpaque = false
         webView.backgroundColor = .clear
         initializeJS()
@@ -85,7 +83,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
         
-        self.api.pageCount(postId: threadIdReceived, completion: {
+        HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
             let realm = try! Realm()
@@ -165,19 +163,19 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func quoteButtonPressed(type: String) {
             if (pageNow == 1 && type == "op") {
-            self.api.quote(quoteType: "t", quoteID: self.op.quoteID, completion: {
+            HKGaldenAPI.shared.quote(quoteType: "t", quoteID: self.op.quoteID, completion: {
                 [weak self] content in
                 self?.quoteContent = content
                 self?.performSegue(withIdentifier: "quote", sender: self)
             })
             } else if pageNow == 1 {
-                self.api.quote(quoteType: "r", quoteID: self.comments[Int(type)! + 1].quoteID, completion: {
+                HKGaldenAPI.shared.quote(quoteType: "r", quoteID: self.comments[Int(type)! + 1].quoteID, completion: {
                     [weak self] content in
                     self?.quoteContent = content
                     self?.performSegue(withIdentifier: "quote", sender: self)
                 })
             } else {
-                self.api.quote(quoteType: "r", quoteID: self.comments[Int(type)!].quoteID, completion: {
+                HKGaldenAPI.shared.quote(quoteType: "r", quoteID: self.comments[Int(type)!].quoteID, completion: {
                     [weak self] content in
                     self?.quoteContent = content
                     self?.performSegue(withIdentifier: "quote", sender: self)
@@ -187,7 +185,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func blockButtonPressed(type: String) {
         if (pageNow == 1 && type == "op") {
-            self.api.blockUser(uid: self.op.userID, completion: {
+            HKGaldenAPI.shared.blockUser(uid: self.op.userID, completion: {
                 [weak self] status in
                 if status == "true" {
                     self?.blockedUsers.append((self?.op.userID)!)
@@ -195,7 +193,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 }
             })
         } else if pageNow == 1 {
-            self.api.blockUser(uid: self.comments[Int(type)! + 1].userID, completion: {
+            HKGaldenAPI.shared.blockUser(uid: self.comments[Int(type)! + 1].userID, completion: {
                 [weak self] status in
                 if status == "true" {
                     self?.blockedUsers.append((self?.comments[Int(type)! + 1].userID)!)
@@ -203,7 +201,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 }
             })
         } else {
-            self.api.blockUser(uid: self.comments[Int(type)!].userID, completion: {
+            HKGaldenAPI.shared.blockUser(uid: self.comments[Int(type)!].userID, completion: {
                 [weak self] status in
                 if status == "true" {
                     self?.blockedUsers.append((self?.comments[Int(type)!].userID)!)
@@ -245,7 +243,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     @IBAction func unwindToContent(segue: UIStoryboardSegue) {
         let sideMenu = segue.source as! ContentSideMenuViewController
         self.pageNow = sideMenu.pageSelected!
-        self.api.pageCount(postId: threadIdReceived, completion: {
+        HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
             self?.updateSequence()
@@ -253,7 +251,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @IBAction func unwindAfterReply(segue: UIStoryboardSegue) {
-        self.api.pageCount(postId: threadIdReceived, completion: {
+        HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
             self?.pageNow = Int((self?.pageCount)!)
@@ -267,14 +265,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     private func updateSequence() {
         navigationLoadingBar?.show()
         self.webView.isHidden = true
-        self.api.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
+        HKGaldenAPI.shared.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
             [weak self] op,comments,rated,blocked,error in
             if (error == nil) {
                 self?.op = op
                 self?.comments = comments
                 self?.blockedUsers = blocked
                 self?.isRated = rated
-                self?.navigationController?.navigationBar.shadowImage = self?.api.channelColorFunc(ch: (self?.op.channel)!).as1ptImage()
+                self?.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: (self?.op.channel)!).as1ptImage()
                 self?.convertedHTML = ""
                 if self?.pageNow == 1 {
                     self?.convertBBCodeToHTML(text: op.content)

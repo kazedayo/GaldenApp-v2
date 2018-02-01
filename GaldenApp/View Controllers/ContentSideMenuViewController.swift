@@ -25,7 +25,6 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
     @IBOutlet weak var pageSelectTableView: UITableView!
     @IBOutlet weak var lmButton: UIButton!
     
-    let api = HKGaldenAPI()
     let keychain = KeychainSwift()
     
     override func viewDidLoad() {
@@ -84,7 +83,7 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
     }
     
     @IBAction func upvoteButtonPressed(_ sender: UIButton) {
-        api.rate(threadID: threadID!, rate: "g", completion: {
+        HKGaldenAPI.shared.rate(threadID: threadID!, rate: "g", completion: {
             self.upvote += 1
             self.upvoteButton.setTitle("正皮: \(self.upvote)", for: .normal)
             self.upvoteButton.isEnabled = false
@@ -95,7 +94,7 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
     }
     
     @IBAction func downvoteButtonPressed(_ sender: UIButton) {
-        api.rate(threadID: threadID!, rate: "b", completion: {
+        HKGaldenAPI.shared.rate(threadID: threadID!, rate: "b", completion: {
             self.downvote += 1
             self.downvoteButton.setTitle("負皮: \(self.downvote)", for: .normal)
             self.upvoteButton.isEnabled = false
@@ -109,7 +108,7 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
         let alert = UIAlertController.init(title: "一鍵留名", message: "確定?", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
             _ in
-            self.api.reply(topicID: self.threadID!, content: self.keychain.get("LeaveNameText")!.replacingOccurrences(of: "\\n", with: "\n"), completion: {
+            HKGaldenAPI.shared.reply(topicID: self.threadID!, content: self.keychain.get("LeaveNameText")!.replacingOccurrences(of: "\\n", with: "\n"), completion: {
                 [weak self] error in
                 if error == nil {
                     self?.performSegue(withIdentifier: "unwindToContent", sender: self)
