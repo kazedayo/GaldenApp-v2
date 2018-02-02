@@ -21,6 +21,7 @@ target 'GaldenApp' do
   pod 'AttributedLabel'
   pod 'Google-Mobile-Ads-SDK'
   pod 'GradientLoadingBar'
+  pod 'CRRefresh'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

@@ -11,8 +11,9 @@ import SideMenu
 import PKHUD
 import GoogleMobileAds
 import GradientLoadingBar
+import CRRefresh
 
-class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
+class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate {
     
     //MARK: Properties
     var threads = [ThreadList]()
@@ -25,36 +26,31 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
     var selectedThreadTitle: String!
     var adTest = false
     var navigationLoadingBar: BottomGradientLoadingBar?
-    lazy var adBannerView: GADBannerView = {
-        let adBannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
+    
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var adBannerView: GADBannerView!
+    @IBOutlet weak var heightConstraint: NSLayoutConstraint!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.delegate = self
+        tableView.dataSource = self
+        addPullToRefresh()
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
         adBannerView.delegate = self
         adBannerView.rootViewController = self
         
-        return adBannerView
-    }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        if let navigationBar = navigationController?.navigationBar {
-            navigationLoadingBar = BottomGradientLoadingBar(onView: navigationBar)
-        }
-        navigationLoadingBar?.show()
         if (adTest == false) {
-            adBannerView.removeFromSuperview()
+            heightConstraint.constant = 0
+            adBannerView.layoutIfNeeded()
         } else {
             adBannerView.load(GADRequest())
         }
         
-        let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = .clear
-        refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshControl
-        } else {
-            // Fallback on earlier versions
-            tableView.addSubview(refreshControl)
+        if let navigationBar = navigationController?.navigationBar {
+            navigationLoadingBar = BottomGradientLoadingBar(onView: navigationBar)
         }
+        navigationLoadingBar?.show()
         
         let menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as! UISideMenuNavigationController
         SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
@@ -76,10 +72,6 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
                 self?.blockedUsers = blocked!
                 self?.tableView.reloadData()
                 self?.navigationLoadingBar?.hide()
-                let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-                spinner.startAnimating()
-                spinner.frame = CGRect(x: 0, y: 0, width: (self?.tableView.frame.width)!, height: 44)
-                self?.tableView.tableFooterView = spinner;
             } else {
                 self?.navigationLoadingBar?.hide()
                 HUD.flash(.error)
@@ -92,27 +84,10 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow!).as1ptImage()
     }
     
-    @objc func refresh(refreshControl: UIRefreshControl) {
-        self.pageNow = "1"
-        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
-            [weak self] threads,blocked,error in
-            if (error == nil) {
-                self?.threads = threads!
-                self?.blockedUsers = blocked!
-                self?.tableView.reloadData()
-                refreshControl.endRefreshing()
-            } else {
-                self?.navigationLoadingBar?.hide()
-                HUD.flash(.error)
-                refreshControl.endRefreshing()
-            }
-        })
-    }
-    
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         //print("Banner loaded successfully")
         // Reposition the banner ad to create a slide down effect
-        let translateTransform = CGAffineTransform(translationX: 0, y: -bannerView.bounds.size.height)
+        let translateTransform = CGAffineTransform(translationX: 0, y: bannerView.bounds.size.height)
         bannerView.transform = translateTransform
         
         UIView.animate(withDuration: 0.5) {
@@ -125,18 +100,6 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         print(error)
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return adBannerView
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if (adTest == false) {
-            return 0
-        } else {
-            return adBannerView.frame.height
-        }
-    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -144,17 +107,17 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
 
     // MARK: - Table view data source
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return threads.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell", for: indexPath) as! ThreadListTableViewCell
         
         // Configure the cell...
@@ -185,7 +148,7 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (blockedUsers.contains(threads[indexPath.row].userID)) {
             DispatchQueue.main.async {
                 let alert = UIAlertController(title:"喂喂喂",message:"扑咗就唔好心郁郁",preferredStyle: .alert)
@@ -195,27 +158,6 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         } else {
             let cell = tableView.cellForRow(at: indexPath)
             self.performSegue(withIdentifier: "GoToPost", sender: cell)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView,
-                   willDisplay cell: UITableViewCell,
-                   forRowAt indexPath: IndexPath)
-    {
-        // At the bottom...
-        if (indexPath.row == self.threads.count - 1) {
-            pageNow = String(Int(pageNow!)! + 1)
-            HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
-                [weak self] threads,blocked,error in
-                if (error == nil) {
-                    self?.threads.append(contentsOf: threads!)
-                    self?.blockedUsers = blocked!
-                    self?.tableView.reloadData()
-                } else {
-                    self?.navigationLoadingBar?.hide()
-                    HUD.flash(.error)
-                }
-            }) // network request to get more data
         }
     }
     
@@ -320,6 +262,46 @@ class ThreadListViewController: UITableViewController,GADBannerViewDelegate {
         self.selectedPage = source.pageSelected
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "GoToPost", sender: self)
+        }
+    }
+    
+    func addPullToRefresh() {
+        tableView.cr.addHeadRefresh(animator: FastAnimator.init(frame: CGRect.init(x: 0, y: 0, width: 50, height: 50), color: .darkGray, arrowColor: .lightGray, lineWidth: 1)) { [weak self] in
+            /// start refresh
+            /// Do anything you want...
+            self?.pageNow = "1"
+            HKGaldenAPI.shared.fetchThreadList(currentChannel: (self?.channelNow)!, pageNumber: (self?.pageNow)!, completion: {
+                [weak self] threads,blocked,error in
+                if (error == nil) {
+                    self?.threads = threads!
+                    self?.blockedUsers = blocked!
+                    self?.tableView.reloadData()
+                    self?.tableView.cr.endHeaderRefresh()
+                } else {
+                    self?.navigationLoadingBar?.hide()
+                    HUD.flash(.error)
+                    self?.tableView.cr.endHeaderRefresh()
+                }
+            })
+        }
+        
+        tableView.cr.addFootRefresh(animator: FastAnimator.init(frame: CGRect.init(x: 0, y: 0, width: 50, height: 50), color: .darkGray, arrowColor: .lightGray, lineWidth: 1)) { [weak self] in
+            /// start refresh
+            /// Do anything you want...
+            self?.pageNow = String(Int((self?.pageNow!)!)! + 1)
+            HKGaldenAPI.shared.fetchThreadList(currentChannel: (self?.channelNow)!, pageNumber: (self?.pageNow)!, completion: {
+                [weak self] threads,blocked,error in
+                if (error == nil) {
+                    self?.threads.append(contentsOf: threads!)
+                    self?.blockedUsers = blocked!
+                    self?.tableView.reloadData()
+                    self?.tableView.cr.endLoadingMore()
+                } else {
+                    self?.navigationLoadingBar?.hide()
+                    HUD.flash(.error)
+                    self?.tableView.cr.endLoadingMore()
+                }
+            })
         }
     }
 }

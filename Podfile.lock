@@ -10,6 +10,7 @@ PODS:
     - AXPhotoViewer/Core
     - Kingfisher (>= 3.10.0)
   - AXStateButton (1.1.4)
+  - CRRefresh (1.0.6)
   - DeckTransition (2.0.0)
   - FLAnimatedImage (1.0.12)
   - Google-Mobile-Ads-SDK (7.27.0)
@@ -35,6 +36,7 @@ DEPENDENCIES:
   - AlamofireNetworkActivityIndicator
   - AttributedLabel
   - AXPhotoViewer/Kingfisher
+  - CRRefresh
   - DeckTransition
   - Google-Mobile-Ads-SDK
   - GradientLoadingBar
@@ -53,6 +55,7 @@ SPEC CHECKSUMS:
   AttributedLabel: f2304965828afcf6df346073566f4ad4e04384cc
   AXPhotoViewer: f1edb13f8116f57e67c5f2a6484acd9f8a54d263
   AXStateButton: 6c515a433e37551505046429b5be04c12daa8c07
+  CRRefresh: fa89bab742592500ce9f76301c152544ec5264e8
   DeckTransition: 2300694f94fbeca2c103f365dc9dc09ffae14a4f
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Google-Mobile-Ads-SDK: 83f7f890e638ce8f1debd440ea363338c9f6be3b
@@ -68,6 +71,6 @@ SPEC CHECKSUMS:
   SideMenu: 47dbf9e4d878062d8994aed43f6e4bf6c1fea30b
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 5a17140e87d0657e164ec40ee9e9465927dcafa2
+PODFILE CHECKSUM: d0cd65844baed1bdff0da10770ce3668474bd4f5
 
 COCOAPODS: 1.4.0

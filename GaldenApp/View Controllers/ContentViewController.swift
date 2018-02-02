@@ -54,6 +54,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationLoadingBar?.show()
         webView.isOpaque = false
         webView.backgroundColor = .clear
         initializeJS()
@@ -111,6 +112,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        navigationLoadingBar?.hide()
         let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "RightMenuNavigationController") as! UISideMenuNavigationController
         SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "quote")
@@ -148,7 +150,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         //print("Banner loaded successfully")
         // Reposition the banner ad to create a slide down effect
-        let translateTransform = CGAffineTransform(translationX: 0, y: -bannerView.bounds.size.height)
+        let translateTransform = CGAffineTransform(translationX: 0, y: bannerView.bounds.size.height)
         bannerView.transform = translateTransform
         
         UIView.animate(withDuration: 0.5) {
