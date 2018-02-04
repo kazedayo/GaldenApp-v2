@@ -11,20 +11,19 @@ import SideMenu
 import PKHUD
 import GoogleMobileAds
 import GradientLoadingBar
-import CRRefresh
 
 class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate {
     
     //MARK: Properties
     var threads = [ThreadList]()
-    var channelNow: String?
-    var pageNow: String?
+    var channelNow: String = "bw"
+    var pageNow: String = "1"
     var pageCount: Double?
     var selectedThread: String!
     var blockedUsers = [String]()
     var selectedPage: Int?
     var selectedThreadTitle: String!
-    var adTest = false
+    var adTest = true
     var navigationLoadingBar: BottomGradientLoadingBar?
     
     @IBOutlet weak var tableView: UITableView!
@@ -33,9 +32,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
-        addPullToRefresh()
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
         adBannerView.delegate = self
         adBannerView.rootViewController = self
@@ -57,31 +56,62 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "RightMenuNavigationController") as! UISideMenuNavigationController
         SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
         SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
-        
-        channelNow = "bw"
-        pageNow = "1"
-        self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow!)
+        self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
         self.navigationController?.navigationBar.barTintColor = UIColor.init(red: 0.15, green: 0.15, blue: 0.15, alpha: 1.0)
         self.navigationController?.navigationBar.isTranslucent = false
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow!).as1ptImage()
-        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
+        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            // Fallback on earlier versions
+            tableView.addSubview(refreshControl)
+        }
+        
+        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: pageNow, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
                 self?.threads = threads!
                 self?.blockedUsers = blocked!
                 self?.tableView.reloadData()
+                self?.tableView.isHidden = false
                 self?.navigationLoadingBar?.hide()
             } else {
                 self?.navigationLoadingBar?.hide()
-                HUD.flash(.error)
+                HUD.flash(.error, delay: 1)
             }
+        })
+    }
+    
+    @objc func refresh(refreshControl: UIRefreshControl) {
+        self.pageNow = "1"
+        DispatchQueue.main.asyncAfter(deadline: 1, execute: {
+            HKGaldenAPI.shared.fetchThreadList(currentChannel: self.channelNow, pageNumber: self.pageNow, completion: {
+                [weak self] threads,blocked,error in
+                if (error == nil) {
+                    self?.threads = threads!
+                    self?.blockedUsers = blocked!
+                    self?.tableView.reloadData()
+                    refreshControl.endRefreshing()
+                } else {
+                    self?.navigationLoadingBar?.hide()
+                    HUD.flash(.error, delay: 1)
+                    refreshControl.endRefreshing()
+                }
+            })
         })
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow!).as1ptImage()
+        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
+        let indexPath = tableView.indexPathForSelectedRow
+        if indexPath != nil {
+            tableView.deselectRow(at: indexPath!, animated: true)
+        }
     }
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
@@ -155,9 +185,27 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 alert.addAction(UIAlertAction(title:"好囉",style:.cancel,handler:nil))
                 self.present(alert,animated: true,completion: nil)
             }
+            tableView.deselectRow(at: indexPath, animated: true)
         } else {
             let cell = tableView.cellForRow(at: indexPath)
+            //tableView.deselectRow(at: indexPath, animated: true)
             self.performSegue(withIdentifier: "GoToPost", sender: cell)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if (threads.count - indexPath.row) == 5 {
+            HKGaldenAPI.shared.fetchThreadList(currentChannel: self.channelNow, pageNumber: self.pageNow, completion: {
+                [weak self] threads,blocked,error in
+                if (error == nil) {
+                    self?.blockedUsers = blocked!
+                    self?.threads.append(contentsOf: threads!)
+                    self?.tableView.reloadData()
+                } else {
+                    self?.navigationLoadingBar?.hide()
+                    HUD.flash(.error, delay: 1)
+                }
+            })
         }
     }
     
@@ -205,7 +253,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             }
         case "StartNewPost":
             let destination = segue.destination as! ComposeViewController
-            destination.channel = channelNow!
+            destination.channel = channelNow
             destination.type = "newThread"
         case "pageSelect":
             let destination = segue.destination as! PageSelectViewController
@@ -222,10 +270,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let channelSelectViewController = segue.source as! ChannelSelectViewController
         self.channelNow = channelSelectViewController.channelSelected
         self.pageNow = "1"
-        self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow!)
-        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow!).as1ptImage()
+        self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
+        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
         self.navigationLoadingBar?.show()
-        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
+        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: pageNow, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
                 self?.threads = threads!
@@ -235,7 +283,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 self?.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
             } else {
                 self?.navigationLoadingBar?.hide()
-                HUD.flash(.error)
+                HUD.flash(.error, delay: 1)
             }
         })
     }
@@ -243,7 +291,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     @IBAction func unwindToThreadListAfterNewPost(segue: UIStoryboardSegue) {
         HUD.flash(.success)
         self.navigationLoadingBar?.show()
-        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow!, pageNumber: pageNow!, completion: {
+        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: pageNow, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
                 self?.threads = threads!
@@ -252,7 +300,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 self?.navigationLoadingBar?.hide()
             } else {
                 self?.navigationLoadingBar?.hide()
-                HUD.flash(.error)
+                HUD.flash(.error, delay: 1)
             }
         })
     }
@@ -265,43 +313,4 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    func addPullToRefresh() {
-        tableView.cr.addHeadRefresh(animator: FastAnimator.init(frame: CGRect.init(x: 0, y: 0, width: 50, height: 50), color: .darkGray, arrowColor: .lightGray, lineWidth: 1)) { [weak self] in
-            /// start refresh
-            /// Do anything you want...
-            self?.pageNow = "1"
-            HKGaldenAPI.shared.fetchThreadList(currentChannel: (self?.channelNow)!, pageNumber: (self?.pageNow)!, completion: {
-                [weak self] threads,blocked,error in
-                if (error == nil) {
-                    self?.threads = threads!
-                    self?.blockedUsers = blocked!
-                    self?.tableView.reloadData()
-                    self?.tableView.cr.endHeaderRefresh()
-                } else {
-                    self?.navigationLoadingBar?.hide()
-                    HUD.flash(.error)
-                    self?.tableView.cr.endHeaderRefresh()
-                }
-            })
-        }
-        
-        tableView.cr.addFootRefresh(animator: FastAnimator.init(frame: CGRect.init(x: 0, y: 0, width: 50, height: 50), color: .darkGray, arrowColor: .lightGray, lineWidth: 1)) { [weak self] in
-            /// start refresh
-            /// Do anything you want...
-            self?.pageNow = String(Int((self?.pageNow!)!)! + 1)
-            HKGaldenAPI.shared.fetchThreadList(currentChannel: (self?.channelNow)!, pageNumber: (self?.pageNow)!, completion: {
-                [weak self] threads,blocked,error in
-                if (error == nil) {
-                    self?.threads.append(contentsOf: threads!)
-                    self?.blockedUsers = blocked!
-                    self?.tableView.reloadData()
-                    self?.tableView.cr.endLoadingMore()
-                } else {
-                    self?.navigationLoadingBar?.hide()
-                    HUD.flash(.error)
-                    self?.tableView.cr.endLoadingMore()
-                }
-            })
-        }
-    }
 }

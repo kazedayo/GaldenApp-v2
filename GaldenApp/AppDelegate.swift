@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AlamofireNetworkActivityIndicator
 import KeychainSwift
 import PKHUD
 import SideMenu
@@ -22,9 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         GADMobileAds.configure(withApplicationID: "ca-app-pub-6919429787140423~6701059788")
-        NetworkActivityIndicatorManager.shared.isEnabled = true
-        NetworkActivityIndicatorManager.shared.startDelay = 0.0
-        NetworkActivityIndicatorManager.shared.completionDelay = 0.2
         PKHUD.sharedHUD.dimsBackground = false
         PKHUD.sharedHUD.userInteractionOnUnderlyingViewsEnabled = false
         UIApplication.shared.statusBarStyle = .lightContent

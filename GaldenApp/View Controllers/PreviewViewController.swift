@@ -76,7 +76,7 @@ class PreviewViewController: UIViewController {
                 if error == nil {
                     self?.performSegue(withIdentifier: "unwindToThreadListAfterNewPost", sender: self)
                 } else {
-                    HUD.flash(.error)
+                    HUD.flash(.error,delay: 1)
                 }
             })
         } else if type == "reply" {
@@ -85,7 +85,7 @@ class PreviewViewController: UIViewController {
                 if error == nil {
                     self?.performSegue(withIdentifier: "unwindAfterReply", sender: self)
                 } else {
-                    HUD.flash(.error)
+                    HUD.flash(.error,delay: 1)
                 }
             })
         }

@@ -686,7 +686,7 @@
         <scene sceneID="tWX-Sb-gHi">
             <objects>
                 <viewController id="cem-34-jOX" customClass="PageSelectViewController" customModule="GaldenApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="eIU-7P-qDN">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="eIU-7P-qDN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -804,15 +804,15 @@
             <objects>
                 <viewController id="wRo-r1-a2n" customClass="ContentViewController" customModule="GaldenApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="o7u-Vh-hNN">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kX0-Yt-cVH">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="622"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="666"/>
                                 <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aRk-m7-7vU" customClass="GADBannerView">
-                                <rect key="frame" x="0.0" y="622" width="414" height="50"/>
+                                <rect key="frame" x="0.0" y="686" width="414" height="50"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="D0L-gE-XLS"/>
@@ -1209,7 +1209,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="20" sectionHeaderHeight="28" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gaS-MI-EvQ">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="622"/>
-                                <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
@@ -1220,7 +1220,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="59.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hSw-ba-qJO" customClass="AttributedLabel" customModule="AttributedLabel">
+                                                <view clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hSw-ba-qJO" customClass="AttributedLabel" customModule="AttributedLabel">
                                                     <rect key="frame" x="15" y="8" width="384" height="20"/>
                                                     <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <userDefinedRuntimeAttributes>
@@ -1236,7 +1236,7 @@
                                                         <userDefinedRuntimeAttribute type="string" keyPath="text" value="Loading..."/>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
-                                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iY4-4A-DXW" customClass="AttributedLabel" customModule="AttributedLabel">
+                                                <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iY4-4A-DXW" customClass="AttributedLabel" customModule="AttributedLabel">
                                                     <rect key="frame" x="15" y="31.666666666666671" width="384" height="20"/>
                                                     <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <userDefinedRuntimeAttributes>
@@ -1264,12 +1264,16 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <gestureRecognizers/>
                                         <connections>
                                             <outlet property="detailLabel" destination="iY4-4A-DXW" id="Y65-0e-YV8"/>
                                             <outlet property="threadTitleLabel" destination="hSw-ba-qJO" id="Ild-ba-TJe"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="S9I-4r-CR0" appends="YES" id="p7i-nd-KSj"/>
+                                </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EqR-Nj-YFx" customClass="GADBannerView">
                                 <rect key="frame" x="0.0" y="622" width="414" height="50"/>
@@ -1280,6 +1284,7 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="gaS-MI-EvQ" firstAttribute="top" secondItem="Jfd-Ff-fKz" secondAttribute="top" id="0Ot-DV-sRX"/>
                             <constraint firstItem="EqR-Nj-YFx" firstAttribute="top" secondItem="gaS-MI-EvQ" secondAttribute="bottom" id="1lx-9u-mZy"/>
@@ -1291,17 +1296,27 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="WF2-0G-UOj"/>
                     </view>
-                    <navigationItem key="navigationItem" id="L1t-S2-zce"/>
+                    <navigationItem key="navigationItem" id="L1t-S2-zce">
+                        <barButtonItem key="rightBarButtonItem" image="Add" id="X8Z-FD-jBo">
+                            <connections>
+                                <segue destination="7Na-LR-Vny" kind="custom" identifier="StartNewPost" customClass="DeckSegue" customModule="DeckTransition" id="jOo-Kv-DnI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="adBannerView" destination="EqR-Nj-YFx" id="oDS-uH-2zT"/>
                         <outlet property="heightConstraint" destination="cd2-ID-Isj" id="c1I-Xw-dRV"/>
                         <outlet property="tableView" destination="gaS-MI-EvQ" id="3zb-aa-Dco"/>
-                        <segue destination="cem-34-jOX" kind="presentation" identifier="pageSelect" id="zy1-2N-qPY"/>
-                        <segue destination="wRo-r1-a2n" kind="show" identifier="GoToPost" id="ykC-f3-BLa"/>
-                        <segue destination="7Na-LR-Vny" kind="custom" identifier="StartNewPost" customClass="DeckSegue" customModule="DeckTransition" id="M9a-Fn-Ipf"/>
+                        <segue destination="cem-34-jOX" kind="presentation" identifier="pageSelect" modalPresentationStyle="overCurrentContext" id="zy1-2N-qPY"/>
+                        <segue destination="wRo-r1-a2n" kind="showDetail" identifier="GoToPost" action="showViewController:sender:" id="ykC-f3-BLa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Ol-7K-FIA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="S9I-4r-CR0">
+                    <connections>
+                        <action selector="jumpToPage:" destination="n49-yd-ECv" id="q49-6k-lFs"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="4157.971014492754" y="-171.19565217391306"/>
         </scene>
@@ -1451,6 +1466,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Add" width="25" height="25"/>
         <image name="Cancel" width="25" height="25"/>
         <image name="FontColor" width="20" height="20"/>
         <image name="FontSize" width="20" height="20"/>
@@ -1462,7 +1478,7 @@
         <image name="Url" width="20" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Hst-LI-0QW"/>
+        <segue reference="jOo-Kv-DnI"/>
         <segue reference="3m0-Cb-r90"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

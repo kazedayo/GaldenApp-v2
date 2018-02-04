@@ -40,7 +40,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var loaded = false
     var scrollPosition: CGFloat = 0.0
     var sender = ""
-    var adTest = false
+    var adTest = true
     var navigationLoadingBar: BottomGradientLoadingBar?
     private var shadowImageView: UIImageView?
     private var webView = WKWebView()

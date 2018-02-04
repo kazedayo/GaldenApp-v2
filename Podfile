@@ -9,7 +9,6 @@ target 'GaldenApp' do
   pod 'IQKeyboardManagerSwift'
   pod 'Alamofire'
   pod 'SwiftyJSON'
-  pod 'AlamofireNetworkActivityIndicator'
   pod 'KeychainSwift'
   pod 'Hero'
   pod 'MarqueeLabel'
@@ -21,7 +20,6 @@ target 'GaldenApp' do
   pod 'AttributedLabel'
   pod 'Google-Mobile-Ads-SDK'
   pod 'GradientLoadingBar'
-  pod 'CRRefresh'
 
   target 'GaldenAppTests' do
     inherit! :search_paths
