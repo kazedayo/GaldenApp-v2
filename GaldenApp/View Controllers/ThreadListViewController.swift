@@ -63,6 +63,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
         
         let refreshControl = UIRefreshControl()
+        refreshControl.backgroundColor = .clear
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refreshControl
@@ -212,11 +213,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     @IBAction func jumpToPage(_ sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
                 
-            let touchPoint = sender.location(in: self.view)
+            let touchPoint = sender.location(in: self.tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
                 self.selectedThread = threads[indexPath.row].id
                 self.selectedThreadTitle = threads[indexPath.row].title
-                self.pageCount = ceil(Double(threads[indexPath.row].count)!/25)
+                self.pageCount = ceil((Double(threads[indexPath.row].count)! + 1)/25)
                 self.performSegue(withIdentifier: "pageSelect", sender: sender)
             }
         }

@@ -17,6 +17,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var titleView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        titleView.heroModifiers = [.translate(x: 0, y: 100)]
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.tableFooterView = UIView()
