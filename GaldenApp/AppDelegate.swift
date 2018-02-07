@@ -27,6 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.isStatusBarHidden = false
         
         SideMenuManager.default.menuFadeStatusBar = false
+        SideMenuManager.default.menuPresentMode = .viewSlideInOut
+        SideMenuManager.default.menuAnimationFadeStrength = 0.5
+        SideMenuManager.default.menuShadowOpacity = 0
         
         if (keychain.getBool("isLoggedIn") == nil) {
             self.window?.rootViewController = UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "FirstLaunch")

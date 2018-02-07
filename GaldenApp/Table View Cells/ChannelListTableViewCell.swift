@@ -17,6 +17,7 @@ class ChannelListTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         channelTitle.font = UIFont.systemFont(ofSize: 15)
+        channelTitle.contentAlignment = .center
         // Initialization code
     }
 

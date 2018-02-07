@@ -23,7 +23,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     var blockedUsers = [String]()
     var selectedPage: Int?
     var selectedThreadTitle: String!
-    var adTest = true
+    var adTest = false
     var navigationLoadingBar: BottomGradientLoadingBar?
     
     @IBOutlet weak var tableView: UITableView!
@@ -164,15 +164,22 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             uname = uname.replacingOccurrences(of: "\n", with: "")
             DispatchQueue.main.async {
                 if let operation = operation, operation.isCancelled { return }
+                cell.titleTrailing.constant = 15
+                cell.detailTrailing.constant = 15
+                cell.threadTitleLabel.backgroundColor = .clear
+                cell.detailLabel.backgroundColor = .clear
                 if (self.blockedUsers.contains(self.threads[indexPath.row].userID)) {
                     cell.threadTitleLabel.text = "[已封鎖]"
                     cell.threadTitleLabel.textColor = .darkGray
                     cell.detailLabel.text = "//unknown identity//"
+                    cell.detailLabel.textColor = .darkGray
                 } else {
                     cell.threadTitleLabel.text = title
                     cell.threadTitleLabel.textColor = .lightGray
                     cell.detailLabel.text = "\(uname) 回覆: \(count) 評分: \(rate)"
+                    cell.detailLabel.textColor = .darkGray
                 }
+                cell.layoutIfNeeded()
             }
         }
         queue.addOperation(operation)

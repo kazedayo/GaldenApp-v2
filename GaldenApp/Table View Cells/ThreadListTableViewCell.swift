@@ -17,6 +17,8 @@ class ThreadListTableViewCell: UITableViewCell {
     
     @IBOutlet weak var threadTitleLabel: AttributedLabel!
     @IBOutlet weak var detailLabel: AttributedLabel!
+    @IBOutlet weak var titleTrailing: NSLayoutConstraint!
+    @IBOutlet weak var detailTrailing: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
