@@ -55,7 +55,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
         let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "RightMenuNavigationController") as! UISideMenuNavigationController
         SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
-        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
+        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.view)
         self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
         self.navigationController?.navigationBar.barTintColor = UIColor.init(red: 0.15, green: 0.15, blue: 0.15, alpha: 1.0)
         self.navigationController?.navigationBar.isTranslucent = false
@@ -71,6 +71,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             // Fallback on earlier versions
             tableView.addSubview(refreshControl)
         }
+        
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        spinner.startAnimating()
+        spinner.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 44)
+        self.tableView.tableFooterView = spinner;
         
         HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: pageNow, completion: {
             [weak self] threads,blocked,error in
@@ -202,13 +207,19 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if (threads.count - indexPath.row) == 5 {
-            HKGaldenAPI.shared.fetchThreadList(currentChannel: self.channelNow, pageNumber: self.pageNow, completion: {
+        if (threads.count - indexPath.row) == 1 {
+            HKGaldenAPI.shared.fetchThreadList(currentChannel: self.channelNow, pageNumber: String(Int(self.pageNow)! + 1), completion: {
                 [weak self] threads,blocked,error in
                 if (error == nil) {
-                    self?.blockedUsers = blocked!
-                    self?.threads.append(contentsOf: threads!)
-                    self?.tableView.reloadData()
+                    DispatchQueue.main.asyncAfter(deadline: 1, execute: {
+                        self?.blockedUsers = blocked!
+                        self?.tableView.beginUpdates()
+                        for i in 0..<(threads?.count)! {
+                            self?.threads.append(threads![i])
+                            self?.tableView.insertRows(at: [IndexPath.init(row: (self?.threads.count)!-1, section: 0)], with: UITableViewRowAnimation.middle)
+                        }
+                        self?.tableView.endUpdates()
+                    })
                 } else {
                     self?.navigationLoadingBar?.hide()
                     HUD.flash(.error, delay: 1)

@@ -29,7 +29,7 @@ class ThreadListTableViewCell: UITableViewCell {
         threadTitleLabel.numberOfLines = 0
         detailLabel.numberOfLines = 1
         threadTitleLabel.usesIntrinsicContentSize = true
-        threadTitleLabel.preferredMaxLayoutWidth = self.frame.width
+        threadTitleLabel.preferredMaxLayoutWidth = threadTitleLabel.frame.width
         threadTitleLabel.font = UIFont.systemFont(ofSize: 15)
         detailLabel.font = UIFont.systemFont(ofSize: 12)
     }

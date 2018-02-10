@@ -18,6 +18,7 @@ import RealmSwift
 import GoogleMobileAds
 import GradientLoadingBar
 import PKHUD
+import AlamofireNetworkActivityIndicator
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,UISideMenuNavigationControllerDelegate,GADBannerViewDelegate {
 
@@ -84,6 +85,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
         
+        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.view)
+        
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
@@ -104,8 +107,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.add(self, name: "block")
         self.webView.configuration.userContentController.add(self, name: "refresh")
         self.webView.frame = self.containerView.bounds
-        self.webView.scrollView.showsVerticalScrollIndicator = false
-        self.webView.scrollView.showsHorizontalScrollIndicator = false
+        self.webView.scrollView.indicatorStyle = .white
         self.webView.navigationDelegate = self
         self.containerView.addSubview(webView)
     }
@@ -301,6 +303,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 }
                 
                 self?.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((self?.convertedHTML)!)</body></html>"
+                NetworkActivityIndicatorManager.shared.incrementActivityCount()
+                NotificationCenter.default.post(name: Notification.Name.Task.DidResume, object: self?.webView)
                 self?.webView.loadHTMLString((self?.pageHTML)!, baseURL: Bundle.main.bundleURL)
                 //print((self?.pageHTML)!)
             } else {
@@ -419,6 +423,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self.navigationLoadingBar?.hide()
             self.webView.isHidden = false
         }
+        NotificationCenter.default.post(name: Notification.Name.Task.DidComplete, object: webView)
+        NetworkActivityIndicatorManager.shared.decrementActivityCount()
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
