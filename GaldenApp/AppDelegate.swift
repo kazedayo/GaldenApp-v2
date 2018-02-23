@@ -9,7 +9,6 @@
 import UIKit
 import KeychainSwift
 import PKHUD
-import SideMenu
 import GoogleMobileAds
 import AlamofireNetworkActivityIndicator
 
@@ -24,16 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NetworkActivityIndicatorManager.shared.isEnabled = true
         NetworkActivityIndicatorManager.shared.startDelay = 0
         NetworkActivityIndicatorManager.shared.completionDelay = 0.2
+        
         GADMobileAds.configure(withApplicationID: "ca-app-pub-6919429787140423~6701059788")
+        
         PKHUD.sharedHUD.dimsBackground = false
         PKHUD.sharedHUD.userInteractionOnUnderlyingViewsEnabled = false
+        
         UIApplication.shared.statusBarStyle = .lightContent
         UIApplication.shared.isStatusBarHidden = false
-        
-        SideMenuManager.default.menuFadeStatusBar = false
-        SideMenuManager.default.menuPresentMode = .viewSlideInOut
-        SideMenuManager.default.menuAnimationFadeStrength = 0.5
-        SideMenuManager.default.menuShadowOpacity = 0
         
         if (keychain.getBool("isLoggedIn") == nil) {
             self.window?.rootViewController = UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "FirstLaunch")

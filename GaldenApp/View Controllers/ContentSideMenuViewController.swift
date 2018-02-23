@@ -10,7 +10,7 @@ import UIKit
 import KeychainSwift
 import PKHUD
 
-class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class ContentMenuViewController: UIViewController {
     
     var upvote: Int = 0
     var downvote: Int = 0
@@ -18,20 +18,14 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
     var threadTitle: String?
     var opName: String?
     var threadID: String?
-    var pageCount: Int = 0
-    var pageSelected: Int?
     @IBOutlet weak var upvoteButton: UIButton!
     @IBOutlet weak var downvoteButton: UIButton!
-    @IBOutlet weak var pageSelectTableView: UITableView!
     @IBOutlet weak var lmButton: UIButton!
     
     let keychain = KeychainSwift()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        pageSelectTableView.delegate = self
-        pageSelectTableView.dataSource = self
-        pageSelectTableView.tableFooterView = UIView()
         // Do any additional setup after loading the view.
     }
     
@@ -47,32 +41,11 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
         }
         upvoteButton.setTitle("正皮: \(upvote)", for: .normal)
         downvoteButton.setTitle("負皮: \(downvote)", for: .normal)
-        pageSelectTableView.selectRow(at: IndexPath.init(row: pageSelected!-1, section: 0), animated: true, scrollPosition: .top)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return pageCount
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PageSelectTableViewCell") as! PageSelectTableViewCell
-        
-        let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor(red:0.15, green:0.15, blue:0.15, alpha:1.0)
-        cell.selectedBackgroundView = bgColorView
-        
-        cell.pageNo.text = "第\(indexPath.row+1)頁"
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        pageSelected = indexPath.row + 1
-        performSegue(withIdentifier: "unwindToContent", sender: self)
     }
     
     @IBAction func shareButtonPressed(_ sender: Any) {
@@ -111,7 +84,7 @@ class ContentSideMenuViewController: UIViewController,UITableViewDelegate,UITabl
             HKGaldenAPI.shared.reply(topicID: self.threadID!, content: self.keychain.get("LeaveNameText")!.replacingOccurrences(of: "\\n", with: "\n"), completion: {
                 [weak self] error in
                 if error == nil {
-                    self?.performSegue(withIdentifier: "unwindToContent", sender: self)
+                    self?.performSegue(withIdentifier: "unwindAfterReply", sender: self)
                 } else {
                     HUD.flash(.error)
                 }

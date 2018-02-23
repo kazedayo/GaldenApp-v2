@@ -8,7 +8,6 @@
 
 import UIKit
 import KeychainSwift
-import SideMenu
 
 class ChannelSelectViewController: UITableViewController {
     
@@ -42,14 +41,10 @@ class ChannelSelectViewController: UITableViewController {
         let bgColorView = UIView()
         bgColorView.backgroundColor = HKGaldenAPI.shared.channelColorFunc(ch: cellIdentifiers[indexPath.row])
         cell.selectedBackgroundView = bgColorView
-        DispatchQueue.global(qos: .default).async {
-            let image = UIImage(named: self.cellIdentifiers[indexPath.row])
-            let text = self.channelTitle[indexPath.row]
-            DispatchQueue.main.async {
-                cell.channelIcon.image = image
-                cell.channelTitle.text = text
-            }
-        }
+        let image = UIImage(named: self.cellIdentifiers[indexPath.row])
+        let text = self.channelTitle[indexPath.row]
+        cell.channelIcon.image = image
+        cell.channelTitle.text = text
         
         return cell
     }

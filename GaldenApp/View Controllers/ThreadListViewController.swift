@@ -7,12 +7,10 @@
 
 import UIKit
 import KeychainSwift
-import SideMenu
 import PKHUD
 import GoogleMobileAds
-import GradientLoadingBar
 
-class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate {
+class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
     
     //MARK: Properties
     var threads = [ThreadList]()
@@ -23,8 +21,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     var blockedUsers = [String]()
     var selectedPage: Int?
     var selectedThreadTitle: String!
-    var adTest = false
-    var navigationLoadingBar: BottomGradientLoadingBar?
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var adBannerView: GADBannerView!
@@ -32,35 +28,26 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.isHidden = true
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
         adBannerView.delegate = self
         adBannerView.rootViewController = self
         
-        if (adTest == false) {
+        if (adOption.adEnabled == false) {
             heightConstraint.constant = 0
             adBannerView.layoutIfNeeded()
         } else {
             adBannerView.load(GADRequest())
         }
         
-        if let navigationBar = navigationController?.navigationBar {
-            navigationLoadingBar = BottomGradientLoadingBar(onView: navigationBar)
-        }
-        navigationLoadingBar?.show()
-        
-        let menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as! UISideMenuNavigationController
-        SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
-        let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "RightMenuNavigationController") as! UISideMenuNavigationController
-        SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
-        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.view)
         self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
-        self.navigationController?.navigationBar.barTintColor = UIColor.init(red: 0.15, green: 0.15, blue: 0.15, alpha: 1.0)
-        self.navigationController?.navigationBar.isTranslucent = false
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
+        self.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
+        self.navigationController?.navigationBar.isTranslucent = true
+        //self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .bottom)
         
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = .clear
@@ -84,39 +71,48 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 self?.blockedUsers = blocked!
                 self?.tableView.reloadData()
                 self?.tableView.isHidden = false
-                self?.navigationLoadingBar?.hide()
             } else {
-                self?.navigationLoadingBar?.hide()
-                HUD.flash(.error, delay: 1)
+                DispatchQueue.main.asyncAfter(deadline: 1, execute: {
+                    HUD.flash(.error, delay: 1)
+                })
             }
         })
     }
     
     @objc func refresh(refreshControl: UIRefreshControl) {
         self.pageNow = "1"
-        DispatchQueue.main.asyncAfter(deadline: 1, execute: {
-            HKGaldenAPI.shared.fetchThreadList(currentChannel: self.channelNow, pageNumber: self.pageNow, completion: {
-                [weak self] threads,blocked,error in
-                if (error == nil) {
-                    self?.threads = threads!
-                    self?.blockedUsers = blocked!
+        HKGaldenAPI.shared.fetchThreadList(currentChannel: self.channelNow, pageNumber: self.pageNow, completion: {
+            [weak self] threads,blocked,error in
+            if (error == nil) {
+                self?.threads = threads!
+                self?.blockedUsers = blocked!
+                DispatchQueue.main.asyncAfter(deadline: 1, execute: {
                     self?.tableView.reloadData()
                     refreshControl.endRefreshing()
-                } else {
-                    self?.navigationLoadingBar?.hide()
+                })
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: 1, execute: {
                     HUD.flash(.error, delay: 1)
                     refreshControl.endRefreshing()
-                }
-            })
+                })
+            }
         })
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
+        self.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
+        //self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)
+        }
+        if #available(iOS 11.0, *) {
+            self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
+            self.tableView.scrollIndicatorInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
+        } else {
+            self.tableView.contentInset = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
+            self.tableView.scrollIndicatorInsets = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
         }
     }
     
@@ -157,37 +153,22 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell", for: indexPath) as! ThreadListTableViewCell
         
         // Configure the cell...
-        let queue = SerialOperationQueue()
-        queue.cancelAllOperations()
-        let operation = BlockOperation()
-        operation.addExecutionBlock {
-            [weak operation] in
             let title = self.threads[indexPath.row].title
             var uname = self.threads[indexPath.row].userName
             let count = self.threads[indexPath.row].count
             let rate = self.threads[indexPath.row].rate
             uname = uname.replacingOccurrences(of: "\n", with: "")
-            DispatchQueue.main.async {
-                if let operation = operation, operation.isCancelled { return }
-                cell.titleTrailing.constant = 15
-                cell.detailTrailing.constant = 15
-                cell.threadTitleLabel.backgroundColor = .clear
-                cell.detailLabel.backgroundColor = .clear
-                if (self.blockedUsers.contains(self.threads[indexPath.row].userID)) {
-                    cell.threadTitleLabel.text = "[已封鎖]"
-                    cell.threadTitleLabel.textColor = .darkGray
-                    cell.detailLabel.text = "//unknown identity//"
-                    cell.detailLabel.textColor = .darkGray
-                } else {
-                    cell.threadTitleLabel.text = title
-                    cell.threadTitleLabel.textColor = .lightGray
-                    cell.detailLabel.text = "\(uname) 回覆: \(count) 評分: \(rate)"
-                    cell.detailLabel.textColor = .darkGray
-                }
-                cell.layoutIfNeeded()
-            }
+        if (self.blockedUsers.contains(self.threads[indexPath.row].userID)) {
+            cell.threadTitleLabel.text = "[已封鎖]"
+            cell.threadTitleLabel.textColor = .darkGray
+            cell.detailLabel.text = "//unknown identity//"
+            cell.detailLabel.textColor = .darkGray
+        } else {
+            cell.threadTitleLabel.text = title
+            cell.threadTitleLabel.textColor = .lightGray
+            cell.detailLabel.text = "\(uname) // 回覆: \(count) // 評分: \(rate)"
+            cell.detailLabel.textColor = .darkGray
         }
-        queue.addOperation(operation)
         return cell
     }
     
@@ -221,7 +202,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                         self?.tableView.endUpdates()
                     })
                 } else {
-                    self?.navigationLoadingBar?.hide()
                     HUD.flash(.error, delay: 1)
                 }
             })
@@ -262,13 +242,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 contentViewController.threadIdReceived = selectedThread
                 contentViewController.title = threads[(indexPath?.row)!].title
                 contentViewController.sender = "cell"
-                contentViewController.navigationLoadingBar = self.navigationLoadingBar
             }
             else {
                 contentViewController.threadIdReceived = selectedThread
                 contentViewController.title = selectedThreadTitle
                 contentViewController.pageNow = self.selectedPage!
-                contentViewController.navigationLoadingBar = self.navigationLoadingBar
             }
         case "StartNewPost":
             let destination = segue.destination as! ComposeViewController
@@ -279,9 +257,18 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             destination.type = "threadList"
             destination.pageCount = self.pageCount!
             destination.titleText = self.selectedThreadTitle
+        case "channelSelect":
+            let popoverViewController = segue.destination as! ChannelSelectViewController
+            popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
+            popoverViewController.popoverPresentationController!.delegate = self
+            popoverViewController.popoverPresentationController!.backgroundColor = UIColor.init(white: 0.2, alpha: 1)
         default:
             break
         }
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
     
     //Unwind Segue
@@ -290,18 +277,16 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         self.channelNow = channelSelectViewController.channelSelected
         self.pageNow = "1"
         self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
-        self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
-        self.navigationLoadingBar?.show()
+        self.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
+        //self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
         HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: pageNow, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
                 self?.threads = threads!
                 self?.blockedUsers = blocked!
                 self?.tableView.reloadData()
-                self?.navigationLoadingBar?.hide()
                 self?.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
             } else {
-                self?.navigationLoadingBar?.hide()
                 HUD.flash(.error, delay: 1)
             }
         })
@@ -309,16 +294,13 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @IBAction func unwindToThreadListAfterNewPost(segue: UIStoryboardSegue) {
         HUD.flash(.success)
-        self.navigationLoadingBar?.show()
         HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: pageNow, completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
                 self?.threads = threads!
                 self?.blockedUsers = blocked!
                 self?.tableView.reloadData()
-                self?.navigationLoadingBar?.hide()
             } else {
-                self?.navigationLoadingBar?.hide()
                 HUD.flash(.error, delay: 1)
             }
         })

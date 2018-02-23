@@ -14,12 +14,9 @@ target 'GaldenApp' do
   pod 'MarqueeLabel'
   pod 'DeckTransition'
   pod 'AXPhotoViewer/Kingfisher'
-  pod 'SideMenu'
   pod 'PKHUD', '~> 5.0'
   pod 'RealmSwift'
-  pod 'AttributedLabel'
   pod 'Google-Mobile-Ads-SDK'
-  pod 'GradientLoadingBar'
   pod 'AlamofireNetworkActivityIndicator'
 
   target 'GaldenAppTests' do

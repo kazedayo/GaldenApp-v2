@@ -7,17 +7,14 @@
 //
 
 import UIKit
-import AttributedLabel
 
 class ChannelListTableViewCell: UITableViewCell {
     
     @IBOutlet weak var channelIcon: UIImageView!
-    @IBOutlet weak var channelTitle: AttributedLabel!
+    @IBOutlet weak var channelTitle: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        channelTitle.font = UIFont.systemFont(ofSize: 15)
-        channelTitle.contentAlignment = .center
         // Initialization code
     }
 

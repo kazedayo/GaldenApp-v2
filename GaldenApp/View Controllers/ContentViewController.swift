@@ -13,14 +13,11 @@ import MarqueeLabel
 import WebKit
 import AXPhotoViewer
 import Kingfisher
-import SideMenu
 import RealmSwift
 import GoogleMobileAds
-import GradientLoadingBar
 import PKHUD
-import AlamofireNetworkActivityIndicator
 
-class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,UISideMenuNavigationControllerDelegate,GADBannerViewDelegate {
+class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
 
     //MARK: Properties
     
@@ -41,8 +38,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var loaded = false
     var scrollPosition: CGFloat = 0.0
     var sender = ""
-    var adTest = false
-    var navigationLoadingBar: BottomGradientLoadingBar?
     private var shadowImageView: UIImageView?
     private var webView = WKWebView()
     
@@ -52,10 +47,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     @IBOutlet weak var adBannerView: GADBannerView!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var pageButton: UIBarButtonItem!
+    @IBOutlet weak var prevButton: UIBarButtonItem!
+    @IBOutlet weak var nextButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationLoadingBar?.show()
         webView.isOpaque = false
         webView.backgroundColor = .clear
         initializeJS()
@@ -64,7 +61,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         adBannerView.delegate = self
         adBannerView.rootViewController = self
         
-        if (adTest == false) {
+        if (adOption.adEnabled == false) {
             heightConstraint.constant = 0
             adBannerView.layoutIfNeeded()
         } else {
@@ -72,7 +69,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
         
         let title = MarqueeLabel.init()
-        title.textColor = .lightGray
+        title.textColor = .white
         title.text = self.title
         title.animationDelay = 1
         title.marqueeType = .MLLeftRight
@@ -81,11 +78,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         title.textAlignment = .center
         navigationItem.titleView = title
         
-        self.webView.isHidden = true
-        
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
-        
-        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.view)
         
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
@@ -101,22 +94,25 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "ContentSideMenu") as! UISideMenuNavigationController
-        SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
+        //NetworkActivityIndicatorManager.shared.incrementActivityCount()
         self.webView.configuration.userContentController.add(self, name: "quote")
         self.webView.configuration.userContentController.add(self, name: "block")
         self.webView.configuration.userContentController.add(self, name: "refresh")
         self.webView.frame = self.containerView.bounds
         self.webView.scrollView.indicatorStyle = .white
         self.webView.navigationDelegate = self
+        if #available(iOS 11.0, *) {
+            self.webView.scrollView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
+            self.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
+        } else {
+            self.webView.scrollView.contentInset = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
+            self.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
+        }
         self.containerView.addSubview(webView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationLoadingBar?.hide()
-        let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "RightMenuNavigationController") as! UISideMenuNavigationController
-        SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "quote")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
@@ -129,19 +125,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         try! realm.write {
             realm.add(history,update: true)
         }
-        //print(realm.objects(History.self))
-    }
-    
-    func sideMenuWillAppear(menu: UISideMenuNavigationController, animated: Bool) {
-        let destination = menu.viewControllers.first as! ContentSideMenuViewController
-        destination.upvote = Int(self.op.good)!
-        destination.downvote = Int(self.op.bad)!
-        destination.opName = self.op.name
-        destination.threadTitle = self.op.title
-        destination.threadID = self.threadIdReceived
-        destination.pageCount = Int(self.pageCount)
-        destination.pageSelected = self.pageNow
-        destination.rated = self.isRated
     }
     
     override func didReceiveMemoryWarning() {
@@ -218,8 +201,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func f5buttonPressed() {
         self.f5 = true
         self.scrollPosition = self.webView.scrollView.contentOffset.y
-        self.pageNow = Int(pageCount)
-        navigationLoadingBar?.show()
         self.updateSequence()
     }
     
@@ -239,14 +220,39 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             destination.topicID = self.threadIdReceived
             destination.content = self.quoteContent + "\n"
             destination.type = "reply"
+        case "menu"?:
+            let destination = segue.destination as! ContentMenuViewController
+            destination.modalPresentationStyle = UIModalPresentationStyle.popover
+            destination.popoverPresentationController!.delegate = self
+            destination.popoverPresentationController!.backgroundColor = UIColor.init(white: 0.2, alpha: 1)
+            destination.upvote = Int(self.op.good)!
+            destination.downvote = Int(self.op.bad)!
+            destination.opName = self.op.name
+            destination.threadTitle = self.op.title
+            destination.threadID = self.threadIdReceived
+            destination.rated = self.isRated
+        case "page"?:
+            let destination = segue.destination as! PagePopoverTableViewController
+            destination.modalPresentationStyle = UIModalPresentationStyle.popover
+            destination.popoverPresentationController!.delegate = self
+            destination.popoverPresentationController!.backgroundColor = UIColor.init(white: 0.2, alpha: 1)
+            destination.threadID = self.threadIdReceived
+            destination.pageCount = Int(self.pageCount)
+            destination.pageSelected = self.pageNow
+            
         default:
             break
         }
     }
     
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+    
     @IBAction func unwindToContent(segue: UIStoryboardSegue) {
-        let sideMenu = segue.source as! ContentSideMenuViewController
-        self.pageNow = sideMenu.pageSelected!
+        let pageMenu = segue.source as! PagePopoverTableViewController
+        self.pageNow = pageMenu.pageSelected!
+        self.pageButton.title = "第\(self.pageNow)頁"
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
@@ -259,16 +265,47 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             [weak self] count in
             self?.pageCount = count
             self?.pageNow = Int((self?.pageCount)!)
+            self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
             self?.replied = true
             self?.updateSequence()
         })
     }
     
+    @IBAction func prevButtonPressed(_ sender: UIBarButtonItem) {
+        self.pageNow -= 1
+        updateSequence()
+    }
+    
+    @IBAction func nextButtonPressed(_ sender: UIBarButtonItem) {
+        self.pageNow += 1
+        updateSequence()
+    }
+    
     //MARK: Private Functions
     
+    private func buttonLogic() {
+        if (self.pageNow == 1 && self.pageNow != Int(pageCount)) {
+            prevButton.isEnabled = false
+            nextButton.isEnabled = true
+        }
+        else if (self.pageNow == 1 && self.pageNow == Int(pageCount)) {
+            prevButton.isEnabled = false
+            nextButton.isEnabled = false
+        }
+        else if (self.pageNow == Int(pageCount)) {
+            prevButton.isEnabled = true
+            nextButton.isEnabled = false
+        }
+        else {
+            prevButton.isEnabled = true
+            nextButton.isEnabled = true
+        }
+    }
+    
     private func updateSequence() {
-        navigationLoadingBar?.show()
-        self.webView.isHidden = true
+        webView.isHidden = true
+        buttonLogic()
+        pageButton.title = "第\(self.pageNow)頁"
         HKGaldenAPI.shared.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
             [weak self] op,comments,rated,blocked,error in
             if (error == nil) {
@@ -276,7 +313,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self?.comments = comments
                 self?.blockedUsers = blocked
                 self?.isRated = rated
-                self?.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: (self?.op.channel)!).as1ptImage()
+                self?.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: (self?.op.channel)!)
+                //self?.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: (self?.op.channel)!).as1ptImage()
                 self?.convertedHTML = ""
                 if self?.pageNow == 1 {
                     self?.convertBBCodeToHTML(text: op.content)
@@ -303,12 +341,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 }
                 
                 self?.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((self?.convertedHTML)!)</body></html>"
-                NetworkActivityIndicatorManager.shared.incrementActivityCount()
-                NotificationCenter.default.post(name: Notification.Name.Task.DidResume, object: self?.webView)
                 self?.webView.loadHTMLString((self?.pageHTML)!, baseURL: Bundle.main.bundleURL)
                 //print((self?.pageHTML)!)
             } else {
-                self?.navigationLoadingBar?.hide()
                 HUD.flash(.error)
             }
         })
@@ -330,13 +365,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
         
         if self.op.level == "lv1" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\">普通會然</td>")
+            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\">\(self.op.userID)</td>")
         } else if self.op.level == "lv2" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#9e3e3f;\">App Developer</td>")
+            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#9e3e3f;\">\(self.op.userID)</td>")
         } else if self.op.level == "lv3" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#5549c9;\">肉務腸</td>")
+            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#5549c9;\">\(self.op.userID)</td>")
         } else if self.op.level == "lv5" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#4b6690;\">鴨免</td>")
+            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#4b6690;\">\(self.op.userID)</td>")
         }
         
         self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"righttext\">date</td>", with: "<td class=\"righttext\">\(self.op.date)</td>")
@@ -363,13 +398,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
         
         if self.comments[index].level == "lv1" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\">普通會然</td>")
+            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\">\(self.comments[index].userID)</td>")
         } else if self.comments[index].level == "lv2" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#9e3e3f;\">App Developer</td>")
+            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#9e3e3f;\">\(self.comments[index].userID)</td>")
         } else if self.comments[index].level == "lv3" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#5549c9;\">肉務腸</td>")
+            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#5549c9;\">\(self.comments[index].userID)</td>")
         } else if self.comments[index].level == "lv5" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#4b6690;\">鴨免</td>")
+            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#4b6690;\">\(self.comments[index].userID)</td>")
         }
         
         self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"righttext\">date</td>", with: "<td class=\"righttext\">\(self.comments[index].date)</td>")
@@ -394,8 +429,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.replied = false
                     HUD.flash(.success, delay: 1.0)
-                    self.navigationLoadingBar?.hide()
-                    self.webView.isHidden = false
+                    webView.isHidden = false
                 })
             })
         } else if f5 == true {
@@ -404,8 +438,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
                     webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.f5 = false
-                    self.navigationLoadingBar?.hide()
-                    self.webView.isHidden = false
+                    webView.isHidden = false
                 })
             })
         } else if loaded == false {
@@ -415,16 +448,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 if thisPost != nil && self.sender == "cell" {
                     self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: false)
                 }
-                self.webView.isHidden = false
-                self.navigationLoadingBar?.hide()
                 self.loaded = true
+                webView.isHidden = false
             })
         } else {
-            self.navigationLoadingBar?.hide()
-            self.webView.isHidden = false
+            webView.isHidden = false
         }
-        NotificationCenter.default.post(name: Notification.Name.Task.DidComplete, object: webView)
-        NetworkActivityIndicatorManager.shared.decrementActivityCount()
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -451,6 +480,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         } else {
             decisionHandler(.allow)
         }
+    }
+    
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        NotificationCenter.default.post(name: Notification.Name.Task.DidComplete, object: webView)
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {

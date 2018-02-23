@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GradientLoadingBar
 
 extension String {
     func nsRange(from range: Range<Index>) -> NSRange {
@@ -63,16 +62,6 @@ class SerialOperationQueue: OperationQueue {
     }
 }
 
-class BottomGradientLoadingBar: GradientLoadingBar {
-    override func setupConstraints() {
-        guard let superview = superview else { return }
-        
-        NSLayoutConstraint.activate([
-            gradientView.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
-            gradientView.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
-            
-            gradientView.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: 2),
-            gradientView.heightAnchor.constraint(equalToConstant: CGFloat(height))
-            ])
-    }
+struct adOption {
+    static var adEnabled = false
 }

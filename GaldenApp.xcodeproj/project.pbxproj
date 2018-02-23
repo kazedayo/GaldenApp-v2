@@ -24,6 +24,7 @@
 		4262C20C1F9460E4002EEC76 /* PageSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4262C20B1F9460E4002EEC76 /* PageSelectTableViewCell.swift */; };
 		4262C2101F95FAE2002EEC76 /* jssource.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20D1F95FAE0002EEC76 /* jssource.js */; };
 		4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20E1F95FAE1002EEC76 /* xbbcode.js */; };
+		427F44B620402001005ED9CD /* UserDetailPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427F44B520402001005ED9CD /* UserDetailPopoverViewController.swift */; };
 		4282161F1FB1ADB3003ACF0C /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */; };
 		428216211FB1AFA7003ACF0C /* FirstLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */; };
 		429267632008C6DE00DF1314 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429267622008C6DE00DF1314 /* History.swift */; };
@@ -31,6 +32,7 @@
 		429A26F61FA4426E00B28B7E /* BlockedUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429A26F51FA4426E00B28B7E /* BlockedUserViewController.swift */; };
 		429A26F81FA4435600B28B7E /* BlockedUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429A26F71FA4435600B28B7E /* BlockedUsers.swift */; };
 		429A26FA1FA4481000B28B7E /* BlockedUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429A26F91FA4481000B28B7E /* BlockedUserTableViewCell.swift */; };
+		429D68F8203F0B6700FAE7C5 /* PagePopoverTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429D68F7203F0B6700FAE7C5 /* PagePopoverTableViewController.swift */; };
 		42A394A21FBC3793008A5239 /* ChannelListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A394A11FBC3793008A5239 /* ChannelListTableViewCell.swift */; };
 		42A979D42014BA43008C7629 /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */; };
 		42AF57A91FB57DF300C6497B /* IconKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AF57A81FB57DF300C6497B /* IconKeyboard.swift */; };
@@ -78,6 +80,7 @@
 		4262C20B1F9460E4002EEC76 /* PageSelectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PageSelectTableViewCell.swift; path = "GaldenApp/Table View Cells/PageSelectTableViewCell.swift"; sourceTree = "<group>"; };
 		4262C20D1F95FAE0002EEC76 /* jssource.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jssource.js; sourceTree = "<group>"; };
 		4262C20E1F95FAE1002EEC76 /* xbbcode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xbbcode.js; sourceTree = "<group>"; };
+		427F44B520402001005ED9CD /* UserDetailPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailPopoverViewController.swift; sourceTree = "<group>"; };
 		4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLoginViewController.swift; sourceTree = "<group>"; };
 		429267622008C6DE00DF1314 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = History.swift; path = "GaldenApp/Custom Classes/History.swift"; sourceTree = "<group>"; };
@@ -85,6 +88,7 @@
 		429A26F51FA4426E00B28B7E /* BlockedUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedUserViewController.swift; sourceTree = "<group>"; };
 		429A26F71FA4435600B28B7E /* BlockedUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BlockedUsers.swift; path = "GaldenApp/Custom Classes/BlockedUsers.swift"; sourceTree = "<group>"; };
 		429A26F91FA4481000B28B7E /* BlockedUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BlockedUserTableViewCell.swift; path = "GaldenApp/Table View Cells/BlockedUserTableViewCell.swift"; sourceTree = "<group>"; };
+		429D68F7203F0B6700FAE7C5 /* PagePopoverTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagePopoverTableViewController.swift; sourceTree = "<group>"; };
 		42A394A11FBC3793008A5239 /* ChannelListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChannelListTableViewCell.swift; path = "GaldenApp/Table View Cells/ChannelListTableViewCell.swift"; sourceTree = "<group>"; };
 		42A979D32014B9C4008C7629 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,6 +145,7 @@
 		427AD6761F81E6F900305EEA /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				429D68F7203F0B6700FAE7C5 /* PagePopoverTableViewController.swift */,
 				42FA369C1FBEB91900635512 /* PreviewViewController.swift */,
 				428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */,
 				4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */,
@@ -151,6 +156,7 @@
 				423331741FF6605F000FED6F /* ThreadListViewController.swift */,
 				42006A2A20036C410006602B /* ContentSideMenuViewController.swift */,
 				423F296E1F98568000BA2351 /* UserDetailViewController.swift */,
+				427F44B520402001005ED9CD /* UserDetailPopoverViewController.swift */,
 				4262C2091F945AC7002EEC76 /* PageSelectViewController.swift */,
 			);
 			path = "View Controllers";
@@ -397,10 +403,8 @@
 				"${BUILT_PRODUCTS_DIR}/AXStateButton/AXStateButton.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityIndicator/AlamofireNetworkActivityIndicator.framework",
-				"${BUILT_PRODUCTS_DIR}/AttributedLabel/AttributedLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/DeckTransition/DeckTransition.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
-				"${BUILT_PRODUCTS_DIR}/GradientLoadingBar/GradientLoadingBar.framework",
 				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
@@ -409,7 +413,6 @@
 				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -418,10 +421,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AXStateButton.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityIndicator.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AttributedLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeckTransition.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GradientLoadingBar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
@@ -430,7 +431,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SideMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -512,12 +512,14 @@
 				4247D5051F82504800809025 /* ThreadList.swift in Sources */,
 				42A394A21FBC3793008A5239 /* ChannelListTableViewCell.swift in Sources */,
 				42FA369D1FBEB91900635512 /* PreviewViewController.swift in Sources */,
+				429D68F8203F0B6700FAE7C5 /* PagePopoverTableViewController.swift in Sources */,
 				429A26F81FA4435600B28B7E /* BlockedUsers.swift in Sources */,
 				4202421C1F7BEC9400ECDD12 /* ChannelSelectViewController.swift in Sources */,
 				429A26FA1FA4481000B28B7E /* BlockedUserTableViewCell.swift in Sources */,
 				423331751FF6605F000FED6F /* ThreadListViewController.swift in Sources */,
 				428216211FB1AFA7003ACF0C /* FirstLoginViewController.swift in Sources */,
 				423F296F1F98568000BA2351 /* UserDetailViewController.swift in Sources */,
+				427F44B620402001005ED9CD /* UserDetailPopoverViewController.swift in Sources */,
 				4247D5031F82503A00809025 /* Channels.swift in Sources */,
 				42C261F51F7CECEA00477479 /* ComposeViewController.swift in Sources */,
 				4247D50B1F82508000809025 /* ThreadListTableViewCell.swift in Sources */,
