@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		32EE3C5177EECCE65C9AC67A /* Pods_GaldenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092365D4D945F6E42B0DE552 /* Pods_GaldenAppTests.framework */; };
-		42006A2B20036C410006602B /* ContentSideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42006A2A20036C410006602B /* ContentSideMenuViewController.swift */; };
+		42006A2B20036C410006602B /* ContentMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42006A2A20036C410006602B /* ContentMenuViewController.swift */; };
 		4202421C1F7BEC9400ECDD12 /* ChannelSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202421B1F7BEC9400ECDD12 /* ChannelSelectViewController.swift */; };
 		420983D01F822A8500375D05 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420983CF1F822A8500375D05 /* ContentViewController.swift */; };
 		421884B81F864300005D0BAA /* OP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421884B71F864300005D0BAA /* OP.swift */; };
@@ -60,7 +60,7 @@
 		092365D4D945F6E42B0DE552 /* Pods_GaldenAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3216F76A4E5F32869F0F36E4 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3347D35989AE9895ECE658C3 /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
-		42006A2A20036C410006602B /* ContentSideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSideMenuViewController.swift; sourceTree = "<group>"; };
+		42006A2A20036C410006602B /* ContentMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentMenuViewController.swift; sourceTree = "<group>"; };
 		4202421B1F7BEC9400ECDD12 /* ChannelSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSelectViewController.swift; sourceTree = "<group>"; };
 		420983CF1F822A8500375D05 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		421884B71F864300005D0BAA /* OP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OP.swift; path = "GaldenApp/Custom Classes/OP.swift"; sourceTree = "<group>"; };
@@ -154,7 +154,7 @@
 				42C261F41F7CECEA00477479 /* ComposeViewController.swift */,
 				420983CF1F822A8500375D05 /* ContentViewController.swift */,
 				423331741FF6605F000FED6F /* ThreadListViewController.swift */,
-				42006A2A20036C410006602B /* ContentSideMenuViewController.swift */,
+				42006A2A20036C410006602B /* ContentMenuViewController.swift */,
 				423F296E1F98568000BA2351 /* UserDetailViewController.swift */,
 				427F44B520402001005ED9CD /* UserDetailPopoverViewController.swift */,
 				4262C2091F945AC7002EEC76 /* PageSelectViewController.swift */,
@@ -508,7 +508,7 @@
 				429267632008C6DE00DF1314 /* History.swift in Sources */,
 				421884BA1F86432E005D0BAA /* Replies.swift in Sources */,
 				420983D01F822A8500375D05 /* ContentViewController.swift in Sources */,
-				42006A2B20036C410006602B /* ContentSideMenuViewController.swift in Sources */,
+				42006A2B20036C410006602B /* ContentMenuViewController.swift in Sources */,
 				4247D5051F82504800809025 /* ThreadList.swift in Sources */,
 				42A394A21FBC3793008A5239 /* ChannelListTableViewCell.swift in Sources */,
 				42FA369D1FBEB91900635512 /* PreviewViewController.swift in Sources */,

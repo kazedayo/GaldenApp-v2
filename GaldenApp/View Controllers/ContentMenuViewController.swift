@@ -1,5 +1,5 @@
 //
-//  ContentSideMenuViewController.swift
+//  ContentMenuViewController.swift
 //  GaldenApp
 //
 //  Created by Kin Wa Lam on 8/1/2018.

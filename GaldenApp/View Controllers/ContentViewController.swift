@@ -304,6 +304,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     private func updateSequence() {
         webView.isHidden = true
+        HUD.show(.progress)
         buttonLogic()
         pageButton.title = "第\(self.pageNow)頁"
         HKGaldenAPI.shared.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
@@ -421,39 +422,32 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: WebView Delegate
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if replied == true {
-            DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+        DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+            if self.replied == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let height = result as! CGFloat
                     let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
                     webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.replied = false
                     HUD.flash(.success, delay: 1.0)
-                    webView.isHidden = false
                 })
-            })
-        } else if f5 == true {
-            DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+            } else if self.f5 == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
                     webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.f5 = false
-                    webView.isHidden = false
                 })
-            })
-        } else if loaded == false {
-            DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+            } else if self.loaded == false {
                 let realm = try! Realm()
                 let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
                 if thisPost != nil && self.sender == "cell" {
                     self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: false)
                 }
                 self.loaded = true
-                webView.isHidden = false
-            })
-        } else {
+            }
             webView.isHidden = false
-        }
+            HUD.hide()
+        })
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
