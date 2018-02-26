@@ -224,7 +224,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             let destination = segue.destination as! ContentMenuViewController
             destination.modalPresentationStyle = UIModalPresentationStyle.popover
             destination.popoverPresentationController!.delegate = self
-            destination.popoverPresentationController!.backgroundColor = UIColor.init(white: 0.2, alpha: 1)
             destination.upvote = Int(self.op.good)!
             destination.downvote = Int(self.op.bad)!
             destination.opName = self.op.name
@@ -235,7 +234,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             let destination = segue.destination as! PagePopoverTableViewController
             destination.modalPresentationStyle = UIModalPresentationStyle.popover
             destination.popoverPresentationController!.delegate = self
-            destination.popoverPresentationController!.backgroundColor = UIColor.init(white: 0.2, alpha: 1)
             destination.threadID = self.threadIdReceived
             destination.pageCount = Int(self.pageCount)
             destination.pageSelected = self.pageNow
@@ -268,6 +266,41 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
             self?.replied = true
             self?.updateSequence()
+        })
+    }
+    
+    @IBAction func share(segue: UIStoryboardSegue) {
+        let source = segue.source as! ContentMenuViewController
+        let shareView = UIActivityViewController(activityItems:[source.shareContent!],applicationActivities:nil)
+        shareView.excludedActivityTypes = [.airDrop,.addToReadingList,.assignToContact,.openInIBooks,.saveToCameraRoll]
+        DispatchQueue.main.asyncAfter(deadline: 0.5, execute: {
+            self.present(shareView, animated: true, completion: nil)
+        })
+    }
+    
+    @IBAction func lm(segue: UIStoryboardSegue) {
+        let alert = UIAlertController.init(title: "一鍵留名", message: "確定?", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
+            _ in
+            HKGaldenAPI.shared.reply(topicID: self.threadIdReceived, content: self.keychain.get("LeaveNameText")!, completion: {
+                [weak self] error in
+                if error == nil {
+                    HKGaldenAPI.shared.pageCount(postId: (self?.threadIdReceived)!, completion: {
+                        [weak self] count in
+                        self?.pageCount = count
+                        self?.pageNow = Int((self?.pageCount)!)
+                        self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
+                        self?.replied = true
+                        self?.updateSequence()
+                    })
+                } else {
+                    HUD.flash(.error)
+                }
+            })
+        }))
+        alert.addAction(UIAlertAction.init(title: "不了", style: .cancel, handler: nil))
+        DispatchQueue.main.asyncAfter(deadline: 0.5, execute: {
+            self.present(alert,animated: true)
         })
     }
     

@@ -560,23 +560,22 @@
         <scene sceneID="Lp3-tk-NpD">
             <objects>
                 <tableViewController id="T2c-pe-lOD" customClass="PagePopoverTableViewController" customModule="GaldenApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="t3D-Yv-HBP">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="t3D-Yv-HBP">
                         <rect key="frame" x="0.0" y="0.0" width="150" height="200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="separatorColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PageSelectTableViewCell" id="e8D-Gb-EDX" customClass="PageSelectTableViewCell" customModule="GaldenApp" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="150" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="e8D-Gb-EDX" id="fpP-Zi-lLP">
-                                    <rect key="frame" x="0.0" y="0.0" width="150" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="page" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V8H-9q-AdM">
                                             <rect key="frame" x="16" y="11" width="118" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -587,7 +586,7 @@
                                         <constraint firstItem="V8H-9q-AdM" firstAttribute="leading" secondItem="fpP-Zi-lLP" secondAttribute="leadingMargin" id="umh-n1-4b9"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="pageNo" destination="V8H-9q-AdM" id="TFv-GN-GCU"/>
                                 </connections>
@@ -622,8 +621,9 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U2o-V8-B5l">
                                         <rect key="frame" x="0.0" y="0.0" width="130" height="37.5"/>
-                                        <color key="backgroundColor" red="0.40000000000000002" green="0.80000000000000004" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="upvote"/>
+                                        <state key="normal" title="upvote">
+                                            <color key="titleColor" red="0.0" green="0.59999999999999998" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="5"/>
@@ -635,8 +635,9 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RAN-sH-5cr">
                                         <rect key="frame" x="0.0" y="47.5" width="130" height="37.5"/>
-                                        <color key="backgroundColor" red="1" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="downvote"/>
+                                        <state key="normal" title="downvote">
+                                            <color key="titleColor" red="1" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="5"/>
@@ -648,8 +649,9 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDi-Rx-Mp1">
                                         <rect key="frame" x="0.0" y="95" width="130" height="37.5"/>
-                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" title="一鍵留名"/>
+                                        <state key="normal" title="一鍵留名">
+                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="5"/>
@@ -661,9 +663,10 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0qq-01-EEw">
                                         <rect key="frame" x="0.0" y="142.5" width="130" height="37.5"/>
-                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="些牙"/>
+                                        <state key="normal" title="些牙">
+                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="5"/>
@@ -676,7 +679,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="lOP-We-rY6" firstAttribute="bottom" secondItem="KmP-mz-gfW" secondAttribute="bottom" constant="10" id="O8V-Wl-f26"/>
                             <constraint firstItem="KmP-mz-gfW" firstAttribute="top" secondItem="lOP-We-rY6" secondAttribute="top" constant="10" id="aih-PS-P5D"/>
@@ -693,6 +696,8 @@
                         <outlet property="lmButton" destination="TDi-Rx-Mp1" id="Khe-JG-5OU"/>
                         <outlet property="upvoteButton" destination="U2o-V8-B5l" id="sua-0g-M9E"/>
                         <segue destination="mUf-d2-Lnm" kind="unwind" identifier="unwindToContent" unwindAction="unwindToContentWithSegue:" id="4dh-iF-oTt"/>
+                        <segue destination="mUf-d2-Lnm" kind="unwind" identifier="share" unwindAction="shareWithSegue:" id="RFn-ea-khC"/>
+                        <segue destination="mUf-d2-Lnm" kind="unwind" identifier="lm" unwindAction="lmWithSegue:" id="N9a-A0-ein"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6aB-8l-VAB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1013,7 +1018,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Sj7-ze-jkP" firstAttribute="trailing" secondItem="Xfu-F3-rpo" secondAttribute="trailing" constant="25" id="376-fb-pVV"/>
                             <constraint firstItem="Sj7-ze-jkP" firstAttribute="bottom" secondItem="qND-Tk-lsI" secondAttribute="bottom" constant="20" id="4HZ-fk-4yi"/>
@@ -1066,16 +1071,16 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rbn-Z7-L2x">
                                         <rect key="frame" x="0.0" y="0.0" width="110" height="40"/>
                                         <state key="normal" title="小氣簿">
-                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <segue destination="pNh-GW-4AS" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="coverVertical" id="ba5-cw-bKc"/>
+                                            <segue destination="pNh-GW-4AS" kind="presentation" modalPresentationStyle="currentContext" modalTransitionStyle="crossDissolve" id="ba5-cw-bKc"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h3n-CW-g7Q">
                                         <rect key="frame" x="0.0" y="40" width="110" height="40"/>
                                         <state key="normal" title="改名怪">
-                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
                                             <action selector="changeNameButtonPressed:" destination="EIs-kF-Qtq" eventType="touchUpInside" id="kNh-PI-ewX"/>
@@ -1093,7 +1098,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nnP-f4-pPe">
                                         <rect key="frame" x="0.0" y="120" width="110" height="40"/>
                                         <state key="normal" title="Souce Code">
-                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
                                             <action selector="sourceButtonPressed:" destination="EIs-kF-Qtq" eventType="touchUpInside" id="RDu-Au-Uq8"/>
@@ -1102,7 +1107,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="gaU-vB-Geg" firstAttribute="bottom" secondItem="0LK-X5-z6t" secondAttribute="bottom" constant="20" id="0cg-Pc-vfT"/>
                             <constraint firstItem="0LK-X5-z6t" firstAttribute="top" secondItem="gaU-vB-Geg" secondAttribute="top" constant="20" id="2dp-tm-X9i"/>
@@ -1127,31 +1132,31 @@
             <objects>
                 <tableViewController id="pNh-GW-4AS" customClass="BlockedUserViewController" customModule="GaldenApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="white" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="kgU-ua-ip3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="separatorColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BlockedUserTableViewCell" rowHeight="75" id="mrs-RD-Pkt" customClass="BlockedUserTableViewCell" customModule="GaldenApp" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="75"/>
+                                <rect key="frame" x="0.0" y="28" width="300" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mrs-RD-Pkt" id="jak-t0-LWw">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="74.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="74.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="08q-2a-Gx3">
-                                            <rect key="frame" x="16" y="11" width="343" height="53"/>
+                                            <rect key="frame" x="16" y="11" width="268" height="53"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Se-tn-E2a">
-                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="36"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="268" height="36"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yuq-MU-WTD">
-                                                    <rect key="frame" x="0.0" y="41" width="343" height="12"/>
+                                                    <rect key="frame" x="0.0" y="41" width="268" height="12"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1177,6 +1182,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="小氣簿" id="8MF-Oa-fGS"/>
+                    <value key="contentSizeForViewInPopover" type="size" width="300" height="400"/>
+                    <size key="freeformSize" width="300" height="400"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="acm-Br-s7H" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1342,21 +1349,21 @@
         <scene sceneID="b00-SV-QXx">
             <objects>
                 <tableViewController id="soA-sJ-Kte" customClass="ChannelSelectViewController" customModule="GaldenApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="HaG-QH-Icw">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="HaG-QH-Icw">
                         <rect key="frame" x="0.0" y="0.0" width="150" height="300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="separatorColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ChannelListTableViewCell" rowHeight="50" id="MUV-PT-qiN" customClass="ChannelListTableViewCell" customModule="GaldenApp" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="150" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MUV-PT-qiN" id="S1V-TH-vQZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="150" height="49.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="g3x-T0-4Qk">
                                             <rect key="frame" x="10" y="10" width="30" height="30"/>
+                                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="g3x-T0-4Qk" secondAttribute="height" multiplier="1:1" id="FNW-wH-xNb"/>
                                             </constraints>
@@ -1364,8 +1371,8 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Channel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ToY-CH-RRL">
                                             <rect key="frame" x="50" y="10" width="90" height="29.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <nil key="highlightedColor"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </label>
                                     </subviews>
                                     <constraints>
@@ -1378,7 +1385,7 @@
                                         <constraint firstItem="ToY-CH-RRL" firstAttribute="top" secondItem="S1V-TH-vQZ" secondAttribute="top" constant="10" id="yeA-Iq-aAG"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="channelIcon" destination="g3x-T0-4Qk" id="esv-AZ-VhA"/>
                                     <outlet property="channelTitle" destination="ToY-CH-RRL" id="GLu-5x-6Wz"/>

@@ -40,7 +40,7 @@ class BlockedUserViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BlockedUserTableViewCell") as! BlockedUserTableViewCell
         let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
+        bgColorView.backgroundColor = .lightGray
         cell.selectedBackgroundView = bgColorView
         cell.userLabel.text = blockedUsers[indexPath.row].userName
         cell.idLabel.text = "UID: " + blockedUsers[indexPath.row].id

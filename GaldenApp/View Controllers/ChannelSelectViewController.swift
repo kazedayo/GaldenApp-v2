@@ -19,11 +19,6 @@ class ChannelSelectViewController: UITableViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        if #available(iOS 11.0, *) {
-            
-        } else {
-            tableView.contentInset = UIEdgeInsets.init(top: 20, left: 0, bottom: 0, right: 0)
-        }
         // Do any additional setup after loading the view.
     }
     
@@ -49,9 +44,21 @@ class ChannelSelectViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
+        cell.channelIcon.tintColor = .white
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
+        cell.channelIcon.tintColor = .white
         channelSelected = cellIdentifiers[indexPath.row]
         performSegue(withIdentifier: "unwindToThreadList", sender: self)
+    }
+    
+    override func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
+        cell.channelIcon.tintColor = .darkGray
     }
     
     /*

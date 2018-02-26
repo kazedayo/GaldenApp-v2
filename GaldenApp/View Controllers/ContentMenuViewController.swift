@@ -18,6 +18,7 @@ class ContentMenuViewController: UIViewController {
     var threadTitle: String?
     var opName: String?
     var threadID: String?
+    var shareContent: String?
     @IBOutlet weak var upvoteButton: UIButton!
     @IBOutlet weak var downvoteButton: UIButton!
     @IBOutlet weak var lmButton: UIButton!
@@ -35,9 +36,9 @@ class ContentMenuViewController: UIViewController {
         }
         if rated == "true" {
             upvoteButton.isEnabled = false
-            upvoteButton.backgroundColor = UIColor(red:0.52, green:0.68, blue:0.52, alpha:1.0)
+            upvoteButton.alpha = 0.5
             downvoteButton.isEnabled = false
-            downvoteButton.backgroundColor = UIColor(red:0.91, green:0.49, blue:0.49, alpha:1.0)
+            downvoteButton.alpha = 0.5
         }
         upvoteButton.setTitle("正皮: \(upvote)", for: .normal)
         downvoteButton.setTitle("負皮: \(downvote)", for: .normal)
@@ -49,10 +50,8 @@ class ContentMenuViewController: UIViewController {
     }
     
     @IBAction func shareButtonPressed(_ sender: Any) {
-        let shared = threadTitle! + " // by: " + opName! + "\nShared via 1080-SIGNAL \nhttps://hkgalden.com/view/" + threadID!
-        let share = UIActivityViewController(activityItems:[shared],applicationActivities:nil)
-        share.excludedActivityTypes = [.airDrop,.addToReadingList,.assignToContact,.openInIBooks,.saveToCameraRoll]
-        present(share,animated: true,completion: nil)
+        self.shareContent = self.threadTitle! + " // by: " + self.opName! + "\nShared via 1080-SIGNAL \nhttps://hkgalden.com/view/" + self.threadID!
+        performSegue(withIdentifier: "share", sender: self)
     }
     
     @IBAction func upvoteButtonPressed(_ sender: UIButton) {
@@ -60,9 +59,9 @@ class ContentMenuViewController: UIViewController {
             self.upvote += 1
             self.upvoteButton.setTitle("正皮: \(self.upvote)", for: .normal)
             self.upvoteButton.isEnabled = false
-            self.upvoteButton.backgroundColor = UIColor(red:0.52, green:0.68, blue:0.52, alpha:1.0)
+            self.upvoteButton.alpha = 0.5
             self.downvoteButton.isEnabled = false
-            self.downvoteButton.backgroundColor = UIColor(red:0.91, green:0.49, blue:0.49, alpha:1.0)
+            self.downvoteButton.alpha = 0.5
         })
     }
     
@@ -71,27 +70,14 @@ class ContentMenuViewController: UIViewController {
             self.downvote += 1
             self.downvoteButton.setTitle("負皮: \(self.downvote)", for: .normal)
             self.upvoteButton.isEnabled = false
-            self.upvoteButton.backgroundColor = UIColor(red:0.52, green:0.68, blue:0.52, alpha:1.0)
+            self.upvoteButton.alpha = 0.5
             self.downvoteButton.isEnabled = false
-            self.downvoteButton.backgroundColor = UIColor(red:0.91, green:0.49, blue:0.49, alpha:1.0)
+            self.downvoteButton.alpha = 0.5
         })
     }
     
     @IBAction func leaveNamePressed(_ sender: UIButton) {
-        let alert = UIAlertController.init(title: "一鍵留名", message: "確定?", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
-            _ in
-            HKGaldenAPI.shared.reply(topicID: self.threadID!, content: self.keychain.get("LeaveNameText")!.replacingOccurrences(of: "\\n", with: "\n"), completion: {
-                [weak self] error in
-                if error == nil {
-                    self?.performSegue(withIdentifier: "unwindAfterReply", sender: self)
-                } else {
-                    HUD.flash(.error)
-                }
-            })
-        }))
-        alert.addAction(UIAlertAction.init(title: "不了", style: .cancel, handler: nil))
-        present(alert,animated: true)
+        performSegue(withIdentifier: "lm", sender: self)
     }
     
     /*

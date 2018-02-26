@@ -72,6 +72,16 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         titleTextField.delegate = self
         contentTextView.delegate = self
         contentTextView.placeholder = "內容"
+        if #available(iOS 11.0, *) {
+            titleTextField.smartInsertDeleteType = .no
+            titleTextField.smartQuotesType = .no
+            titleTextField.smartDashesType = .no
+            contentTextView.smartDashesType = .no
+            contentTextView.smartQuotesType = .no
+            contentTextView.smartInsertDeleteType = .no
+        } else {
+            // Fallback on earlier versions
+        }
         channelLabel.setTitle(HKGaldenAPI.shared.channelNameFunc(ch: channel), for: .normal)
         channelLabel.backgroundColor = HKGaldenAPI.shared.channelColorFunc(ch: channel)
         if type == "reply" {

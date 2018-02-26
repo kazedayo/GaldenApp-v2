@@ -261,7 +261,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             let popoverViewController = segue.destination as! ChannelSelectViewController
             popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
             popoverViewController.popoverPresentationController!.delegate = self
-            popoverViewController.popoverPresentationController!.backgroundColor = UIColor.init(white: 0.2, alpha: 1)
         default:
             break
         }

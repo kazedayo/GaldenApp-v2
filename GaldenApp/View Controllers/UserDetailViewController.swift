@@ -49,7 +49,6 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
             let popoverViewController = segue.destination as! UserDetailPopoverViewController
             popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
             popoverViewController.popoverPresentationController!.delegate = self
-            popoverViewController.popoverPresentationController!.backgroundColor = .clear
             popoverViewController.popoverPresentationController!.permittedArrowDirections = .init(rawValue: 0)
         }
     }
