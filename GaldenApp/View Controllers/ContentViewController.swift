@@ -50,10 +50,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     @IBOutlet weak var pageButton: UIBarButtonItem!
     @IBOutlet weak var prevButton: UIBarButtonItem!
     @IBOutlet weak var nextButton: UIBarButtonItem!
+    @IBOutlet weak var reloadButton: UIButton!
+    @IBOutlet weak var errorImage: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.isOpaque = false
+        webView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         webView.backgroundColor = .clear
         initializeJS()
         navigationController?.delegate = self
@@ -293,8 +296,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                         self?.replied = true
                         self?.updateSequence()
                     })
-                } else {
-                    HUD.flash(.error)
                 }
             })
         }))
@@ -312,6 +313,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     @IBAction func nextButtonPressed(_ sender: UIBarButtonItem) {
         self.pageNow += 1
         updateSequence()
+    }
+    
+    @IBAction func reloadButtonPressed(_ sender: UIButton) {
+        self.updateSequence()
     }
     
     //MARK: Private Functions
@@ -343,15 +348,17 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         HKGaldenAPI.shared.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
             [weak self] op,comments,rated,blocked,error in
             if (error == nil) {
-                self?.op = op
-                self?.comments = comments
-                self?.blockedUsers = blocked
-                self?.isRated = rated
+                self?.errorImage.isHidden = true
+                self?.reloadButton.isHidden = true
+                self?.op = op!
+                self?.comments = comments!
+                self?.blockedUsers = blocked!
+                self?.isRated = rated!
                 self?.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: (self?.op.channel)!)
                 //self?.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: (self?.op.channel)!).as1ptImage()
                 self?.convertedHTML = ""
                 if self?.pageNow == 1 {
-                    self?.convertBBCodeToHTML(text: op.content)
+                    self?.convertBBCodeToHTML(text: op!.content)
                     self?.op.contentHTML = (self?.convertedText)!
                     self?.constructOPHeader()
                     if (self?.blockedUsers.contains((self?.op.userID)!))! {
@@ -361,7 +368,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 }
                 
                 for index in 0..<(self?.comments.count)! {
-                    self?.convertBBCodeToHTML(text: comments[index].content)
+                    self?.convertBBCodeToHTML(text: comments![index].content)
                     self?.comments[index].contentHTML = (self?.convertedText)!
                     self?.constructCommentHeader(index: index)
                     if (self?.blockedUsers.contains((self?.comments[index].userID)!))! {
@@ -378,7 +385,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self?.webView.loadHTMLString((self?.pageHTML)!, baseURL: Bundle.main.bundleURL)
                 //print((self?.pageHTML)!)
             } else {
-                HUD.flash(.error)
+                self?.errorImage.isHidden = false
+                self?.reloadButton.isHidden = false
             }
         })
     }

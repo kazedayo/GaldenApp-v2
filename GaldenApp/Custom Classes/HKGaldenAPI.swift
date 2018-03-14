@@ -10,12 +10,13 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import KeychainSwift
+import PKHUD
 
 class HKGaldenAPI {
     
     static let shared = HKGaldenAPI()
     
-    func fetchThreadList(currentChannel: String,pageNumber: String, completion : @escaping (_ threads: [ThreadList]?,_ blockedUsers: [String]?, _ error: Error?)->Void) {
+    func fetchThreadList(currentChannel: String,pageNumber: String, completion : @escaping (_ threads: [ThreadList],_ blockedUsers: [String], _ error: Error?)->Void) {
         let par: Parameters = ["ident": currentChannel, "ofs": pageNumber]
         let keychain = KeychainSwift()
         let head:HTTPHeaders
@@ -61,12 +62,13 @@ class HKGaldenAPI {
                 
             case .failure(let error):
                 print(error)
-                completion(nil,nil,error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                completion([ThreadList](),[String](),error)
             }
         }
     }
     
-    func fetchContent(postId: String, pageNo: String, completion : @escaping (_ op: OP,_ comments: [Replies],_ rated: String,_ blockedUsers: [String], _ error: Error?)->Void) {
+    func fetchContent(postId: String, pageNo: String, completion : @escaping (_ op: OP?,_ comments: [Replies]?,_ rated: String?,_ blockedUsers: [String]?, _ error: Error?)->Void) {
         let keychain = KeychainSwift()
         let par: Parameters = ["id": postId, "ofs": pageNo]
         var head: HTTPHeaders
@@ -138,6 +140,8 @@ class HKGaldenAPI {
                 
             case .failure(let error):
                 print(error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                completion(nil,nil,nil,nil,error)
             }
         }
     }
@@ -168,6 +172,7 @@ class HKGaldenAPI {
                 completion(userName,id)
             case .failure(let error):
                 print(error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             }
         }
     }
@@ -191,6 +196,7 @@ class HKGaldenAPI {
             response in
             if response.error != nil {
                 completion(response.error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             } else {
                 completion(nil)
             }
@@ -205,6 +211,7 @@ class HKGaldenAPI {
             response in
             if response.error != nil {
                 completion(response.error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             } else {
                 completion(nil)
             }
@@ -224,6 +231,7 @@ class HKGaldenAPI {
                 completion(content)
             case .failure(let error):
                 print(error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             }
         }
     }
@@ -257,6 +265,7 @@ class HKGaldenAPI {
                 
             case .failure(let error):
                 print(error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             }
         }
     }
@@ -393,6 +402,7 @@ class HKGaldenAPI {
                 completion(pageCount)
             case .failure(let error):
                 print(error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             }
         }
     }
@@ -442,6 +452,7 @@ class HKGaldenAPI {
                 }
             case .failure(let error):
                 print(error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             }
         })
     }
@@ -459,6 +470,7 @@ class HKGaldenAPI {
                 completion(status)
             case .failure(let error):
                 print(error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             }
         }
     }
@@ -477,6 +489,7 @@ class HKGaldenAPI {
                 completion(status,newName)
             case .failure(let error):
                 print(error)
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             }
         }
     }
@@ -496,7 +509,7 @@ class HKGaldenAPI {
                 completion(status,uname)
             case .failure(let error):
                 print(error)
-                completion("","")
+                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             }
         }
     }

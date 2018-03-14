@@ -11,11 +11,11 @@ PODS:
   - AXStateButton (1.1.4)
   - DeckTransition (2.0.0)
   - FLAnimatedImage (1.0.12)
-  - Google-Mobile-Ads-SDK (7.28.0)
-  - Hero (1.0.1)
+  - Google-Mobile-Ads-SDK (7.29.0)
+  - Hero (1.1.0)
   - IQKeyboardManagerSwift (5.0.7)
   - KeychainSwift (10.0.0)
-  - Kingfisher (4.6.1)
+  - Kingfisher (4.6.3)
   - MarqueeLabel (3.1.4):
     - MarqueeLabel/ObjC (= 3.1.4)
   - MarqueeLabel/ObjC (3.1.4)
@@ -48,11 +48,11 @@ SPEC CHECKSUMS:
   AXStateButton: 6c515a433e37551505046429b5be04c12daa8c07
   DeckTransition: 2300694f94fbeca2c103f365dc9dc09ffae14a4f
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  Google-Mobile-Ads-SDK: 7f9bc0011df363ae5616449de3682a14c4701612
-  Hero: cee286821578e170d8c0c9c9cda7897357401112
+  Google-Mobile-Ads-SDK: 375bbb821b3df2106c37b74f6b0a97576ddc5f6b
+  Hero: ce59e81c79390613d97b43da7179e2c5e1017e04
   IQKeyboardManagerSwift: 30fb3a61de1af53a95e02b80fb54ed0a19d5ede5
   KeychainSwift: f9f7910449a0c0fd2cabc889121530dd2c477c33
-  Kingfisher: 1f9157d9c02b380cbd0b7cc890161195164eb634
+  Kingfisher: 98e6d5b5e807645743e8ed5ececd25d688d38452
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
   Realm: 42d1c38a5b1bbcc828b48a7ce702cb86fc68adf4

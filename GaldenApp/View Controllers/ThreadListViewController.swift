@@ -9,13 +9,14 @@ import UIKit
 import KeychainSwift
 import PKHUD
 import GoogleMobileAds
+import QuartzCore
 
 class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
     
     //MARK: Properties
     var threads = [ThreadList]()
     var channelNow: String = "bw"
-    var pageNow: String = "1"
+    var pageNow: Int = 1
     var pageCount: Double?
     var selectedThread: String!
     var blockedUsers = [String]()
@@ -25,6 +26,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var adBannerView: GADBannerView!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var errorImage: UIButton!
+    @IBOutlet weak var reloadButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,45 +67,21 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         spinner.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 44)
         self.tableView.tableFooterView = spinner;
         
-        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: pageNow, completion: {
-            [weak self] threads,blocked,error in
-            if (error == nil) {
-                self?.threads = threads!
-                self?.blockedUsers = blocked!
-                self?.tableView.reloadData()
-                self?.tableView.isHidden = false
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: 1, execute: {
-                    HUD.flash(.error, delay: 1)
-                })
-            }
-        })
+        updateSequence(append: false, completion: {})
     }
     
     @objc func refresh(refreshControl: UIRefreshControl) {
-        self.pageNow = "1"
-        HKGaldenAPI.shared.fetchThreadList(currentChannel: self.channelNow, pageNumber: self.pageNow, completion: {
-            [weak self] threads,blocked,error in
-            if (error == nil) {
-                self?.threads = threads!
-                self?.blockedUsers = blocked!
-                DispatchQueue.main.asyncAfter(deadline: 1, execute: {
-                    self?.tableView.reloadData()
-                    refreshControl.endRefreshing()
-                })
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: 1, execute: {
-                    HUD.flash(.error, delay: 1)
-                    refreshControl.endRefreshing()
-                })
-            }
+        self.pageNow = 1
+        DispatchQueue.main.asyncAfter(deadline: 1, execute: {
+            self.updateSequence(append: false, completion: {
+                refreshControl.endRefreshing()
+            })
         })
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
-        //self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)
@@ -189,21 +168,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if (threads.count - indexPath.row) == 1 {
-            HKGaldenAPI.shared.fetchThreadList(currentChannel: self.channelNow, pageNumber: String(Int(self.pageNow)! + 1), completion: {
-                [weak self] threads,blocked,error in
-                if (error == nil) {
-                    DispatchQueue.main.asyncAfter(deadline: 1, execute: {
-                        self?.blockedUsers = blocked!
-                        self?.tableView.beginUpdates()
-                        for i in 0..<(threads?.count)! {
-                            self?.threads.append(threads![i])
-                            self?.tableView.insertRows(at: [IndexPath.init(row: (self?.threads.count)!-1, section: 0)], with: UITableViewRowAnimation.middle)
-                        }
-                        self?.tableView.endUpdates()
-                    })
-                } else {
-                    HUD.flash(.error, delay: 1)
-                }
+            self.pageNow += 1
+            DispatchQueue.main.asyncAfter(deadline: 1, execute: {
+                self.updateSequence(append: true, completion: {})
             })
         }
     }
@@ -274,35 +241,17 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     @IBAction func unwindToThreadList(segue: UIStoryboardSegue) {
         let channelSelectViewController = segue.source as! ChannelSelectViewController
         self.channelNow = channelSelectViewController.channelSelected
-        self.pageNow = "1"
+        self.pageNow = 1
         self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
         self.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
         //self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
-        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: pageNow, completion: {
-            [weak self] threads,blocked,error in
-            if (error == nil) {
-                self?.threads = threads!
-                self?.blockedUsers = blocked!
-                self?.tableView.reloadData()
-                self?.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
-            } else {
-                HUD.flash(.error, delay: 1)
-            }
-        })
+        self.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
+        self.updateSequence(append: false, completion: {})
     }
     
     @IBAction func unwindToThreadListAfterNewPost(segue: UIStoryboardSegue) {
         HUD.flash(.success)
-        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: pageNow, completion: {
-            [weak self] threads,blocked,error in
-            if (error == nil) {
-                self?.threads = threads!
-                self?.blockedUsers = blocked!
-                self?.tableView.reloadData()
-            } else {
-                HUD.flash(.error, delay: 1)
-            }
-        })
+        self.updateSequence(append: false, completion: {})
     }
     
     @IBAction func unwindAfterPageSelect(segue: UIStoryboardSegue) {
@@ -313,4 +262,29 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
+    @IBAction func reloadButtonPressed(_ sender: UIButton) {
+        self.updateSequence(append: false, completion: {})
+    }
+    
+    private func updateSequence(append: Bool, completion: @escaping ()->Void) {
+        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: String(pageNow), completion: {
+            [weak self] threads,blocked,error in
+            if (error == nil) {
+                if append == true {
+                    self?.threads.append(contentsOf: threads)
+                } else {
+                    self?.threads = threads
+                }
+                self?.blockedUsers = blocked
+                self?.tableView.reloadData()
+                self?.errorImage.isHidden = true
+                self?.reloadButton.isHidden = true
+                self?.tableView.isHidden = false
+            } else {
+                self?.errorImage.isHidden = false
+                self?.reloadButton.isHidden = false
+            }
+            completion()
+        })
+    }
 }

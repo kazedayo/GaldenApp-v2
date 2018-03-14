@@ -25,7 +25,7 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
         super.viewDidLoad()
         emailField.delegate = self
         passwordField.delegate = self
-        loginText.heroModifiers = [.fade,.position(CGPoint(x:UIScreen.main.bounds.midX,y:100))]
+        loginText.hero.modifiers = [.fade,.position(CGPoint(x:UIScreen.main.bounds.midX,y:100))]
         // Do any additional setup after loading the view.
     }
 

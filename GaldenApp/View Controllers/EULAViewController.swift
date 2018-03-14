@@ -16,8 +16,8 @@ class EULAViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        eulaLabel.heroModifiers = [.position(CGPoint(x:eulaLabel.frame.midX,y:-50))]
-        eulaContent.heroModifiers = [.fade,.scale(0.5)]
+        eulaLabel.hero.modifiers = [.position(CGPoint(x:eulaLabel.frame.midX,y:-50))]
+        eulaContent.hero.modifiers = [.fade,.scale(0.5)]
         // Do any additional setup after loading the view.
     }
     
