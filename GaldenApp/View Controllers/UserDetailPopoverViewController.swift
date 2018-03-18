@@ -13,10 +13,22 @@ import KeychainSwift
 
 class UserDetailPopoverViewController: UIViewController {
 
+    @IBOutlet weak var adToggle: UISwitch!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        if adOption.adEnabled == true {
+            adToggle.isOn = true
+        } else {
+            adToggle.isOn = false
+        }
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        let keychain = KeychainSwift()
+        keychain.set(adToggle.isOn, forKey: "adEnabled")
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,6 +84,14 @@ class UserDetailPopoverViewController: UIViewController {
         }))
         alert.addAction(UIAlertAction(title: "冇嘢啦",style:.cancel,handler:nil))
         present(alert,animated: true,completion: nil)
+    }
+    
+    @IBAction func adToggle(_ sender: UISwitch) {
+        if sender.isOn == true {
+            adOption.adEnabled = true
+        } else {
+            adOption.adEnabled = false
+        }
     }
     
     /*

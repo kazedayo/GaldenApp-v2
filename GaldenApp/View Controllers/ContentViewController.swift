@@ -64,13 +64,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         adBannerView.delegate = self
         adBannerView.rootViewController = self
         
-        if (adOption.adEnabled == false) {
-            heightConstraint.constant = 0
-            adBannerView.layoutIfNeeded()
-        } else {
-            adBannerView.load(GADRequest())
-        }
-        
         let title = MarqueeLabel.init()
         title.textColor = .white
         title.text = self.title
@@ -93,6 +86,16 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             }
             self?.updateSequence()
         })
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if (adOption.adEnabled == false) {
+            heightConstraint.constant = 0
+            adBannerView.layoutIfNeeded()
+        } else {
+            adBannerView.load(GADRequest())
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -343,7 +346,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     private func updateSequence() {
         webView.isHidden = true
         HUD.show(.progress)
-        buttonLogic()
+        HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
+            [weak self] count in
+            self?.pageCount = count
+            self?.buttonLogic()
+        })
         pageButton.title = "第\(self.pageNow)頁"
         HKGaldenAPI.shared.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
             [weak self] op,comments,rated,blocked,error in

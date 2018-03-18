@@ -364,7 +364,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     func keyWasTapped(character: String) {
-        contentTextView.insertText(character)
+        contentTextView.insertText("\(character) ")
     }
     
     @IBAction func callIconKeyboard(_ sender: UIButton) {

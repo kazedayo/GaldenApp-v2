@@ -63,7 +63,7 @@ class SerialOperationQueue: OperationQueue {
 }
 
 struct adOption {
-    static var adEnabled = false
+    static var adEnabled = true
 }
 
 extension UIView {

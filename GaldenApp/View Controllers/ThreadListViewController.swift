@@ -38,13 +38,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         adBannerView.delegate = self
         adBannerView.rootViewController = self
         
-        if (adOption.adEnabled == false) {
-            heightConstraint.constant = 0
-            adBannerView.layoutIfNeeded()
-        } else {
-            adBannerView.load(GADRequest())
-        }
-        
         self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
         self.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
         self.navigationController?.navigationBar.isTranslucent = true
@@ -77,6 +70,16 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 refreshControl.endRefreshing()
             })
         })
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if (adOption.adEnabled == false) {
+            heightConstraint.constant = 0
+            adBannerView.layoutIfNeeded()
+        } else {
+            adBannerView.load(GADRequest())
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

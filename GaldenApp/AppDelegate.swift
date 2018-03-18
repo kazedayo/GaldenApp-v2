@@ -36,6 +36,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "FirstLaunch")
         }
         
+        if (keychain.getBool("adEnabled") == nil) {
+            adOption.adEnabled = true
+        } else {
+            adOption.adEnabled = keychain.getBool("adEnabled")!
+        }
+        
         return true
     }
 
