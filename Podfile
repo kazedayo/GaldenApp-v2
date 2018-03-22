@@ -13,7 +13,7 @@ target 'GaldenApp' do
   pod 'Hero'
   pod 'MarqueeLabel'
   pod 'DeckTransition'
-  pod 'AXPhotoViewer/Kingfisher'
+  pod 'Agrume', :git => 'https://github.com/JanGorman/Agrume.git'
   pod 'PKHUD', '~> 5.0'
   pod 'RealmSwift'
   pod 'Google-Mobile-Ads-SDK'

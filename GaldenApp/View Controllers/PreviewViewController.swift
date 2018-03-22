@@ -74,6 +74,7 @@ class PreviewViewController: UIViewController {
             HKGaldenAPI.shared.submitPost(channel: channel!, title: threadTitle!, content: content!, completion: {
                 [weak self] error in
                 if error == nil {
+                    HUD.flash(.success,delay:1)
                     self?.performSegue(withIdentifier: "unwindToThreadListAfterNewPost", sender: self)
                 } else {
                     HUD.flash(.error,delay: 1)
@@ -83,6 +84,7 @@ class PreviewViewController: UIViewController {
             HKGaldenAPI.shared.reply(topicID: topicID!, content: content!, completion: {
                 [weak self] error in
                 if error == nil {
+                    HUD.flash(.success,delay:1)
                     self?.performSegue(withIdentifier: "unwindAfterReply", sender: self)
                 } else {
                     HUD.flash(.error,delay: 1)

@@ -26,8 +26,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var adBannerView: GADBannerView!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var errorImage: UIButton!
-    @IBOutlet weak var reloadButton: UIButton!
+    
+    var reloadButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         self.navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .bottom)
         
         let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = .clear
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refreshControl
@@ -59,6 +58,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         spinner.startAnimating()
         spinner.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 44)
         self.tableView.tableFooterView = spinner;
+        
+        reloadButton.center = self.view.center
+        reloadButton.setTitle("重新載入", for: .normal)
+        reloadButton.isHidden = true
+        reloadButton.addTarget(self, action: #selector(reloadButtonPressed(_:)), for: .touchUpInside)
         
         updateSequence(append: false, completion: {})
     }
@@ -265,7 +269,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    @IBAction func reloadButtonPressed(_ sender: UIButton) {
+    @objc func reloadButtonPressed(_ sender: UIButton) {
         self.updateSequence(append: false, completion: {})
     }
     
@@ -280,11 +284,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 }
                 self?.blockedUsers = blocked
                 self?.tableView.reloadData()
-                self?.errorImage.isHidden = true
                 self?.reloadButton.isHidden = true
                 self?.tableView.isHidden = false
             } else {
-                self?.errorImage.isHidden = false
                 self?.reloadButton.isHidden = false
             }
             completion()

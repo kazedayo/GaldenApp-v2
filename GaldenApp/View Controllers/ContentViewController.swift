@@ -11,11 +11,9 @@ import JavaScriptCore
 import KeychainSwift
 import MarqueeLabel
 import WebKit
-import AXPhotoViewer
-import Kingfisher
 import RealmSwift
 import GoogleMobileAds
-import PKHUD
+import Agrume
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
 
@@ -44,14 +42,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //HKGalden API (NOT included in GitHub repo)
     let keychain = KeychainSwift()
     
+    var activityIndicator = UIActivityIndicatorView()
+    var reloadButton = UIButton()
+    
     @IBOutlet weak var adBannerView: GADBannerView!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
     @IBOutlet weak var pageButton: UIBarButtonItem!
     @IBOutlet weak var prevButton: UIBarButtonItem!
     @IBOutlet weak var nextButton: UIBarButtonItem!
-    @IBOutlet weak var reloadButton: UIButton!
-    @IBOutlet weak var errorImage: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +74,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         navigationItem.titleView = title
         
         NotificationCenter.default.addObserver(self, selector: #selector(ContentViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
+        
+        activityIndicator.center = self.view.center
+        activityIndicator.startAnimating()
+        reloadButton.center = self.view.center
+        reloadButton.setTitle("重新載入", for: .normal)
+        reloadButton.addTarget(self, action: #selector(reloadButtonPressed(_:)), for: .touchUpInside)
         
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
@@ -318,7 +323,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         updateSequence()
     }
     
-    @IBAction func reloadButtonPressed(_ sender: UIButton) {
+    @objc func reloadButtonPressed(_ sender: UIButton) {
         self.updateSequence()
     }
     
@@ -345,7 +350,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     private func updateSequence() {
         webView.isHidden = true
-        HUD.show(.progress)
+        self.view.addSubview(activityIndicator)
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
@@ -355,8 +360,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         HKGaldenAPI.shared.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
             [weak self] op,comments,rated,blocked,error in
             if (error == nil) {
-                self?.errorImage.isHidden = true
-                self?.reloadButton.isHidden = true
+                self?.reloadButton.removeFromSuperview()
                 self?.op = op!
                 self?.comments = comments!
                 self?.blockedUsers = blocked!
@@ -392,8 +396,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self?.webView.loadHTMLString((self?.pageHTML)!, baseURL: Bundle.main.bundleURL)
                 //print((self?.pageHTML)!)
             } else {
-                self?.errorImage.isHidden = false
-                self?.reloadButton.isHidden = false
+                self?.activityIndicator.removeFromSuperview()
+                self?.view.addSubview((self?.reloadButton)!)
             }
         })
     }
@@ -477,7 +481,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
                     webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.replied = false
-                    HUD.flash(.success, delay: 1.0)
                 })
             } else if self.f5 == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
@@ -493,8 +496,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 }
                 self.loaded = true
             }
+            self.activityIndicator.removeFromSuperview()
             webView.isHidden = false
-            HUD.hide()
         })
     }
     
@@ -503,11 +506,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             if (navigationAction.request.url?.absoluteString.contains("jpg"))! || (navigationAction.request.url?.absoluteString.contains("png"))! || (navigationAction.request.url?.absoluteString.contains("gif"))! || (navigationAction.request.url?.absoluteString.contains("holland.pk"))! {
                 let url = navigationAction.request.url
                 //open image viewer
-                let photo = Photo(url: url)
-                let dataSource = PhotosDataSource(photos: [photo])
-                let photoViewController = PhotosViewController(dataSource: dataSource)
-                
-                self.present(photoViewController,animated: true)
+                let agrume = Agrume(imageUrl: url!)
+                agrume.showFrom(self)
                 decisionHandler(.cancel)
             } else {
                 let url = navigationAction.request.url
