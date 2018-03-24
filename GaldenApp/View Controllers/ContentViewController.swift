@@ -373,7 +373,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     self?.op.contentHTML = (self?.convertedText)!
                     self?.constructOPHeader()
                     if (self?.blockedUsers.contains((self?.op.userID)!))! {
-                        self?.op.contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖會然</div>"
+                        self?.op.contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
                     }
                     self?.convertedHTML.append((self?.op.contentHTML)!)
                 }
@@ -383,7 +383,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     self?.comments[index].contentHTML = (self?.convertedText)!
                     self?.constructCommentHeader(index: index)
                     if (self?.blockedUsers.contains((self?.comments[index].userID)!))! {
-                        self?.comments[index].contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖會然</div>"
+                        self?.comments[index].contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
                     }
                     self?.convertedHTML.append((self?.comments[index].contentHTML)!)
                 }
