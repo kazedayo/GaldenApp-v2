@@ -77,6 +77,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         activityIndicator.center = self.view.center
         activityIndicator.startAnimating()
+        self.view.addSubview(activityIndicator)
         reloadButton.center = self.view.center
         reloadButton.setTitle("重新載入", for: .normal)
         reloadButton.addTarget(self, action: #selector(reloadButtonPressed(_:)), for: .touchUpInside)
