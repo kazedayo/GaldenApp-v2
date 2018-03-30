@@ -18,6 +18,7 @@ target 'GaldenApp' do
   pod 'RealmSwift'
   pod 'Google-Mobile-Ads-SDK'
   pod 'AlamofireNetworkActivityIndicator'
+  pod 'SnapKit'
 
   target 'GaldenAppTests' do
     inherit! :search_paths
