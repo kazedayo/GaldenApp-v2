@@ -41,7 +41,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
             adToggle.isOn = false
         }
         
-        view.backgroundColor = UIColor(white: 0, alpha: 0.25)
+        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
         backgroundView.addGestureRecognizer(swipeToDismiss)
         setupUI()
         
@@ -70,7 +70,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
@@ -80,18 +80,18 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
             popoverViewController.popoverPresentationController!.delegate = self
             popoverViewController.popoverPresentationController!.permittedArrowDirections = .init(rawValue: 0)
         }
-    }
+    }*/
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
     
-    @IBAction func logoutButtonPressed(_ sender: UIButton) {
+    @objc func logoutButtonPressed(_ sender: UIButton) {
         HKGaldenAPI.shared.logout {
             weak var pvc = self.presentingViewController
             self.keychain.delete("isLoggedIn")
             self.dismiss(animated: true, completion: {
-                pvc?.performSegue(withIdentifier: "logoutSegue", sender: pvc)
+                pvc?.present(FirstLoginViewController(), animated: true, completion: nil)
             })
         }
     }
@@ -126,6 +126,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         logoutButton.backgroundColor = UIColor(rgb: 0xfc3158)
         logoutButton.layer.cornerRadius = 10
         logoutButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        logoutButton.addTarget(self, action: #selector(logoutButtonPressed(_:)), for: .touchUpInside)
         backgroundView.addSubview(logoutButton)
         
         changeNameButton.setImage(UIImage(named: "changeName"), for: .normal)
@@ -147,7 +148,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fillEqually
         stackView.alignment = .center
         stackView.spacing = 15
         stackView.addArrangedSubview(changeNameButton)
@@ -189,7 +190,6 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
             make.top.equalTo(userID.snp.bottom).offset(10)
             make.leading.equalTo(backgroundView).offset(15)
             make.trailing.equalTo(backgroundView).offset(-15)
-            make.height.equalTo(175)
         }
         
         logoutButton.snp.makeConstraints {
@@ -206,6 +206,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
             make.bottom.equalTo(-15)
+            make.height.equalTo(35)
         }
     }
     

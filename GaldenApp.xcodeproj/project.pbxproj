@@ -42,7 +42,6 @@
 		42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89A1F7923E1002CC13F /* Assets.xcassets */; };
 		42E7F89E1F7923E1002CC13F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89C1F7923E1002CC13F /* LaunchScreen.storyboard */; };
 		42E7F8A91F7923E2002CC13F /* GaldenAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */; };
-		42FA369D1FBEB91900635512 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FA369C1FBEB91900635512 /* PreviewViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,7 +101,6 @@
 		42E7F8A41F7923E2002CC13F /* GaldenAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GaldenAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaldenAppTests.swift; sourceTree = "<group>"; };
 		42E7F8AA1F7923E2002CC13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		42FA369C1FBEB91900635512 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		5E399980B258AF2026630D8D /* Pods-GaldenAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		6190805695CCE41754519B0E /* Pods-GaldenApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.release.xcconfig"; sourceTree = "<group>"; };
 		AE09C78BE00384D4A5929212 /* Pods-GaldenApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 				42006A2A20036C410006602B /* ContentMenuViewController.swift */,
 				429D68F7203F0B6700FAE7C5 /* PagePopoverTableViewController.swift */,
 				42C261F41F7CECEA00477479 /* ComposeViewController.swift */,
-				42FA369C1FBEB91900635512 /* PreviewViewController.swift */,
 				423F296E1F98568000BA2351 /* UserDetailViewController.swift */,
 				429A26F51FA4426E00B28B7E /* BlockedUserViewController.swift */,
 			);
@@ -504,7 +501,6 @@
 				428B32E6206E49A800670877 /* WelcomeViewController.swift in Sources */,
 				4247D5051F82504800809025 /* ThreadList.swift in Sources */,
 				42A394A21FBC3793008A5239 /* ChannelListTableViewCell.swift in Sources */,
-				42FA369D1FBEB91900635512 /* PreviewViewController.swift in Sources */,
 				429D68F8203F0B6700FAE7C5 /* PagePopoverTableViewController.swift in Sources */,
 				429A26F81FA4435600B28B7E /* BlockedUsers.swift in Sources */,
 				4202421C1F7BEC9400ECDD12 /* ChannelSelectViewController.swift in Sources */,

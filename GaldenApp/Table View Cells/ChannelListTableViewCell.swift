@@ -37,7 +37,6 @@ class ChannelListTableViewCell: UITableViewCell {
             make.bottom.equalTo(-10)
             make.leading.equalTo(10)
             make.width.equalTo(20)
-            make.height.equalTo(20)
         }
         
         channelTitle.snp.makeConstraints {

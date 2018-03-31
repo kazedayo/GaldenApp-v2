@@ -25,6 +25,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     let tableView = UITableView()
     let adBannerView = GADBannerView()
+    lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var channelSwitch = UIBarButtonItem(image: UIImage(named: "channel"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
     lazy var newThread = UIBarButtonItem(image: UIImage(named: "Add"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
@@ -46,6 +47,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
+        tableView.addGestureRecognizer(longPress)
         view.addSubview(tableView)
         
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
@@ -184,11 +186,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         if (self.blockedUsers.contains(self.threads[indexPath.row].userID)) {
             cell.threadTitleLabel.text = "[已封鎖]"
             cell.threadTitleLabel.textColor = .darkGray
-            cell.detailLabel.isHidden = true
+            cell.detailLabel.removeFromSuperview()
         } else {
             cell.threadTitleLabel.text = title
             cell.threadTitleLabel.textColor = .lightGray
-            cell.detailLabel.isHidden = false
+            
             cell.detailLabel.text = "\(uname) // 回覆: \(count) // 評分: \(rate)"
             cell.detailLabel.textColor = .darkGray
         }
@@ -222,7 +224,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    @IBAction func jumpToPage(_ sender: UILongPressGestureRecognizer) {
+    @objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
                 
             let touchPoint = sender.location(in: self.tableView)
@@ -230,7 +232,14 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 self.selectedThread = threads[indexPath.row].id
                 self.selectedThreadTitle = threads[indexPath.row].title
                 self.pageCount = ceil((Double(threads[indexPath.row].count)! + 1)/25)
-                self.performSegue(withIdentifier: "pageSelect", sender: sender)
+                let destination = PageSelectViewController()
+                destination.pageCount = self.pageCount!
+                destination.titleText = self.selectedThreadTitle
+                destination.hero.isEnabled = true
+                destination.hero.modalAnimationType = .fade
+                destination.modalPresentationStyle = .overFullScreen
+                destination.mainVC = self
+                present(destination, animated: true, completion: nil)
             }
         }
     }
@@ -248,6 +257,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let destination = ComposeViewController()
         destination.channel = channelNow
         destination.type = "newThread"
+        destination.modalPresentationStyle = .overFullScreen
+        destination.hero.isEnabled = true
+        destination.hero.modalAnimationType = .fade
+        destination.threadVC = self
         present(destination, animated: true, completion: nil)
     }
     
@@ -262,21 +275,18 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
         
         switch(segue.identifier ?? "") {
         case "pageSelect":
-            let destination = segue.destination as! PageSelectViewController
-            destination.type = "threadList"
-            destination.pageCount = self.pageCount!
-            destination.titleText = self.selectedThreadTitle
+            
         default:
             break
         }
-    }
+    }*/
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
@@ -293,7 +303,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     func unwindToThreadListAfterNewPost() {
-        HUD.flash(.success)
         self.updateSequence(append: false, completion: {})
     }
     
@@ -304,6 +313,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             contentVC.threadIdReceived = self.selectedThread
             contentVC.title = self.selectedThreadTitle
             contentVC.pageNow = self.selectedPage!
+            self.navigationController?.pushViewController(contentVC, animated: true)
         }
     }
     

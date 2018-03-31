@@ -37,11 +37,14 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
         emailField.delegate = self
         emailField.borderStyle = .roundedRect
         emailField.placeholder = "email"
+        emailField.keyboardType = .emailAddress
+        emailField.autocapitalizationType = .none
         view.addSubview(emailField)
         
         passwordField.delegate = self
         passwordField.borderStyle = .roundedRect
         passwordField.placeholder = "密碼"
+        passwordField.isSecureTextEntry = true
         view.addSubview(passwordField)
         
         loginButton.hero.id = "button"
