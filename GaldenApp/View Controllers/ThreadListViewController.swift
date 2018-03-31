@@ -23,27 +23,65 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     var selectedPage: Int?
     var selectedThreadTitle: String!
     
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var adBannerView: GADBannerView!
-    @IBOutlet weak var heightConstraint: NSLayoutConstraint!
+    let tableView = UITableView()
+    let adBannerView = GADBannerView()
+    lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
+    lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+    lazy var channelSwitch = UIBarButtonItem(image: UIImage(named: "channel"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
+    lazy var newThread = UIBarButtonItem(image: UIImage(named: "Add"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
+    lazy var userDetail = UIBarButtonItem(image: UIImage(named: "user"), style: .plain, target: self, action: #selector(userDetailPressed))
     
     var reloadButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isHidden = true
+        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tableView.separatorColor = UIColor(white: 0.2, alpha: 1)
+        tableView.estimatedRowHeight = 50
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
+        tableView.addGestureRecognizer(longPress)
+        view.addSubview(tableView)
+        
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
         adBannerView.delegate = self
         adBannerView.rootViewController = self
+        view.addSubview(adBannerView)
         
-        self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
-        self.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
-        self.navigationController?.navigationBar.isTranslucent = true
-        //self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .bottom)
+        tableView.snp.makeConstraints {
+            (make) -> Void in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        adBannerView.snp.makeConstraints {
+            (make) -> Void in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(view.snp.bottom).offset(-44)
+            make.height.equalTo(50)
+        }
+        
+        navigationController?.isToolbarHidden = false
+        navigationController?.navigationBar.barStyle = .black
+        navigationController?.toolbar.barStyle = .black
+        navigationController?.toolbar.tintColor = .white
+        navigationController?.navigationBar.tintColor = .white
+        toolbarItems = [flexibleSpace,channelSwitch,flexibleSpace,newThread,flexibleSpace,userDetail,flexibleSpace]
+        navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
+        navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .bottom)
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
@@ -57,7 +95,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
         spinner.startAnimating()
         spinner.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 44)
-        self.tableView.tableFooterView = spinner;
+        tableView.tableFooterView = spinner;
         
         reloadButton.center = self.view.center
         reloadButton.setTitle("重新載入", for: .normal)
@@ -68,7 +106,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     @objc func refresh(refreshControl: UIRefreshControl) {
-        self.pageNow = 1
+        pageNow = 1
         DispatchQueue.main.asyncAfter(deadline: 1, execute: {
             self.updateSequence(append: false, completion: {
                 refreshControl.endRefreshing()
@@ -79,8 +117,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if (adOption.adEnabled == false) {
-            heightConstraint.constant = 0
-            adBannerView.layoutIfNeeded()
+            adBannerView.removeFromSuperview()
+            view.layoutSubviews()
         } else {
             adBannerView.load(GADRequest())
         }
@@ -136,9 +174,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell", for: indexPath) as! ThreadListTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
         
         // Configure the cell...
+        cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
             let title = self.threads[indexPath.row].title
             var uname = self.threads[indexPath.row].userName
             let count = self.threads[indexPath.row].count
@@ -147,11 +186,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         if (self.blockedUsers.contains(self.threads[indexPath.row].userID)) {
             cell.threadTitleLabel.text = "[已封鎖]"
             cell.threadTitleLabel.textColor = .darkGray
-            cell.detailLabel.isHidden = true
+            cell.detailLabel.removeFromSuperview()
         } else {
             cell.threadTitleLabel.text = title
             cell.threadTitleLabel.textColor = .lightGray
-            cell.detailLabel.isHidden = false
+            
             cell.detailLabel.text = "\(uname) // 回覆: \(count) // 評分: \(rate)"
             cell.detailLabel.textColor = .darkGray
         }
@@ -167,9 +206,12 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             }
             tableView.deselectRow(at: indexPath, animated: true)
         } else {
-            let cell = tableView.cellForRow(at: indexPath)
-            //tableView.deselectRow(at: indexPath, animated: true)
-            self.performSegue(withIdentifier: "GoToPost", sender: cell)
+            let contentVC = ContentViewController()
+            let selectedThread = threads[indexPath.row].id
+            contentVC.threadIdReceived = selectedThread
+            contentVC.title = threads[indexPath.row].title
+            contentVC.sender = "cell"
+            navigationController?.pushViewController(contentVC, animated: true)
         }
     }
     
@@ -182,7 +224,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    @IBAction func jumpToPage(_ sender: UILongPressGestureRecognizer) {
+    @objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
                 
             let touchPoint = sender.location(in: self.tableView)
@@ -190,82 +232,88 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 self.selectedThread = threads[indexPath.row].id
                 self.selectedThreadTitle = threads[indexPath.row].title
                 self.pageCount = ceil((Double(threads[indexPath.row].count)! + 1)/25)
-                self.performSegue(withIdentifier: "pageSelect", sender: sender)
+                let destination = PageSelectViewController()
+                destination.pageCount = self.pageCount!
+                destination.titleText = self.selectedThreadTitle
+                destination.hero.isEnabled = true
+                destination.hero.modalAnimationType = .fade
+                destination.modalPresentationStyle = .overFullScreen
+                destination.mainVC = self
+                present(destination, animated: true, completion: nil)
             }
         }
+    }
+    
+    @objc func channelButtonPressed(sender: UIBarButtonItem) {
+        let popoverViewController = ChannelSelectViewController()
+        popoverViewController.threadListViewController = self
+        popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
+        popoverViewController.popoverPresentationController?.delegate = self
+        popoverViewController.popoverPresentationController?.barButtonItem = sender
+        present(popoverViewController, animated: true, completion: nil)
+    }
+    
+    @objc func newThreadButtonPressed() {
+        let destination = ComposeViewController()
+        destination.channel = channelNow
+        destination.type = "newThread"
+        destination.modalPresentationStyle = .overFullScreen
+        destination.hero.isEnabled = true
+        destination.hero.modalAnimationType = .fade
+        destination.threadVC = self
+        present(destination, animated: true, completion: nil)
+    }
+    
+    @objc func userDetailPressed() {
+        let destination = UserDetailViewController()
+        destination.modalPresentationStyle = .overFullScreen
+        destination.hero.isEnabled = true
+        destination.hero.modalAnimationType = .fade
+        present(destination, animated: true, completion: nil)
     }
     
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
         
         switch(segue.identifier ?? "") {
-        case "GoToPost":
-            guard let contentViewController = segue.destination as? ContentViewController else {
-                fatalError("Unexpected destination: \(segue.destination)")
-            }
-            
-            if (sender is ThreadListTableViewCell) {
-                let selectedThreadCell = sender as? ThreadListTableViewCell
-                let indexPath = tableView.indexPath(for: selectedThreadCell!)
-                let selectedThread = threads[(indexPath?.row)!].id
-                contentViewController.threadIdReceived = selectedThread
-                contentViewController.title = threads[(indexPath?.row)!].title
-                contentViewController.sender = "cell"
-            }
-            else {
-                contentViewController.threadIdReceived = selectedThread
-                contentViewController.title = selectedThreadTitle
-                contentViewController.pageNow = self.selectedPage!
-            }
-        case "StartNewPost":
-            let destination = segue.destination as! ComposeViewController
-            destination.channel = channelNow
-            destination.type = "newThread"
         case "pageSelect":
-            let destination = segue.destination as! PageSelectViewController
-            destination.type = "threadList"
-            destination.pageCount = self.pageCount!
-            destination.titleText = self.selectedThreadTitle
-        case "channelSelect":
-            let popoverViewController = segue.destination as! ChannelSelectViewController
-            popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
-            popoverViewController.popoverPresentationController!.delegate = self
+            
         default:
             break
         }
-    }
+    }*/
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
     
     //Unwind Segue
-    @IBAction func unwindToThreadList(segue: UIStoryboardSegue) {
-        let channelSelectViewController = segue.source as! ChannelSelectViewController
-        self.channelNow = channelSelectViewController.channelSelected
+    func unwindToThreadList(channelSelected: String) {
+        self.channelNow = channelSelected
         self.pageNow = 1
         self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
         self.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
-        //self.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: self.channelNow).as1ptImage()
         self.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
         self.updateSequence(append: false, completion: {})
     }
     
-    @IBAction func unwindToThreadListAfterNewPost(segue: UIStoryboardSegue) {
-        HUD.flash(.success)
+    func unwindToThreadListAfterNewPost() {
         self.updateSequence(append: false, completion: {})
     }
     
-    @IBAction func unwindAfterPageSelect(segue: UIStoryboardSegue) {
-        let source = segue.source as! PageSelectViewController
-        self.selectedPage = source.pageSelected
+    func unwindAfterPageSelect(pageSelected: Int) {
+        self.selectedPage = pageSelected
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "GoToPost", sender: self)
+            let contentVC = ContentViewController()
+            contentVC.threadIdReceived = self.selectedThread
+            contentVC.title = self.selectedThreadTitle
+            contentVC.pageNow = self.selectedPage!
+            self.navigationController?.pushViewController(contentVC, animated: true)
         }
     }
     

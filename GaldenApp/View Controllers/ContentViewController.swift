@@ -44,24 +44,51 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     var activityIndicator = UIActivityIndicatorView()
     var reloadButton = UIButton()
-    
-    @IBOutlet weak var adBannerView: GADBannerView!
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var heightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var pageButton: UIBarButtonItem!
-    @IBOutlet weak var prevButton: UIBarButtonItem!
-    @IBOutlet weak var nextButton: UIBarButtonItem!
+    let adBannerView = GADBannerView()
+    lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+    lazy var replyButton = UIBarButtonItem(image: UIImage(named: "Reply"), style: .plain, target: self, action: #selector(replyButtonPressed))
+    lazy var moreButton = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(moreButtonPressed))
+    lazy var pageButton = UIBarButtonItem(title: "撈緊...", style: .plain, target: self, action: #selector(pageButtonPressed))
+    lazy var prevButton = UIBarButtonItem(image: UIImage(named: "previous"), style: .plain, target: self, action: #selector(prevButtonPressed(_:)))
+    lazy var nextButton = UIBarButtonItem(image: UIImage(named: "next"), style: .plain, target: self, action: #selector(nextButtonPressed(_:)))
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        
         webView.isOpaque = false
-        webView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         webView.backgroundColor = .clear
+        webView.configuration.userContentController.add(self, name: "quote")
+        webView.configuration.userContentController.add(self, name: "block")
+        webView.configuration.userContentController.add(self, name: "refresh")
+        webView.navigationDelegate = self
+        view.addSubview(webView)
+        
         initializeJS()
+        
         navigationController?.delegate = self
+        toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,moreButton,flexibleSpace,nextButton]
+        
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
         adBannerView.delegate = self
         adBannerView.rootViewController = self
+        view.addSubview(adBannerView)
+        
+        webView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+        
+        adBannerView.snp.makeConstraints {
+            (make) -> Void in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(view.snp.bottom).offset(-44)
+            make.height.equalTo(50)
+        }
         
         let title = MarqueeLabel.init()
         title.textColor = .white
@@ -97,30 +124,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if (adOption.adEnabled == false) {
-            heightConstraint.constant = 0
-            adBannerView.layoutIfNeeded()
+            adBannerView.removeFromSuperview()
         } else {
             adBannerView.load(GADRequest())
+            webView.scrollView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
+            webView.scrollView.scrollIndicatorInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
         }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        //NetworkActivityIndicatorManager.shared.incrementActivityCount()
-        self.webView.configuration.userContentController.add(self, name: "quote")
-        self.webView.configuration.userContentController.add(self, name: "block")
-        self.webView.configuration.userContentController.add(self, name: "refresh")
-        self.webView.frame = self.containerView.bounds
-        self.webView.scrollView.indicatorStyle = .white
-        self.webView.navigationDelegate = self
-        if #available(iOS 11.0, *) {
-            self.webView.scrollView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
-            self.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
-        } else {
-            self.webView.scrollView.contentInset = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
-            self.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
-        }
-        self.containerView.addSubview(webView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -165,19 +174,19 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             HKGaldenAPI.shared.quote(quoteType: "t", quoteID: self.op.quoteID, completion: {
                 [weak self] content in
                 self?.quoteContent = content
-                self?.performSegue(withIdentifier: "quote", sender: self)
+                self?.quote()
             })
             } else if pageNow == 1 {
                 HKGaldenAPI.shared.quote(quoteType: "r", quoteID: self.comments[Int(type)! + 1].quoteID, completion: {
                     [weak self] content in
                     self?.quoteContent = content
-                    self?.performSegue(withIdentifier: "quote", sender: self)
+                    self?.quote()
                 })
             } else {
                 HKGaldenAPI.shared.quote(quoteType: "r", quoteID: self.comments[Int(type)!].quoteID, completion: {
                     [weak self] content in
                     self?.quoteContent = content
-                    self?.performSegue(withIdentifier: "quote", sender: self)
+                    self?.quote()
                 })
         }
     }
@@ -216,52 +225,75 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.updateSequence()
     }
     
+    @objc func moreButtonPressed() {
+        let destination = ContentMenuViewController()
+        destination.modalPresentationStyle = UIModalPresentationStyle.popover
+        destination.popoverPresentationController?.delegate = self
+        destination.popoverPresentationController?.barButtonItem = moreButton
+        destination.upvote = Int(self.op.good)!
+        destination.downvote = Int(self.op.bad)!
+        destination.opName = self.op.name
+        destination.threadTitle = self.op.title
+        destination.threadID = self.threadIdReceived
+        destination.rated = self.isRated
+        destination.mainVC = self
+        present(destination, animated: true, completion: nil)
+    }
+    
+    @objc func pageButtonPressed() {
+        let destination = PagePopoverTableViewController()
+        destination.modalPresentationStyle = UIModalPresentationStyle.popover
+        destination.popoverPresentationController?.delegate = self
+        destination.popoverPresentationController?.barButtonItem = pageButton
+        destination.threadID = self.threadIdReceived
+        destination.pageCount = Int(self.pageCount)
+        destination.pageSelected = self.pageNow
+        destination.mainVC = self
+        present(destination, animated: true, completion: nil)
+    }
+    
+    @objc func replyButtonPressed() {
+        let destination = ComposeViewController()
+        destination.topicID = self.threadIdReceived
+        destination.type = "reply"
+        destination.modalPresentationStyle = .overFullScreen
+        destination.hero.isEnabled = true
+        destination.hero.modalAnimationType = .fade
+        destination.contentVC = self
+        present(destination, animated: true, completion: nil)
+    }
+    
+    func quote() {
+        let destination = ComposeViewController()
+        destination.topicID = self.threadIdReceived
+        destination.content = self.quoteContent + "\n"
+        destination.type = "reply"
+        destination.modalPresentationStyle = .overFullScreen
+        destination.hero.isEnabled = true
+        destination.hero.modalAnimationType = .fade
+        present(destination, animated: true, completion: nil)
+    }
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         switch segue.identifier {
-        case "WriteReply"?:
-            let destination = segue.destination as! ComposeViewController
-            destination.topicID = self.threadIdReceived
-            destination.type = "reply"
         case "quote"?:
-            let destination = segue.destination as! ComposeViewController
-            destination.topicID = self.threadIdReceived
-            destination.content = self.quoteContent + "\n"
-            destination.type = "reply"
-        case "menu"?:
-            let destination = segue.destination as! ContentMenuViewController
-            destination.modalPresentationStyle = UIModalPresentationStyle.popover
-            destination.popoverPresentationController!.delegate = self
-            destination.upvote = Int(self.op.good)!
-            destination.downvote = Int(self.op.bad)!
-            destination.opName = self.op.name
-            destination.threadTitle = self.op.title
-            destination.threadID = self.threadIdReceived
-            destination.rated = self.isRated
-        case "page"?:
-            let destination = segue.destination as! PagePopoverTableViewController
-            destination.modalPresentationStyle = UIModalPresentationStyle.popover
-            destination.popoverPresentationController!.delegate = self
-            destination.threadID = self.threadIdReceived
-            destination.pageCount = Int(self.pageCount)
-            destination.pageSelected = self.pageNow
             
         default:
             break
         }
-    }
+    }*/
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
     
-    @IBAction func unwindToContent(segue: UIStoryboardSegue) {
-        let pageMenu = segue.source as! PagePopoverTableViewController
-        self.pageNow = pageMenu.pageSelected!
+    func unwindToContent(pageSelected: Int) {
+        self.pageNow = pageSelected
         self.pageButton.title = "第\(self.pageNow)頁"
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
@@ -270,7 +302,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         })
     }
     
-    @IBAction func unwindAfterReply(segue: UIStoryboardSegue) {
+    func unwindAfterReply() {
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             [weak self] count in
             self?.pageCount = count
@@ -281,16 +313,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         })
     }
     
-    @IBAction func share(segue: UIStoryboardSegue) {
-        let source = segue.source as! ContentMenuViewController
-        let shareView = UIActivityViewController(activityItems:[source.shareContent!],applicationActivities:nil)
+    func share(shareContent: String) {
+        let shareView = UIActivityViewController(activityItems:[shareContent],applicationActivities:nil)
         shareView.excludedActivityTypes = [.airDrop,.addToReadingList,.assignToContact,.openInIBooks,.saveToCameraRoll]
         DispatchQueue.main.asyncAfter(deadline: 0.5, execute: {
             self.present(shareView, animated: true, completion: nil)
         })
     }
     
-    @IBAction func lm(segue: UIStoryboardSegue) {
+    func lm() {
         let alert = UIAlertController.init(title: "一鍵留名", message: "確定?", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
             _ in
@@ -314,13 +345,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         })
     }
     
-    @IBAction func prevButtonPressed(_ sender: UIBarButtonItem) {
-        self.pageNow -= 1
+    @objc func prevButtonPressed(_ sender: UIBarButtonItem) {
+        pageNow -= 1
         updateSequence()
     }
     
-    @IBAction func nextButtonPressed(_ sender: UIBarButtonItem) {
-        self.pageNow += 1
+    @objc func nextButtonPressed(_ sender: UIBarButtonItem) {
+        pageNow += 1
         updateSequence()
     }
     

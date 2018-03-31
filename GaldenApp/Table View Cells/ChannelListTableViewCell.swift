@@ -7,17 +7,51 @@
 //
 
 import UIKit
+import SnapKit
 
 class ChannelListTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var channelIcon: UIImageView!
-    @IBOutlet weak var channelTitle: UILabel!
+    let channelIcon = UIImageView()
+    let channelTitle = UILabel()
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .clear
+        
+        channelIcon.tintColor = .darkGray
+        contentView.addSubview(channelIcon)
+        
+        channelTitle.textColor = .darkGray
+        channelTitle.textAlignment = .center
+        channelTitle.font = UIFont.systemFont(ofSize: 15)
+        contentView.addSubview(channelTitle)
+        
+        channelIcon.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(10)
+            make.bottom.equalTo(-10)
+            make.leading.equalTo(10)
+            make.width.equalTo(20)
+        }
+        
+        channelTitle.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(10)
+            make.bottom.equalTo(-10)
+            make.leading.equalTo(channelIcon.snp.trailing).offset(10)
+            make.trailing.equalTo(-10)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

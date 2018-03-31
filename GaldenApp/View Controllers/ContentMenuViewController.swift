@@ -19,14 +19,56 @@ class ContentMenuViewController: UIViewController {
     var opName: String?
     var threadID: String?
     var shareContent: String?
-    @IBOutlet weak var upvoteButton: UIButton!
-    @IBOutlet weak var downvoteButton: UIButton!
-    @IBOutlet weak var lmButton: UIButton!
+    var mainVC: ContentViewController?
+    
+    let upvoteButton = UIButton()
+    let downvoteButton = UIButton()
+    let lmButton = UIButton()
+    let shareButton = UIButton()
     
     let keychain = KeychainSwift()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        preferredContentSize = CGSize(width: 125, height: 250)
+        
+        upvoteButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        upvoteButton.setTitleColor(UIColor(rgb:0x00cc33), for: .normal)
+        upvoteButton.addTarget(self, action: #selector(upvoteButtonPressed(_:)), for: .touchUpInside)
+        
+        downvoteButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        downvoteButton.setTitleColor(UIColor(rgb: 0xfc3158), for: .normal)
+        downvoteButton.addTarget(self, action: #selector(downvoteButtonPressed(_:)), for: .touchUpInside)
+        
+        lmButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        lmButton.setTitleColor(.darkGray, for: .normal)
+        lmButton.setTitle("一鍵留名", for: .normal)
+        lmButton.addTarget(self, action: #selector(leaveNamePressed(_:)), for: .touchUpInside)
+        
+        shareButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        shareButton.setTitleColor(.darkGray, for: .normal)
+        shareButton.setTitle("些牙", for: .normal)
+        shareButton.addTarget(self, action: #selector(shareButtonPressed(_:)), for: .touchUpInside)
+        
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.alignment = .center
+        stackView.spacing = 15
+        stackView.addArrangedSubview(upvoteButton)
+        stackView.addArrangedSubview(downvoteButton)
+        stackView.addArrangedSubview(lmButton)
+        stackView.addArrangedSubview(shareButton)
+        view.addSubview(stackView)
+        
+        stackView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(15)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(-15)
+        }
+        
         // Do any additional setup after loading the view.
     }
     
@@ -49,12 +91,13 @@ class ContentMenuViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func shareButtonPressed(_ sender: Any) {
+    @objc func shareButtonPressed(_ sender: Any) {
         self.shareContent = self.threadTitle! + " // by: " + self.opName! + "\nShared via 1080-SIGNAL \nhttps://hkgalden.com/view/" + self.threadID!
-        performSegue(withIdentifier: "share", sender: self)
+        dismiss(animated: true, completion: nil)
+        mainVC?.share(shareContent: self.shareContent!)
     }
     
-    @IBAction func upvoteButtonPressed(_ sender: UIButton) {
+    @objc func upvoteButtonPressed(_ sender: UIButton) {
         HKGaldenAPI.shared.rate(threadID: threadID!, rate: "g", completion: {
             self.upvote += 1
             self.upvoteButton.setTitle("正皮: \(self.upvote)", for: .normal)
@@ -65,7 +108,7 @@ class ContentMenuViewController: UIViewController {
         })
     }
     
-    @IBAction func downvoteButtonPressed(_ sender: UIButton) {
+    @objc func downvoteButtonPressed(_ sender: UIButton) {
         HKGaldenAPI.shared.rate(threadID: threadID!, rate: "b", completion: {
             self.downvote += 1
             self.downvoteButton.setTitle("負皮: \(self.downvote)", for: .normal)
@@ -76,8 +119,9 @@ class ContentMenuViewController: UIViewController {
         })
     }
     
-    @IBAction func leaveNamePressed(_ sender: UIButton) {
-        performSegue(withIdentifier: "lm", sender: self)
+    @objc func leaveNamePressed(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
+        mainVC?.lm()
     }
     
     /*

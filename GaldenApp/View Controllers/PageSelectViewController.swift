@@ -11,28 +11,83 @@ import UIKit
 class PageSelectViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     var pageCount: Double = 0.0
-    var type: String!
     var pageSelected: Int = 0
     var titleText: String?
+    var mainVC: ThreadListViewController?
     
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var titleView: UIView!
+    let tableView = UITableView()
+    let titleLabel = UILabel()
+    let titleView = UIView()
+    let cancelButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        titleView.hero.modifiers = [.translate(x: 0, y: 100)]
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.tableFooterView = UIView()
-        if type == "threadList" {
-            self.titleLabel.text = titleText!
+        titleView.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: 100))]
+        titleView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        titleView.layer.cornerRadius = 10
+        view.addSubview(titleView)
+        
+        titleLabel.text = titleText!
+        titleLabel.numberOfLines = 0
+        titleLabel.font = UIFont.systemFont(ofSize: 15)
+        titleLabel.textColor = .lightGray
+        titleView.addSubview(titleLabel)
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorColor = UIColor(white: 0.2, alpha: 1)
+        tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tableView.hero.modifiers = [.scale(0.5)]
+        tableView.tableFooterView = UIView()
+        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        tableView.layer.cornerRadius = 10
+        tableView.register(PageSelectTableViewCell.self, forCellReuseIdentifier: "PageSelectTableViewCell")
+        view.addSubview(tableView)
+        
+        cancelButton.setTitle("不了", for: .normal)
+        cancelButton.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: 1000))]
+        cancelButton.backgroundColor = UIColor(rgb: 0xfc3158)
+        cancelButton.setTitleColor(.white, for: .normal)
+        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        cancelButton.layer.cornerRadius = 10
+        cancelButton.addTarget(self, action: #selector(cancelButtonPressed(_:)), for: .touchUpInside)
+        view.addSubview(cancelButton)
+        
+        titleView.snp.makeConstraints {
+            (make) -> Void in
+            make.centerY.equalToSuperview().offset(-120)
+            make.leading.equalTo(100)
+            make.trailing.equalTo(-100)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(10)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(-10)
+        }
+        
+        tableView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(titleView.snp.bottom).offset(20)
+            make.leading.equalTo(100)
+            make.trailing.equalTo(-100)
+            make.height.equalTo(200)
+        }
+        
+        cancelButton.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(tableView.snp.bottom).offset(20)
+            make.leading.equalTo(100)
+            make.trailing.equalTo(-100)
+            make.height.equalTo(35)
         }
     }
 
@@ -68,15 +123,11 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         pageSelected = (indexPath.row + 1)
-        if type == "inPost" {
-            performSegue(withIdentifier: "unwindToPage", sender: self)
-        } else if type == "threadList" {
-            performSegue(withIdentifier: "unwindAfterPageSelect", sender: self)
-        }
-        
+        dismiss(animated: true, completion: nil)
+        mainVC?.unwindAfterPageSelect(pageSelected: pageSelected)
     }
     
-    @IBAction func cancelButtonPressed(_ sender: UIButton) {
+    @objc func cancelButtonPressed(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
     }
     

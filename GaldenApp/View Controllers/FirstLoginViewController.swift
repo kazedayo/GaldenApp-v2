@@ -11,9 +11,10 @@ import KeychainSwift
 
 class FirstLoginViewController: UIViewController,UITextFieldDelegate {
     
-    @IBOutlet weak var loginText: UILabel!
-    @IBOutlet weak var emailField: UITextField!
-    @IBOutlet weak var passwordField: UITextField!
+    let loginText = UILabel()
+    let emailField = UITextField()
+    let passwordField = UITextField()
+    let loginButton = UIButton()
     
     let keychain = KeychainSwift()
     var window: UIWindow?
@@ -23,9 +24,64 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        emailField.delegate = self
-        passwordField.delegate = self
+        hero.isEnabled = true
+        hero.modalAnimationType = .zoom
+        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        
         loginText.hero.modifiers = [.fade,.position(CGPoint(x:UIScreen.main.bounds.midX,y:100))]
+        loginText.text = "請登入你的膠登帳戶"
+        loginText.textColor = .white
+        loginText.textAlignment = .center
+        view.addSubview(loginText)
+        
+        emailField.delegate = self
+        emailField.borderStyle = .roundedRect
+        emailField.placeholder = "email"
+        emailField.keyboardType = .emailAddress
+        emailField.autocapitalizationType = .none
+        view.addSubview(emailField)
+        
+        passwordField.delegate = self
+        passwordField.borderStyle = .roundedRect
+        passwordField.placeholder = "密碼"
+        passwordField.isSecureTextEntry = true
+        view.addSubview(passwordField)
+        
+        loginButton.hero.id = "button"
+        loginButton.layer.cornerRadius = 5
+        loginButton.backgroundColor = UIColor(rgb: 0x0076ff)
+        loginButton.setTitle("登入", for: .normal)
+        loginButton.setTitleColor(.white, for: .normal)
+        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
+        view.addSubview(loginButton)
+        
+        loginText.snp.makeConstraints {
+            (make) -> Void in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-50)
+        }
+        
+        emailField.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(loginText.snp.bottom).offset(20)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(200)
+        }
+        
+        passwordField.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(emailField.snp.bottom).offset(10)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(200)
+        }
+        
+        loginButton.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(passwordField.snp.bottom).offset(20)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(50)
+        }
         // Do any additional setup after loading the view.
     }
 
@@ -34,7 +90,7 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func loginButtonPressed(_ sender: UIButton) {
+    @objc func loginButtonPressed() {
         emailField.endEditing(true)
         passwordField.endEditing(true)
         if (emailField.text == "" || passwordField.text == "") {
@@ -54,8 +110,10 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
                         self?.keychain.set(username, forKey: "userName")
                         self?.keychain.set(userid, forKey: "userID")
                         self?.keychain.set(true, forKey: "isLoggedIn")
-                        self?.window?.rootViewController = UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "ThreadList")
-                        self?.performSegue(withIdentifier: "Start", sender: self)
+                        let mainVC = UINavigationController(rootViewController: ThreadListViewController())
+                        mainVC.hero.isEnabled = true
+                        mainVC.hero.modalAnimationType = .zoom
+                        self?.present(mainVC, animated: true, completion: nil)
                     }
                 })
             })

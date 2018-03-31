@@ -11,6 +11,7 @@ import KeychainSwift
 import PKHUD
 import GoogleMobileAds
 import AlamofireNetworkActivityIndicator
+import IQKeyboardManagerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,10 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let keychain = KeychainSwift()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        window = UIWindow(frame: UIScreen.main.bounds)
+        
         // Override point for customization after application launch.
         NetworkActivityIndicatorManager.shared.isEnabled = true
         NetworkActivityIndicatorManager.shared.startDelay = 0
         NetworkActivityIndicatorManager.shared.completionDelay = 0.2
+        
+        IQKeyboardManager.sharedManager().enable = true
         
         GADMobileAds.configure(withApplicationID: "ca-app-pub-6919429787140423~6701059788")
         
@@ -33,7 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.isStatusBarHidden = false
         
         if (keychain.getBool("isLoggedIn") == nil) {
-            self.window?.rootViewController = UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "FirstLaunch")
+            let root = WelcomeViewController()
+            window?.rootViewController = root
+        } else {
+            let root = UINavigationController(rootViewController: ThreadListViewController())
+            window?.rootViewController = root
         }
         
         if (keychain.getBool("adEnabled") == nil) {
@@ -42,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             adOption.adEnabled = keychain.getBool("adEnabled")!
         }
         
+        window?.makeKeyAndVisible()
         return true
     }
 

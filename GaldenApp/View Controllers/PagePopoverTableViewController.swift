@@ -13,10 +13,15 @@ class PagePopoverTableViewController: UITableViewController {
     var threadID: String?
     var pageCount: Int = 0
     var pageSelected: Int?
+    var mainVC: ContentViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        preferredContentSize = CGSize(width: 125, height: 200)
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = .lightGray
+        tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tableView.register(PageSelectTableViewCell.self, forCellReuseIdentifier: "PageSelectTableViewCell")
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -60,7 +65,8 @@ class PagePopoverTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         pageSelected = indexPath.row + 1
-        performSegue(withIdentifier: "unwindToContent", sender: self)
+        dismiss(animated: true, completion: nil)
+        mainVC?.unwindToContent(pageSelected: pageSelected!)
     }
     
     /*

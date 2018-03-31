@@ -19,58 +19,68 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var topicID = ""
     var type = ""
     var kheight: CGFloat = 0
+    var threadVC: ThreadListViewController?
+    var contentVC: ContentViewController?
     
     let iconKeyboard = IconKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 265))
     
-    @IBOutlet weak var channelLabel: UIButton!
-    @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var contentTextView: IQTextView!
-    @IBOutlet weak var bottomConstrain: NSLayoutConstraint!
+    let backgroundView = UIView()
+    let secondaryBackgroundView = UIView()
+    let channelLabel = UILabel()
+    let titleTextField = UITextField()
+    let contentTextView = IQTextView()
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        if type == "reply" {
-            contentTextView.becomeFirstResponder()
-        } else {
-            titleTextField.becomeFirstResponder()
-        }
-    }
+    let previewButton = UIButton()
+    let fontSizeButton = UIButton()
+    let fontColorButton = UIButton()
+    let fontStyleButton = UIButton()
+    let imageButton = UIButton()
+    let urlButton = UIButton()
+    let iconButton = UIButton()
     
-    //MARK: - getKayboardHeight
-    @objc func keyboardWillShow(notification: Notification) {
-        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
-        let keyboardRectangle = keyboardFrame.cgRectValue
-        let keyboardHeight = keyboardRectangle.height
-        // do whatever you want with this keyboard height
-        self.kheight = keyboardHeight
-        bottomConstrain.constant = (kheight + 20)
-        self.view.layoutIfNeeded()
-    }
-    
-    @objc func keyboardWillHide(notification: Notification) {
-        // keyboard is dismissed/hidden from the screen
-        bottomConstrain.constant -= kheight
-        self.view.layoutIfNeeded()
-    }
+    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
+    var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
+    var secondaryBackgrundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
+    lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
         resignFirstResponder()
-        NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)
+        secondaryBackgrundViewOriginalPoint = CGPoint(x: secondaryBackgroundView.frame.minX, y: secondaryBackgroundView.frame.minY)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        modalPresentationCapturesStatusBarAppearance = true
+        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        backgroundView.addGestureRecognizer(swipeToDismiss)
+        
         // Do any additional setup after loading the view.
         iconKeyboard.delegate = self
+        backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        backgroundView.layer.cornerRadius = 10
+        backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
+        view.addSubview(backgroundView)
+        
+        secondaryBackgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        secondaryBackgroundView.layer.cornerRadius = 10
+        secondaryBackgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 0))]
+        view.addSubview(secondaryBackgroundView)
+        
+        if type == "reply" {
+            titleTextField.isHidden = true
+            channelLabel.isHidden = true
+            contentTextView.text = content
+        }
         titleTextField.delegate = self
+        titleTextField.borderStyle = .roundedRect
+        titleTextField.placeholder = "標題"
         contentTextView.delegate = self
+        contentTextView.layer.cornerRadius = 10
         contentTextView.placeholder = "內容"
         if #available(iOS 11.0, *) {
             titleTextField.smartInsertDeleteType = .no
@@ -82,12 +92,115 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         } else {
             // Fallback on earlier versions
         }
-        channelLabel.setTitle(HKGaldenAPI.shared.channelNameFunc(ch: channel), for: .normal)
-        channelLabel.backgroundColor = HKGaldenAPI.shared.channelColorFunc(ch: channel)
-        if type == "reply" {
-            titleTextField.isHidden = true
-            channelLabel.isHidden = true
-            contentTextView.text = content
+        backgroundView.addSubview(titleTextField)
+        backgroundView.addSubview(contentTextView)
+        
+        channelLabel.text = HKGaldenAPI.shared.channelNameFunc(ch: channel)
+        channelLabel.textColor = HKGaldenAPI.shared.channelColorFunc(ch: channel)
+        backgroundView.addSubview(channelLabel)
+        
+        previewButton.setTitle("發表", for: .normal)
+        previewButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        previewButton.backgroundColor = UIColor(rgb: 0x0076ff)
+        previewButton.cornerRadius = 10
+        previewButton.addTarget(self, action: #selector(sendButtonPressed(_:)), for: .touchUpInside)
+        backgroundView.addSubview(previewButton)
+        
+        fontSizeButton.setImage(UIImage(named: "FontSize"), for: .normal)
+        fontSizeButton.tintColor = .white
+        fontSizeButton.imageView?.contentMode = .scaleAspectFit
+        fontSizeButton.addTarget(self, action: #selector(fontSizeButtonPressed(_:)), for: .touchUpInside)
+        
+        fontColorButton.setImage(UIImage(named: "FontColor"), for: .normal)
+        fontColorButton.tintColor = .white
+        fontColorButton.imageView?.contentMode = .scaleAspectFit
+        fontColorButton.addTarget(self, action: #selector(fontColorButtonPressed(_:)), for: .touchUpInside)
+        
+        fontStyleButton.setImage(UIImage(named: "FontStyle"), for: .normal)
+        fontStyleButton.tintColor = .white
+        fontStyleButton.imageView?.contentMode = .scaleAspectFit
+        fontStyleButton.addTarget(self, action: #selector(fontStyleButtonPressed(_:)), for: .touchUpInside)
+        
+        imageButton.setImage(UIImage(named: "Image"), for: .normal)
+        imageButton.tintColor = .white
+        imageButton.imageView?.contentMode = .scaleAspectFit
+        imageButton.addTarget(self, action: #selector(imageButtonPressed(_:)), for: .touchUpInside)
+        
+        urlButton.setImage(UIImage(named: "Url"), for: .normal)
+        urlButton.tintColor = .white
+        urlButton.imageView?.contentMode = .scaleAspectFit
+        urlButton.addTarget(self, action: #selector(urlButtonPressed(_:)), for: .touchUpInside)
+        
+        iconButton.setImage(UIImage(named: "Icon"), for: .normal)
+        iconButton.tintColor = .white
+        iconButton.imageView?.contentMode = .scaleAspectFit
+        iconButton.addTarget(self, action: #selector(callIconKeyboard(_:)), for: .touchUpInside)
+        
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.alignment = .center
+        stackView.spacing = 15
+        stackView.addArrangedSubview(fontSizeButton)
+        stackView.addArrangedSubview(fontColorButton)
+        stackView.addArrangedSubview(fontStyleButton)
+        stackView.addArrangedSubview(imageButton)
+        stackView.addArrangedSubview(urlButton)
+        stackView.addArrangedSubview(iconButton)
+        secondaryBackgroundView.addSubview(stackView)
+        
+        backgroundView.snp.makeConstraints {
+            (make) -> Void in
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(-15)
+            make.height.equalTo(350)
+        }
+        
+        secondaryBackgroundView.snp.makeConstraints {
+            (make) -> Void in
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(backgroundView.snp.top).offset(-20)
+            make.height.equalTo(65)
+        }
+        
+        channelLabel.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(10)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+        }
+        
+        titleTextField.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(channelLabel.snp.bottom).offset(10)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+        }
+        
+        contentTextView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(titleTextField.snp.bottom).offset(10)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+        }
+        
+        previewButton.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(contentTextView.snp.bottom).offset(10)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(-10)
+            make.height.equalTo(35)
+        }
+        
+        stackView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(10)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(-15)
         }
     }
     
@@ -103,24 +216,12 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
-        contentTextView.endEditing(true)
-        if type == "newThread" {
-            let destination = segue.destination as! PreviewViewController
-            destination.channel = self.channel
-            destination.threadTitle = self.titleTextField.text
-            destination.content = contentTextView.text
-            destination.type = "newThread"
-        } else if type == "reply" {
-            let destination = segue.destination as! PreviewViewController
-            destination.content = contentTextView.text
-            destination.topicID = topicID
-            destination.type = "reply"
-        }
+        
     }
     
     //MARK: Actions
 
-    @IBAction func fontSizeButtonPressed(_ sender: UIButton) {
+    @objc func fontSizeButtonPressed(_ sender: UIButton) {
         let actionsheet = UIAlertController(title:"揀大細", message: nil, preferredStyle: .actionSheet)
         actionsheet.addAction(UIAlertAction(title:"超大",style:.default,handler: {
             _ in
@@ -174,7 +275,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         self.present(actionsheet,animated: true,completion: nil)
     }
     
-    @IBAction func fontStyleButtonPressed(_ sender: UIButton) {
+    @objc func fontStyleButtonPressed(_ sender: UIButton) {
         let actionsheet = UIAlertController(title:"字體格式", message: nil, preferredStyle: .actionSheet)
         actionsheet.addAction(UIAlertAction(title:"粗體",style:.default,handler: {
             _ in
@@ -236,7 +337,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         self.present(actionsheet,animated: true,completion: nil)
     }
     
-    @IBAction func fontColorButtonPressed(_ sender: UIButton) {
+    @objc func fontColorButtonPressed(_ sender: UIButton) {
         let actionsheet = UIAlertController(title:"揀顏色", message: nil, preferredStyle: .actionSheet)
         actionsheet.addAction(UIAlertAction(title:"紅色",style:.default,handler: {
             _ in
@@ -282,7 +383,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         present(actionsheet,animated: true,completion: nil)
     }
     
-    @IBAction func imageButtonPressed(_ sender: UIButton) {
+    @objc func imageButtonPressed(_ sender: UIButton) {
         let actionsheet = UIAlertController(title:"噏圖(powered by eService-HK)",message:"你想...",preferredStyle:.actionSheet)
         actionsheet.addAction(UIAlertAction(title:"揀相",style:.default,handler: {
             _ in
@@ -305,7 +406,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         present(actionsheet,animated: true,completion: nil)
     }
     
-    @IBAction func urlButtonPressed(_ sender: UIButton) {
+    @objc func urlButtonPressed(_ sender: UIButton) {
         self.contentTextView.insertText("[url]text[/url]")
         let range = self.contentTextView.text.range(of: "text")
         let nsRange = self.contentTextView.text.nsRange(from: range!)
@@ -313,7 +414,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         self.contentTextView.select(nsRange)
     }
     
-    @IBAction func sendButtonPressed(_ sender: UIButton) {
+    @objc func sendButtonPressed(_ sender: UIButton) {
         self.view.endEditing(true)
         if (type == "newThread" && titleTextField.text == "") {
             let alert = UIAlertController.init(title: "注意", message: "標題不可爲空", preferredStyle: .alert)
@@ -325,7 +426,31 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
             self.present(alert,animated: true,completion: nil)
         } else {
-            performSegue(withIdentifier: "preview", sender: self)
+            contentTextView.endEditing(true)
+            HUD.show(.progress)
+            if type == "newThread" {
+                HKGaldenAPI.shared.submitPost(channel: channel, title: titleTextField.text!, content: contentTextView.text!, completion: {
+                    [weak self] error in
+                    if error == nil {
+                        HUD.flash(.success,delay:1)
+                        self?.dismiss(animated: true, completion: nil)
+                        self?.threadVC?.unwindToThreadListAfterNewPost()
+                    } else {
+                        HUD.flash(.error,delay: 1)
+                    }
+                })
+            } else if type == "reply" {
+                HKGaldenAPI.shared.reply(topicID: topicID, content: contentTextView.text!, completion: {
+                    [weak self] error in
+                    if error == nil {
+                        HUD.flash(.success,delay:1)
+                        self?.dismiss(animated: true, completion: nil)
+                        self?.contentVC?.unwindAfterReply()
+                    } else {
+                        HUD.flash(.error,delay: 1)
+                    }
+                })
+            }
         }
     }
     
@@ -367,7 +492,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         contentTextView.insertText("\(character) ")
     }
     
-    @IBAction func callIconKeyboard(_ sender: UIButton) {
+    @objc func callIconKeyboard(_ sender: UIButton) {
         if contentTextView.inputView == nil {
             contentTextView.resignFirstResponder()
             contentTextView.inputView = iconKeyboard
@@ -376,6 +501,28 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             contentTextView.resignFirstResponder()
             contentTextView.inputView = nil
             contentTextView.becomeFirstResponder()
+        }
+    }
+    
+    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: self.view?.window)
+        
+        if sender.state == UIGestureRecognizerState.began {
+            initialTouchPoint = touchPoint
+        } else if sender.state == UIGestureRecognizerState.changed {
+            if touchPoint.y - initialTouchPoint.y > 0 {
+                self.backgroundView.frame = CGRect(x: backgroundViewOriginalPoint.x, y: backgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
+                self.secondaryBackgroundView.frame = CGRect(x: secondaryBackgrundViewOriginalPoint.x, y: secondaryBackgrundViewOriginalPoint.y - (touchPoint.y - initialTouchPoint.y), width: self.secondaryBackgroundView.frame.size.width, height: self.secondaryBackgroundView.frame.size.height)
+            }
+        } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
+            if touchPoint.y - initialTouchPoint.y > 100 {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
+                    self.secondaryBackgroundView.frame = CGRect(x: self.secondaryBackgrundViewOriginalPoint.x, y: self.secondaryBackgrundViewOriginalPoint.y, width: self.secondaryBackgroundView.frame.size.width, height: self.secondaryBackgroundView.frame.size.height)
+                })
+            }
         }
     }
 }
