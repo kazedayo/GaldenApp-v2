@@ -15,9 +15,9 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
     var pageSelected: Int = 0
     var titleText: String?
     
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var titleView: UIView!
+    let tableView = UITableView()
+    let titleLabel = UILabel()
+    let titleView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()

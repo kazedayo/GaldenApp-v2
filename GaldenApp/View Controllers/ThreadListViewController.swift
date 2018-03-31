@@ -10,8 +10,6 @@ import KeychainSwift
 import PKHUD
 import GoogleMobileAds
 import QuartzCore
-import SnapKit
-import DeckTransition
 
 class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
     
@@ -30,14 +28,12 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var channelSwitch = UIBarButtonItem(image: UIImage(named: "channel"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
     lazy var newThread = UIBarButtonItem(image: UIImage(named: "Add"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
-    lazy var userDetail = UIBarButtonItem(image: UIImage(named: "user"), style: .plain, target: self, action: nil)
+    lazy var userDetail = UIBarButtonItem(image: UIImage(named: "user"), style: .plain, target: self, action: #selector(userDetailPressed))
     
     var reloadButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.hero.isEnabled = true
-        navigationController?.hero.modalAnimationType = .zoom
         
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
@@ -240,8 +236,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
-        print("channel button pressed")
         let popoverViewController = ChannelSelectViewController()
+        popoverViewController.threadListViewController = self
         popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
         popoverViewController.popoverPresentationController?.delegate = self
         popoverViewController.popoverPresentationController?.barButtonItem = sender
@@ -250,11 +246,16 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @objc func newThreadButtonPressed() {
         let destination = ComposeViewController()
-        let transitionDelegate = DeckTransitioningDelegate()
-        destination.transitioningDelegate = transitionDelegate
-        destination.modalPresentationStyle = .custom
         destination.channel = channelNow
         destination.type = "newThread"
+        present(destination, animated: true, completion: nil)
+    }
+    
+    @objc func userDetailPressed() {
+        let destination = UserDetailViewController()
+        destination.modalPresentationStyle = .overFullScreen
+        destination.hero.isEnabled = true
+        destination.hero.modalAnimationType = .fade
         present(destination, animated: true, completion: nil)
     }
     

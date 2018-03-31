@@ -14,7 +14,6 @@ import WebKit
 import RealmSwift
 import GoogleMobileAds
 import Agrume
-import SnapKit
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
 

@@ -8,7 +8,6 @@
 
 import UIKit
 import Hero
-import SnapKit
 
 class EULAViewController: UIViewController {
 

@@ -24,7 +24,6 @@
 		4262C20C1F9460E4002EEC76 /* PageSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4262C20B1F9460E4002EEC76 /* PageSelectTableViewCell.swift */; };
 		4262C2101F95FAE2002EEC76 /* jssource.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20D1F95FAE0002EEC76 /* jssource.js */; };
 		4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20E1F95FAE1002EEC76 /* xbbcode.js */; };
-		427F44B620402001005ED9CD /* UserDetailPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427F44B520402001005ED9CD /* UserDetailPopoverViewController.swift */; };
 		4282161F1FB1ADB3003ACF0C /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */; };
 		428216211FB1AFA7003ACF0C /* FirstLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */; };
 		428B32E6206E49A800670877 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428B32E5206E49A800670877 /* WelcomeViewController.swift */; };
@@ -80,7 +79,6 @@
 		4262C20B1F9460E4002EEC76 /* PageSelectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PageSelectTableViewCell.swift; path = "GaldenApp/Table View Cells/PageSelectTableViewCell.swift"; sourceTree = "<group>"; };
 		4262C20D1F95FAE0002EEC76 /* jssource.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jssource.js; sourceTree = "<group>"; };
 		4262C20E1F95FAE1002EEC76 /* xbbcode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xbbcode.js; sourceTree = "<group>"; };
-		427F44B520402001005ED9CD /* UserDetailPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailPopoverViewController.swift; sourceTree = "<group>"; };
 		4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLoginViewController.swift; sourceTree = "<group>"; };
 		428B32E5206E49A800670877 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -157,7 +155,6 @@
 				42C261F41F7CECEA00477479 /* ComposeViewController.swift */,
 				42FA369C1FBEB91900635512 /* PreviewViewController.swift */,
 				423F296E1F98568000BA2351 /* UserDetailViewController.swift */,
-				427F44B520402001005ED9CD /* UserDetailPopoverViewController.swift */,
 				429A26F51FA4426E00B28B7E /* BlockedUserViewController.swift */,
 			);
 			path = "View Controllers";
@@ -515,7 +512,6 @@
 				423331751FF6605F000FED6F /* ThreadListViewController.swift in Sources */,
 				428216211FB1AFA7003ACF0C /* FirstLoginViewController.swift in Sources */,
 				423F296F1F98568000BA2351 /* UserDetailViewController.swift in Sources */,
-				427F44B620402001005ED9CD /* UserDetailPopoverViewController.swift in Sources */,
 				4247D5031F82503A00809025 /* Channels.swift in Sources */,
 				42C261F51F7CECEA00477479 /* ComposeViewController.swift in Sources */,
 				4247D50B1F82508000809025 /* ThreadListTableViewCell.swift in Sources */,

@@ -8,7 +8,6 @@
 
 import UIKit
 import KeychainSwift
-import SnapKit
 
 class FirstLoginViewController: UIViewController,UITextFieldDelegate {
     
@@ -108,7 +107,10 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
                         self?.keychain.set(username, forKey: "userName")
                         self?.keychain.set(userid, forKey: "userID")
                         self?.keychain.set(true, forKey: "isLoggedIn")
-                        self?.present(UINavigationController(rootViewController: ThreadListViewController()), animated: true, completion: nil)
+                        let mainVC = UINavigationController(rootViewController: ThreadListViewController())
+                        mainVC.hero.isEnabled = true
+                        mainVC.hero.modalAnimationType = .zoom
+                        self?.present(mainVC, animated: true, completion: nil)
                     }
                 })
             })

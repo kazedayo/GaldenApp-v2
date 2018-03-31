@@ -11,14 +11,19 @@ import KeychainSwift
 
 class ChannelSelectViewController: UITableViewController {
     
+    var threadListViewController: ThreadListViewController?
     var channelSelected = ""
     let cellIdentifiers: [String] = ["bw","et","ca","fn","gm","ap","it","mp","sp","lv","sy","ed","tm","tr","an","to","mu","vi","dc","st","ts","mb","ia","ac","ep"]
     let channelTitle: [String] = ["吹水臺","娛樂臺","時事臺","財經臺","遊戲臺","App臺","科技臺","電話臺","體育臺","感情臺","講故臺","飲食臺","番茄臺","旅遊臺","動漫臺","玩具臺","音樂臺","影視臺","攝影臺","學術臺","汽車臺","站務臺","內務臺","活動臺","創意臺"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.backgroundColor = .clear
+        
+        preferredContentSize = CGSize(width: 125, height: 250)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.register(ChannelListTableViewCell.self, forCellReuseIdentifier: "ChannelListTableViewCell")
         // Do any additional setup after loading the view.
     }
     
@@ -47,18 +52,22 @@ class ChannelSelectViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
         cell.channelIcon.tintColor = .white
+        cell.channelTitle.textColor = .white
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
         cell.channelIcon.tintColor = .white
+        cell.channelTitle.textColor = .white
         channelSelected = cellIdentifiers[indexPath.row]
-        performSegue(withIdentifier: "unwindToThreadList", sender: self)
+        threadListViewController?.unwindToThreadList(channelSelected: channelSelected)
+        dismiss(animated: true, completion: nil)
     }
     
     override func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
         cell.channelIcon.tintColor = .darkGray
+        cell.channelTitle.textColor = .darkGray
     }
     
     /*
