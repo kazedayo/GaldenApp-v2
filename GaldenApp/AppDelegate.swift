@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let root = WelcomeViewController()
             window?.rootViewController = root
         } else {
-            let root = ThreadListViewController()
+            let root = UINavigationController(rootViewController: ThreadListViewController())
             window?.rootViewController = root
         }
         

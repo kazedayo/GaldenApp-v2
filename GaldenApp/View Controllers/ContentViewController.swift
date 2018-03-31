@@ -14,6 +14,7 @@ import WebKit
 import RealmSwift
 import GoogleMobileAds
 import Agrume
+import SnapKit
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
 
@@ -44,24 +45,51 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     var activityIndicator = UIActivityIndicatorView()
     var reloadButton = UIButton()
-    
-    @IBOutlet weak var adBannerView: GADBannerView!
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var heightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var pageButton: UIBarButtonItem!
-    @IBOutlet weak var prevButton: UIBarButtonItem!
-    @IBOutlet weak var nextButton: UIBarButtonItem!
+    let adBannerView = GADBannerView()
+    lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+    lazy var replyButton = UIBarButtonItem(image: UIImage(named: "Reply"), style: .plain, target: self, action: nil)
+    lazy var moreButton = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: nil)
+    lazy var pageButton = UIBarButtonItem(title: "撈緊...", style: .plain, target: self, action: nil)
+    lazy var prevButton = UIBarButtonItem(image: UIImage(named: "previous"), style: .plain, target: self, action: #selector(prevButtonPressed(_:)))
+    lazy var nextButton = UIBarButtonItem(image: UIImage(named: "next"), style: .plain, target: self, action: #selector(nextButtonPressed(_:)))
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        
         webView.isOpaque = false
-        webView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         webView.backgroundColor = .clear
+        webView.configuration.userContentController.add(self, name: "quote")
+        webView.configuration.userContentController.add(self, name: "block")
+        webView.configuration.userContentController.add(self, name: "refresh")
+        webView.navigationDelegate = self
+        view.addSubview(webView)
+        
         initializeJS()
+        
         navigationController?.delegate = self
+        toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,moreButton,flexibleSpace,nextButton]
+        
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
         adBannerView.delegate = self
         adBannerView.rootViewController = self
+        view.addSubview(adBannerView)
+        
+        webView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+        
+        adBannerView.snp.makeConstraints {
+            (make) -> Void in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(view.snp.bottom).offset(-44)
+            make.height.equalTo(50)
+        }
         
         let title = MarqueeLabel.init()
         title.textColor = .white
@@ -97,30 +125,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if (adOption.adEnabled == false) {
-            heightConstraint.constant = 0
-            adBannerView.layoutIfNeeded()
+            adBannerView.removeFromSuperview()
         } else {
             adBannerView.load(GADRequest())
+            webView.scrollView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
+            webView.scrollView.scrollIndicatorInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
         }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        //NetworkActivityIndicatorManager.shared.incrementActivityCount()
-        self.webView.configuration.userContentController.add(self, name: "quote")
-        self.webView.configuration.userContentController.add(self, name: "block")
-        self.webView.configuration.userContentController.add(self, name: "refresh")
-        self.webView.frame = self.containerView.bounds
-        self.webView.scrollView.indicatorStyle = .white
-        self.webView.navigationDelegate = self
-        if #available(iOS 11.0, *) {
-            self.webView.scrollView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
-            self.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
-        } else {
-            self.webView.scrollView.contentInset = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
-            self.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
-        }
-        self.containerView.addSubview(webView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -314,13 +324,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         })
     }
     
-    @IBAction func prevButtonPressed(_ sender: UIBarButtonItem) {
-        self.pageNow -= 1
+    @objc func prevButtonPressed(_ sender: UIBarButtonItem) {
+        pageNow -= 1
         updateSequence()
     }
     
-    @IBAction func nextButtonPressed(_ sender: UIBarButtonItem) {
-        self.pageNow += 1
+    @objc func nextButtonPressed(_ sender: UIBarButtonItem) {
+        pageNow += 1
         updateSequence()
     }
     

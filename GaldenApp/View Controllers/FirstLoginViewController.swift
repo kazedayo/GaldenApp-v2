@@ -108,8 +108,7 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
                         self?.keychain.set(username, forKey: "userName")
                         self?.keychain.set(userid, forKey: "userID")
                         self?.keychain.set(true, forKey: "isLoggedIn")
-                        self?.window?.rootViewController = UIStoryboard(name: "Main",bundle: nil).instantiateViewController(withIdentifier: "ThreadList")
-                        self?.present(ThreadListViewController(), animated: true, completion: nil)
+                        self?.present(UINavigationController(rootViewController: ThreadListViewController()), animated: true, completion: nil)
                     }
                 })
             })
