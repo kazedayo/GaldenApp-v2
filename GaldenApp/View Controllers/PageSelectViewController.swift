@@ -62,8 +62,8 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         titleView.snp.makeConstraints {
             (make) -> Void in
             make.centerY.equalToSuperview().offset(-120)
-            make.leading.equalTo(100)
-            make.trailing.equalTo(-100)
+            make.leading.equalTo(75)
+            make.trailing.equalTo(-75)
         }
         
         titleLabel.snp.makeConstraints {
@@ -77,16 +77,16 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(titleView.snp.bottom).offset(20)
-            make.leading.equalTo(100)
-            make.trailing.equalTo(-100)
+            make.leading.equalTo(75)
+            make.trailing.equalTo(-75)
             make.height.equalTo(200)
         }
         
         cancelButton.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(tableView.snp.bottom).offset(20)
-            make.leading.equalTo(100)
-            make.trailing.equalTo(-100)
+            make.leading.equalTo(75)
+            make.trailing.equalTo(-75)
             make.height.equalTo(35)
         }
     }

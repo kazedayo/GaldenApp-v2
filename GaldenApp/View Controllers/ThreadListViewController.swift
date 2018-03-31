@@ -186,11 +186,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         if (self.blockedUsers.contains(self.threads[indexPath.row].userID)) {
             cell.threadTitleLabel.text = "[已封鎖]"
             cell.threadTitleLabel.textColor = .darkGray
-            cell.detailLabel.removeFromSuperview()
+            cell.detailLabel.isHidden = true
         } else {
             cell.threadTitleLabel.text = title
             cell.threadTitleLabel.textColor = .lightGray
-            
+            cell.detailLabel.isHidden = false
             cell.detailLabel.text = "\(uname) // 回覆: \(count) // 評分: \(rate)"
             cell.detailLabel.textColor = .darkGray
         }

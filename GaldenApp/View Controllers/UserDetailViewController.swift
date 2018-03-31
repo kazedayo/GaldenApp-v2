@@ -206,7 +206,6 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
             make.bottom.equalTo(-15)
-            make.height.equalTo(35)
         }
     }
     
