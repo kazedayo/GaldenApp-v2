@@ -11,7 +11,6 @@ import SnapKit
 
 class ChannelListTableViewCell: UITableViewCell {
     
-    let channelIcon = UIImageView()
     let channelTitle = UILabel()
     
     override func awakeFromNib() {
@@ -23,27 +22,16 @@ class ChannelListTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
         
-        channelIcon.tintColor = .darkGray
-        contentView.addSubview(channelIcon)
-        
         channelTitle.textColor = .darkGray
         channelTitle.textAlignment = .center
         channelTitle.font = UIFont.systemFont(ofSize: 15)
         contentView.addSubview(channelTitle)
         
-        channelIcon.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(10)
-            make.bottom.equalTo(-10)
-            make.leading.equalTo(10)
-            make.width.equalTo(20)
-        }
-        
         channelTitle.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(10)
             make.bottom.equalTo(-10)
-            make.leading.equalTo(channelIcon.snp.trailing).offset(10)
+            make.leading.equalTo(10)
             make.trailing.equalTo(-10)
         }
     }

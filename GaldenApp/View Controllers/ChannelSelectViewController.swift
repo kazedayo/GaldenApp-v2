@@ -40,9 +40,7 @@ class ChannelSelectViewController: UITableViewController {
         let bgColorView = UIView()
         bgColorView.backgroundColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![indexPath.row]["color"].stringValue)
         cell.selectedBackgroundView = bgColorView
-        let image = UIImage(named: HKGaldenAPI.shared.chList![indexPath.row]["ident"].stringValue)
         let text = HKGaldenAPI.shared.chList![indexPath.row]["name"].stringValue
-        cell.channelIcon.image = image
         cell.channelTitle.text = text
         
         return cell
@@ -50,13 +48,11 @@ class ChannelSelectViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
-        cell.channelIcon.tintColor = .white
         cell.channelTitle.textColor = .white
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
-        cell.channelIcon.tintColor = .white
         cell.channelTitle.textColor = .white
         channelSelected = indexPath.row
         threadListViewController?.unwindToThreadList(channelSelected: channelSelected)
@@ -65,7 +61,6 @@ class ChannelSelectViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
-        cell.channelIcon.tintColor = .darkGray
         cell.channelTitle.textColor = .darkGray
     }
     

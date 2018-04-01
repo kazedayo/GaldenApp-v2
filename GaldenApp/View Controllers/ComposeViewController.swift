@@ -61,7 +61,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         // Do any additional setup after loading the view.
         iconKeyboard.delegate = self
-        backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        if type == "reply" {
+            backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        } else {
+            backgroundView.backgroundColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channel]["color"].stringValue)
+        }
         backgroundView.layer.cornerRadius = 10
         backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
         view.addSubview(backgroundView)
@@ -71,11 +75,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         secondaryBackgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 0))]
         view.addSubview(secondaryBackgroundView)
         
-        if type == "reply" {
-            titleTextField.isHidden = true
-            channelLabel.isHidden = true
-            contentTextView.text = content
-        }
+        channelLabel.text = HKGaldenAPI.shared.chList![channel]["name"].stringValue
+        channelLabel.textColor = .white
+        backgroundView.addSubview(channelLabel)
+        
         titleTextField.delegate = self
         titleTextField.borderStyle = .roundedRect
         titleTextField.placeholder = "標題"
@@ -95,9 +98,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         backgroundView.addSubview(titleTextField)
         backgroundView.addSubview(contentTextView)
         
-        channelLabel.text = HKGaldenAPI.shared.chList![channel]["name"].stringValue
-        channelLabel.textColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channel]["color"].stringValue)
-        backgroundView.addSubview(channelLabel)
+        if type == "reply" {
+            titleTextField.removeFromSuperview()
+            channelLabel.text = "回覆"
+            contentTextView.text = content
+        }
         
         previewButton.setTitle("發表", for: .normal)
         previewButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
@@ -172,16 +177,22 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             make.trailing.equalTo(-15)
         }
         
-        titleTextField.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(channelLabel.snp.bottom).offset(10)
-            make.leading.equalTo(15)
-            make.trailing.equalTo(-15)
+        if type != "reply" {
+            titleTextField.snp.makeConstraints {
+                (make) -> Void in
+                make.top.equalTo(channelLabel.snp.bottom).offset(10)
+                make.leading.equalTo(15)
+                make.trailing.equalTo(-15)
+            }
         }
         
         contentTextView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(titleTextField.snp.bottom).offset(10)
+            if type == "reply" {
+                make.top.equalTo(channelLabel.snp.bottom).offset(10)
+            } else {
+                make.top.equalTo(titleTextField.snp.bottom).offset(10)
+            }
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
         }
@@ -433,8 +444,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     [weak self] error in
                     if error == nil {
                         HUD.flash(.success,delay:1)
-                        self?.dismiss(animated: true, completion: nil)
                         self?.threadVC?.unwindToThreadListAfterNewPost()
+                        self?.dismiss(animated: true, completion: nil)
                     } else {
                         HUD.flash(.error,delay: 1)
                     }
@@ -444,8 +455,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     [weak self] error in
                     if error == nil {
                         HUD.flash(.success,delay:1)
-                        self?.dismiss(animated: true, completion: nil)
                         self?.contentVC?.unwindAfterReply()
+                        self?.dismiss(animated: true, completion: nil)
                     } else {
                         HUD.flash(.error,delay: 1)
                     }
