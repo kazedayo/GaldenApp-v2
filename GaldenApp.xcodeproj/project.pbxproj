@@ -26,6 +26,7 @@
 		4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20E1F95FAE1002EEC76 /* xbbcode.js */; };
 		4282161F1FB1ADB3003ACF0C /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */; };
 		428216211FB1AFA7003ACF0C /* FirstLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */; };
+		4286EB882070D2CA000655C3 /* BlockedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4286EB872070D2CA000655C3 /* BlockedTableViewCell.swift */; };
 		428B32E6206E49A800670877 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428B32E5206E49A800670877 /* WelcomeViewController.swift */; };
 		428B32E82070710800670877 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428B32E72070710800670877 /* LaunchViewController.swift */; };
 		429267632008C6DE00DF1314 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429267622008C6DE00DF1314 /* History.swift */; };
@@ -80,6 +81,7 @@
 		4262C20E1F95FAE1002EEC76 /* xbbcode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xbbcode.js; sourceTree = "<group>"; };
 		4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLoginViewController.swift; sourceTree = "<group>"; };
+		4286EB872070D2CA000655C3 /* BlockedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BlockedTableViewCell.swift; path = "GaldenApp/Table View Cells/BlockedTableViewCell.swift"; sourceTree = "<group>"; };
 		428B32E5206E49A800670877 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		428B32E72070710800670877 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		429267622008C6DE00DF1314 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = History.swift; path = "GaldenApp/Custom Classes/History.swift"; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				429A26F91FA4481000B28B7E /* BlockedUserTableViewCell.swift */,
 				4262C20B1F9460E4002EEC76 /* PageSelectTableViewCell.swift */,
 				4247D50A1F82508000809025 /* ThreadListTableViewCell.swift */,
+				4286EB872070D2CA000655C3 /* BlockedTableViewCell.swift */,
 				42A394A11FBC3793008A5239 /* ChannelListTableViewCell.swift */,
 			);
 			name = "Table View Cells";
@@ -506,6 +509,7 @@
 				423331751FF6605F000FED6F /* ThreadListViewController.swift in Sources */,
 				428216211FB1AFA7003ACF0C /* FirstLoginViewController.swift in Sources */,
 				423F296F1F98568000BA2351 /* UserDetailViewController.swift in Sources */,
+				4286EB882070D2CA000655C3 /* BlockedTableViewCell.swift in Sources */,
 				4247D5031F82503A00809025 /* Channels.swift in Sources */,
 				42C261F51F7CECEA00477479 /* ComposeViewController.swift in Sources */,
 				4247D50B1F82508000809025 /* ThreadListTableViewCell.swift in Sources */,

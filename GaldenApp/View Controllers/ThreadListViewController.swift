@@ -47,6 +47,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
+        tableView.register(BlockedTableViewCell.classForCoder(), forCellReuseIdentifier: "BlockedTableViewCell")
         tableView.addGestureRecognizer(longPress)
         view.addSubview(tableView)
         
@@ -174,27 +175,27 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
-        
         // Configure the cell...
-        cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
             let title = self.threads[indexPath.row].title
             var uname = self.threads[indexPath.row].userName
             let count = self.threads[indexPath.row].count
             let rate = self.threads[indexPath.row].rate
             uname = uname.replacingOccurrences(of: "\n", with: "")
         if (self.blockedUsers.contains(self.threads[indexPath.row].userID)) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "BlockedTableViewCell") as! BlockedTableViewCell
+            cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
             cell.threadTitleLabel.text = "[已封鎖]"
             cell.threadTitleLabel.textColor = .darkGray
-            cell.detailLabel.isHidden = true
+            return cell
         } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
+            cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
             cell.threadTitleLabel.text = title
             cell.threadTitleLabel.textColor = .lightGray
-            cell.detailLabel.isHidden = false
             cell.detailLabel.text = "\(uname) // 回覆: \(count) // 評分: \(rate)"
             cell.detailLabel.textColor = .darkGray
+            return cell
         }
-        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
