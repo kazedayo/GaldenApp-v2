@@ -12,7 +12,6 @@ target 'GaldenApp' do
   pod 'KeychainSwift'
   pod 'Hero'
   pod 'MarqueeLabel'
-  pod 'DeckTransition'
   pod 'Agrume', :git => 'https://github.com/JanGorman/Agrume.git'
   pod 'PKHUD', '~> 5.0'
   pod 'RealmSwift'

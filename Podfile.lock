@@ -3,7 +3,6 @@ PODS:
   - Alamofire (4.6.0)
   - AlamofireNetworkActivityIndicator (2.2.0):
     - Alamofire (~> 4.5)
-  - DeckTransition (2.0.0)
   - Google-Mobile-Ads-SDK (7.29.0)
   - Hero (1.1.0)
   - IQKeyboardManagerSwift (5.0.7)
@@ -24,7 +23,6 @@ DEPENDENCIES:
   - Agrume (from `https://github.com/JanGorman/Agrume.git`)
   - Alamofire
   - AlamofireNetworkActivityIndicator
-  - DeckTransition
   - Google-Mobile-Ads-SDK
   - Hero
   - IQKeyboardManagerSwift
@@ -48,7 +46,6 @@ SPEC CHECKSUMS:
   Agrume: 123943d590fd0436a00642e37032da1814518153
   Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
   AlamofireNetworkActivityIndicator: 81e1630e7cfed22a4e4e82a174c59e651dc4f8ca
-  DeckTransition: 2300694f94fbeca2c103f365dc9dc09ffae14a4f
   Google-Mobile-Ads-SDK: 375bbb821b3df2106c37b74f6b0a97576ddc5f6b
   Hero: ce59e81c79390613d97b43da7179e2c5e1017e04
   IQKeyboardManagerSwift: 30fb3a61de1af53a95e02b80fb54ed0a19d5ede5
@@ -60,6 +57,6 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: e6856fe0852da32b2aecad8b56838318f46a24f3
+PODFILE CHECKSUM: bdd89e1224790a93271bc2bd66a7454274d2e18f
 
 COCOAPODS: 1.4.0
