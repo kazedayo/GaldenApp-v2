@@ -19,8 +19,7 @@ class PagePopoverTableViewController: UITableViewController {
         super.viewDidLoad()
         preferredContentSize = CGSize(width: 125, height: 200)
         tableView.backgroundColor = .clear
-        tableView.separatorColor = .lightGray
-        tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tableView.separatorStyle = .none
         tableView.register(PageSelectTableViewCell.self, forCellReuseIdentifier: "PageSelectTableViewCell")
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -60,6 +59,7 @@ class PagePopoverTableViewController: UITableViewController {
         cell.selectedBackgroundView = bgColorView
         
         cell.pageNo.text = "第\(indexPath.row+1)頁"
+        cell.pageNo.textColor = .darkGray
         return cell
     }
     

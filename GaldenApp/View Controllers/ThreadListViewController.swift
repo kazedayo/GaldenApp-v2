@@ -15,7 +15,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     //MARK: Properties
     var threads = [ThreadList]()
-    var channelNow: String = "bw"
+    var channelNow: Int = 0
     var pageNow: Int = 1
     var pageCount: Double?
     var selectedThread: String!
@@ -77,8 +77,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         navigationController?.toolbar.tintColor = .white
         navigationController?.navigationBar.tintColor = .white
         toolbarItems = [flexibleSpace,channelSwitch,flexibleSpace,newThread,flexibleSpace,userDetail,flexibleSpace]
-        navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
-        navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
+        navigationItem.title = HKGaldenAPI.shared.chList![channelNow]["name"].stringValue
+        navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .bottom)
@@ -126,7 +126,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
+        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)
@@ -293,11 +293,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     //Unwind Segue
-    func unwindToThreadList(channelSelected: String) {
+    func unwindToThreadList(channelSelected: Int) {
         self.channelNow = channelSelected
         self.pageNow = 1
-        self.navigationItem.title = HKGaldenAPI.shared.channelNameFunc(ch: channelNow)
-        self.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: channelNow)
+        self.navigationItem.title = HKGaldenAPI.shared.chList![channelNow]["name"].stringValue
+        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         self.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
         self.updateSequence(append: false, completion: {})
     }
@@ -322,7 +322,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     private func updateSequence(append: Bool, completion: @escaping ()->Void) {
-        HKGaldenAPI.shared.fetchThreadList(currentChannel: channelNow, pageNumber: String(pageNow), completion: {
+        HKGaldenAPI.shared.fetchThreadList(currentChannel: HKGaldenAPI.shared.chList![channelNow]["ident"].stringValue, pageNumber: String(pageNow), completion: {
             [weak self] threads,blocked,error in
             if (error == nil) {
                 if append == true {

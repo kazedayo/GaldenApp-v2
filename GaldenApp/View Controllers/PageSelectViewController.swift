@@ -41,8 +41,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorColor = UIColor(white: 0.2, alpha: 1)
-        tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tableView.separatorStyle = .none
         tableView.hero.modifiers = [.scale(0.5)]
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)

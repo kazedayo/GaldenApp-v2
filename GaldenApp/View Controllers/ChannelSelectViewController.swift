@@ -12,9 +12,7 @@ import KeychainSwift
 class ChannelSelectViewController: UITableViewController {
     
     var threadListViewController: ThreadListViewController?
-    var channelSelected = ""
-    let cellIdentifiers: [String] = ["bw","et","ca","fn","gm","ap","it","mp","sp","lv","sy","ed","tm","tr","an","to","mu","vi","dc","st","ts","mb","ia","ac","ep"]
-    let channelTitle: [String] = ["吹水臺","娛樂臺","時事臺","財經臺","遊戲臺","App臺","科技臺","電話臺","體育臺","感情臺","講故臺","飲食臺","番茄臺","旅遊臺","動漫臺","玩具臺","音樂臺","影視臺","攝影臺","學術臺","汽車臺","站務臺","內務臺","活動臺","創意臺"]
+    var channelSelected = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +21,7 @@ class ChannelSelectViewController: UITableViewController {
         preferredContentSize = CGSize(width: 125, height: 250)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorStyle = .none
         tableView.register(ChannelListTableViewCell.self, forCellReuseIdentifier: "ChannelListTableViewCell")
         // Do any additional setup after loading the view.
     }
@@ -33,16 +32,16 @@ class ChannelSelectViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cellIdentifiers.count
+        return HKGaldenAPI.shared.chList!.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChannelListTableViewCell") as! ChannelListTableViewCell
         let bgColorView = UIView()
-        bgColorView.backgroundColor = HKGaldenAPI.shared.channelColorFunc(ch: cellIdentifiers[indexPath.row])
+        bgColorView.backgroundColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![indexPath.row]["color"].stringValue)
         cell.selectedBackgroundView = bgColorView
-        let image = UIImage(named: self.cellIdentifiers[indexPath.row])
-        let text = self.channelTitle[indexPath.row]
+        let image = UIImage(named: HKGaldenAPI.shared.chList![indexPath.row]["ident"].stringValue)
+        let text = HKGaldenAPI.shared.chList![indexPath.row]["name"].stringValue
         cell.channelIcon.image = image
         cell.channelTitle.text = text
         
@@ -59,7 +58,7 @@ class ChannelSelectViewController: UITableViewController {
         let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
         cell.channelIcon.tintColor = .white
         cell.channelTitle.textColor = .white
-        channelSelected = cellIdentifiers[indexPath.row]
+        channelSelected = indexPath.row
         threadListViewController?.unwindToThreadList(channelSelected: channelSelected)
         dismiss(animated: true, completion: nil)
     }

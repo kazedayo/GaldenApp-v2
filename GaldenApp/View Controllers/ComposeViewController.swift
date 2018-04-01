@@ -14,7 +14,7 @@ import IQKeyboardManagerSwift
 class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate,IconKeyboardDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
     //MARK: Properties
-    var channel: String = ""
+    var channel = 0
     var content = ""
     var topicID = ""
     var type = ""
@@ -80,7 +80,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         titleTextField.borderStyle = .roundedRect
         titleTextField.placeholder = "標題"
         contentTextView.delegate = self
-        contentTextView.layer.cornerRadius = 10
+        contentTextView.layer.cornerRadius = 5
         contentTextView.placeholder = "內容"
         if #available(iOS 11.0, *) {
             titleTextField.smartInsertDeleteType = .no
@@ -95,8 +95,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         backgroundView.addSubview(titleTextField)
         backgroundView.addSubview(contentTextView)
         
-        channelLabel.text = HKGaldenAPI.shared.channelNameFunc(ch: channel)
-        channelLabel.textColor = HKGaldenAPI.shared.channelColorFunc(ch: channel)
+        channelLabel.text = HKGaldenAPI.shared.chList![channel]["name"].stringValue
+        channelLabel.textColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channel]["color"].stringValue)
         backgroundView.addSubview(channelLabel)
         
         previewButton.setTitle("發表", for: .normal)
@@ -429,7 +429,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             contentTextView.endEditing(true)
             HUD.show(.progress)
             if type == "newThread" {
-                HKGaldenAPI.shared.submitPost(channel: channel, title: titleTextField.text!, content: contentTextView.text!, completion: {
+                HKGaldenAPI.shared.submitPost(channel: HKGaldenAPI.shared.chList![channel]["ident"].stringValue, title: titleTextField.text!, content: contentTextView.text!, completion: {
                     [weak self] error in
                     if error == nil {
                         HUD.flash(.success,delay:1)

@@ -119,7 +119,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         leaveNameTextView.placeholder = "自訂一鍵留名"
         leaveNameTextView.text = keychain.get("LeaveNameText")
-        leaveNameTextView.layer.cornerRadius = 10
+        leaveNameTextView.layer.cornerRadius = 5
         backgroundView.addSubview(leaveNameTextView)
         
         logoutButton.setTitle("登出", for: .normal)

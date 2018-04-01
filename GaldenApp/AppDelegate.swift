@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let keychain = KeychainSwift()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         
         // Override point for customization after application launch.
@@ -41,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let root = WelcomeViewController()
             window?.rootViewController = root
         } else {
-            let root = UINavigationController(rootViewController: ThreadListViewController())
+            let root = LaunchViewController()
             window?.rootViewController = root
         }
         

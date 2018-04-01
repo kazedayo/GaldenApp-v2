@@ -14,6 +14,7 @@ import WebKit
 import RealmSwift
 import GoogleMobileAds
 import Agrume
+import SwiftyJSON
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
 
@@ -36,6 +37,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var loaded = false
     var scrollPosition: CGFloat = 0.0
     var sender = ""
+    var channelColor = ""
     private var shadowImageView: UIImageView?
     private var webView = WKWebView()
     
@@ -397,7 +399,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self?.comments = comments!
                 self?.blockedUsers = blocked!
                 self?.isRated = rated!
-                self?.navigationController?.navigationBar.barTintColor = HKGaldenAPI.shared.channelColorFunc(ch: (self?.op.channel)!)
+                for subJson: JSON in HKGaldenAPI.shared.chList! {
+                    if subJson["ident"].stringValue == self?.op.channel {
+                        self?.channelColor = subJson["color"].stringValue
+                    }
+                }
+                self?.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:(self?.channelColor)!)
                 //self?.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: (self?.op.channel)!).as1ptImage()
                 self?.convertedHTML = ""
                 if self?.pageNow == 1 {

@@ -27,9 +27,9 @@
 		4282161F1FB1ADB3003ACF0C /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */; };
 		428216211FB1AFA7003ACF0C /* FirstLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */; };
 		428B32E6206E49A800670877 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428B32E5206E49A800670877 /* WelcomeViewController.swift */; };
+		428B32E82070710800670877 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428B32E72070710800670877 /* LaunchViewController.swift */; };
 		429267632008C6DE00DF1314 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429267622008C6DE00DF1314 /* History.swift */; };
 		42942F231FA6CAC700171D8B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42942F221FA6CAC700171D8B /* Extensions.swift */; };
-		429A26F61FA4426E00B28B7E /* BlockedUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429A26F51FA4426E00B28B7E /* BlockedUserViewController.swift */; };
 		429A26F81FA4435600B28B7E /* BlockedUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429A26F71FA4435600B28B7E /* BlockedUsers.swift */; };
 		429A26FA1FA4481000B28B7E /* BlockedUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429A26F91FA4481000B28B7E /* BlockedUserTableViewCell.swift */; };
 		429D68F8203F0B6700FAE7C5 /* PagePopoverTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429D68F7203F0B6700FAE7C5 /* PagePopoverTableViewController.swift */; };
@@ -81,9 +81,9 @@
 		4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLoginViewController.swift; sourceTree = "<group>"; };
 		428B32E5206E49A800670877 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		428B32E72070710800670877 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		429267622008C6DE00DF1314 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = History.swift; path = "GaldenApp/Custom Classes/History.swift"; sourceTree = "<group>"; };
 		42942F221FA6CAC700171D8B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = "GaldenApp/Custom Classes/Extensions.swift"; sourceTree = "<group>"; };
-		429A26F51FA4426E00B28B7E /* BlockedUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedUserViewController.swift; sourceTree = "<group>"; };
 		429A26F71FA4435600B28B7E /* BlockedUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BlockedUsers.swift; path = "GaldenApp/Custom Classes/BlockedUsers.swift"; sourceTree = "<group>"; };
 		429A26F91FA4481000B28B7E /* BlockedUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BlockedUserTableViewCell.swift; path = "GaldenApp/Table View Cells/BlockedUserTableViewCell.swift"; sourceTree = "<group>"; };
 		429D68F7203F0B6700FAE7C5 /* PagePopoverTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagePopoverTableViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +141,7 @@
 		427AD6761F81E6F900305EEA /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				428B32E72070710800670877 /* LaunchViewController.swift */,
 				428B32E5206E49A800670877 /* WelcomeViewController.swift */,
 				4282161E1FB1ADB3003ACF0C /* EULAViewController.swift */,
 				428216201FB1AFA7003ACF0C /* FirstLoginViewController.swift */,
@@ -152,7 +153,6 @@
 				429D68F7203F0B6700FAE7C5 /* PagePopoverTableViewController.swift */,
 				42C261F41F7CECEA00477479 /* ComposeViewController.swift */,
 				423F296E1F98568000BA2351 /* UserDetailViewController.swift */,
-				429A26F51FA4426E00B28B7E /* BlockedUserViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -486,7 +486,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				42942F231FA6CAC700171D8B /* Extensions.swift in Sources */,
-				429A26F61FA4426E00B28B7E /* BlockedUserViewController.swift in Sources */,
 				4282161F1FB1ADB3003ACF0C /* EULAViewController.swift in Sources */,
 				4247D5071F82505300809025 /* HKGaldenAPI.swift in Sources */,
 				4262C20C1F9460E4002EEC76 /* PageSelectTableViewCell.swift in Sources */,
@@ -499,6 +498,7 @@
 				420983D01F822A8500375D05 /* ContentViewController.swift in Sources */,
 				42006A2B20036C410006602B /* ContentMenuViewController.swift in Sources */,
 				428B32E6206E49A800670877 /* WelcomeViewController.swift in Sources */,
+				428B32E82070710800670877 /* LaunchViewController.swift in Sources */,
 				4247D5051F82504800809025 /* ThreadList.swift in Sources */,
 				42A394A21FBC3793008A5239 /* ChannelListTableViewCell.swift in Sources */,
 				429D68F8203F0B6700FAE7C5 /* PagePopoverTableViewController.swift in Sources */,
@@ -677,7 +677,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -701,7 +702,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
