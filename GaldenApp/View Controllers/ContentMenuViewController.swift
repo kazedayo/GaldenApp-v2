@@ -30,7 +30,7 @@ class ContentMenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        preferredContentSize = CGSize(width: 125, height: 250)
+        preferredContentSize = CGSize(width: 125, height: 200)
         
         upvoteButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         upvoteButton.setTitleColor(UIColor(rgb:0x00cc33), for: .normal)

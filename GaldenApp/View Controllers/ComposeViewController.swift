@@ -106,8 +106,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         previewButton.setTitle("發表", for: .normal)
         previewButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        previewButton.backgroundColor = UIColor(rgb: 0x0076ff)
+        //previewButton.backgroundColor = UIColor(rgb: 0x0076ff)
         previewButton.cornerRadius = 10
+        previewButton.borderWidth = 1
+        previewButton.borderColor = .white
         previewButton.addTarget(self, action: #selector(sendButtonPressed(_:)), for: .touchUpInside)
         backgroundView.addSubview(previewButton)
         
@@ -444,7 +446,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     [weak self] error in
                     if error == nil {
                         HUD.flash(.success,delay:1)
-                        self?.threadVC?.unwindToThreadListAfterNewPost()
+                        DispatchQueue.main.async {
+                            self?.threadVC?.unwindToThreadListAfterNewPost()
+                        }
                         self?.dismiss(animated: true, completion: nil)
                     } else {
                         HUD.flash(.error,delay: 1)
@@ -455,7 +459,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     [weak self] error in
                     if error == nil {
                         HUD.flash(.success,delay:1)
-                        self?.contentVC?.unwindAfterReply()
+                        DispatchQueue.main.async {
+                            self?.contentVC?.unwindAfterReply()
+                        }
                         self?.dismiss(animated: true, completion: nil)
                     } else {
                         HUD.flash(.error,delay: 1)

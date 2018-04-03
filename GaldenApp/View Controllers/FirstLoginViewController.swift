@@ -113,7 +113,9 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
                         let mainVC = UINavigationController(rootViewController: ThreadListViewController())
                         mainVC.hero.isEnabled = true
                         mainVC.hero.modalAnimationType = .zoom
-                        self?.present(mainVC, animated: true, completion: nil)
+                        HKGaldenAPI.shared.getChannelList {
+                            self?.present(mainVC, animated: true, completion: nil)
+                        }
                     }
                 })
             })

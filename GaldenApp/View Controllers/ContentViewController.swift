@@ -88,7 +88,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             (make) -> Void in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom).offset(-44)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.snp.bottomMargin)
+            } else {
+                make.bottom.equalTo(view.snp.bottom).offset(-44)
+            }
             make.height.equalTo(50)
         }
         
