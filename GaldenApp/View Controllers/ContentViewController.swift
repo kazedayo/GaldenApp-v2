@@ -16,8 +16,8 @@ import GoogleMobileAds
 import Agrume
 import SwiftyJSON
 
-class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
-
+class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate,PagePopoverTableViewControllerDelegate,ComposeViewControllerDelegate {
+    
     //MARK: Properties
     
     var threadIdReceived: String = ""
@@ -47,6 +47,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var activityIndicator = UIActivityIndicatorView()
     var reloadButton = UIButton()
     let adBannerView = GADBannerView()
+    let composeVC = ComposeViewController()
+    let pageVC = PagePopoverTableViewController()
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var replyButton = UIBarButtonItem(image: UIImage(named: "Reply"), style: .plain, target: self, action: #selector(replyButtonPressed))
     lazy var moreButton = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(moreButtonPressed))
@@ -56,6 +58,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        composeVC.delegate = self
+        pageVC.delegate = self
+        
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
         webView.isOpaque = false
@@ -254,7 +259,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         destination.threadID = self.threadIdReceived
         destination.pageCount = Int(self.pageCount)
         destination.pageSelected = self.pageNow
-        destination.mainVC = self
         present(destination, animated: true, completion: nil)
     }
     
@@ -317,6 +321,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self?.replied = true
             self?.updateSequence()
         })
+    }
+    
+    func unwindToThreadListAfterNewPost() {
+        
     }
     
     func share(shareContent: String) {

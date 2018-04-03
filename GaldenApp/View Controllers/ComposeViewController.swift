@@ -11,6 +11,11 @@ import KeychainSwift
 import PKHUD
 import IQKeyboardManagerSwift
 
+protocol ComposeViewControllerDelegate: class {
+    func unwindToThreadListAfterNewPost()
+    func unwindAfterReply()
+}
+
 class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate,IconKeyboardDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
     //MARK: Properties
@@ -19,8 +24,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var topicID = ""
     var type = ""
     var kheight: CGFloat = 0
-    var threadVC: ThreadListViewController?
     var contentVC: ContentViewController?
+    weak var delegate: ComposeViewControllerDelegate?
     
     let iconKeyboard = IconKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 265))
     
@@ -447,7 +452,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     if error == nil {
                         HUD.flash(.success,delay:1)
                         DispatchQueue.main.async {
-                            self?.threadVC?.unwindToThreadListAfterNewPost()
+                            self?.delegate?.unwindToThreadListAfterNewPost()
                         }
                         self?.dismiss(animated: true, completion: nil)
                     } else {

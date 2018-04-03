@@ -30,11 +30,9 @@
 		424A47182073493E005795A6 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46FC2073493D005795A6 /* ContentViewController.swift */; };
 		424A47192073493E005795A6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46FD2073493D005795A6 /* Extensions.swift */; };
 		424A471A2073493E005795A6 /* BlockedUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46FE2073493D005795A6 /* BlockedUserTableViewCell.swift */; };
-		424A471B2073493E005795A6 /* BlockedUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46FF2073493D005795A6 /* BlockedUserViewController.swift */; };
 		424A471C2073493E005795A6 /* Channels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47002073493D005795A6 /* Channels.swift */; };
 		424A471D2073493E005795A6 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47012073493E005795A6 /* LaunchViewController.swift */; };
 		424A471E2073493E005795A6 /* ThreadListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47022073493E005795A6 /* ThreadListViewController.swift */; };
-		424A471F2073493E005795A6 /* ContentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47032073493E005795A6 /* ContentTableViewCell.swift */; };
 		424A47202073493E005795A6 /* ChannelSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47042073493E005795A6 /* ChannelSelectViewController.swift */; };
 		424A4725207349BD005795A6 /* IconKeyboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 424A4724207349BC005795A6 /* IconKeyboard.xib */; };
 		424B61CB1FC06EFA000D71F0 /* content.css in Resources */ = {isa = PBXBuildFile; fileRef = 424B61CA1FC06EFA000D71F0 /* content.css */; };
@@ -87,11 +85,9 @@
 		424A46FC2073493D005795A6 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		424A46FD2073493D005795A6 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		424A46FE2073493D005795A6 /* BlockedUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedUserTableViewCell.swift; sourceTree = "<group>"; };
-		424A46FF2073493D005795A6 /* BlockedUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedUserViewController.swift; sourceTree = "<group>"; };
 		424A47002073493D005795A6 /* Channels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channels.swift; sourceTree = "<group>"; };
 		424A47012073493E005795A6 /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		424A47022073493E005795A6 /* ThreadListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadListViewController.swift; sourceTree = "<group>"; };
-		424A47032073493E005795A6 /* ContentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentTableViewCell.swift; sourceTree = "<group>"; };
 		424A47042073493E005795A6 /* ChannelSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelSelectViewController.swift; sourceTree = "<group>"; };
 		424A4724207349BC005795A6 /* IconKeyboard.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IconKeyboard.xib; sourceTree = "<group>"; };
 		424B61CA1FC06EFA000D71F0 /* content.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = content.css; sourceTree = "<group>"; };
@@ -138,7 +134,6 @@
 				424A46FA2073493D005795A6 /* BlockedTableViewCell.swift */,
 				424A46FE2073493D005795A6 /* BlockedUserTableViewCell.swift */,
 				424A46F22073493C005795A6 /* ChannelListTableViewCell.swift */,
-				424A47032073493E005795A6 /* ContentTableViewCell.swift */,
 				424A46EA2073493B005795A6 /* PageSelectTableViewCell.swift */,
 				424A46F02073493C005795A6 /* ThreadListTableViewCell.swift */,
 			);
@@ -148,7 +143,6 @@
 		424A472220734987005795A6 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				424A46FF2073493D005795A6 /* BlockedUserViewController.swift */,
 				424A47042073493E005795A6 /* ChannelSelectViewController.swift */,
 				424A46F72073493C005795A6 /* ComposeViewController.swift */,
 				424A46F12073493C005795A6 /* ContentMenuViewController.swift */,
@@ -494,14 +488,12 @@
 				424A47072073493E005795A6 /* FirstLoginViewController.swift in Sources */,
 				424A47162073493E005795A6 /* BlockedTableViewCell.swift in Sources */,
 				424A47172073493E005795A6 /* BlockedUsers.swift in Sources */,
-				424A471B2073493E005795A6 /* BlockedUserViewController.swift in Sources */,
 				424A47112073493E005795A6 /* History.swift in Sources */,
 				424A47142073493E005795A6 /* HKGaldenAPI.swift in Sources */,
 				42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */,
 				424A47092073493E005795A6 /* WelcomeViewController.swift in Sources */,
 				424A47082073493E005795A6 /* OP.swift in Sources */,
 				424A47192073493E005795A6 /* Extensions.swift in Sources */,
-				424A471F2073493E005795A6 /* ContentTableViewCell.swift in Sources */,
 				424A470C2073493E005795A6 /* ThreadListTableViewCell.swift in Sources */,
 				424A470F2073493E005795A6 /* PagePopoverTableViewController.swift in Sources */,
 				424A471D2073493E005795A6 /* LaunchViewController.swift in Sources */,

@@ -11,7 +11,7 @@ import PKHUD
 import GoogleMobileAds
 import QuartzCore
 
-class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
+class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate,ChannelSelectViewControllerDelegate,ComposeViewControllerDelegate,PageSelectViewControllerDelegate {
     
     //MARK: Properties
     var threads = [ThreadList]()
@@ -25,6 +25,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     let tableView = UITableView()
     let adBannerView = GADBannerView()
+    let channelVC = ChannelSelectViewController()
+    let composeVC = ComposeViewController()
+    let pageVC = PageSelectViewController()
     lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var channelSwitch = UIBarButtonItem(image: UIImage(named: "channel"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
@@ -35,6 +38,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        channelVC.delegate = self
+        composeVC.delegate = self
+        pageVC.delegate = self
         
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
@@ -243,7 +249,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 destination.hero.isEnabled = true
                 destination.hero.modalAnimationType = .fade
                 destination.modalPresentationStyle = .overFullScreen
-                destination.mainVC = self
                 present(destination, animated: true, completion: nil)
             }
         }
@@ -251,7 +256,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
         let popoverViewController = ChannelSelectViewController()
-        popoverViewController.threadListViewController = self
         popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
         popoverViewController.popoverPresentationController?.delegate = self
         popoverViewController.popoverPresentationController?.barButtonItem = sender
@@ -265,7 +269,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         destination.modalPresentationStyle = .overFullScreen
         destination.hero.isEnabled = true
         destination.hero.modalAnimationType = .fade
-        destination.threadVC = self
         present(destination, animated: true, completion: nil)
     }
     
@@ -297,7 +300,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         return .none
     }
     
-    //Unwind Segue
+    //Delegates
     func unwindToThreadList(channelSelected: Int) {
         self.channelNow = channelSelected
         self.pageNow = 1
@@ -320,6 +323,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             contentVC.pageNow = self.selectedPage!
             self.navigationController?.pushViewController(contentVC, animated: true)
         }
+    }
+    
+    func unwindAfterReply() {
+        
     }
     
     @objc func reloadButtonPressed(_ sender: UIButton) {
