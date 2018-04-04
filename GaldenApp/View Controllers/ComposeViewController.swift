@@ -65,7 +65,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         backgroundView.addGestureRecognizer(swipeToDismiss)
         
         // Do any additional setup after loading the view.
-        iconKeyboard.delegate = self
+        iconKeyboard.keyboardDelegate = self
         if type == "reply" {
             backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         } else {

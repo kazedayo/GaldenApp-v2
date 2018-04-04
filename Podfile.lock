@@ -7,6 +7,7 @@ PODS:
   - Hero (1.1.0)
   - IQKeyboardManagerSwift (5.0.7)
   - KeychainSwift (10.0.0)
+  - Kingfisher (4.6.3)
   - MarqueeLabel (3.1.4):
     - MarqueeLabel/ObjC (= 3.1.4)
   - MarqueeLabel/ObjC (3.1.4)
@@ -27,6 +28,7 @@ DEPENDENCIES:
   - Hero
   - IQKeyboardManagerSwift
   - KeychainSwift
+  - Kingfisher
   - MarqueeLabel
   - PKHUD (~> 5.0)
   - RealmSwift
@@ -50,6 +52,7 @@ SPEC CHECKSUMS:
   Hero: ce59e81c79390613d97b43da7179e2c5e1017e04
   IQKeyboardManagerSwift: 30fb3a61de1af53a95e02b80fb54ed0a19d5ede5
   KeychainSwift: f9f7910449a0c0fd2cabc889121530dd2c477c33
+  Kingfisher: 98e6d5b5e807645743e8ed5ececd25d688d38452
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
   Realm: 42d1c38a5b1bbcc828b48a7ce702cb86fc68adf4
@@ -57,6 +60,6 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: bdd89e1224790a93271bc2bd66a7454274d2e18f
+PODFILE CHECKSUM: 0dcfeeaf37445492c1e9242a4f6087644099adc7
 
 COCOAPODS: 1.4.0
