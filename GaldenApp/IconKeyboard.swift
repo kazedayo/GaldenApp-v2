@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import Blueprints
 
 protocol IconKeyboardDelegate: class {
     func keyWasTapped(character: String)
@@ -22,7 +23,8 @@ class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let layout = UICollectionViewFlowLayout()
+        let layout = VerticalBlueprintLayout()
+        layout.itemsPerRow = 3
         layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10)
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10

@@ -18,6 +18,7 @@ struct ThreadList {
     var count: String
     var rate: String
     var userID: String
+    var isBlocked: Bool
     
     /*init(iD: String, iDent: String, tit: String, userN: String, cnt: String, rt: String,uid: String) {
         id = iD

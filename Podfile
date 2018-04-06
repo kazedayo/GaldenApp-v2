@@ -12,13 +12,14 @@ target 'GaldenApp' do
   pod 'KeychainSwift'
   pod 'Hero'
   pod 'MarqueeLabel'
-  pod 'Agrume', :git => 'https://github.com/JanGorman/Agrume.git'
   pod 'PKHUD', '~> 5.0'
   pod 'RealmSwift'
   pod 'Google-Mobile-Ads-SDK'
   pod 'AlamofireNetworkActivityIndicator'
   pod 'SnapKit'
   pod 'Kingfisher'
+  pod 'AXPhotoViewer/Kingfisher'
+  pod 'Blueprints'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

@@ -13,6 +13,15 @@ class LaunchViewController: UIViewController {
     
     let logo = UIImageView()
     let text = UILabel()
+    
+    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
+        if presentedViewController != nil {
+            // Unsure why WKWebView calls this controller - instead of it's own parent controller
+            presentedViewController?.present(viewControllerToPresent, animated: flag, completion: completion)
+        } else {
+            super.present(viewControllerToPresent, animated: flag, completion: completion)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

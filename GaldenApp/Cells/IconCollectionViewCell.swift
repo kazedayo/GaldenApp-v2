@@ -17,6 +17,7 @@ class IconCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .clear
         
         iconImage.contentMode = .center
+        iconImage.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(iconImage)
         
         iconImage.snp.makeConstraints {

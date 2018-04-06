@@ -17,7 +17,7 @@ class HKGaldenAPI {
     static let shared = HKGaldenAPI()
     var chList: [JSON]?
     
-    func fetchThreadList(currentChannel: String,pageNumber: String, completion : @escaping (_ threads: [ThreadList],_ blockedUsers: [String], _ error: Error?)->Void) {
+    func fetchThreadList(currentChannel: String,pageNumber: String, completion : @escaping (_ threads: [ThreadList], _ error: Error?)->Void) {
         let par: Parameters = ["ident": currentChannel, "ofs": pageNumber]
         let keychain = KeychainSwift()
         let head:HTTPHeaders
@@ -35,23 +35,6 @@ class HKGaldenAPI {
                 //debug output in console
                 //print("JSON: \(json)")
                 
-                var fetchedContent = [ThreadList]()
-                
-                for (_,subJson):(String, JSON) in json["topics"] {
-                    var topic: String = subJson["tle"].stringValue
-                    
-                    topic = topic.replacingOccurrences(of: "\n", with: "")
-                    
-                    let user: String = subJson["uname"].stringValue
-                    let rate: String = subJson["rate"].stringValue
-                    let reply: String = subJson["count"].stringValue
-                    let channel: String = subJson["ident"].stringValue
-                    let threadNo: String = subJson["id"].stringValue
-                    let userid: String = subJson["uid"].stringValue
-                    
-                    fetchedContent.append(ThreadList(id: threadNo,ident: channel,title: topic,userName: user, count: reply, rate: rate, userID: userid))
-                }
-                
                 var blockedUsers = [String]()
                 
                 for (_,subJson):(String, JSON) in json["blockedusers"] {
@@ -59,12 +42,31 @@ class HKGaldenAPI {
                     blockedUsers.append(blockedid)
                 }
                 
-                completion(fetchedContent,blockedUsers,nil)
+                var fetchedContent = [ThreadList]()
+                
+                for (_,subJson):(String, JSON) in json["topics"] {
+                    var topic: String = subJson["tle"].stringValue
+                    topic = topic.replacingOccurrences(of: "\n", with: "")
+                    var user: String = subJson["uname"].stringValue
+                    user = user.replacingOccurrences(of: "\n", with: "")
+                    let rate: String = subJson["rate"].stringValue
+                    let reply: String = subJson["count"].stringValue
+                    let channel: String = subJson["ident"].stringValue
+                    let threadNo: String = subJson["id"].stringValue
+                    let userid: String = subJson["uid"].stringValue
+                    var isBlocked: Bool = false
+                    if (blockedUsers.contains(subJson["uid"].stringValue)) {
+                        isBlocked = true
+                    }
+                    fetchedContent.append(ThreadList(id: threadNo,ident: channel,title: topic,userName: user, count: reply, rate: rate, userID: userid,isBlocked: isBlocked))
+                }
+                
+                completion(fetchedContent,nil)
                 
             case .failure(let error):
                 print(error)
                 HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
-                completion([ThreadList](),[String](),error)
+                completion([ThreadList](),error)
             }
         }
     }
@@ -245,7 +247,7 @@ class HKGaldenAPI {
         completion()
     }
     
-    func getBlockedUsers(completion: @escaping (_ blocked: [BlockedUsers])-> Void) {
+    /*func getBlockedUsers(completion: @escaping ()-> Void) {
         let keychain = KeychainSwift()
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
         Alamofire.request("https://api.hkgalden.com/f/b",method:.get,headers:head).responseJSON {
@@ -262,14 +264,14 @@ class HKGaldenAPI {
                     blockedUsers.append(BlockedUsers(id: id,userName: name))
                 }
                 
-                completion(blockedUsers)
-                
+                self.blockList = blockedUsers
+                completion()
             case .failure(let error):
                 print(error)
                 HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             }
         }
-    }
+    }*/
     
     func pageCount(postId: String, completion : @escaping (_ pageCount: Double)->Void) {
         var pageCount: Double = 0.0

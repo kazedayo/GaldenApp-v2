@@ -124,7 +124,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         logoutButton.setTitle("登出", for: .normal)
         logoutButton.backgroundColor = UIColor(rgb: 0xfc3158)
-        logoutButton.layer.cornerRadius = 10
+        logoutButton.layer.cornerRadius = 5
         logoutButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         logoutButton.addTarget(self, action: #selector(logoutButtonPressed(_:)), for: .touchUpInside)
         backgroundView.addSubview(logoutButton)

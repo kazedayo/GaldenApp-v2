@@ -8,16 +8,12 @@
 
 import UIKit
 
-protocol PagePopoverTableViewControllerDelegate: class {
-    func unwindToContent(pageSelected: Int)
-}
-
 class PagePopoverTableViewController: UITableViewController {
 
     var threadID: String?
     var pageCount: Int = 0
     var pageSelected: Int?
-    weak var delegate: PagePopoverTableViewControllerDelegate?
+    var mainVC: ContentViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +66,7 @@ class PagePopoverTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         pageSelected = indexPath.row + 1
         dismiss(animated: true, completion: nil)
-        delegate?.unwindToContent(pageSelected: pageSelected!)
+        mainVC?.unwindToContent(pageSelected: pageSelected!)
     }
     
     /*

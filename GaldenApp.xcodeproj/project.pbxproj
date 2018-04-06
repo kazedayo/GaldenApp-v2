@@ -30,7 +30,6 @@
 		424A47172073493E005795A6 /* BlockedUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46FB2073493D005795A6 /* BlockedUsers.swift */; };
 		424A47182073493E005795A6 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46FC2073493D005795A6 /* ContentViewController.swift */; };
 		424A47192073493E005795A6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46FD2073493D005795A6 /* Extensions.swift */; };
-		424A471A2073493E005795A6 /* BlockedUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46FE2073493D005795A6 /* BlockedUserTableViewCell.swift */; };
 		424A471C2073493E005795A6 /* Channels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47002073493D005795A6 /* Channels.swift */; };
 		424A471D2073493E005795A6 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47012073493E005795A6 /* LaunchViewController.swift */; };
 		424A471E2073493E005795A6 /* ThreadListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47022073493E005795A6 /* ThreadListViewController.swift */; };
@@ -85,7 +84,6 @@
 		424A46FB2073493D005795A6 /* BlockedUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedUsers.swift; sourceTree = "<group>"; };
 		424A46FC2073493D005795A6 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		424A46FD2073493D005795A6 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		424A46FE2073493D005795A6 /* BlockedUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedUserTableViewCell.swift; sourceTree = "<group>"; };
 		424A47002073493D005795A6 /* Channels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channels.swift; sourceTree = "<group>"; };
 		424A47012073493E005795A6 /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		424A47022073493E005795A6 /* ThreadListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadListViewController.swift; sourceTree = "<group>"; };
@@ -133,7 +131,6 @@
 			children = (
 				423E272C207458ED00F267CA /* IconCollectionViewCell.swift */,
 				424A46FA2073493D005795A6 /* BlockedTableViewCell.swift */,
-				424A46FE2073493D005795A6 /* BlockedUserTableViewCell.swift */,
 				424A46F22073493C005795A6 /* ChannelListTableViewCell.swift */,
 				424A46EA2073493B005795A6 /* PageSelectTableViewCell.swift */,
 				424A46F02073493C005795A6 /* ThreadListTableViewCell.swift */,
@@ -260,7 +257,6 @@
 				42E7F88D1F7923E1002CC13F /* Frameworks */,
 				42E7F88E1F7923E1002CC13F /* Resources */,
 				4F419E7458970D573B49BAFF /* [CP] Embed Pods Frameworks */,
-				5564D005FD48652560CF1B82 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -279,8 +275,6 @@
 				42E7F8A01F7923E2002CC13F /* Sources */,
 				42E7F8A11F7923E2002CC13F /* Frameworks */,
 				42E7F8A21F7923E2002CC13F /* Resources */,
-				0B5B88F1F5F0E4EC59B1FE4F /* [CP] Embed Pods Frameworks */,
-				43D234FE9382C2F33E9B264A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -355,36 +349,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0B5B88F1F5F0E4EC59B1FE4F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		43D234FE9382C2F33E9B264A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4F419E7458970D573B49BAFF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -392,9 +356,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Agrume/Agrume.framework",
+				"${BUILT_PRODUCTS_DIR}/AXPhotoViewer/AXPhotoViewer.framework",
+				"${BUILT_PRODUCTS_DIR}/AXStateButton/AXStateButton.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityIndicator/AlamofireNetworkActivityIndicator.framework",
+				"${BUILT_PRODUCTS_DIR}/Blueprints/Blueprints.framework",
+				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
 				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
@@ -408,9 +375,12 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Agrume.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AXPhotoViewer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AXStateButton.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityIndicator.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Blueprints.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
@@ -425,21 +395,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5564D005FD48652560CF1B82 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5D86E780739A876119903A00 /* [CP] Check Pods Manifest.lock */ = {
@@ -501,7 +456,6 @@
 				424A47152073493E005795A6 /* IconKeyboard.swift in Sources */,
 				424A47122073493E005795A6 /* Replies.swift in Sources */,
 				424A47182073493E005795A6 /* ContentViewController.swift in Sources */,
-				424A471A2073493E005795A6 /* BlockedUserTableViewCell.swift in Sources */,
 				424A470E2073493E005795A6 /* ChannelListTableViewCell.swift in Sources */,
 				424A47102073493E005795A6 /* PageSelectViewController.swift in Sources */,
 				423E272D207458ED00F267CA /* IconCollectionViewCell.swift in Sources */,

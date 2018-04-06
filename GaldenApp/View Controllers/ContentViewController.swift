@@ -13,10 +13,11 @@ import MarqueeLabel
 import WebKit
 import RealmSwift
 import GoogleMobileAds
-import Agrume
+import AXPhotoViewer
 import SwiftyJSON
+import Kingfisher
 
-class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate,PagePopoverTableViewControllerDelegate,ComposeViewControllerDelegate {
+class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
     
     //MARK: Properties
     
@@ -58,8 +59,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        composeVC.delegate = self
-        pageVC.delegate = self
         
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
@@ -259,6 +258,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         destination.threadID = self.threadIdReceived
         destination.pageCount = Int(self.pageCount)
         destination.pageSelected = self.pageNow
+        destination.mainVC = self
         present(destination, animated: true, completion: nil)
     }
     
@@ -417,7 +417,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     }
                 }
                 self?.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:(self?.channelColor)!)
-                //self?.navigationController?.navigationBar.shadowImage = HKGaldenAPI.shared.channelColorFunc(ch: (self?.op.channel)!).as1ptImage()
                 self?.convertedHTML = ""
                 if self?.pageNow == 1 {
                     self?.convertBBCodeToHTML(text: op!.content)
@@ -525,6 +524,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: WebView Delegate
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
             if self.replied == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
@@ -557,8 +557,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             if (navigationAction.request.url?.absoluteString.contains("jpg"))! || (navigationAction.request.url?.absoluteString.contains("png"))! || (navigationAction.request.url?.absoluteString.contains("gif"))! || (navigationAction.request.url?.absoluteString.contains("holland.pk"))! {
                 let url = navigationAction.request.url
                 //open image viewer
-                let agrume = Agrume(imageUrl: url!)
-                agrume.showFrom(self)
+                let image = AXPhoto()
+                image.url = url
+                let dataSource = AXPhotosDataSource(photos: [image])
+                let photosViewController = AXPhotosViewController(dataSource: dataSource)
+                self.present(photosViewController, animated: true)
                 decisionHandler(.cancel)
             } else {
                 let url = navigationAction.request.url

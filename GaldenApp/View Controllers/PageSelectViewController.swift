@@ -8,16 +8,12 @@
 
 import UIKit
 
-protocol PageSelectViewControllerDelegate: class {
-    func unwindAfterPageSelect(pageSelected: Int)
-}
-
 class PageSelectViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     var pageCount: Double = 0.0
     var pageSelected: Int = 0
     var titleText: String?
-    weak var delegate: PageSelectViewControllerDelegate?
+    var mainVC: ThreadListViewController?
     
     let tableView = UITableView()
     let titleLabel = UILabel()
@@ -127,7 +123,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         pageSelected = (indexPath.row + 1)
         dismiss(animated: true, completion: nil)
-        delegate?.unwindAfterPageSelect(pageSelected: pageSelected)
+        mainVC?.unwindAfterPageSelect(pageSelected: pageSelected)
     }
     
     @objc func cancelButtonPressed(_ sender: UIButton) {

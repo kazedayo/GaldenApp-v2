@@ -25,7 +25,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var type = ""
     var kheight: CGFloat = 0
     var contentVC: ContentViewController?
-    weak var delegate: ComposeViewControllerDelegate?
+    var threadVC: ThreadListViewController?
     
     let iconKeyboard = IconKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 265))
     
@@ -451,10 +451,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     [weak self] error in
                     if error == nil {
                         HUD.flash(.success,delay:1)
-                        DispatchQueue.main.async {
-                            self?.delegate?.unwindToThreadListAfterNewPost()
-                        }
                         self?.dismiss(animated: true, completion: nil)
+                        DispatchQueue.main.async {
+                            self?.threadVC?.unwindToThreadListAfterNewPost()
+                        }
                     } else {
                         HUD.flash(.error,delay: 1)
                     }
@@ -464,10 +464,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     [weak self] error in
                     if error == nil {
                         HUD.flash(.success,delay:1)
+                        self?.dismiss(animated: true, completion: nil)
                         DispatchQueue.main.async {
                             self?.contentVC?.unwindAfterReply()
                         }
-                        self?.dismiss(animated: true, completion: nil)
                     } else {
                         HUD.flash(.error,delay: 1)
                     }

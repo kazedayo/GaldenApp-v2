@@ -11,7 +11,7 @@ import PKHUD
 import GoogleMobileAds
 import QuartzCore
 
-class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate,ChannelSelectViewControllerDelegate,ComposeViewControllerDelegate,PageSelectViewControllerDelegate {
+class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
     
     //MARK: Properties
     var threads = [ThreadList]()
@@ -38,9 +38,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        channelVC.delegate = self
-        composeVC.delegate = self
-        pageVC.delegate = self
         
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
@@ -48,8 +45,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.dataSource = self
         tableView.isHidden = true
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
-        tableView.separatorColor = UIColor(white: 0.2, alpha: 1)
+        tableView.separatorInset = UIEdgeInsetsMake(0, 10, 0, 0)
+        tableView.separatorColor = UIColor(white: 0.10, alpha: 1)
         tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
@@ -103,11 +100,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             tableView.addSubview(refreshControl)
         }
         
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        spinner.startAnimating()
-        spinner.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 44)
-        tableView.tableFooterView = spinner;
-        
         reloadButton.center = self.view.center
         reloadButton.setTitle("重新載入", for: .normal)
         reloadButton.isHidden = true
@@ -118,11 +110,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @objc func refresh(refreshControl: UIRefreshControl) {
         pageNow = 1
-        DispatchQueue.main.asyncAfter(deadline: 1, execute: {
+        DispatchQueue.main.async {
             self.updateSequence(append: false, completion: {
                 refreshControl.endRefreshing()
             })
-        })
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -187,11 +179,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Configure the cell...
             let title = self.threads[indexPath.row].title
-            var uname = self.threads[indexPath.row].userName
+            let uname = self.threads[indexPath.row].userName
             let count = self.threads[indexPath.row].count
             let rate = self.threads[indexPath.row].rate
-            uname = uname.replacingOccurrences(of: "\n", with: "")
-        if (self.blockedUsers.contains(self.threads[indexPath.row].userID)) {
+            let isBlocked = self.threads[indexPath.row].isBlocked
+        if (isBlocked == true) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "BlockedTableViewCell") as! BlockedTableViewCell
             cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
             cell.threadTitleLabel.text = "[已封鎖]"
@@ -229,9 +221,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if (threads.count - indexPath.row) == 1 {
             self.pageNow += 1
-            DispatchQueue.main.asyncAfter(deadline: 1, execute: {
+            DispatchQueue.main.async {
                 self.updateSequence(append: true, completion: {})
-            })
+            }
         }
     }
     
@@ -249,6 +241,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 destination.hero.isEnabled = true
                 destination.hero.modalAnimationType = .fade
                 destination.modalPresentationStyle = .overFullScreen
+                destination.mainVC = self
                 present(destination, animated: true, completion: nil)
             }
         }
@@ -259,6 +252,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
         popoverViewController.popoverPresentationController?.delegate = self
         popoverViewController.popoverPresentationController?.barButtonItem = sender
+        popoverViewController.mainVC = self
         present(popoverViewController, animated: true, completion: nil)
     }
     
@@ -269,6 +263,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         destination.modalPresentationStyle = .overFullScreen
         destination.hero.isEnabled = true
         destination.hero.modalAnimationType = .fade
+        destination.threadVC = self
         present(destination, animated: true, completion: nil)
     }
     
@@ -335,14 +330,13 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     private func updateSequence(append: Bool, completion: @escaping ()->Void) {
         HKGaldenAPI.shared.fetchThreadList(currentChannel: HKGaldenAPI.shared.chList![channelNow]["ident"].stringValue, pageNumber: String(pageNow), completion: {
-            [weak self] threads,blocked,error in
+            [weak self] threads,error in
             if (error == nil) {
                 if append == true {
                     self?.threads.append(contentsOf: threads)
                 } else {
                     self?.threads = threads
                 }
-                self?.blockedUsers = blocked
                 self?.tableView.reloadData()
                 self?.reloadButton.isHidden = true
                 self?.tableView.isHidden = false

@@ -9,14 +9,10 @@
 import UIKit
 import KeychainSwift
 
-protocol ChannelSelectViewControllerDelegate: class {
-    func unwindToThreadList(channelSelected: Int)
-}
-
 class ChannelSelectViewController: UITableViewController {
     
     var channelSelected = 0
-    weak var delegate: ChannelSelectViewControllerDelegate?
+    var mainVC: ThreadListViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +55,7 @@ class ChannelSelectViewController: UITableViewController {
         let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
         cell.channelTitle.textColor = .white
         channelSelected = indexPath.row
-        self.delegate?.unwindToThreadList(channelSelected: channelSelected)
+        mainVC?.unwindToThreadList(channelSelected: channelSelected)
         dismiss(animated: true, completion: nil)
     }
     
