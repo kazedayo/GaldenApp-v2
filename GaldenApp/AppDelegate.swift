@@ -20,13 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let keychain = KeychainSwift()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
         window = UIWindow(frame: UIScreen.main.bounds)
         
         // Override point for customization after application launch.
         NetworkActivityIndicatorManager.shared.isEnabled = true
         NetworkActivityIndicatorManager.shared.startDelay = 0
         NetworkActivityIndicatorManager.shared.completionDelay = 0.2
+        
+        xbbcodeBridge.shared.initializeJS()
         
         IQKeyboardManager.sharedManager().enable = true
         

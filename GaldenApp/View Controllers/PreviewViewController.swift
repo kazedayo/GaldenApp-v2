@@ -8,7 +8,6 @@
 
 import UIKit
 import WebKit
-import JavaScriptCore
 import MarqueeLabel
 
 class PreviewViewController: UIViewController {
@@ -20,7 +19,6 @@ class PreviewViewController: UIViewController {
     let titleLabel = MarqueeLabel()
     var webView = WKWebView()
     lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
-    var convertedText: String?
     var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
     var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
     
@@ -31,8 +29,7 @@ class PreviewViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        initializeJS()
-        NotificationCenter.default.addObserver(self, selector: #selector(PreviewViewController.handleBBCodeToHTMLNotification(notification:)), name: NSNotification.Name("bbcodeToHTMLNotification"), object: nil)
+        xbbcodeBridge.shared.sender = "preview"
         
         backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         backgroundView.addGestureRecognizer(swipeToDismiss)
@@ -54,8 +51,10 @@ class PreviewViewController: UIViewController {
         
         webView.isOpaque = false
         webView.backgroundColor = .clear
-        convertBBCodeToHTML(text: contentText!)
-        webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((convertedText!))</body></html>", baseURL: Bundle.main.bundleURL)
+        contentText = HKGaldenAPI.shared.iconParse(bbcode: contentText!)
+        xbbcodeBridge.shared.convertBBCodeToHTML(text: contentText!)
+        xbbcodeBridge.shared.convertedText = HKGaldenAPI.shared.iconParse(bbcode: xbbcodeBridge.shared.convertedText!)
+        webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((xbbcodeBridge.shared.convertedText!))</body></html>", baseURL: Bundle.main.bundleURL)
         backgroundView.addSubview(webView)
         
         backgroundView.snp.makeConstraints {
@@ -76,8 +75,8 @@ class PreviewViewController: UIViewController {
         webView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.leading.equalTo(15)
-            make.trailing.equalTo(-15)
+            make.leading.equalTo(10)
+            make.trailing.equalTo(-10)
             make.bottom.equalTo(-15)
         }
         
@@ -98,64 +97,6 @@ class PreviewViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    
-    //MARK: JavaScript BBCode Parser Related
-    var jsContext: JSContext!
-    
-    let consoleLog: @convention(block) (String) -> Void = { logMessage in
-        print("\nJS Console:", logMessage)
-    }
-    
-    let bbcodeToHTMLHandler: @convention(block) (String) -> Void = { htmlOutput in
-        NotificationCenter.default.post(name: NSNotification.Name("bbcodeToHTMLNotification"), object: htmlOutput)
-    }
-    
-    func initializeJS() {
-        self.jsContext = JSContext()
-        
-        // Add an exception handler.
-        self.jsContext.exceptionHandler = { context, exception in
-            if let exc = exception {
-                print("JS Exception:", exc.toString())
-            }
-        }
-        
-        let consoleLogObject = unsafeBitCast(self.consoleLog, to: AnyObject.self)
-        self.jsContext.setObject(consoleLogObject, forKeyedSubscript: "consoleLog" as (NSCopying & NSObjectProtocol))
-        _ = self.jsContext.evaluateScript("consoleLog")
-        
-        if let jsSourcePath = Bundle.main.path(forResource: "jssource", ofType: "js") {
-            do {
-                let jsSourceContents = try String(contentsOfFile: jsSourcePath)
-                self.jsContext.evaluateScript(jsSourceContents)
-                
-                
-                // Fetch and evaluate the Snowdown script.
-                let xbbcodeScript = try String(contentsOfFile: Bundle.main.path(forResource: "xbbcode", ofType: "js")!)
-                self.jsContext.evaluateScript(xbbcodeScript)
-            }
-            catch {
-                print(error.localizedDescription)
-            }
-        }
-        
-        let htmlResultsHandler = unsafeBitCast(self.bbcodeToHTMLHandler, to: AnyObject.self)
-        self.jsContext.setObject(htmlResultsHandler, forKeyedSubscript: "handleConvertedBBCode" as (NSCopying & NSObjectProtocol))
-        _ = self.jsContext.evaluateScript("handleConvertedBBCode")
-        
-    }
-    
-    func convertBBCodeToHTML(text: String) {
-        if let functionConvertBBCodeToHTML = self.jsContext.objectForKeyedSubscript("convertBBCodeToHTML") {
-            _ = functionConvertBBCodeToHTML.call(withArguments: [text])
-        }
-    }
-    
-    @objc func handleBBCodeToHTMLNotification(notification: Notification) {
-        if let html = notification.object as? String {
-            convertedText = html
-        }
-    }
     
     @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
         let touchPoint = sender.location(in: self.view?.window)

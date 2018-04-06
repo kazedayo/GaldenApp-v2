@@ -490,7 +490,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     [weak self] error in
                     if error == nil {
                         HUD.flash(.success,delay:1)
-                        self?.dismiss(animated: true, completion: nil)
+                        self?.dismiss(animated: true, completion: {xbbcodeBridge.shared.sender = "content"})
                         DispatchQueue.main.async {
                             self?.contentVC?.unwindAfterReply()
                         }
