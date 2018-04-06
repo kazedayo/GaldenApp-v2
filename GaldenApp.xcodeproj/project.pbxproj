@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		32EE3C5177EECCE65C9AC67A /* Pods_GaldenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092365D4D945F6E42B0DE552 /* Pods_GaldenAppTests.framework */; };
+		4231DA782077299B00AB1DE5 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4231DA772077299B00AB1DE5 /* PreviewViewController.swift */; };
 		423E272D207458ED00F267CA /* IconCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423E272C207458ED00F267CA /* IconCollectionViewCell.swift */; };
 		424A47052073493E005795A6 /* UserDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46E92073493B005795A6 /* UserDetailViewController.swift */; };
 		424A47062073493E005795A6 /* PageSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EA2073493B005795A6 /* PageSelectTableViewCell.swift */; };
@@ -58,6 +59,7 @@
 		092365D4D945F6E42B0DE552 /* Pods_GaldenAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3216F76A4E5F32869F0F36E4 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3347D35989AE9895ECE658C3 /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4231DA772077299B00AB1DE5 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		423720BC2014B7D600603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		423720BE2014B89700603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		423720C02014B8EA00603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,6 +145,7 @@
 			children = (
 				424A47042073493E005795A6 /* ChannelSelectViewController.swift */,
 				424A46F72073493C005795A6 /* ComposeViewController.swift */,
+				4231DA772077299B00AB1DE5 /* PreviewViewController.swift */,
 				424A46F12073493C005795A6 /* ContentMenuViewController.swift */,
 				424A46FC2073493D005795A6 /* ContentViewController.swift */,
 				424A46EE2073493B005795A6 /* EULAViewController.swift */,
@@ -463,6 +466,7 @@
 				424A471E2073493E005795A6 /* ThreadListViewController.swift in Sources */,
 				424A471C2073493E005795A6 /* Channels.swift in Sources */,
 				424A47132073493E005795A6 /* ComposeViewController.swift in Sources */,
+				4231DA782077299B00AB1DE5 /* PreviewViewController.swift in Sources */,
 				424A470A2073493E005795A6 /* EULAViewController.swift in Sources */,
 				424A47062073493E005795A6 /* PageSelectTableViewCell.swift in Sources */,
 				424A470B2073493E005795A6 /* ThreadList.swift in Sources */,

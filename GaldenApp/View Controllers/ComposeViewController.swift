@@ -34,8 +34,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     let channelLabel = UILabel()
     let titleTextField = UITextField()
     let contentTextView = IQTextView()
-    
     let previewButton = UIButton()
+    let sendButton = UIButton()
+    
     let fontSizeButton = UIButton()
     let fontColorButton = UIButton()
     let fontStyleButton = UIButton()
@@ -62,7 +63,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        backgroundView.addGestureRecognizer(swipeToDismiss)
         
         // Do any additional setup after loading the view.
         iconKeyboard.keyboardDelegate = self
@@ -71,6 +71,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         } else {
             backgroundView.backgroundColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channel]["color"].stringValue)
         }
+        backgroundView.addGestureRecognizer(swipeToDismiss)
         backgroundView.layer.cornerRadius = 10
         backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
         view.addSubview(backgroundView)
@@ -109,14 +110,28 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             contentTextView.text = content
         }
         
-        previewButton.setTitle("發表", for: .normal)
+        previewButton.setTitle("預覽", for: .normal)
         previewButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        //previewButton.backgroundColor = UIColor(rgb: 0x0076ff)
-        previewButton.cornerRadius = 10
+        previewButton.cornerRadius = 5
         previewButton.borderWidth = 1
         previewButton.borderColor = .white
-        previewButton.addTarget(self, action: #selector(sendButtonPressed(_:)), for: .touchUpInside)
-        backgroundView.addSubview(previewButton)
+        previewButton.addTarget(self, action: #selector(previewButtonPressed(_:)), for: .touchUpInside)
+        
+        sendButton.setTitle("發表", for: .normal)
+        sendButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        sendButton.cornerRadius = 5
+        sendButton.borderWidth = 1
+        sendButton.borderColor = .white
+        sendButton.addTarget(self, action: #selector(sendButtonPressed(_:)), for: .touchUpInside)
+        
+        let stackViewNew = UIStackView()
+        stackViewNew.axis = .horizontal
+        stackViewNew.distribution = .fillEqually
+        stackViewNew.alignment = .center
+        stackViewNew.spacing = 10
+        stackViewNew.addArrangedSubview(previewButton)
+        stackViewNew.addArrangedSubview(sendButton)
+        backgroundView.addSubview(stackViewNew)
         
         fontSizeButton.setImage(UIImage(named: "FontSize"), for: .normal)
         fontSizeButton.tintColor = .white
@@ -204,21 +219,20 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             make.trailing.equalTo(-15)
         }
         
-        previewButton.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(contentTextView.snp.bottom).offset(10)
-            make.leading.equalTo(15)
-            make.trailing.equalTo(-15)
-            make.bottom.equalTo(-10)
-            make.height.equalTo(35)
-        }
-        
         stackView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(10)
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
             make.bottom.equalTo(-15)
+        }
+        
+        stackViewNew.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(contentTextView.snp.bottom).offset(10)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(-10)
         }
     }
     
@@ -430,6 +444,18 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let nsRange = self.contentTextView.text.nsRange(from: range!)
         self.contentTextView.selectedRange = nsRange
         self.contentTextView.select(nsRange)
+    }
+    
+    @objc func previewButtonPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        let previewVC = PreviewViewController()
+        previewVC.modalPresentationStyle = .overCurrentContext
+        previewVC.type = type
+        previewVC.contentText = contentTextView.text
+        if type != "reply" {
+            previewVC.titleText = titleTextField.text
+        }
+        present(previewVC, animated: true, completion: nil)
     }
     
     @objc func sendButtonPressed(_ sender: UIButton) {
