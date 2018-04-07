@@ -14,7 +14,7 @@ class ContentMenuViewController: UIViewController {
     
     var upvote: Int = 0
     var downvote: Int = 0
-    var rated: String = "false"
+    var rated: Bool = false
     var threadTitle: String?
     var opName: String?
     var threadID: String?
@@ -76,7 +76,7 @@ class ContentMenuViewController: UIViewController {
         if keychain.get("LeaveNameText") == "" {
             lmButton.isHidden = true
         }
-        if rated == "true" {
+        if rated == true {
             upvoteButton.isEnabled = false
             upvoteButton.alpha = 0.5
             downvoteButton.isEnabled = false

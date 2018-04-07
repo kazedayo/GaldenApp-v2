@@ -12,6 +12,35 @@ import PKHUD
 import GoogleMobileAds
 import AlamofireNetworkActivityIndicator
 import IQKeyboardManagerSwift
+import URLNavigator
+
+let navigator = Navigator()
+
+struct URLNavigationMap {
+    static func initialize(navigator: NavigatorType) {
+        navigator.register("https://hkgalden.com/view/<string:id>") {
+            url, values, context in
+            let contentVC = ContentViewController()
+            guard let id = values["id"] as? String else {return nil}
+            contentVC.threadIdReceived = id
+            return contentVC
+        }
+        navigator.register("http://hkgalden.com/view/<string:id>") {
+            url, values, context in
+            let contentVC = ContentViewController()
+            guard let id = values["id"] as? String else {return nil}
+            contentVC.threadIdReceived = id
+            return contentVC
+        }
+        navigator.register("hkgalden.com/view/<string:id>") {
+            url, values, context in
+            let contentVC = ContentViewController()
+            guard let id = values["id"] as? String else {return nil}
+            contentVC.threadIdReceived = id
+            return contentVC
+        }
+    }
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,6 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NetworkActivityIndicatorManager.shared.completionDelay = 0.2
         
         xbbcodeBridge.shared.initializeJS()
+        URLNavigationMap.initialize(navigator: navigator)
         
         IQKeyboardManager.sharedManager().enable = true
         
@@ -51,6 +81,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             adOption.adEnabled = true
         } else {
             adOption.adEnabled = keychain.getBool("adEnabled")!
+        }
+        
+        if let url = launchOptions?[.url] as? URL {
+            let opened = navigator.open(url)
+            if !opened {
+                navigator.present(url)
+            }
         }
         
         window?.makeKeyAndVisible()

@@ -21,9 +21,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: Properties
     
     var threadIdReceived: String = ""
-    var isRated: String = ""
+    var isRated: Bool = false
     var pageNow: Int = 1
-    var op = OP(title: "",name: "",level: "",content: "",contentHTML: "",avatar: "",date: "",good: "",bad: "",gender: "",channel: "",quoteID:"",userID:"")
+    var op = OP(title: "",name: "",level: "",content: "",contentHTML: "",avatar: "",date: "",good: "",bad: "",gender: "",channel: "",quoteID:"",userID:"",ident:"")
     var comments = [Replies]()
     var replyCount = 1
     var pageCount = 0.0
@@ -36,7 +36,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var loaded = false
     var scrollPosition: CGFloat = 0.0
     var sender = ""
-    var channelColor = ""
+    var ident = ""
+    var titleLabel = MarqueeLabel()
     private var shadowImageView: UIImageView?
     private var webView = WKWebView()
     
@@ -96,16 +97,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             make.height.equalTo(50)
         }
         
-        let title = MarqueeLabel.init()
-        title.textColor = .white
-        title.text = self.title
-        title.animationDelay = 1
-        title.marqueeType = .MLLeftRight
-        title.fadeLength = 5
-        title.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
-        title.textAlignment = .center
-        navigationItem.titleView = title
-        
         activityIndicator.center = self.view.center
         activityIndicator.startAnimating()
         self.view.addSubview(activityIndicator)
@@ -127,6 +118,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        for subJson in HKGaldenAPI.shared.chList! {
+            if subJson["ident"].stringValue == self.ident {
+                self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
+            }
+        }
         if (adOption.adEnabled == false) {
             adBannerView.removeFromSuperview()
         } else {
@@ -405,12 +401,20 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self?.comments = comments!
                 self?.blockedUsers = blocked!
                 self?.isRated = rated!
-                for subJson: JSON in HKGaldenAPI.shared.chList! {
-                    if subJson["ident"].stringValue == self?.op.channel {
-                        self?.channelColor = subJson["color"].stringValue
+                self?.titleLabel.text = self?.op.title
+                self?.titleLabel.textColor = .white
+                self?.titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
+                self?.titleLabel.animationDelay = 1
+                self?.titleLabel.marqueeType = .MLLeftRight
+                self?.titleLabel.fadeLength = 5
+                self?.titleLabel.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
+                self?.titleLabel.textAlignment = .center
+                for subJson in HKGaldenAPI.shared.chList! {
+                    if subJson["ident"].stringValue == self?.op.ident {
+                        self?.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
                     }
                 }
-                self?.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:(self?.channelColor)!)
+                self?.navigationItem.titleView = self?.titleLabel
                 self?.convertedHTML = ""
                 if self?.pageNow == 1 {
                     xbbcodeBridge.shared.convertBBCodeToHTML(text: op!.content)
@@ -556,6 +560,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 let dataSource = AXPhotosDataSource(photos: [image])
                 let photosViewController = AXPhotosViewController(dataSource: dataSource)
                 self.present(photosViewController, animated: true)
+                decisionHandler(.cancel)
+            } else if (navigationAction.request.url?.absoluteString.contains("hkgalden.com/view/"))! {
+                navigator.pushURL(navigationAction.request.url!)
                 decisionHandler(.cancel)
             } else {
                 let url = navigationAction.request.url

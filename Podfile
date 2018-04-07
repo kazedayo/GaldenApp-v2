@@ -20,6 +20,7 @@ target 'GaldenApp' do
   pod 'Kingfisher'
   pod 'AXPhotoViewer/Kingfisher'
   pod 'Blueprints'
+  pod 'URLNavigator'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

@@ -49,11 +49,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var secondaryBackgrundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
     lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        resignFirstResponder()
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)

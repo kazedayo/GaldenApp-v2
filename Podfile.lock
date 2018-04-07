@@ -28,6 +28,7 @@ PODS:
     - Realm (= 3.3.2)
   - SnapKit (4.0.0)
   - SwiftyJSON (4.0.0)
+  - URLNavigator (2.0.4)
 
 DEPENDENCIES:
   - Alamofire
@@ -44,6 +45,7 @@ DEPENDENCIES:
   - RealmSwift
   - SnapKit
   - SwiftyJSON
+  - URLNavigator
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -64,6 +66,7 @@ SPEC REPOS:
     - RealmSwift
     - SnapKit
     - SwiftyJSON
+    - URLNavigator
 
 SPEC CHECKSUMS:
   Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
@@ -83,7 +86,8 @@ SPEC CHECKSUMS:
   RealmSwift: 4e903a494e05d866581d69ad6f7e7b879d446baf
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  URLNavigator: af5582fbbb3586c958be16835d799bfdb23a4793
 
-PODFILE CHECKSUM: 63f9e28bdf6f4f8c2ff92dc74410d2880d443810
+PODFILE CHECKSUM: 52e9737d2e08826e29f05ef8f159683a2e1d2997
 
 COCOAPODS: 1.5.0

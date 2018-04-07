@@ -71,7 +71,7 @@ class HKGaldenAPI {
         }
     }
     
-    func fetchContent(postId: String, pageNo: String, completion : @escaping (_ op: OP?,_ comments: [Replies]?,_ rated: String?,_ blockedUsers: [String]?, _ error: Error?)->Void) {
+    func fetchContent(postId: String, pageNo: String, completion : @escaping (_ op: OP?,_ comments: [Replies]?,_ rated: Bool?,_ blockedUsers: [String]?, _ error: Error?)->Void) {
         let keychain = KeychainSwift()
         let par: Parameters = ["id": postId, "ofs": pageNo]
         var head: HTTPHeaders
@@ -107,9 +107,9 @@ class HKGaldenAPI {
                 let channel = json["topic"]["f_ident"].stringValue
                 let quoteid = json["topic"]["id"].stringValue
                 let userid = json["topic"]["uid"].stringValue
+                let ident = json["topic"]["f_ident"].stringValue
                 
-                
-                let op = OP(title: title,name: name,level: level,content: content,contentHTML: "",avatar: avatar,date: date,good: good,bad: bad,gender: gender,channel: channel,quoteID: quoteid,userID: userid)
+                let op = OP(title: title,name: name,level: level,content: content,contentHTML: "",avatar: avatar,date: date,good: good,bad: bad,gender: gender,channel: channel,quoteID: quoteid,userID: userid,ident: ident)
                 
                 //fetch reply data
                 for (_,subJson):(String, JSON) in json["replys"] {
@@ -137,7 +137,7 @@ class HKGaldenAPI {
                     blocked.append(blockedid)
                 }
                 
-                let rated = json["rated"].stringValue
+                let rated = json["rated"].boolValue
                 
                 completion(op,comments,rated,blocked,nil)
                 

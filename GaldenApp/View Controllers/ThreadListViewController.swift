@@ -19,7 +19,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     var pageNow: Int = 1
     var pageCount: Double?
     var selectedThread: String!
-    var blockedUsers = [String]()
     var selectedPage: Int?
     var selectedThreadTitle: String!
     
@@ -201,7 +200,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (blockedUsers.contains(threads[indexPath.row].userID)) {
+        if (threads[indexPath.row].isBlocked == true) {
             DispatchQueue.main.async {
                 let alert = UIAlertController(title:"喂喂喂",message:"扑咗就唔好心郁郁",preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title:"好囉",style:.cancel,handler:nil))
@@ -213,6 +212,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             let selectedThread = threads[indexPath.row].id
             contentVC.threadIdReceived = selectedThread
             contentVC.title = threads[indexPath.row].title
+            contentVC.ident = threads[indexPath.row].ident
             contentVC.sender = "cell"
             navigationController?.pushViewController(contentVC, animated: true)
         }
