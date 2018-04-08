@@ -118,6 +118,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         if (adOption.adEnabled == false) {
             adBannerView.removeFromSuperview()
             view.layoutSubviews()
@@ -128,7 +129,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)

@@ -552,7 +552,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if navigationAction.navigationType == .linkActivated {
-            if (navigationAction.request.url?.absoluteString.contains("jpg"))! || (navigationAction.request.url?.absoluteString.contains("png"))! || (navigationAction.request.url?.absoluteString.contains("gif"))! || (navigationAction.request.url?.absoluteString.contains("holland.pk"))! {
+            let imageType = ["jpg","png","gif","jpeg"]
+            if imageType.contains((navigationAction.request.url?.pathExtension)!) {
                 let url = navigationAction.request.url
                 //open image viewer
                 let image = AXPhoto()

@@ -16,32 +16,6 @@ import URLNavigator
 
 let navigator = Navigator()
 
-struct URLNavigationMap {
-    static func initialize(navigator: NavigatorType) {
-        navigator.register("https://hkgalden.com/view/<string:id>") {
-            url, values, context in
-            let contentVC = ContentViewController()
-            guard let id = values["id"] as? String else {return nil}
-            contentVC.threadIdReceived = id
-            return contentVC
-        }
-        navigator.register("http://hkgalden.com/view/<string:id>") {
-            url, values, context in
-            let contentVC = ContentViewController()
-            guard let id = values["id"] as? String else {return nil}
-            contentVC.threadIdReceived = id
-            return contentVC
-        }
-        navigator.register("hkgalden.com/view/<string:id>") {
-            url, values, context in
-            let contentVC = ContentViewController()
-            guard let id = values["id"] as? String else {return nil}
-            contentVC.threadIdReceived = id
-            return contentVC
-        }
-    }
-}
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
