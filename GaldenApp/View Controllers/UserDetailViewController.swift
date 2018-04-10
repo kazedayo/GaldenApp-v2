@@ -25,10 +25,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
     let sourceCodeButton = UIButton()
     let adToggle = UISwitch()
     
-    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
-    var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
-    var secondaryBackgrundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
-    lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
+    lazy var tapToDismiss = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognizerHandler(_:)))
     
     let keychain = KeychainSwift()
     
@@ -42,16 +39,10 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         }
         
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        backgroundView.addGestureRecognizer(swipeToDismiss)
+        view.addGestureRecognizer(tapToDismiss)
         setupUI()
         
         // Do any additional setup after loading the view.
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)
-        secondaryBackgrundViewOriginalPoint = CGPoint(x: secondaryBackgroundView.frame.minX, y: secondaryBackgroundView.frame.minY)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -162,7 +153,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
             make.bottom.equalTo(-15)
-            make.height.equalTo(300)
+            make.height.equalTo(200)
         }
         
         secondaryBackgroundView.snp.makeConstraints {
@@ -209,26 +200,8 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         }
     }
     
-    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
-        let touchPoint = sender.location(in: self.view?.window)
-        
-        if sender.state == UIGestureRecognizerState.began {
-            initialTouchPoint = touchPoint
-        } else if sender.state == UIGestureRecognizerState.changed {
-            if touchPoint.y - initialTouchPoint.y > 0 {
-                self.backgroundView.frame = CGRect(x: backgroundViewOriginalPoint.x, y: backgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-                self.secondaryBackgroundView.frame = CGRect(x: secondaryBackgrundViewOriginalPoint.x, y: secondaryBackgrundViewOriginalPoint.y - (touchPoint.y - initialTouchPoint.y), width: self.secondaryBackgroundView.frame.size.width, height: self.secondaryBackgroundView.frame.size.height)
-            }
-        } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
-            if touchPoint.y - initialTouchPoint.y > 100 {
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-                    self.secondaryBackgroundView.frame = CGRect(x: self.secondaryBackgrundViewOriginalPoint.x, y: self.secondaryBackgrundViewOriginalPoint.y, width: self.secondaryBackgroundView.frame.size.width, height: self.secondaryBackgroundView.frame.size.height)
-                })
-            }
-        }
+    @objc func tapGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func sourceButtonPressed(_ sender: UIButton) {

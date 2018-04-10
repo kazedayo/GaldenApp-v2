@@ -8,25 +8,48 @@
 
 import UIKit
 
-class PagePopoverTableViewController: UITableViewController {
+class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
 
     var threadID: String?
     var pageCount: Int = 0
     var pageSelected: Int?
     var mainVC: ContentViewController?
+    let tableView = UITableView()
+    let backgroundView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        preferredContentSize = CGSize(width: 125, height: 200)
+        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        
+        backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        backgroundView.layer.cornerRadius = 10
+        backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
+        view.addSubview(backgroundView)
+        
         tableView.backgroundColor = .clear
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.layer.cornerRadius = 10
         tableView.separatorStyle = .none
         tableView.register(PageSelectTableViewCell.self, forCellReuseIdentifier: "PageSelectTableViewCell")
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
         tableView.tableFooterView = UIView()
+        backgroundView.addSubview(tableView)
+        
+        backgroundView.snp.makeConstraints {
+            (make) -> Void in
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(-15)
+            make.height.equalTo(150)
+        }
+        
+        tableView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -41,29 +64,28 @@ class PagePopoverTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return pageCount
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PageSelectTableViewCell") as! PageSelectTableViewCell
         
         let bgColorView = UIView()
-        bgColorView.backgroundColor = .lightGray
+        bgColorView.backgroundColor = .darkGray
         cell.selectedBackgroundView = bgColorView
         
         cell.pageNo.text = "第\(indexPath.row+1)頁"
-        cell.pageNo.textColor = .darkGray
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         pageSelected = indexPath.row + 1
         dismiss(animated: true, completion: nil)
         mainVC?.unwindToContent(pageSelected: pageSelected!)

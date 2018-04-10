@@ -18,7 +18,6 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
     let tableView = UITableView()
     let titleLabel = UILabel()
     let titleView = UIView()
-    let cancelButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +27,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        titleView.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: 100))]
+        titleView.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: -100))]
         titleView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         titleView.layer.cornerRadius = 10
         view.addSubview(titleView)
@@ -42,27 +41,17 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.hero.modifiers = [.scale(0.5)]
+        tableView.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: 1000))]
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.layer.cornerRadius = 10
         tableView.register(PageSelectTableViewCell.self, forCellReuseIdentifier: "PageSelectTableViewCell")
         view.addSubview(tableView)
         
-        cancelButton.setTitle("不了", for: .normal)
-        cancelButton.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: 1000))]
-        cancelButton.backgroundColor = UIColor(rgb: 0xfc3158)
-        cancelButton.setTitleColor(.white, for: .normal)
-        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        cancelButton.layer.cornerRadius = 10
-        cancelButton.addTarget(self, action: #selector(cancelButtonPressed(_:)), for: .touchUpInside)
-        view.addSubview(cancelButton)
-        
         titleView.snp.makeConstraints {
             (make) -> Void in
-            make.centerY.equalToSuperview().offset(-120)
-            make.leading.equalTo(75)
-            make.trailing.equalTo(-75)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
         }
         
         titleLabel.snp.makeConstraints {
@@ -76,17 +65,10 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(titleView.snp.bottom).offset(20)
-            make.leading.equalTo(75)
-            make.trailing.equalTo(-75)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(-15)
             make.height.equalTo(200)
-        }
-        
-        cancelButton.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(tableView.snp.bottom).offset(20)
-            make.leading.equalTo(75)
-            make.trailing.equalTo(-75)
-            make.height.equalTo(35)
         }
     }
 
@@ -124,10 +106,6 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         pageSelected = (indexPath.row + 1)
         dismiss(animated: true, completion: nil)
         mainVC?.unwindAfterPageSelect(pageSelected: pageSelected)
-    }
-    
-    @objc func cancelButtonPressed(_ sender: UIButton) {
-        dismiss(animated: true, completion: nil)
     }
     
     /*

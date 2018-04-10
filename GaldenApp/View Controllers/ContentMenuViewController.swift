@@ -25,12 +25,21 @@ class ContentMenuViewController: UIViewController {
     let downvoteButton = UIButton()
     let lmButton = UIButton()
     let shareButton = UIButton()
+    let backgroundView = UIView()
     
     let keychain = KeychainSwift()
     
+    lazy var tapToDismiss = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognizerHandler(_:)))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        preferredContentSize = CGSize(width: 125, height: 200)
+        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        view.addGestureRecognizer(tapToDismiss)
+        
+        backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        backgroundView.layer.cornerRadius = 10
+        backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
+        view.addSubview(backgroundView)
         
         upvoteButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         upvoteButton.setTitleColor(UIColor(rgb:0x00cc33), for: .normal)
@@ -41,12 +50,12 @@ class ContentMenuViewController: UIViewController {
         downvoteButton.addTarget(self, action: #selector(downvoteButtonPressed(_:)), for: .touchUpInside)
         
         lmButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        lmButton.setTitleColor(.darkGray, for: .normal)
+        lmButton.setTitleColor(.white, for: .normal)
         lmButton.setTitle("一鍵留名", for: .normal)
         lmButton.addTarget(self, action: #selector(leaveNamePressed(_:)), for: .touchUpInside)
         
         shareButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        shareButton.setTitleColor(.darkGray, for: .normal)
+        shareButton.setTitleColor(.white, for: .normal)
         shareButton.setTitle("些牙", for: .normal)
         shareButton.addTarget(self, action: #selector(shareButtonPressed(_:)), for: .touchUpInside)
         
@@ -59,7 +68,15 @@ class ContentMenuViewController: UIViewController {
         stackView.addArrangedSubview(downvoteButton)
         stackView.addArrangedSubview(lmButton)
         stackView.addArrangedSubview(shareButton)
-        view.addSubview(stackView)
+        backgroundView.addSubview(stackView)
+        
+        backgroundView.snp.makeConstraints {
+            (make) -> Void in
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(-15)
+            make.height.equalTo(200)
+        }
         
         stackView.snp.makeConstraints {
             (make) -> Void in
@@ -122,6 +139,10 @@ class ContentMenuViewController: UIViewController {
     @objc func leaveNamePressed(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
         mainVC?.lm()
+    }
+    
+    @objc func tapGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
+        dismiss(animated: true, completion: nil)
     }
     
     /*

@@ -26,7 +26,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     let adBannerView = GADBannerView()
     let channelVC = ChannelSelectViewController()
     let composeVC = ComposeViewController()
-    let pageVC = PageSelectViewController()
+    let userVC = UserDetailViewController()
     lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var channelSwitch = UIBarButtonItem(image: UIImage(named: "channel"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
@@ -229,50 +229,46 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
-                
             let touchPoint = sender.location(in: self.tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
                 self.selectedThread = threads[indexPath.row].id
                 self.selectedThreadTitle = threads[indexPath.row].title
                 self.pageCount = ceil((Double(threads[indexPath.row].count)! + 1)/25)
-                let destination = PageSelectViewController()
-                destination.pageCount = self.pageCount!
-                destination.titleText = self.selectedThreadTitle
-                destination.hero.isEnabled = true
-                destination.hero.modalAnimationType = .fade
-                destination.modalPresentationStyle = .overFullScreen
-                destination.mainVC = self
-                present(destination, animated: true, completion: nil)
+                let pageVC = PageSelectViewController()
+                pageVC.pageCount = self.pageCount!
+                pageVC.titleText = self.selectedThreadTitle
+                pageVC.hero.isEnabled = true
+                pageVC.hero.modalAnimationType = .fade
+                pageVC.modalPresentationStyle = .overFullScreen
+                pageVC.mainVC = self
+                present(pageVC, animated: true, completion: nil)
             }
         }
     }
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
-        let popoverViewController = ChannelSelectViewController()
-        popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
-        popoverViewController.popoverPresentationController?.delegate = self
-        popoverViewController.popoverPresentationController?.barButtonItem = sender
-        popoverViewController.mainVC = self
-        present(popoverViewController, animated: true, completion: nil)
+        channelVC.modalPresentationStyle = .overFullScreen
+        channelVC.hero.isEnabled = true
+        channelVC.hero.modalAnimationType = .fade
+        channelVC.mainVC = self
+        present(channelVC, animated: true, completion: nil)
     }
     
     @objc func newThreadButtonPressed() {
-        let destination = ComposeViewController()
-        destination.channel = channelNow
-        destination.type = "newThread"
-        destination.modalPresentationStyle = .overFullScreen
-        destination.hero.isEnabled = true
-        destination.hero.modalAnimationType = .fade
-        destination.threadVC = self
-        present(destination, animated: true, completion: nil)
+        composeVC.channel = channelNow
+        composeVC.type = "newThread"
+        composeVC.modalPresentationStyle = .overFullScreen
+        composeVC.hero.isEnabled = true
+        composeVC.hero.modalAnimationType = .fade
+        composeVC.threadVC = self
+        present(composeVC, animated: true, completion: nil)
     }
     
     @objc func userDetailPressed() {
-        let destination = UserDetailViewController()
-        destination.modalPresentationStyle = .overFullScreen
-        destination.hero.isEnabled = true
-        destination.hero.modalAnimationType = .fade
-        present(destination, animated: true, completion: nil)
+        userVC.modalPresentationStyle = .overFullScreen
+        userVC.hero.isEnabled = true
+        userVC.hero.modalAnimationType = .fade
+        present(userVC, animated: true, completion: nil)
     }
     
     // MARK: - Navigation

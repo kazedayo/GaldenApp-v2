@@ -49,6 +49,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     let adBannerView = GADBannerView()
     let composeVC = ComposeViewController()
     let pageVC = PagePopoverTableViewController()
+    let menuVC = ContentMenuViewController()
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var replyButton = UIBarButtonItem(image: UIImage(named: "Reply"), style: .plain, target: self, action: #selector(replyButtonPressed))
     lazy var moreButton = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(moreButtonPressed))
@@ -226,52 +227,48 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @objc func moreButtonPressed() {
-        let destination = ContentMenuViewController()
-        destination.modalPresentationStyle = UIModalPresentationStyle.popover
-        destination.popoverPresentationController?.delegate = self
-        destination.popoverPresentationController?.barButtonItem = moreButton
-        destination.upvote = Int(self.op.good)!
-        destination.downvote = Int(self.op.bad)!
-        destination.opName = self.op.name
-        destination.threadTitle = self.op.title
-        destination.threadID = self.threadIdReceived
-        destination.rated = self.isRated
-        destination.mainVC = self
-        present(destination, animated: true, completion: nil)
+        menuVC.modalPresentationStyle = .overFullScreen
+        menuVC.upvote = Int(self.op.good)!
+        menuVC.downvote = Int(self.op.bad)!
+        menuVC.opName = self.op.name
+        menuVC.threadTitle = self.op.title
+        menuVC.threadID = self.threadIdReceived
+        menuVC.rated = self.isRated
+        menuVC.hero.isEnabled = true
+        menuVC.hero.modalAnimationType = .fade
+        menuVC.mainVC = self
+        present(menuVC, animated: true, completion: nil)
     }
     
     @objc func pageButtonPressed() {
-        let destination = PagePopoverTableViewController()
-        destination.modalPresentationStyle = UIModalPresentationStyle.popover
-        destination.popoverPresentationController?.delegate = self
-        destination.popoverPresentationController?.barButtonItem = pageButton
-        destination.threadID = self.threadIdReceived
-        destination.pageCount = Int(self.pageCount)
-        destination.pageSelected = self.pageNow
-        destination.mainVC = self
-        present(destination, animated: true, completion: nil)
+        pageVC.modalPresentationStyle = .overFullScreen
+        pageVC.threadID = self.threadIdReceived
+        pageVC.pageCount = Int(self.pageCount)
+        pageVC.pageSelected = self.pageNow
+        pageVC.hero.isEnabled = true
+        pageVC.hero.modalAnimationType = .fade
+        pageVC.mainVC = self
+        present(pageVC, animated: true, completion: nil)
     }
     
     @objc func replyButtonPressed() {
-        let destination = ComposeViewController()
-        destination.topicID = self.threadIdReceived
-        destination.type = "reply"
-        destination.modalPresentationStyle = .overFullScreen
-        destination.hero.isEnabled = true
-        destination.hero.modalAnimationType = .fade
-        destination.contentVC = self
-        present(destination, animated: true, completion: nil)
+        composeVC.topicID = self.threadIdReceived
+        composeVC.type = "reply"
+        composeVC.modalPresentationStyle = .overFullScreen
+        composeVC.hero.isEnabled = true
+        composeVC.hero.modalAnimationType = .fade
+        composeVC.contentVC = self
+        present(composeVC, animated: true, completion: nil)
     }
     
     func quote() {
-        let destination = ComposeViewController()
-        destination.topicID = self.threadIdReceived
-        destination.content = self.quoteContent + "\n"
-        destination.type = "reply"
-        destination.modalPresentationStyle = .overFullScreen
-        destination.hero.isEnabled = true
-        destination.hero.modalAnimationType = .fade
-        present(destination, animated: true, completion: nil)
+        composeVC.topicID = self.threadIdReceived
+        composeVC.content = self.quoteContent + "\n"
+        composeVC.type = "reply"
+        composeVC.modalPresentationStyle = .overFullScreen
+        composeVC.hero.isEnabled = true
+        composeVC.hero.modalAnimationType = .fade
+        present(composeVC, animated: true, completion: nil)
     }
     
     // MARK: - Navigation
