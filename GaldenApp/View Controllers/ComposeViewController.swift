@@ -64,7 +64,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         secondaryBackgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         secondaryBackgroundView.layer.cornerRadius = 10
-        secondaryBackgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 0))]
+        secondaryBackgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 700))]
         view.addSubview(secondaryBackgroundView)
         
         channelLabel.text = HKGaldenAPI.shared.chList![channel]["name"].stringValue
@@ -167,15 +167,15 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
             make.bottom.equalTo(-15)
-            make.height.equalTo(250)
+            make.height.equalTo(300)
         }
         
         secondaryBackgroundView.snp.makeConstraints {
             (make) -> Void in
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
-            make.bottom.equalTo(backgroundView.snp.top).offset(-20)
-            make.height.equalTo(65)
+            make.bottom.equalTo(backgroundView.snp.top).offset(-10)
+            make.height.equalTo(45)
         }
         
         channelLabel.snp.makeConstraints {
@@ -207,10 +207,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         stackView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(10)
-            make.leading.equalTo(15)
-            make.trailing.equalTo(-15)
-            make.bottom.equalTo(-15)
+            make.top.equalToSuperview()
+            make.leading.equalTo(10)
+            make.trailing.equalTo(-10)
+            make.bottom.equalToSuperview()
         }
         
         stackViewNew.snp.makeConstraints {

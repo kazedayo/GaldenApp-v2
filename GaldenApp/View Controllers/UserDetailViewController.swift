@@ -11,6 +11,7 @@ import KeychainSwift
 import PKHUD
 import RealmSwift
 import IQKeyboardManagerSwift
+import SwiftyStoreKit
 
 class UserDetailViewController: UIViewController,UINavigationControllerDelegate,UITextViewDelegate,UIPopoverPresentationControllerDelegate {
 
@@ -23,7 +24,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
     let changeNameButton = UIButton()
     let clearHistoryButton = UIButton()
     let sourceCodeButton = UIButton()
-    let adToggle = UISwitch()
+    let adIAPButton = UIButton()
     
     lazy var tapToDismiss = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognizerHandler(_:)))
     
@@ -32,10 +33,10 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if adOption.adEnabled == true {
-            adToggle.isOn = true
+        if keychain.getBool("noAd") == true {
+            adIAPButton.isEnabled = false
         } else {
-            adToggle.isOn = false
+            adIAPButton.isEnabled = true
         }
         
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
@@ -49,7 +50,6 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         super.viewDidDisappear(animated)
         leaveNameTextView.endEditing(true)
         keychain.set(leaveNameTextView.text!, forKey: "LeaveNameText")
-        keychain.set(adToggle.isOn, forKey: "adEnabled")
     }
 
     override func didReceiveMemoryWarning() {
@@ -95,7 +95,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         secondaryBackgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         secondaryBackgroundView.layer.cornerRadius = 10
-        secondaryBackgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 0))]
+        secondaryBackgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 700))]
         view.addSubview(secondaryBackgroundView)
         
         userName.text = keychain.get("userName")!
@@ -135,7 +135,10 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         sourceCodeButton.imageView?.contentMode = .scaleAspectFit
         sourceCodeButton.addTarget(self, action: #selector(sourceButtonPressed(_:)), for: .touchUpInside)
         
-        adToggle.addTarget(self, action: #selector(adToggle(_:)), for: .valueChanged)
+        adIAPButton.setImage(UIImage(named: "noAds"), for: .normal)
+        adIAPButton.tintColor = .white
+        adIAPButton.imageView?.contentMode = .scaleAspectFit
+        adIAPButton.addTarget(self, action: #selector(adIAPButtonPressed(_:)), for: .touchUpInside)
         
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -145,7 +148,7 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         stackView.addArrangedSubview(changeNameButton)
         stackView.addArrangedSubview(clearHistoryButton)
         stackView.addArrangedSubview(sourceCodeButton)
-        stackView.addArrangedSubview(adToggle)
+        stackView.addArrangedSubview(adIAPButton)
         secondaryBackgroundView.addSubview(stackView)
         
         backgroundView.snp.makeConstraints {
@@ -160,8 +163,8 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
             (make) -> Void in
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
-            make.bottom.equalTo(backgroundView.snp.top).offset(-20)
-            make.height.equalTo(65)
+            make.bottom.equalTo(backgroundView.snp.top).offset(-10)
+            make.height.equalTo(45)
         }
         
         userName.snp.makeConstraints {
@@ -193,10 +196,10 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         stackView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(10)
-            make.leading.equalTo(15)
-            make.trailing.equalTo(-15)
-            make.bottom.equalTo(-15)
+            make.top.equalToSuperview()
+            make.leading.equalTo(10)
+            make.trailing.equalTo(-10)
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -254,11 +257,47 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         present(alert,animated: true,completion: nil)
     }
     
-    @objc func adToggle(_ sender: UISwitch) {
-        if sender.isOn == true {
-            adOption.adEnabled = true
-        } else {
-            adOption.adEnabled = false
-        }
+    @objc func adIAPButtonPressed(_ sender: UIButton) {
+        let alert = UIAlertController(title: "去除廣告", message: "支持廢青開發工作", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "畀錢!", style: .default, handler: {
+            _ in
+            SwiftyStoreKit.purchaseProduct("1080signaladfree", quantity: 1, atomically: true) { result in
+                switch result {
+                case .success(_):
+                    self.keychain.set(true, forKey: "noAd")
+                    self.adIAPButton.isEnabled = false
+                    let success = UIAlertController(title: "購買成功!", message: "多謝支持!(重新啓動/入post再出post就會冇咗個廣告banner啦!)", preferredStyle: .alert)
+                    success.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(success, animated: true, completion: nil)
+                case .error(let error):
+                    let failure = UIAlertController(title: "購買失敗:(", message: "debug info: \(error.code.rawValue)", preferredStyle: .alert)
+                    failure.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(failure, animated: true, completion: nil)
+                }
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "恢復購買", style: .default, handler: {
+            _ in
+            SwiftyStoreKit.restorePurchases(atomically: true) { results in
+                if results.restoreFailedPurchases.count > 0 {
+                    let failure = UIAlertController(title: "恢復失敗:(", message: "請稍後再試", preferredStyle: .alert)
+                    failure.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(failure, animated: true, completion: nil)
+                }
+                else if results.restoredPurchases.count > 0 {
+                    self.keychain.set(true, forKey: "noAd")
+                    let success = UIAlertController(title: "恢復成功", message: "多謝支持!(重新啓動/入post再出post就會冇咗個廣告banner啦!)", preferredStyle: .alert)
+                    success.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(success, animated: true, completion: nil)
+                }
+                else {
+                    let none = UIAlertController(title: "冇嘢恢復", message: "你未畀錢喎ching #ng#", preferredStyle: .alert)
+                    none.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(none, animated: true, completion: nil)
+                }
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "不了", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }

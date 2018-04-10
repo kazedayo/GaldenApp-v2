@@ -47,9 +47,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var activityIndicator = UIActivityIndicatorView()
     var reloadButton = UIButton()
     let adBannerView = GADBannerView()
-    let composeVC = ComposeViewController()
-    let pageVC = PagePopoverTableViewController()
-    let menuVC = ContentMenuViewController()
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var replyButton = UIBarButtonItem(image: UIImage(named: "Reply"), style: .plain, target: self, action: #selector(replyButtonPressed))
     lazy var moreButton = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(moreButtonPressed))
@@ -124,7 +121,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
             }
         }
-        if (adOption.adEnabled == false) {
+        if (keychain.getBool("noAd") == true) {
             adBannerView.removeFromSuperview()
         } else {
             adBannerView.load(GADRequest())
@@ -227,6 +224,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @objc func moreButtonPressed() {
+        let menuVC = ContentMenuViewController()
         menuVC.modalPresentationStyle = .overFullScreen
         menuVC.upvote = Int(self.op.good)!
         menuVC.downvote = Int(self.op.bad)!
@@ -241,6 +239,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @objc func pageButtonPressed() {
+        let pageVC = PagePopoverTableViewController()
         pageVC.modalPresentationStyle = .overFullScreen
         pageVC.threadID = self.threadIdReceived
         pageVC.pageCount = Int(self.pageCount)
@@ -252,6 +251,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @objc func replyButtonPressed() {
+        let composeVC = ComposeViewController()
         composeVC.topicID = self.threadIdReceived
         composeVC.type = "reply"
         composeVC.modalPresentationStyle = .overFullScreen
@@ -262,6 +262,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func quote() {
+        let composeVC = ComposeViewController()
         composeVC.topicID = self.threadIdReceived
         composeVC.content = self.quoteContent + "\n"
         composeVC.type = "reply"
@@ -439,6 +440,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 
                 self?.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((self?.convertedHTML)!)</body></html>"
                 self?.webView.loadHTMLString((self?.pageHTML)!, baseURL: Bundle.main.bundleURL)
+                NotificationCenter.default.post(name: Notification.Name.Task.DidResume, object: self?.webView)
                 //print((self?.pageHTML)!)
             } else {
                 self?.activityIndicator.removeFromSuperview()
@@ -519,6 +521,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: WebView Delegate
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        NotificationCenter.default.post(name: Notification.Name.Task.DidComplete, object: webView)
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
             if self.replied == true {
@@ -578,7 +581,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        NotificationCenter.default.post(name: Notification.Name.Task.DidComplete, object: webView)
+        NotificationCenter.default.post(name: Notification.Name.Task.DidCancel, object: webView)
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {

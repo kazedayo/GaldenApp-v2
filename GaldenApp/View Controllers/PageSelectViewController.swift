@@ -27,7 +27,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        titleView.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: -100))]
+        titleView.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: 700))]
         titleView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         titleView.layer.cornerRadius = 10
         view.addSubview(titleView)
@@ -64,7 +64,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         
         tableView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(titleView.snp.bottom).offset(20)
+            make.top.equalTo(titleView.snp.bottom).offset(10)
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
             make.bottom.equalTo(-15)

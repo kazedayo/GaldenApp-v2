@@ -29,12 +29,13 @@ PODS:
     - Realm (= 3.3.2)
   - SnapKit (4.0.0)
   - SwiftyJSON (4.0.0)
+  - SwiftyStoreKit (0.13.1)
   - URLNavigator (2.0.4)
 
 DEPENDENCIES:
   - Alamofire
   - AlamofireNetworkActivityIndicator
-  - AXPhotoViewer (~> 1.4.0)
+  - AXPhotoViewer
   - Blueprints
   - Google-Mobile-Ads-SDK
   - Hero
@@ -42,10 +43,11 @@ DEPENDENCIES:
   - KeychainSwift
   - Kingfisher
   - MarqueeLabel
-  - PKHUD (~> 5.0)
+  - PKHUD
   - RealmSwift
   - SnapKit
   - SwiftyJSON
+  - SwiftyStoreKit
   - URLNavigator
 
 SPEC REPOS:
@@ -67,6 +69,7 @@ SPEC REPOS:
     - RealmSwift
     - SnapKit
     - SwiftyJSON
+    - SwiftyStoreKit
     - URLNavigator
 
 SPEC CHECKSUMS:
@@ -87,8 +90,9 @@ SPEC CHECKSUMS:
   RealmSwift: 4e903a494e05d866581d69ad6f7e7b879d446baf
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  SwiftyStoreKit: c36bb7841dd51a485ce5c38abf9e96fba988741f
   URLNavigator: af5582fbbb3586c958be16835d799bfdb23a4793
 
-PODFILE CHECKSUM: 8f927efb39cfbd6d50d0181b699a118bc35da5fc
+PODFILE CHECKSUM: 6e031c0e36210e55991d14fd045b9fea65392720
 
 COCOAPODS: 1.5.0

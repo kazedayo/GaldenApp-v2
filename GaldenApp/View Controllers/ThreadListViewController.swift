@@ -22,11 +22,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     var selectedPage: Int?
     var selectedThreadTitle: String!
     
+    let keychain = KeychainSwift()
     let tableView = UITableView()
     let adBannerView = GADBannerView()
-    let channelVC = ChannelSelectViewController()
-    let composeVC = ComposeViewController()
-    let userVC = UserDetailViewController()
     lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var channelSwitch = UIBarButtonItem(image: UIImage(named: "channel"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
@@ -119,7 +117,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
-        if (adOption.adEnabled == false) {
+        if (keychain.getBool("noAd") == true) {
             adBannerView.removeFromSuperview()
             view.layoutSubviews()
         } else {
@@ -247,6 +245,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
+        let channelVC = ChannelSelectViewController()
         channelVC.modalPresentationStyle = .overFullScreen
         channelVC.hero.isEnabled = true
         channelVC.hero.modalAnimationType = .fade
@@ -255,6 +254,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     @objc func newThreadButtonPressed() {
+        let composeVC = ComposeViewController()
         composeVC.channel = channelNow
         composeVC.type = "newThread"
         composeVC.modalPresentationStyle = .overFullScreen
@@ -265,6 +265,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     @objc func userDetailPressed() {
+        let userVC = UserDetailViewController()
         userVC.modalPresentationStyle = .overFullScreen
         userVC.hero.isEnabled = true
         userVC.hero.modalAnimationType = .fade

@@ -21,6 +21,7 @@ target 'GaldenApp' do
   pod 'AXPhotoViewer'
   pod 'Blueprints'
   pod 'URLNavigator'
+  pod 'SwiftyStoreKit'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

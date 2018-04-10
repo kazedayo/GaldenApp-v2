@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		32EE3C5177EECCE65C9AC67A /* Pods_GaldenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092365D4D945F6E42B0DE552 /* Pods_GaldenAppTests.framework */; };
 		42029C68207A44610001E142 /* URLNavigationMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42029C67207A44610001E142 /* URLNavigationMap.swift */; };
+		42029C6A207CC5CC0001E142 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42029C69207CC5CC0001E142 /* StoreKit.framework */; };
 		4231DA782077299B00AB1DE5 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4231DA772077299B00AB1DE5 /* PreviewViewController.swift */; };
 		4231DA7A20774B7900AB1DE5 /* xbbcodeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4231DA7920774B7900AB1DE5 /* xbbcodeBridge.swift */; };
 		423E272D207458ED00F267CA /* IconCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423E272C207458ED00F267CA /* IconCollectionViewCell.swift */; };
@@ -62,6 +63,7 @@
 		3216F76A4E5F32869F0F36E4 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3347D35989AE9895ECE658C3 /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		42029C67207A44610001E142 /* URLNavigationMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLNavigationMap.swift; sourceTree = "<group>"; };
+		42029C69207CC5CC0001E142 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4231DA772077299B00AB1DE5 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		4231DA7920774B7900AB1DE5 /* xbbcodeBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xbbcodeBridge.swift; sourceTree = "<group>"; };
 		423720BC2014B7D600603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +120,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42A979D42014BA43008C7629 /* Pods_GaldenApp.framework in Frameworks */,
+				42029C6A207CC5CC0001E142 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,6 +234,7 @@
 		44717B75C39E1397AB701D29 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42029C69207CC5CC0001E142 /* StoreKit.framework */,
 				42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */,
 				42A979D32014B9C4008C7629 /* Pods_GaldenApp.framework */,
 				423720C22014B93E00603395 /* Pods_GaldenApp.framework */,
@@ -308,6 +312,11 @@
 					42E7F88F1F7923E1002CC13F = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 					42E7F8A31F7923E2002CC13F = {
 						CreatedOnToolsVersion = 9.0;
@@ -381,6 +390,7 @@
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyStoreKit/SwiftyStoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/URLNavigator/URLNavigator.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -401,6 +411,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyStoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLNavigator.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

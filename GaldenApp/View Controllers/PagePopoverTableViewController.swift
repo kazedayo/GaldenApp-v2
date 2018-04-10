@@ -78,7 +78,7 @@ class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UIT
         let cell = tableView.dequeueReusableCell(withIdentifier: "PageSelectTableViewCell") as! PageSelectTableViewCell
         
         let bgColorView = UIView()
-        bgColorView.backgroundColor = .darkGray
+        bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
         cell.selectedBackgroundView = bgColorView
         
         cell.pageNo.text = "第\(indexPath.row+1)頁"

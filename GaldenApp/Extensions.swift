@@ -62,10 +62,6 @@ class SerialOperationQueue: OperationQueue {
     }
 }
 
-struct adOption {
-    static var adEnabled = true
-}
-
 extension UIView {
     
     @IBInspectable var cornerRadius: CGFloat {

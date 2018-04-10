@@ -13,6 +13,7 @@ import GoogleMobileAds
 import AlamofireNetworkActivityIndicator
 import IQKeyboardManagerSwift
 import URLNavigator
+import SwiftyStoreKit
 
 let navigator = Navigator()
 
@@ -37,6 +38,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         GADMobileAds.configure(withApplicationID: "ca-app-pub-6919429787140423~6701059788")
         
+        SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
+            for purchase in purchases {
+                switch purchase.transaction.transactionState {
+                case .purchased, .restored:
+                    if purchase.needsFinishTransaction {
+                        // Deliver content from server, then:
+                        SwiftyStoreKit.finishTransaction(purchase.transaction)
+                    }
+                // Unlock content
+                case .failed, .purchasing, .deferred:
+                    break // do nothing
+                }
+            }
+        }
+        
         PKHUD.sharedHUD.dimsBackground = false
         PKHUD.sharedHUD.userInteractionOnUnderlyingViewsEnabled = false
         
@@ -51,10 +67,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.rootViewController = root
         }
         
-        if (keychain.getBool("adEnabled") == nil) {
-            adOption.adEnabled = true
-        } else {
-            adOption.adEnabled = keychain.getBool("adEnabled")!
+        if (keychain.getBool("noAd") == nil) {
+            keychain.set(false, forKey: "noAd")
         }
         
         if let url = launchOptions?[.url] as? URL {
