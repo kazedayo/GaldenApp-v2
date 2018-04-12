@@ -25,6 +25,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     let keychain = KeychainSwift()
     let tableView = UITableView()
     let adBannerView = GADBannerView()
+    let channelVC = ChannelSelectViewController()
     lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var channelSwitch = UIBarButtonItem(image: UIImage(named: "channel"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
@@ -245,7 +246,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
-        let channelVC = ChannelSelectViewController()
         channelVC.modalPresentationStyle = .overFullScreen
         channelVC.hero.isEnabled = true
         channelVC.hero.modalAnimationType = .fade

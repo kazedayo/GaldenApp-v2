@@ -307,6 +307,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self?.pageNow = Int((self?.pageCount)!)
             self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
             self?.replied = true
+            xbbcodeBridge.shared.sender = "content"
             self?.updateSequence()
         })
     }

@@ -463,10 +463,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     [weak self] error in
                     if error == nil {
                         HUD.flash(.success,delay:1)
-                        self?.dismiss(animated: true, completion: nil)
-                        DispatchQueue.main.async {
+                        self?.dismiss(animated: true, completion: {
                             self?.threadVC?.unwindToThreadListAfterNewPost()
-                        }
+                        })
                     } else {
                         HUD.flash(.error,delay: 1)
                     }
@@ -476,10 +475,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     [weak self] error in
                     if error == nil {
                         HUD.flash(.success,delay:1)
-                        self?.dismiss(animated: true, completion: {xbbcodeBridge.shared.sender = "content"})
-                        DispatchQueue.main.async {
+                        self?.dismiss(animated: true, completion: {
+                            xbbcodeBridge.shared.sender = "content"
                             self?.contentVC?.unwindAfterReply()
-                        }
+                        })
                     } else {
                         HUD.flash(.error,delay: 1)
                     }
