@@ -19,9 +19,21 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
     let titleLabel = UILabel()
     let titleView = UIView()
     
+    lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
+    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
+    var tableViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
+    var titleViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tableViewOriginalPoint = CGPoint(x: tableView.frame.minX, y: tableView.frame.minY)
+        titleViewOriginalPoint = CGPoint(x: titleView.frame.minX, y: titleView.frame.minY)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        view.addGestureRecognizer(swipeToDismiss)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -154,5 +166,27 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         // Pass the selected object to the new view controller.
     }
     */
+    
+    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: self.view?.window)
+        
+        if sender.state == UIGestureRecognizerState.began {
+            initialTouchPoint = touchPoint
+        } else if sender.state == UIGestureRecognizerState.changed {
+            if touchPoint.y - initialTouchPoint.y > 0 {
+                self.tableView.frame = CGRect(x: tableViewOriginalPoint.x, y: tableViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.tableView.frame.size.width, height: self.tableView.frame.size.height)
+                self.titleView.frame = CGRect(x: titleViewOriginalPoint.x, y: titleViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.titleView.frame.size.width, height: self.titleView.frame.size.height)
+            }
+        } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
+            if touchPoint.y - initialTouchPoint.y > 100 {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.tableView.frame = CGRect(x: self.tableViewOriginalPoint.x, y: self.tableViewOriginalPoint.y, width: self.tableView.frame.size.width, height: self.tableView.frame.size.height)
+                    self.titleView.frame = CGRect(x: self.titleViewOriginalPoint.x, y: self.titleViewOriginalPoint.y, width: self.titleView.frame.size.width, height: self.titleView.frame.size.height)
+                })
+            }
+        }
+    }
 
 }

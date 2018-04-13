@@ -44,12 +44,21 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     let urlButton = UIButton()
     let iconButton = UIButton()
     
-    lazy var tapToDismiss = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognizerHandler(_:)))
+    lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
+    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
+    var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
+    var secondaryBackgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)
+        secondaryBackgroundViewOriginalPoint = CGPoint(x: secondaryBackgroundView.frame.minX, y: secondaryBackgroundView.frame.minY)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        view.addGestureRecognizer(tapToDismiss)
+        view.addGestureRecognizer(swipeToDismiss)
         
         // Do any additional setup after loading the view.
         iconKeyboard.keyboardDelegate = self
@@ -537,7 +546,25 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         }
     }
     
-    @objc func tapGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
-        dismiss(animated: true, completion: nil)
+    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: self.view?.window)
+        
+        if sender.state == UIGestureRecognizerState.began {
+            initialTouchPoint = touchPoint
+        } else if sender.state == UIGestureRecognizerState.changed {
+            if touchPoint.y - initialTouchPoint.y > 0 {
+                self.backgroundView.frame = CGRect(x: backgroundViewOriginalPoint.x, y: backgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
+                self.secondaryBackgroundView.frame = CGRect(x: secondaryBackgroundViewOriginalPoint.x, y: secondaryBackgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.secondaryBackgroundView.frame.size.width, height: self.secondaryBackgroundView.frame.size.height)
+            }
+        } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
+            if touchPoint.y - initialTouchPoint.y > 100 {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
+                    self.secondaryBackgroundView.frame = CGRect(x: self.secondaryBackgroundViewOriginalPoint.x, y: self.secondaryBackgroundViewOriginalPoint.y, width: self.secondaryBackgroundView.frame.size.width, height: self.secondaryBackgroundView.frame.size.height)
+                })
+            }
+        }
     }
 }

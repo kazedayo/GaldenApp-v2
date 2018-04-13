@@ -29,12 +29,19 @@ class ContentMenuViewController: UIViewController {
     
     let keychain = KeychainSwift()
     
-    lazy var tapToDismiss = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognizerHandler(_:)))
+    lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
+    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
+    var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        view.addGestureRecognizer(tapToDismiss)
+        view.addGestureRecognizer(swipeToDismiss)
         
         backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         backgroundView.layer.cornerRadius = 10
@@ -141,8 +148,24 @@ class ContentMenuViewController: UIViewController {
         mainVC?.lm()
     }
     
-    @objc func tapGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
-        dismiss(animated: true, completion: nil)
+    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: self.view?.window)
+        
+        if sender.state == UIGestureRecognizerState.began {
+            initialTouchPoint = touchPoint
+        } else if sender.state == UIGestureRecognizerState.changed {
+            if touchPoint.y - initialTouchPoint.y > 0 {
+                self.backgroundView.frame = CGRect(x: backgroundViewOriginalPoint.x, y: backgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
+            }
+        } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
+            if touchPoint.y - initialTouchPoint.y > 100 {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
+                })
+            }
+        }
     }
     
     /*
