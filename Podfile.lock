@@ -1,7 +1,7 @@
 PODS:
   - Alamofire (4.7.1)
-  - AlamofireNetworkActivityIndicator (2.2.0):
-    - Alamofire (~> 4.5)
+  - AlamofireNetworkActivityIndicator (2.2.1):
+    - Alamofire (~> 4.7)
   - AXPhotoViewer (1.4.2):
     - AXPhotoViewer/Lite (= 1.4.2)
   - AXPhotoViewer/Core (1.4.2):
@@ -11,13 +11,13 @@ PODS:
   - AXPhotoViewer/Lite (1.4.2):
     - AXPhotoViewer/Core
   - AXStateButton (1.1.4)
-  - Blueprints (0.1.4)
+  - Blueprints (0.1.5)
   - FLAnimatedImage (1.0.12)
   - Google-Mobile-Ads-SDK (7.30.0)
-  - Hero (1.1.0)
-  - IQKeyboardManagerSwift (5.0.8)
+  - Hero (1.2.0)
+  - IQKeyboardManagerSwift (6.0.0)
   - KeychainSwift (11.0.0)
-  - Kingfisher (4.6.4)
+  - Kingfisher (4.7.0)
   - MarqueeLabel (3.1.4):
     - MarqueeLabel/ObjC (= 3.1.4)
   - MarqueeLabel/ObjC (3.1.4)
@@ -74,16 +74,16 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
-  AlamofireNetworkActivityIndicator: 81e1630e7cfed22a4e4e82a174c59e651dc4f8ca
+  AlamofireNetworkActivityIndicator: aeac50e6ecb78ec71a5f1f29098bcf4ec2962910
   AXPhotoViewer: 21772189db20242febfaf4545e204a3ff069add5
   AXStateButton: 6c515a433e37551505046429b5be04c12daa8c07
-  Blueprints: 3f0bde1f6dd8b340df42515f614b76dd6a28f437
+  Blueprints: 6fdf738c5300ee3a6be32718ddccbfecaf10264b
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Google-Mobile-Ads-SDK: 7404f68120ae8682afeb5af001fbf4aad731c78e
-  Hero: ce59e81c79390613d97b43da7179e2c5e1017e04
-  IQKeyboardManagerSwift: 2e7dc7f98c111458c1ea2b373f893e8cf95e2b97
+  Hero: 33dadf2cd1c98af71e213dcbc2902e6e03622a4e
+  IQKeyboardManagerSwift: 624f128983eec795deacd50c1cd2f72664d13f08
   KeychainSwift: bea6bd9f98af7b8d7ca4aa79fe105c00fab532db
-  Kingfisher: 68498a706e46c2a050b0c9572f100e5db407f6e0
+  Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
   Realm: d927fbf66df5532cfafc08afb5f7e53ded37b894

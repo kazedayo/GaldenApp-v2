@@ -51,6 +51,7 @@ class PreviewViewController: UIViewController {
         
         webView.isOpaque = false
         webView.backgroundColor = .clear
+        contentText = HKGaldenAPI.shared.sizeTagCorrection(bbcode: contentText!)
         contentText = HKGaldenAPI.shared.iconParse(bbcode: contentText!)
         xbbcodeBridge.shared.convertBBCodeToHTML(text: contentText!)
         xbbcodeBridge.shared.convertedText = HKGaldenAPI.shared.iconParse(bbcode: xbbcodeBridge.shared.convertedText!)

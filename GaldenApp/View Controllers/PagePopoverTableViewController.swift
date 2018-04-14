@@ -50,7 +50,7 @@ class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UIT
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
             make.bottom.equalTo(-15)
-            make.height.equalTo(150)
+            make.height.equalTo(200)
         }
         
         tableView.snp.makeConstraints {
