@@ -454,7 +454,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     @objc func sendButtonPressed(_ sender: UIButton) {
-        self.view.endEditing(true)
         if (type == "newThread" && titleTextField.text == "") {
             let alert = UIAlertController.init(title: "注意", message: "標題不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
@@ -465,31 +464,24 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
             self.present(alert,animated: true,completion: nil)
         } else {
-            contentTextView.endEditing(true)
             HUD.show(.progress)
             if type == "newThread" {
                 HKGaldenAPI.shared.submitPost(channel: HKGaldenAPI.shared.chList![channel]["ident"].stringValue, title: titleTextField.text!, content: contentTextView.text!, completion: {
                     [weak self] error in
                     if error == nil {
-                        HUD.flash(.success,delay:1)
                         self?.dismiss(animated: true, completion: {
                             self?.threadVC?.unwindToThreadListAfterNewPost()
                         })
-                    } else {
-                        HUD.flash(.error,delay: 1)
                     }
                 })
             } else if type == "reply" {
                 HKGaldenAPI.shared.reply(topicID: topicID, content: contentTextView.text!, completion: {
                     [weak self] error in
                     if error == nil {
-                        HUD.flash(.success,delay:1)
                         self?.dismiss(animated: true, completion: {
                             xbbcodeBridge.shared.sender = "content"
                             self?.contentVC?.unwindAfterReply()
                         })
-                    } else {
-                        HUD.flash(.error,delay: 1)
                     }
                 })
             }

@@ -201,6 +201,7 @@ class HKGaldenAPI {
                 completion(response.error)
                 HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             } else {
+                HUD.flash(.success,delay:1)
                 completion(nil)
             }
         }
