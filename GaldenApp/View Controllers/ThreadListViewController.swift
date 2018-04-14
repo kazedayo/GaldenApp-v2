@@ -232,7 +232,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
                 self.selectedThread = threads[indexPath.row].id
                 self.selectedThreadTitle = threads[indexPath.row].title
-                self.pageCount = ceil((Double(threads[indexPath.row].count)! + 1)/25)
+                self.pageCount = ceil((Double(threads[indexPath.row].count)!)/25)
                 let pageVC = PageSelectViewController()
                 pageVC.pageCount = self.pageCount!
                 pageVC.titleText = self.selectedThreadTitle
