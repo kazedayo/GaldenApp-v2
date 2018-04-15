@@ -12,7 +12,7 @@ import MarqueeLabel
 import WebKit
 import RealmSwift
 import GoogleMobileAds
-import AXPhotoViewer
+import Agrume
 import SwiftyJSON
 import Kingfisher
 
@@ -61,9 +61,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         webView.isOpaque = false
         webView.backgroundColor = .clear
-        webView.configuration.userContentController.add(self, name: "quote")
-        webView.configuration.userContentController.add(self, name: "block")
-        webView.configuration.userContentController.add(self, name: "refresh")
         webView.navigationDelegate = self
         view.addSubview(webView)
         
@@ -103,19 +100,22 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         reloadButton.addTarget(self, action: #selector(reloadButtonPressed(_:)), for: .touchUpInside)
         
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
-            [weak self] count in
-            self?.pageCount = count
+            count in
+            self.pageCount = count
             let realm = try! Realm()
-            let thisPost = realm.object(ofType: History.self, forPrimaryKey: self?.threadIdReceived)
-            if thisPost != nil && self?.sender == "cell" {
-                self?.pageNow = (thisPost?.page)!
+            let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
+            if thisPost != nil && self.sender == "cell" {
+                self.pageNow = thisPost!.page
             }
-            self?.updateSequence()
+            self.updateSequence()
         })
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        webView.configuration.userContentController.add(self, name: "quote")
+        webView.configuration.userContentController.add(self, name: "block")
+        webView.configuration.userContentController.add(self, name: "refresh")
         for subJson in HKGaldenAPI.shared.chList! {
             if subJson["ident"].stringValue == self.ident {
                 self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
@@ -170,21 +170,21 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func quoteButtonPressed(type: String) {
             if (pageNow == 1 && type == "op") {
             HKGaldenAPI.shared.quote(quoteType: "t", quoteID: self.op.quoteID, completion: {
-                [weak self] content in
-                self?.quoteContent = content
-                self?.quote()
+                content in
+                self.quoteContent = content
+                self.quote()
             })
             } else if pageNow == 1 {
                 HKGaldenAPI.shared.quote(quoteType: "r", quoteID: self.comments[Int(type)! + 1].quoteID, completion: {
-                    [weak self] content in
-                    self?.quoteContent = content
-                    self?.quote()
+                    content in
+                    self.quoteContent = content
+                    self.quote()
                 })
             } else {
                 HKGaldenAPI.shared.quote(quoteType: "r", quoteID: self.comments[Int(type)!].quoteID, completion: {
-                    [weak self] content in
-                    self?.quoteContent = content
-                    self?.quote()
+                    content in
+                    self.quoteContent = content
+                    self.quote()
                 })
         }
     }
@@ -192,26 +192,26 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func blockButtonPressed(type: String) {
         if (pageNow == 1 && type == "op") {
             HKGaldenAPI.shared.blockUser(uid: self.op.userID, completion: {
-                [weak self] status in
+                status in
                 if status == "true" {
-                    self?.blockedUsers.append((self?.op.userID)!)
-                    self?.updateSequence()
+                    self.blockedUsers.append(self.op.userID)
+                    self.updateSequence()
                 }
             })
         } else if pageNow == 1 {
             HKGaldenAPI.shared.blockUser(uid: self.comments[Int(type)! + 1].userID, completion: {
-                [weak self] status in
+                status in
                 if status == "true" {
-                    self?.blockedUsers.append((self?.comments[Int(type)! + 1].userID)!)
-                    self?.updateSequence()
+                    self.blockedUsers.append(self.comments[Int(type)! + 1].userID)
+                    self.updateSequence()
                 }
             })
         } else {
             HKGaldenAPI.shared.blockUser(uid: self.comments[Int(type)!].userID, completion: {
-                [weak self] status in
+                status in
                 if status == "true" {
-                    self?.blockedUsers.append((self?.comments[Int(type)!].userID)!)
-                    self?.updateSequence()
+                    self.blockedUsers.append(self.comments[Int(type)!].userID)
+                    self.updateSequence()
                 }
             })
         }
@@ -269,6 +269,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         composeVC.modalPresentationStyle = .overFullScreen
         composeVC.hero.isEnabled = true
         composeVC.hero.modalAnimationType = .fade
+        composeVC.contentVC = self
         present(composeVC, animated: true, completion: nil)
     }
     
@@ -294,21 +295,21 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.pageNow = pageSelected
         self.pageButton.title = "第\(self.pageNow)頁"
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
-            [weak self] count in
-            self?.pageCount = count
-            self?.updateSequence()
+            count in
+            self.pageCount = count
+            self.updateSequence()
         })
     }
     
     func unwindAfterReply() {
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
-            [weak self] count in
-            self?.pageCount = count
-            self?.pageNow = Int((self?.pageCount)!)
-            self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
-            self?.replied = true
+            count in
+            self.pageCount = count
+            self.pageNow = Int(self.pageCount)
+            self.pageButton.title = "第\(self.pageNow)頁"
+            self.replied = true
             xbbcodeBridge.shared.sender = "content"
-            self?.updateSequence()
+            self.updateSequence()
         })
     }
     
@@ -329,15 +330,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
             _ in
             HKGaldenAPI.shared.reply(topicID: self.threadIdReceived, content: self.keychain.get("LeaveNameText")!, completion: {
-                [weak self] error in
+                error in
                 if error == nil {
-                    HKGaldenAPI.shared.pageCount(postId: (self?.threadIdReceived)!, completion: {
-                        [weak self] count in
-                        self?.pageCount = count
-                        self?.pageNow = Int((self?.pageCount)!)
-                        self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
-                        self?.replied = true
-                        self?.updateSequence()
+                    HKGaldenAPI.shared.pageCount(postId: self.threadIdReceived, completion: {
+                        count in
+                        self.pageCount = count
+                        self.pageNow = Int(self.pageCount)
+                        self.pageButton.title = "第\(self.pageNow)頁"
+                        self.replied = true
+                        self.updateSequence()
                     })
                 }
             })
@@ -387,65 +388,65 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView.isHidden = true
         self.view.addSubview(activityIndicator)
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
-            [weak self] count in
-            self?.pageCount = count
-            self?.buttonLogic()
+            count in
+            self.pageCount = count
+            self.buttonLogic()
         })
         pageButton.title = "第\(self.pageNow)頁"
         HKGaldenAPI.shared.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
-            [weak self] op,comments,rated,blocked,error in
+            op,comments,rated,blocked,error in
             if (error == nil) {
-                self?.reloadButton.removeFromSuperview()
-                self?.op = op!
-                self?.comments = comments!
-                self?.blockedUsers = blocked!
-                self?.isRated = rated!
-                self?.titleLabel.text = self?.op.title
-                self?.titleLabel.textColor = .white
-                self?.titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
-                self?.titleLabel.animationDelay = 1
-                self?.titleLabel.marqueeType = .MLLeftRight
-                self?.titleLabel.fadeLength = 5
-                self?.titleLabel.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
-                self?.titleLabel.textAlignment = .center
+                self.reloadButton.removeFromSuperview()
+                self.op = op!
+                self.comments = comments!
+                self.blockedUsers = blocked!
+                self.isRated = rated!
+                self.titleLabel.text = self.op.title
+                self.titleLabel.textColor = .white
+                self.titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
+                self.titleLabel.animationDelay = 1
+                self.titleLabel.marqueeType = .MLLeftRight
+                self.titleLabel.fadeLength = 5
+                self.titleLabel.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
+                self.titleLabel.textAlignment = .center
                 for subJson in HKGaldenAPI.shared.chList! {
-                    if subJson["ident"].stringValue == self?.op.ident {
-                        self?.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
+                    if subJson["ident"].stringValue == self.op.ident {
+                        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
                     }
                 }
-                self?.navigationItem.titleView = self?.titleLabel
-                self?.convertedHTML = ""
-                if self?.pageNow == 1 {
+                self.navigationItem.titleView = self.titleLabel
+                self.convertedHTML = ""
+                if self.pageNow == 1 {
                     xbbcodeBridge.shared.convertBBCodeToHTML(text: op!.content)
-                    self?.op.contentHTML = (xbbcodeBridge.shared.convertedText)!
-                    self?.constructOPHeader()
-                    if (self?.blockedUsers.contains((self?.op.userID)!))! {
-                        self?.op.contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
+                    self.op.contentHTML = (xbbcodeBridge.shared.convertedText)!
+                    self.constructOPHeader()
+                    if (self.blockedUsers.contains(self.op.userID)) {
+                        self.op.contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
                     }
-                    self?.convertedHTML.append((self?.op.contentHTML)!)
+                    self.convertedHTML.append(self.op.contentHTML)
                 }
                 
-                for index in 0..<(self?.comments.count)! {
+                for index in 0..<self.comments.count {
                     xbbcodeBridge.shared.convertBBCodeToHTML(text: comments![index].content)
-                    self?.comments[index].contentHTML = (xbbcodeBridge.shared.convertedText)!
-                    self?.constructCommentHeader(index: index)
-                    if (self?.blockedUsers.contains((self?.comments[index].userID)!))! {
-                        self?.comments[index].contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
+                    self.comments[index].contentHTML = (xbbcodeBridge.shared.convertedText)!
+                    self.constructCommentHeader(index: index)
+                    if (self.blockedUsers.contains(self.comments[index].userID)) {
+                        self.comments[index].contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
                     }
-                    self?.convertedHTML.append((self?.comments[index].contentHTML)!)
+                    self.convertedHTML.append(self.comments[index].contentHTML)
                 }
                 
-                if(self?.pageNow==Int((self?.pageCount)!)) {
-                    self?.convertedHTML.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
+                if (self.pageNow==Int(self.pageCount)) {
+                    self.convertedHTML.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
-                self?.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((self?.convertedHTML)!)</body></html>"
-                self?.webView.loadHTMLString((self?.pageHTML)!, baseURL: Bundle.main.bundleURL)
-                NotificationCenter.default.post(name: Notification.Name.Task.DidResume, object: self?.webView)
+                self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\(self.convertedHTML)</body></html>"
+                self.webView.loadHTMLString(self.pageHTML, baseURL: Bundle.main.bundleURL)
+                NotificationCenter.default.post(name: Notification.Name.Task.DidResume, object: self.webView)
                 //print((self?.pageHTML)!)
             } else {
-                self?.activityIndicator.removeFromSuperview()
-                self?.view.addSubview((self?.reloadButton)!)
+                self.activityIndicator.removeFromSuperview()
+                self.view.addSubview(self.reloadButton)
             }
         })
     }
@@ -553,15 +554,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if navigationAction.navigationType == .linkActivated {
-            let imageType = ["jpg","png","gif","jpeg"]
+            let imageType = ["jpg","png","gif","jpeg","jpg-large","png-large","jpg:large","png:large"]
             if imageType.contains((navigationAction.request.url?.pathExtension)!) {
                 let url = navigationAction.request.url
                 //open image viewer
-                let image = AXPhoto()
-                image.url = url
-                let dataSource = AXPhotosDataSource(photos: [image])
-                let photosViewController = AXPhotosViewController(dataSource: dataSource)
-                self.present(photosViewController, animated: true)
+                let agrume = Agrume(imageUrl: url!)
+                agrume.showFrom(self)
                 decisionHandler(.cancel)
             } else if (navigationAction.request.url?.absoluteString.contains("hkgalden.com/view/"))! {
                 navigator.pushURL(navigationAction.request.url!)

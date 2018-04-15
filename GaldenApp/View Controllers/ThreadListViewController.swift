@@ -327,18 +327,18 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     private func updateSequence(append: Bool, completion: @escaping ()->Void) {
         HKGaldenAPI.shared.fetchThreadList(currentChannel: HKGaldenAPI.shared.chList![channelNow]["ident"].stringValue, pageNumber: String(pageNow), completion: {
-            [weak self] threads,error in
+            threads,error in
             if (error == nil) {
                 if append == true {
-                    self?.threads.append(contentsOf: threads)
+                    self.threads.append(contentsOf: threads)
                 } else {
-                    self?.threads = threads
+                    self.threads = threads
                 }
-                self?.tableView.reloadData()
-                self?.reloadButton.isHidden = true
-                self?.tableView.isHidden = false
+                self.tableView.reloadData()
+                self.reloadButton.isHidden = true
+                self.tableView.isHidden = false
             } else {
-                self?.reloadButton.isHidden = false
+                self.reloadButton.isHidden = false
             }
             completion()
         })

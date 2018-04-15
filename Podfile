@@ -18,10 +18,10 @@ target 'GaldenApp' do
   pod 'AlamofireNetworkActivityIndicator'
   pod 'SnapKit'
   pod 'Kingfisher'
-  pod 'AXPhotoViewer'
   pod 'Blueprints'
   pod 'URLNavigator'
   pod 'SwiftyStoreKit'
+  pod 'Agrume'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

@@ -35,7 +35,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     let titleTextField = UITextField()
     let contentTextView = IQTextView()
     let previewButton = UIButton()
-    let sendButton = UIButton()
     
     let fontSizeButton = UIButton()
     let fontColorButton = UIButton()
@@ -111,22 +110,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         previewButton.borderWidth = 1
         previewButton.borderColor = .white
         previewButton.addTarget(self, action: #selector(previewButtonPressed(_:)), for: .touchUpInside)
-        
-        sendButton.setTitle("發表", for: .normal)
-        sendButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        sendButton.cornerRadius = 5
-        sendButton.borderWidth = 1
-        sendButton.borderColor = .white
-        sendButton.addTarget(self, action: #selector(sendButtonPressed(_:)), for: .touchUpInside)
-        
-        let stackViewNew = UIStackView()
-        stackViewNew.axis = .horizontal
-        stackViewNew.distribution = .fillEqually
-        stackViewNew.alignment = .center
-        stackViewNew.spacing = 10
-        stackViewNew.addArrangedSubview(previewButton)
-        stackViewNew.addArrangedSubview(sendButton)
-        backgroundView.addSubview(stackViewNew)
+        backgroundView.addSubview(previewButton)
         
         fontSizeButton.setImage(UIImage(named: "FontSize"), for: .normal)
         fontSizeButton.tintColor = .white
@@ -222,7 +206,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             make.bottom.equalToSuperview()
         }
         
-        stackViewNew.snp.makeConstraints {
+        previewButton.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(contentTextView.snp.bottom).offset(10)
             make.leading.equalTo(15)
@@ -443,17 +427,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     @objc func previewButtonPressed(_ sender: UIButton) {
         self.view.endEditing(true)
-        let previewVC = PreviewViewController()
-        previewVC.modalPresentationStyle = .overCurrentContext
-        previewVC.type = type
-        previewVC.contentText = contentTextView.text
-        if type != "reply" {
-            previewVC.titleText = titleTextField.text
-        }
-        present(previewVC, animated: true, completion: nil)
-    }
-    
-    @objc func sendButtonPressed(_ sender: UIButton) {
         if (type == "newThread" && titleTextField.text == "") {
             let alert = UIAlertController.init(title: "注意", message: "標題不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
@@ -464,27 +437,18 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
             self.present(alert,animated: true,completion: nil)
         } else {
-            HUD.show(.progress)
-            if type == "newThread" {
-                HKGaldenAPI.shared.submitPost(channel: HKGaldenAPI.shared.chList![channel]["ident"].stringValue, title: titleTextField.text!, content: contentTextView.text!, completion: {
-                    [weak self] error in
-                    if error == nil {
-                        self?.dismiss(animated: true, completion: {
-                            self?.threadVC?.unwindToThreadListAfterNewPost()
-                        })
-                    }
-                })
-            } else if type == "reply" {
-                HKGaldenAPI.shared.reply(topicID: topicID, content: contentTextView.text!, completion: {
-                    [weak self] error in
-                    if error == nil {
-                        self?.dismiss(animated: true, completion: {
-                            xbbcodeBridge.shared.sender = "content"
-                            self?.contentVC?.unwindAfterReply()
-                        })
-                    }
-                })
+            let previewVC = PreviewViewController()
+            previewVC.modalPresentationStyle = .overCurrentContext
+            previewVC.type = type
+            previewVC.contentText = contentTextView.text
+            previewVC.composeVC = self
+            if type != "reply" {
+                previewVC.titleText = titleTextField.text
+                previewVC.channel = self.channel
+            } else {
+                previewVC.topicID = self.topicID
             }
+            present(previewVC, animated: true, completion: nil)
         }
     }
     

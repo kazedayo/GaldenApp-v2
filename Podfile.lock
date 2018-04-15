@@ -1,18 +1,9 @@
 PODS:
+  - Agrume (4.0.4)
   - Alamofire (4.7.1)
   - AlamofireNetworkActivityIndicator (2.2.1):
     - Alamofire (~> 4.7)
-  - AXPhotoViewer (1.4.2):
-    - AXPhotoViewer/Lite (= 1.4.2)
-  - AXPhotoViewer/Core (1.4.2):
-    - AXStateButton (>= 1.1.3)
-    - FLAnimatedImage (>= 1.0.0)
-    - FLAnimatedImage-tvOS (>= 1.0.16)
-  - AXPhotoViewer/Lite (1.4.2):
-    - AXPhotoViewer/Core
-  - AXStateButton (1.1.4)
   - Blueprints (0.1.5)
-  - FLAnimatedImage (1.0.12)
   - Google-Mobile-Ads-SDK (7.30.0)
   - Hero (1.2.0)
   - IQKeyboardManagerSwift (6.0.0)
@@ -33,9 +24,9 @@ PODS:
   - URLNavigator (2.0.4)
 
 DEPENDENCIES:
+  - Agrume
   - Alamofire
   - AlamofireNetworkActivityIndicator
-  - AXPhotoViewer
   - Blueprints
   - Google-Mobile-Ads-SDK
   - Hero
@@ -52,12 +43,10 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - Agrume
     - Alamofire
     - AlamofireNetworkActivityIndicator
-    - AXPhotoViewer
-    - AXStateButton
     - Blueprints
-    - FLAnimatedImage
     - Google-Mobile-Ads-SDK
     - Hero
     - IQKeyboardManagerSwift
@@ -73,12 +62,10 @@ SPEC REPOS:
     - URLNavigator
 
 SPEC CHECKSUMS:
+  Agrume: 123943d590fd0436a00642e37032da1814518153
   Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
   AlamofireNetworkActivityIndicator: aeac50e6ecb78ec71a5f1f29098bcf4ec2962910
-  AXPhotoViewer: 21772189db20242febfaf4545e204a3ff069add5
-  AXStateButton: 6c515a433e37551505046429b5be04c12daa8c07
   Blueprints: 6fdf738c5300ee3a6be32718ddccbfecaf10264b
-  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Google-Mobile-Ads-SDK: 7404f68120ae8682afeb5af001fbf4aad731c78e
   Hero: 33dadf2cd1c98af71e213dcbc2902e6e03622a4e
   IQKeyboardManagerSwift: 624f128983eec795deacd50c1cd2f72664d13f08
@@ -93,6 +80,6 @@ SPEC CHECKSUMS:
   SwiftyStoreKit: c36bb7841dd51a485ce5c38abf9e96fba988741f
   URLNavigator: af5582fbbb3586c958be16835d799bfdb23a4793
 
-PODFILE CHECKSUM: 6e031c0e36210e55991d14fd045b9fea65392720
+PODFILE CHECKSUM: 4b8f6497e51c87928263037e4f07361df4617b85
 
 COCOAPODS: 1.5.0
