@@ -15,7 +15,6 @@ target 'GaldenApp' do
   pod 'PKHUD'
   pod 'RealmSwift'
   pod 'Google-Mobile-Ads-SDK'
-  pod 'AlamofireNetworkActivityIndicator'
   pod 'SnapKit'
   pod 'Kingfisher'
   pod 'Blueprints'

@@ -18,6 +18,7 @@ class PreviewViewController: UIViewController {
     var channel: Int?
     var titleText: String?
     var contentText: String?
+    var previewText: String?
     let backgroundView = UIView()
     let titleLabel = MarqueeLabel()
     var webView = WKWebView()
@@ -57,10 +58,9 @@ class PreviewViewController: UIViewController {
         
         webView.isOpaque = false
         webView.backgroundColor = .clear
-        contentText = HKGaldenAPI.shared.sizeTagCorrection(bbcode: contentText!)
-        contentText = HKGaldenAPI.shared.iconParse(bbcode: contentText!)
-        xbbcodeBridge.shared.convertBBCodeToHTML(text: contentText!)
-        xbbcodeBridge.shared.convertedText = HKGaldenAPI.shared.iconParse(bbcode: xbbcodeBridge.shared.convertedText!)
+        previewText = HKGaldenAPI.shared.sizeTagCorrection(bbcode: contentText!)
+        previewText = HKGaldenAPI.shared.iconParse(bbcode: contentText!)
+        xbbcodeBridge.shared.convertBBCodeToHTML(text: previewText!)
         webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((xbbcodeBridge.shared.convertedText!))</body></html>", baseURL: Bundle.main.bundleURL)
         backgroundView.addSubview(webView)
         

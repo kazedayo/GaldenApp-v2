@@ -1,8 +1,6 @@
 PODS:
   - Agrume (4.0.4)
   - Alamofire (4.7.1)
-  - AlamofireNetworkActivityIndicator (2.2.1):
-    - Alamofire (~> 4.7)
   - Blueprints (0.1.5)
   - Google-Mobile-Ads-SDK (7.30.0)
   - Hero (1.2.0)
@@ -26,7 +24,6 @@ PODS:
 DEPENDENCIES:
   - Agrume
   - Alamofire
-  - AlamofireNetworkActivityIndicator
   - Blueprints
   - Google-Mobile-Ads-SDK
   - Hero
@@ -45,7 +42,6 @@ SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Agrume
     - Alamofire
-    - AlamofireNetworkActivityIndicator
     - Blueprints
     - Google-Mobile-Ads-SDK
     - Hero
@@ -64,7 +60,6 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Agrume: 123943d590fd0436a00642e37032da1814518153
   Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
-  AlamofireNetworkActivityIndicator: aeac50e6ecb78ec71a5f1f29098bcf4ec2962910
   Blueprints: 6fdf738c5300ee3a6be32718ddccbfecaf10264b
   Google-Mobile-Ads-SDK: 7404f68120ae8682afeb5af001fbf4aad731c78e
   Hero: 33dadf2cd1c98af71e213dcbc2902e6e03622a4e
@@ -80,6 +75,6 @@ SPEC CHECKSUMS:
   SwiftyStoreKit: c36bb7841dd51a485ce5c38abf9e96fba988741f
   URLNavigator: af5582fbbb3586c958be16835d799bfdb23a4793
 
-PODFILE CHECKSUM: 4b8f6497e51c87928263037e4f07361df4617b85
+PODFILE CHECKSUM: 442359453bffe8a4b52c41ff0de0083ba98227f2
 
 COCOAPODS: 1.5.0

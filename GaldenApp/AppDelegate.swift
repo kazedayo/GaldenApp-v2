@@ -10,7 +10,6 @@ import UIKit
 import KeychainSwift
 import PKHUD
 import GoogleMobileAds
-import AlamofireNetworkActivityIndicator
 import IQKeyboardManagerSwift
 import URLNavigator
 import SwiftyStoreKit
@@ -27,9 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         
         // Override point for customization after application launch.
-        NetworkActivityIndicatorManager.shared.isEnabled = true
-        NetworkActivityIndicatorManager.shared.startDelay = 0
-        NetworkActivityIndicatorManager.shared.completionDelay = 0.2
         
         xbbcodeBridge.shared.initializeJS()
         URLNavigationMap.initialize(navigator: navigator)

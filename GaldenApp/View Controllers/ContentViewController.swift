@@ -442,7 +442,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 
                 self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\(self.convertedHTML)</body></html>"
                 self.webView.loadHTMLString(self.pageHTML, baseURL: Bundle.main.bundleURL)
-                NotificationCenter.default.post(name: Notification.Name.Task.DidResume, object: self.webView)
                 //print((self?.pageHTML)!)
             } else {
                 self.activityIndicator.removeFromSuperview()
@@ -577,10 +576,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         } else {
             decisionHandler(.allow)
         }
-    }
-    
-    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        NotificationCenter.default.post(name: Notification.Name.Task.DidCancel, object: webView)
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
