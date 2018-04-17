@@ -41,6 +41,7 @@
 		424B61CB1FC06EFA000D71F0 /* content.css in Resources */ = {isa = PBXBuildFile; fileRef = 424B61CA1FC06EFA000D71F0 /* content.css */; };
 		4262C2101F95FAE2002EEC76 /* jssource.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20D1F95FAE0002EEC76 /* jssource.js */; };
 		4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20E1F95FAE1002EEC76 /* xbbcode.js */; };
+		42964F212085CF12000FA349 /* NetworkActivityIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */; };
 		42A979D42014BA43008C7629 /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */; };
 		42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8931F7923E1002CC13F /* AppDelegate.swift */; };
 		42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89A1F7923E1002CC13F /* Assets.xcassets */; };
@@ -99,6 +100,7 @@
 		424B61CA1FC06EFA000D71F0 /* content.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = content.css; sourceTree = "<group>"; };
 		4262C20D1F95FAE0002EEC76 /* jssource.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jssource.js; sourceTree = "<group>"; };
 		4262C20E1F95FAE1002EEC76 /* xbbcode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xbbcode.js; sourceTree = "<group>"; };
+		42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkActivityIndicatorManager.swift; sourceTree = "<group>"; };
 		42A979D32014B9C4008C7629 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8901F7923E1002CC13F /* GaldenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaldenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -212,6 +214,7 @@
 				424A4723207349A5005795A6 /* Models */,
 				424A46FD2073493D005795A6 /* Extensions.swift */,
 				424A46F82073493C005795A6 /* HKGaldenAPI.swift */,
+				42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */,
 				4231DA7920774B7900AB1DE5 /* xbbcodeBridge.swift */,
 				424A46F92073493D005795A6 /* IconKeyboard.swift */,
 				42E7F8931F7923E1002CC13F /* AppDelegate.swift */,
@@ -473,6 +476,7 @@
 				424A47152073493E005795A6 /* IconKeyboard.swift in Sources */,
 				424A47122073493E005795A6 /* Replies.swift in Sources */,
 				424A47182073493E005795A6 /* ContentViewController.swift in Sources */,
+				42964F212085CF12000FA349 /* NetworkActivityIndicatorManager.swift in Sources */,
 				424A470E2073493E005795A6 /* ChannelListTableViewCell.swift in Sources */,
 				424A47102073493E005795A6 /* PageSelectViewController.swift in Sources */,
 				423E272D207458ED00F267CA /* IconCollectionViewCell.swift in Sources */,

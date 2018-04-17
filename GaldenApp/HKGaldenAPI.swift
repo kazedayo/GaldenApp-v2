@@ -26,8 +26,10 @@ class HKGaldenAPI {
         } else {
             head = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed"]
         }
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/f/l", method: .get, parameters: par, headers: head).responseJSON {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -80,8 +82,10 @@ class HKGaldenAPI {
         } else {
             head = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed"]
         }
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/f/t", method: .get, parameters: par, headers: head).responseJSON {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -152,8 +156,10 @@ class HKGaldenAPI {
     func login(email: String, password: String, completion: @escaping ()->() ) {
         let par = ["dname": "1080-SIGNAL User", "email": email, "password": password, "appid": "74", "deviceid": UIDevice.current.identifierForVendor!.uuidString]
         let head: HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed"]
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/u/authorize", method: .post, parameters: par, headers: head).response {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             var userKey = response.response?.url?.absoluteString
             userKey = userKey?.replacingOccurrences(of: "https://api.hkgalden.com/auth/authorized?u=", with: "")
             let keychain = KeychainSwift()
@@ -165,8 +171,10 @@ class HKGaldenAPI {
     func getUserDetail(completion: @escaping (_ uname: String, _ uid: String)->Void) {
         let keychain = KeychainSwift()
         let head: HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/u/check", method: .get,headers: head).responseJSON {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -184,8 +192,10 @@ class HKGaldenAPI {
         let keychain = KeychainSwift()
         let par = ["did": UIDevice.current.identifierForVendor!.uuidString]
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/u/unreg",method:.get,parameters:par,headers:head).response {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             keychain.delete("userKey")
             completion()
         }
@@ -195,8 +205,10 @@ class HKGaldenAPI {
         let keychain = KeychainSwift()
         let par = ["t_id": topicID,"content": content]
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/f/r",method:.post,parameters:par,headers:head).response {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             if response.error != nil {
                 completion(response.error)
                 HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
@@ -211,8 +223,10 @@ class HKGaldenAPI {
         let keychain = KeychainSwift()
         let par = ["title": title, "content": content, "ident": channel]
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/f/t",method:.post,parameters:par,headers:head).response {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             if response.error != nil {
                 completion(response.error)
                 HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
@@ -226,8 +240,10 @@ class HKGaldenAPI {
         let keychain = KeychainSwift()
         let par = ["q_type": quoteType, "q_id": quoteID]
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/f/q",method:.get,parameters:par,headers:head).responseJSON {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -279,8 +295,10 @@ class HKGaldenAPI {
         
         let par: Parameters = ["id": postId]
         let head: HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed"]
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/f/t", method: .get, parameters: par, headers: head).responseJSON {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -351,8 +369,10 @@ class HKGaldenAPI {
         let keychain = KeychainSwift()
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
         let par = ["bid": uid]
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/f/bi", method: .post, parameters: par, headers: head).responseJSON {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -369,8 +389,10 @@ class HKGaldenAPI {
         let keychain = KeychainSwift()
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
         let par = ["name": name]
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/u/changename",method:.post,parameters:par,headers:head).responseJSON {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -384,7 +406,7 @@ class HKGaldenAPI {
         }
     }
     
-    func unblockUser(uid: String,completion: @escaping (_ status: String,_ userName:String)->Void) {
+    /*func unblockUser(uid: String,completion: @escaping (_ status: String,_ userName:String)->Void) {
         let keychain = KeychainSwift()
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
         let par = ["bid": uid]
@@ -402,12 +424,14 @@ class HKGaldenAPI {
                 HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
             }
         }
-    }
+    }*/
     
     func getChannelList(completion: @escaping()->Void) {
         let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed"]
+        NetworkActivityIndicatorManager.networkOperationStarted()
         Alamofire.request("https://api.hkgalden.com/f/",headers:head).responseJSON {
             response in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             switch response.result {
             case .success(let value):
                 let json = JSON(value)

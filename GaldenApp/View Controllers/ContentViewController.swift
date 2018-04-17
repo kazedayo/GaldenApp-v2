@@ -442,6 +442,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 
                 self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\(self.convertedHTML)</body></html>"
                 self.webView.loadHTMLString(self.pageHTML, baseURL: Bundle.main.bundleURL)
+                NetworkActivityIndicatorManager.networkOperationStarted()
                 //print((self?.pageHTML)!)
             } else {
                 self.activityIndicator.removeFromSuperview()
@@ -522,7 +523,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: WebView Delegate
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        NotificationCenter.default.post(name: Notification.Name.Task.DidComplete, object: webView)
+        NetworkActivityIndicatorManager.networkOperationFinished()
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
             if self.replied == true {
@@ -576,6 +577,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         } else {
             decisionHandler(.allow)
         }
+    }
+    
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        NetworkActivityIndicatorManager.networkOperationFinished()
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
