@@ -20,6 +20,7 @@ PODS:
   - SwiftyJSON (4.0.0)
   - SwiftyStoreKit (0.13.1)
   - URLNavigator (2.0.4)
+  - Whisper (6.0.2)
 
 DEPENDENCIES:
   - Agrume
@@ -37,6 +38,7 @@ DEPENDENCIES:
   - SwiftyJSON
   - SwiftyStoreKit
   - URLNavigator
+  - Whisper
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -56,6 +58,7 @@ SPEC REPOS:
     - SwiftyJSON
     - SwiftyStoreKit
     - URLNavigator
+    - Whisper
 
 SPEC CHECKSUMS:
   Agrume: 123943d590fd0436a00642e37032da1814518153
@@ -74,7 +77,8 @@ SPEC CHECKSUMS:
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   SwiftyStoreKit: c36bb7841dd51a485ce5c38abf9e96fba988741f
   URLNavigator: af5582fbbb3586c958be16835d799bfdb23a4793
+  Whisper: 169760fc4bab0abf24d5529f9276f95c25cf1025
 
-PODFILE CHECKSUM: 442359453bffe8a4b52c41ff0de0083ba98227f2
+PODFILE CHECKSUM: 262682c1b9a1650949322d6ea5d5867a8a34c9ce
 
 COCOAPODS: 1.5.0

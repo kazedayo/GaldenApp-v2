@@ -146,23 +146,19 @@ class PreviewViewController: UIViewController {
             HKGaldenAPI.shared.submitPost(channel: HKGaldenAPI.shared.chList![channel!]["ident"].stringValue, title: titleText!, content: contentText!, completion: {
                 error in
                 if error == nil {
-                    self.dismiss(animated: true, completion: {
-                        self.composeVC?.dismiss(animated: true, completion: {
-                            self.composeVC.threadVC?.unwindToThreadListAfterNewPost()
-                        })
-                    })
+                    self.dismiss(animated: true, completion: nil)
+                    self.composeVC.dismiss(animated: true, completion: nil)
+                    self.composeVC.threadVC?.unwindToThreadListAfterNewPost()
                 }
             })
         } else if type == "reply" {
             HKGaldenAPI.shared.reply(topicID: topicID!, content: contentText!, completion: {
                 error in
                 if error == nil {
-                    self.dismiss(animated: true, completion: {
-                        self.composeVC?.dismiss(animated: true, completion: {
-                            xbbcodeBridge.shared.sender = "content"
-                            self.composeVC.contentVC?.unwindAfterReply()
-                        })
-                    })
+                    self.dismiss(animated: true, completion: nil)
+                    self.composeVC.dismiss(animated: true, completion: nil)
+                    xbbcodeBridge.shared.sender = "content"
+                    self.composeVC.contentVC?.unwindAfterReply()
                 }
             })
         }

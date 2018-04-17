@@ -288,7 +288,9 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         let alert = UIAlertController(title: "去除廣告", message: "支持廢青開發工作", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "畀錢!", style: .default, handler: {
             _ in
+            NetworkActivityIndicatorManager.networkOperationStarted()
             SwiftyStoreKit.purchaseProduct("1080signaladfree", quantity: 1, atomically: true) { result in
+                NetworkActivityIndicatorManager.networkOperationFinished()
                 switch result {
                 case .success(_):
                     self.keychain.set(true, forKey: "noAd")
@@ -305,7 +307,9 @@ class UserDetailViewController: UIViewController,UINavigationControllerDelegate,
         }))
         alert.addAction(UIAlertAction(title: "恢復購買", style: .default, handler: {
             _ in
+            NetworkActivityIndicatorManager.networkOperationStarted()
             SwiftyStoreKit.restorePurchases(atomically: true) { results in
+                NetworkActivityIndicatorManager.networkOperationFinished()
                 if results.restoreFailedPurchases.count > 0 {
                     let failure = UIAlertController(title: "恢復失敗:(", message: "請稍後再試", preferredStyle: .alert)
                     failure.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))

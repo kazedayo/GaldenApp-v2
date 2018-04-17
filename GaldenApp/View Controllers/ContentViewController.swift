@@ -15,6 +15,7 @@ import GoogleMobileAds
 import Agrume
 import SwiftyJSON
 import Kingfisher
+import Whisper
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
     
@@ -135,6 +136,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "quote")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
+        Whisper.hide(whisperFrom: navigationController!)
         let history = History()
         history.threadID = self.threadIdReceived
         history.page = self.pageNow
@@ -143,6 +145,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         let realm = try! Realm()
         try! realm.write {
             realm.add(history,update: true)
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if webView.isLoading == true {
+            webView.stopLoading()
+            NetworkActivityIndicatorManager.networkOperationFinished()
         }
     }
     
@@ -313,10 +323,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         })
     }
     
-    func unwindToThreadListAfterNewPost() {
-        
-    }
-    
     func share(shareContent: String) {
         let shareView = UIActivityViewController(activityItems:[shareContent],applicationActivities:nil)
         shareView.excludedActivityTypes = [.airDrop,.addToReadingList,.assignToContact,.openInIBooks,.saveToCameraRoll]
@@ -443,7 +449,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\(self.convertedHTML)</body></html>"
                 self.webView.loadHTMLString(self.pageHTML, baseURL: Bundle.main.bundleURL)
                 NetworkActivityIndicatorManager.networkOperationStarted()
-                //print((self?.pageHTML)!)
             } else {
                 self.activityIndicator.removeFromSuperview()
                 self.view.addSubview(self.reloadButton)
@@ -522,33 +527,40 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     //MARK: WebView Delegate
     
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        self.activityIndicator.removeFromSuperview()
+        webView.isHidden = false
+        let message = Message(title: "撈緊...(信息顯示超過~10秒代表post內圖片可能死圖)", backgroundColor: UIColor(hexRGB: "f44336")!)
+        Whisper.show(whisper: message, to: self.navigationController!, action: .present)
+    }
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         NetworkActivityIndicatorManager.networkOperationFinished()
+        let message = Message(title: "撈完!(移動到最後觀看位置)", backgroundColor: UIColor(hexRGB: "4caf50")!)
+        Whisper.show(whisper: message, to: self.navigationController!, action: .show)
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
             if self.replied == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let height = result as! CGFloat
                     let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
-                    webView.scrollView.setContentOffset(scrollPoint, animated: false)
+                    webView.scrollView.setContentOffset(scrollPoint, animated: true)
                     self.replied = false
                 })
             } else if self.f5 == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
-                    webView.scrollView.setContentOffset(scrollPoint, animated: false)
+                    webView.scrollView.setContentOffset(scrollPoint, animated: true)
                     self.f5 = false
                 })
             } else if self.loaded == false {
                 let realm = try! Realm()
                 let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
                 if thisPost != nil && self.sender == "cell" {
-                    self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: false)
+                    self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: true)
                 }
                 self.loaded = true
             }
-            self.activityIndicator.removeFromSuperview()
-            webView.isHidden = false
         })
     }
     

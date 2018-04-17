@@ -90,6 +90,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .bottom)
         
         let refreshControl = UIRefreshControl()
+        refreshControl.backgroundColor = UIColor(white: 0.13, alpha: 1)
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refreshControl
@@ -108,11 +109,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @objc func refresh(refreshControl: UIRefreshControl) {
         pageNow = 1
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
             self.updateSequence(append: false, completion: {
                 refreshControl.endRefreshing()
             })
-        }
+        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
