@@ -536,8 +536,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         NetworkActivityIndicatorManager.networkOperationFinished()
-        let message = Message(title: "撈完!(移動到最後觀看位置)", backgroundColor: UIColor(hexRGB: "4caf50")!)
-        Whisper.show(whisper: message, to: self.navigationController!, action: .show)
+        var message: Message!
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
             if self.replied == true {
@@ -545,12 +544,16 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     let height = result as! CGFloat
                     let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
+                    message = Message(title: "回覆成功!(移到頁尾)", backgroundColor: UIColor(hexRGB: "4caf50")!)
+                    Whisper.show(whisper: message, to: self.navigationController!, action: .show)
                     self.replied = false
                 })
             } else if self.f5 == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
+                    message = Message(title: "撈完!(移到頁尾)", backgroundColor: UIColor(hexRGB: "4caf50")!)
+                    Whisper.show(whisper: message, to: self.navigationController!, action: .show)
                     self.f5 = false
                 })
             } else if self.loaded == false {
@@ -558,7 +561,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
                 if thisPost != nil && self.sender == "cell" {
                     self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: true)
+                    message = Message(title: "撈完!(移到最後觀看位置)", backgroundColor: UIColor(hexRGB: "4caf50")!)
+                } else {
+                    message = Message(title: "撈完!", backgroundColor: UIColor(hexRGB: "4caf50")!)
                 }
+                Whisper.show(whisper: message, to: self.navigationController!, action: .show)
                 self.loaded = true
             }
         })
