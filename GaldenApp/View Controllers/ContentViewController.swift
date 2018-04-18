@@ -64,6 +64,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView.backgroundColor = .clear
         webView.navigationDelegate = self
         view.addSubview(webView)
+        prevButton.isEnabled = false
+        nextButton.isEnabled = false
         
         navigationController?.delegate = self
         toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,moreButton,flexibleSpace,nextButton]
@@ -393,6 +395,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     private func updateSequence() {
         webView.isHidden = true
         self.view.addSubview(activityIndicator)
+        self.prevButton.isEnabled = false
+        self.nextButton.isEnabled = false
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             count in
             self.pageCount = count
@@ -567,6 +571,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 }
                 Whisper.show(whisper: message, to: self.navigationController!, action: .show)
                 self.loaded = true
+            } else {
+                message = Message(title: "撈完!", backgroundColor: UIColor(hexRGB: "4caf50")!)
+                Whisper.show(whisper: message, to: self.navigationController!, action: .show)
             }
         })
     }
