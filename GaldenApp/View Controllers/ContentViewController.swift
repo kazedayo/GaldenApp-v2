@@ -63,9 +63,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView.isOpaque = false
         webView.backgroundColor = .clear
         webView.navigationDelegate = self
+        if #available(iOS 11.0, *) {
+            webView.scrollView.contentInsetAdjustmentBehavior = .automatic
+        } else {
+            // Fallback on earlier versions
+            automaticallyAdjustsScrollViewInsets = true
+        }
         view.addSubview(webView)
-        prevButton.isEnabled = false
-        nextButton.isEnabled = false
         
         navigationController?.delegate = self
         toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,moreButton,flexibleSpace,nextButton]
@@ -116,6 +120,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        prevButton.isEnabled = false
+        nextButton.isEnabled = false
         webView.configuration.userContentController.add(self, name: "quote")
         webView.configuration.userContentController.add(self, name: "block")
         webView.configuration.userContentController.add(self, name: "refresh")

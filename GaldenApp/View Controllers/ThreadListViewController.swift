@@ -42,6 +42,12 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isHidden = true
+        if #available(iOS 11.0, *) {
+            tableView.contentInsetAdjustmentBehavior = .automatic
+        } else {
+            // Fallback on earlier versions
+            automaticallyAdjustsScrollViewInsets = true
+        }
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.separatorInset = UIEdgeInsetsMake(0, 10, 0, 0)
         tableView.separatorColor = UIColor(white: 0.10, alpha: 1)

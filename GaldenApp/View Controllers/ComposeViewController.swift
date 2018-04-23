@@ -61,11 +61,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         // Do any additional setup after loading the view.
         iconKeyboard.keyboardDelegate = self
-        if type == "reply" {
-            backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        } else {
-            backgroundView.backgroundColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channel]["color"].stringValue)
-        }
+        backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         backgroundView.layer.cornerRadius = 10
         backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
         view.addSubview(backgroundView)
@@ -107,8 +103,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         previewButton.setTitle("預覽", for: .normal)
         previewButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         previewButton.cornerRadius = 5
-        previewButton.borderWidth = 1
-        previewButton.borderColor = .white
+        previewButton.backgroundColor = UIColor(hexRGB: "0076ff")
         previewButton.addTarget(self, action: #selector(previewButtonPressed(_:)), for: .touchUpInside)
         backgroundView.addSubview(previewButton)
         
@@ -418,11 +413,33 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     @objc func urlButtonPressed(_ sender: UIButton) {
-        self.contentTextView.insertText("[url]text[/url]")
-        let range = self.contentTextView.text.range(of: "text")
-        let nsRange = self.contentTextView.text.nsRange(from: range!)
-        self.contentTextView.selectedRange = nsRange
-        self.contentTextView.select(nsRange)
+        let actionsheet = UIAlertController(title:"特別格式",message:nil,preferredStyle:.actionSheet)
+        actionsheet.addAction(UIAlertAction(title: "[url] tag", style: .default, handler: {
+            _ in
+            self.contentTextView.insertText("[url]text[/url]")
+            let range = self.contentTextView.text.range(of: "text")
+            let nsRange = self.contentTextView.text.nsRange(from: range!)
+            self.contentTextView.selectedRange = nsRange
+            self.contentTextView.select(nsRange)
+        }))
+        actionsheet.addAction(UIAlertAction(title: "[quote] tag", style: .default, handler: {
+            _ in
+            self.contentTextView.insertText("[quote]text[/quote]")
+            let range = self.contentTextView.text.range(of: "text")
+            let nsRange = self.contentTextView.text.nsRange(from: range!)
+            self.contentTextView.selectedRange = nsRange
+            self.contentTextView.select(nsRange)
+        }))
+        actionsheet.addAction(UIAlertAction(title: "[hide] tag", style: .default, handler: {
+            _ in
+            self.contentTextView.insertText("[hide]text[/hide]")
+            let range = self.contentTextView.text.range(of: "text")
+            let nsRange = self.contentTextView.text.nsRange(from: range!)
+            self.contentTextView.selectedRange = nsRange
+            self.contentTextView.select(nsRange)
+        }))
+        actionsheet.addAction(UIAlertAction(title:"冇嘢啦",style:.cancel,handler:nil))
+        present(actionsheet,animated: true,completion: nil)
     }
     
     @objc func previewButtonPressed(_ sender: UIButton) {

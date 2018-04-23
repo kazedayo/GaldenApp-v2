@@ -37,9 +37,9 @@ class PreviewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         xbbcodeBridge.shared.sender = "preview"
+        view.addGestureRecognizer(swipeToDismiss)
         
         backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        backgroundView.addGestureRecognizer(swipeToDismiss)
         backgroundView.layer.cornerRadius = 10
         backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
         view.addSubview(backgroundView)
@@ -68,7 +68,7 @@ class PreviewViewController: UIViewController {
         sendButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         sendButton.cornerRadius = 5
         sendButton.borderWidth = 1
-        sendButton.borderColor = .white
+        sendButton.backgroundColor = UIColor(hexRGB: "0076ff")
         sendButton.addTarget(self, action: #selector(sendButtonPressed(_:)), for: .touchUpInside)
         backgroundView.addSubview(sendButton)
         
@@ -77,7 +77,7 @@ class PreviewViewController: UIViewController {
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
             make.bottom.equalTo(-15)
-            make.height.equalTo(450)
+            make.height.equalTo(400)
         }
         
         titleLabel.snp.makeConstraints {
