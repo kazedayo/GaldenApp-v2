@@ -47,7 +47,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         titleLabel.text = titleText!
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 15)
-        titleLabel.textColor = .lightGray
+        titleLabel.textColor = .white
         titleLabel.textAlignment = .center
         titleView.addSubview(titleLabel)
         

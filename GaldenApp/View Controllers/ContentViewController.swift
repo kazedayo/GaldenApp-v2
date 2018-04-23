@@ -540,26 +540,27 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         self.activityIndicator.removeFromSuperview()
         webView.isHidden = false
-        self.showMessage("撈緊...(信息顯示超過~10秒代表post內圖片可能死圖)", type: .warning, options: [.autoHide(false)])
+        self.showMessage("撈緊...(超過~10秒代表post內圖片可能死圖)", type: .error, options: [.autoHide(false)])
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         NetworkActivityIndicatorManager.networkOperationFinished()
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
-        DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+        DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
+            self.hideMessage()
             if self.replied == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let height = result as! CGFloat
                     let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
-                    self.showMessage("回覆成功!(移到頁尾)", type: .success)
+                    self.showMessage("回覆成功!(移到頁尾)", type: .info)
                     self.replied = false
                 })
             } else if self.f5 == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
-                    self.showMessage("撈完!(移到頁尾)", type: .success)
+                    self.showMessage("撈完!(移到頁尾)", type: .info)
                     self.f5 = false
                 })
             } else if self.loaded == false {
@@ -567,13 +568,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
                 if thisPost != nil && self.sender == "cell" {
                     self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: true)
-                    self.showMessage("撈完!(移到最後觀看位置)", type: .success)
+                    self.showMessage("撈完!(移到最後觀看位置)", type: .info)
                 } else {
-                    self.showMessage("撈完!", type: .success)
+                    self.showMessage("撈完!", type: .info)
                 }
                 self.loaded = true
             } else {
-                self.showMessage("撈完!", type: .success)
+                self.showMessage("撈完!", type: .info)
             }
         })
     }
