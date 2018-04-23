@@ -15,7 +15,7 @@ import GoogleMobileAds
 import Agrume
 import SwiftyJSON
 import Kingfisher
-import Whisper
+import GSMessages
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
     
@@ -144,7 +144,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "quote")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
-        Whisper.hide(whisperFrom: navigationController!)
+        self.hideMessage()
         let history = History()
         history.threadID = self.threadIdReceived
         history.page = self.pageNow
@@ -540,13 +540,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         self.activityIndicator.removeFromSuperview()
         webView.isHidden = false
-        let message = Message(title: "撈緊...(信息顯示超過~10秒代表post內圖片可能死圖)", backgroundColor: UIColor(hexRGB: "f44336")!)
-        Whisper.show(whisper: message, to: self.navigationController!, action: .present)
+        self.showMessage("撈緊...(信息顯示超過~10秒代表post內圖片可能死圖)", type: .warning, options: [.autoHide(false)])
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         NetworkActivityIndicatorManager.networkOperationFinished()
-        var message: Message!
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
             if self.replied == true {
@@ -554,16 +552,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     let height = result as! CGFloat
                     let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
-                    message = Message(title: "回覆成功!(移到頁尾)", backgroundColor: UIColor(hexRGB: "4caf50")!)
-                    Whisper.show(whisper: message, to: self.navigationController!, action: .show)
+                    self.showMessage("回覆成功!(移到頁尾)", type: .success)
                     self.replied = false
                 })
             } else if self.f5 == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
                     webView.scrollView.setContentOffset(scrollPoint, animated: true)
-                    message = Message(title: "撈完!(移到頁尾)", backgroundColor: UIColor(hexRGB: "4caf50")!)
-                    Whisper.show(whisper: message, to: self.navigationController!, action: .show)
+                    self.showMessage("撈完!(移到頁尾)", type: .success)
                     self.f5 = false
                 })
             } else if self.loaded == false {
@@ -571,15 +567,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
                 if thisPost != nil && self.sender == "cell" {
                     self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: true)
-                    message = Message(title: "撈完!(移到最後觀看位置)", backgroundColor: UIColor(hexRGB: "4caf50")!)
+                    self.showMessage("撈完!(移到最後觀看位置)", type: .success)
                 } else {
-                    message = Message(title: "撈完!", backgroundColor: UIColor(hexRGB: "4caf50")!)
+                    self.showMessage("撈完!", type: .success)
                 }
-                Whisper.show(whisper: message, to: self.navigationController!, action: .show)
                 self.loaded = true
             } else {
-                message = Message(title: "撈完!", backgroundColor: UIColor(hexRGB: "4caf50")!)
-                Whisper.show(whisper: message, to: self.navigationController!, action: .show)
+                self.showMessage("撈完!", type: .success)
             }
         })
     }

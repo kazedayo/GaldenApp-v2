@@ -3,6 +3,7 @@ PODS:
   - Alamofire (4.7.1)
   - Blueprints (0.1.5)
   - Google-Mobile-Ads-SDK (7.30.0)
+  - GSMessages (1.5.1)
   - Hero (1.2.0)
   - IQKeyboardManagerSwift (6.0.0)
   - KeychainSwift (11.0.0)
@@ -20,13 +21,13 @@ PODS:
   - SwiftyJSON (4.0.0)
   - SwiftyStoreKit (0.13.1)
   - URLNavigator (2.0.4)
-  - Whisper (6.0.2)
 
 DEPENDENCIES:
   - Agrume
   - Alamofire
   - Blueprints
   - Google-Mobile-Ads-SDK
+  - GSMessages
   - Hero
   - IQKeyboardManagerSwift
   - KeychainSwift
@@ -38,7 +39,6 @@ DEPENDENCIES:
   - SwiftyJSON
   - SwiftyStoreKit
   - URLNavigator
-  - Whisper
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -46,6 +46,7 @@ SPEC REPOS:
     - Alamofire
     - Blueprints
     - Google-Mobile-Ads-SDK
+    - GSMessages
     - Hero
     - IQKeyboardManagerSwift
     - KeychainSwift
@@ -58,13 +59,13 @@ SPEC REPOS:
     - SwiftyJSON
     - SwiftyStoreKit
     - URLNavigator
-    - Whisper
 
 SPEC CHECKSUMS:
   Agrume: 123943d590fd0436a00642e37032da1814518153
   Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
   Blueprints: 6fdf738c5300ee3a6be32718ddccbfecaf10264b
   Google-Mobile-Ads-SDK: 7404f68120ae8682afeb5af001fbf4aad731c78e
+  GSMessages: 2e6893301ae99f59d72a6d8c920ad41be407216c
   Hero: 33dadf2cd1c98af71e213dcbc2902e6e03622a4e
   IQKeyboardManagerSwift: 624f128983eec795deacd50c1cd2f72664d13f08
   KeychainSwift: bea6bd9f98af7b8d7ca4aa79fe105c00fab532db
@@ -77,8 +78,7 @@ SPEC CHECKSUMS:
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   SwiftyStoreKit: c36bb7841dd51a485ce5c38abf9e96fba988741f
   URLNavigator: af5582fbbb3586c958be16835d799bfdb23a4793
-  Whisper: 169760fc4bab0abf24d5529f9276f95c25cf1025
 
-PODFILE CHECKSUM: 262682c1b9a1650949322d6ea5d5867a8a34c9ce
+PODFILE CHECKSUM: 3c5833bffe8729a3c0e0127b953bfce7e1665e77
 
 COCOAPODS: 1.5.0

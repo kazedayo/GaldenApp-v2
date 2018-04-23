@@ -21,7 +21,7 @@ target 'GaldenApp' do
   pod 'URLNavigator'
   pod 'SwiftyStoreKit'
   pod 'Agrume'
-  pod 'Whisper'
+  pod 'GSMessages'
 
   target 'GaldenAppTests' do
     inherit! :search_paths
