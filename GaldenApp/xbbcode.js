@@ -227,7 +227,7 @@ var XBBCODE = (function() {
                     myUrl = "";
                 }*/
 
-                return '<a href="' + myUrl + '"><img src="' + myUrl + '" /></a>';
+               return '<img alt onclick="redrawImg($(this), \''+myUrl+'\');"src="http://m.hkgalden.com/img/image.png" />';
             },
             closeTag: function(params,content) {
                 return '';

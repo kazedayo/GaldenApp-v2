@@ -40,7 +40,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var ident = ""
     var titleLabel = MarqueeLabel()
     private var shadowImageView: UIImageView?
-    private var webView = WKWebView()
+    private var webView: WKWebView!
     
     //HKGalden API (NOT included in GitHub repo)
     let keychain = KeychainSwift()
@@ -60,6 +60,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         xbbcodeBridge.shared.sender = "content"
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
+        let config = WKWebViewConfiguration()
+        config.preferences.javaScriptEnabled = true
+        config.processPool = WKProcessPool()
+        webView = WKWebView(frame: self.view.bounds, configuration: config)
         webView.isOpaque = false
         webView.backgroundColor = .clear
         webView.navigationDelegate = self
@@ -125,6 +129,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView.configuration.userContentController.add(self, name: "quote")
         webView.configuration.userContentController.add(self, name: "block")
         webView.configuration.userContentController.add(self, name: "refresh")
+        webView.configuration.userContentController.add(self, name: "imageView")
         for subJson in HKGaldenAPI.shared.chList! {
             if subJson["ident"].stringValue == self.ident {
                 self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
@@ -144,6 +149,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "quote")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
+        self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "imageView")
         self.hideMessage()
         let history = History()
         history.threadID = self.threadIdReceived
@@ -456,7 +462,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     self.convertedHTML.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
-                self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\(self.convertedHTML)</body></html>"
+                self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script type=\"text/javascript\" src=\"redrawImg.js\"></script></head><body>\(self.convertedHTML)</body></html>"
                 self.webView.loadHTMLString(self.pageHTML, baseURL: Bundle.main.bundleURL)
                 NetworkActivityIndicatorManager.networkOperationStarted()
             } else {
@@ -623,6 +629,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             present(alert,animated: true)
         } else if message.name == "refresh" {
             self.f5buttonPressed()
+        } else if message.name == "imageView" {
+            let url = message.body as! URL
+            let agrume = Agrume(imageUrl: url)
+            agrume.showFrom(self)
         }
     }
     
