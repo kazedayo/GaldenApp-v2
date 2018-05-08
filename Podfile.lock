@@ -1,33 +1,31 @@
 PODS:
-  - Agrume (4.0.4)
-  - Alamofire (4.7.1)
+  - Agrume (5.0.0)
+  - Alamofire (4.7.2)
   - Blueprints (0.1.5)
   - Google-Mobile-Ads-SDK (7.30.0)
-  - GSMessages (1.5.1)
   - Hero (1.2.0)
-  - IQKeyboardManagerSwift (6.0.0)
+  - IQKeyboardManagerSwift (6.0.2)
   - KeychainSwift (11.0.0)
   - Kingfisher (4.7.0)
   - MarqueeLabel (3.1.4):
     - MarqueeLabel/ObjC (= 3.1.4)
   - MarqueeLabel/ObjC (3.1.4)
   - PKHUD (5.0.0)
-  - Realm (3.3.2):
-    - Realm/Headers (= 3.3.2)
-  - Realm/Headers (3.3.2)
-  - RealmSwift (3.3.2):
-    - Realm (= 3.3.2)
+  - Realm (3.5.0):
+    - Realm/Headers (= 3.5.0)
+  - Realm/Headers (3.5.0)
+  - RealmSwift (3.5.0):
+    - Realm (= 3.5.0)
   - SnapKit (4.0.0)
-  - SwiftyJSON (4.0.0)
-  - SwiftyStoreKit (0.13.1)
-  - URLNavigator (2.0.4)
+  - SwiftyJSON (4.1.0)
+  - SwiftyStoreKit (0.13.2)
+  - URLNavigator (2.0.5)
 
 DEPENDENCIES:
   - Agrume
   - Alamofire
   - Blueprints
   - Google-Mobile-Ads-SDK
-  - GSMessages
   - Hero
   - IQKeyboardManagerSwift
   - KeychainSwift
@@ -46,7 +44,6 @@ SPEC REPOS:
     - Alamofire
     - Blueprints
     - Google-Mobile-Ads-SDK
-    - GSMessages
     - Hero
     - IQKeyboardManagerSwift
     - KeychainSwift
@@ -61,24 +58,23 @@ SPEC REPOS:
     - URLNavigator
 
 SPEC CHECKSUMS:
-  Agrume: 123943d590fd0436a00642e37032da1814518153
-  Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
+  Agrume: f73353c86a323aa64ff6ec7515f153b586294cf2
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   Blueprints: 6fdf738c5300ee3a6be32718ddccbfecaf10264b
   Google-Mobile-Ads-SDK: 7404f68120ae8682afeb5af001fbf4aad731c78e
-  GSMessages: 2e6893301ae99f59d72a6d8c920ad41be407216c
   Hero: 33dadf2cd1c98af71e213dcbc2902e6e03622a4e
-  IQKeyboardManagerSwift: 624f128983eec795deacd50c1cd2f72664d13f08
+  IQKeyboardManagerSwift: 59d4b0e140bc546c3c76ae5bb35b3dafd10b8172
   KeychainSwift: bea6bd9f98af7b8d7ca4aa79fe105c00fab532db
   Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
-  Realm: d927fbf66df5532cfafc08afb5f7e53ded37b894
-  RealmSwift: 4e903a494e05d866581d69ad6f7e7b879d446baf
+  Realm: 0378021c424e4e2bd6a0e63b27881e929d9b9ad1
+  RealmSwift: 3322562622fda2ad596985ead4d8d8be30cf838c
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
-  SwiftyStoreKit: c36bb7841dd51a485ce5c38abf9e96fba988741f
-  URLNavigator: af5582fbbb3586c958be16835d799bfdb23a4793
+  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
+  SwiftyStoreKit: b7563505440a68c9d9fa70bc43d8a97015519409
+  URLNavigator: b7bdd352cc07f4f745547807a3ca2a82980a6cea
 
-PODFILE CHECKSUM: 3c5833bffe8729a3c0e0127b953bfce7e1665e77
+PODFILE CHECKSUM: 442359453bffe8a4b52c41ff0de0083ba98227f2
 
 COCOAPODS: 1.5.0

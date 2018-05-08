@@ -15,7 +15,6 @@ import GoogleMobileAds
 import Agrume
 import SwiftyJSON
 import Kingfisher
-import GSMessages
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
     
@@ -150,7 +149,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "imageView")
-        self.hideMessage()
         let history = History()
         history.threadID = self.threadIdReceived
         history.page = self.pageNow
@@ -462,7 +460,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     self.convertedHTML.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
-                self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://raw.githubusercontent.com/kazedayo/GaldenApp-v2/master/GaldenApp/redrawImg.js\"></script></head><body>\(self.convertedHTML)</body></html>"
+                self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/GaldenApp-v2/84ab1203/GaldenApp/redrawImg.js\"></script></head><body>\(self.convertedHTML)</body></html>"
                 self.webView.loadHTMLString(self.pageHTML, baseURL: Bundle.main.bundleURL)
                 NetworkActivityIndicatorManager.networkOperationStarted()
             } else {
@@ -543,58 +541,39 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     //MARK: WebView Delegate
     
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        self.activityIndicator.removeFromSuperview()
-        webView.isHidden = false
-        self.showMessage("撈緊...(超過~10秒代表post內圖片可能死圖)", type: .error, options: [.autoHide(false)])
-    }
-    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         NetworkActivityIndicatorManager.networkOperationFinished()
+        webView.isHidden = false
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
-            self.hideMessage()
             if self.replied == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let height = result as! CGFloat
                     let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
-                    webView.scrollView.setContentOffset(scrollPoint, animated: true)
-                    self.showMessage("回覆成功!(移到頁尾)", type: .info)
+                    webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.replied = false
                 })
             } else if self.f5 == true {
                 webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
                     let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
-                    webView.scrollView.setContentOffset(scrollPoint, animated: true)
-                    self.showMessage("撈完!(移到頁尾)", type: .info)
+                    webView.scrollView.setContentOffset(scrollPoint, animated: false)
                     self.f5 = false
                 })
             } else if self.loaded == false {
                 let realm = try! Realm()
                 let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
                 if thisPost != nil && self.sender == "cell" {
-                    self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: true)
-                    self.showMessage("撈完!(移到最後觀看位置)", type: .info)
+                    self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: false)
                 } else {
-                    self.showMessage("撈完!", type: .info)
                 }
                 self.loaded = true
-            } else {
-                self.showMessage("撈完!", type: .info)
             }
         })
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if navigationAction.navigationType == .linkActivated {
-            let imageType = ["jpg","png","gif","jpeg","jpg-large","png-large","jpg:large","png:large"]
-            if imageType.contains((navigationAction.request.url?.pathExtension)!) {
-                let url = navigationAction.request.url
-                //open image viewer
-                let agrume = Agrume(imageUrl: url!)
-                agrume.showFrom(self)
-                decisionHandler(.cancel)
-            } else if (navigationAction.request.url?.absoluteString.contains("hkgalden.com/view/"))! {
+            if (navigationAction.request.url?.absoluteString.contains("hkgalden.com/view/"))! {
                 navigator.pushURL(navigationAction.request.url!)
                 decisionHandler(.cancel)
             } else {
@@ -630,9 +609,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         } else if message.name == "refresh" {
             self.f5buttonPressed()
         } else if message.name == "imageView" {
-            let url = message.body as! URL
-            let agrume = Agrume(imageUrl: url)
-            agrume.showFrom(self)
+            let urlString = message.body as! String
+            let url = URL(string: urlString)
+            let agrume = Agrume(url: url!)
+            agrume.show(from: self)
         }
     }
     
