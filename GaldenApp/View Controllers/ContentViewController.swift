@@ -12,9 +12,9 @@ import MarqueeLabel
 import WebKit
 import RealmSwift
 import GoogleMobileAds
-import Agrume
 import SwiftyJSON
 import Kingfisher
+import SKPhotoBrowser
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
     
@@ -34,7 +34,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var replied = false
     var f5 = false
     var loaded = false
-    var scrollPosition: CGFloat = 0.0
+    var scrollPosition = ""
     var sender = ""
     var ident = ""
     var titleLabel = MarqueeLabel()
@@ -149,15 +149,26 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "imageView")
-        let history = History()
-        history.threadID = self.threadIdReceived
-        history.page = self.pageNow
-        history.position = self.webView.scrollView.contentOffset.y
-        
-        let realm = try! Realm()
-        try! realm.write {
-            realm.add(history,update: true)
-        }
+        self.webView.evaluateJavaScript("$(\".showing\").last().attr(\"id\")", completionHandler: {
+            result,error in
+            if error == nil {
+                let position = result as? String
+                let history = History()
+                history.threadID = self.threadIdReceived
+                history.page = self.pageNow
+                if position != nil {
+                    history.position = position!
+                } else if self.pageNow == 1 {
+                    history.position = "0"
+                } else {
+                    history.position = String((self.pageNow-1) * 25 + 1)
+                }
+                let realm = try! Realm()
+                try! realm.write {
+                    realm.add(history,update: true)
+                }
+            }
+        })
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -217,6 +228,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 status in
                 if status == "true" {
                     self.blockedUsers.append(self.op.userID)
+                    self.f5 = true
+                    self.scrollPosition = "0"
                     self.updateSequence()
                 }
             })
@@ -225,6 +238,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 status in
                 if status == "true" {
                     self.blockedUsers.append(self.comments[Int(type)! + 1].userID)
+                    self.f5 = true
+                    self.scrollPosition = type
                     self.updateSequence()
                 }
             })
@@ -233,6 +248,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 status in
                 if status == "true" {
                     self.blockedUsers.append(self.comments[Int(type)!].userID)
+                    self.f5 = true
+                    self.scrollPosition = type
                     self.updateSequence()
                 }
             })
@@ -241,8 +258,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func f5buttonPressed() {
         self.f5 = true
-        self.scrollPosition = self.webView.scrollView.contentOffset.y
-        self.updateSequence()
+        self.webView.evaluateJavaScript("$(\".showing\").last().attr(\"id\")", completionHandler: {
+            result,error in
+            let position = result as! String
+            self.scrollPosition = position
+            self.updateSequence()
+        })
     }
     
     @objc func moreButtonPressed() {
@@ -439,20 +460,20 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 if self.pageNow == 1 {
                     xbbcodeBridge.shared.convertBBCodeToHTML(text: op!.content)
                     self.op.contentHTML = (xbbcodeBridge.shared.convertedText)!
-                    self.constructOPHeader()
                     if (self.blockedUsers.contains(self.op.userID)) {
-                        self.op.contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
+                        self.op.contentHTML = "<div class=\"comment\" id=\"commentCount\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
                     }
+                    self.constructOPHeader()
                     self.convertedHTML.append(self.op.contentHTML)
                 }
                 
                 for index in 0..<self.comments.count {
                     xbbcodeBridge.shared.convertBBCodeToHTML(text: comments![index].content)
                     self.comments[index].contentHTML = (xbbcodeBridge.shared.convertedText)!
-                    self.constructCommentHeader(index: index)
                     if (self.blockedUsers.contains(self.comments[index].userID)) {
-                        self.comments[index].contentHTML = "<div class=\"comment\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
+                        self.comments[index].contentHTML = "<div class=\"comment\" id=\"commentCount\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
                     }
+                    self.constructCommentHeader(index: index)
                     self.convertedHTML.append(self.comments[index].contentHTML)
                 }
                 
@@ -460,7 +481,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     self.convertedHTML.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
-                self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/GaldenApp-v2/84ab1203/GaldenApp/redrawImg.js\"></script></head><body>\(self.convertedHTML)</body></html>"
+                self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(self.convertedHTML)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
                 self.webView.loadHTMLString(self.pageHTML, baseURL: Bundle.main.bundleURL)
                 NetworkActivityIndicatorManager.networkOperationStarted()
             } else {
@@ -500,6 +521,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "quotetype", with: "op")
         self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "blocktype", with: "op")
+        self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "commentCount", with: "0")
     }
     
     private func constructCommentHeader(index: Int) {
@@ -537,37 +559,58 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "quotetype", with: "\(index)")
             self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "blocktype", with: "\(index)")
         }
+        self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "commentCount", with: String((pageNow-1) * 25 + index + 1))
     }
     
     //MARK: WebView Delegate
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        NetworkActivityIndicatorManager.networkOperationFinished()
-        webView.isHidden = false
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
-        DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
-            if self.replied == true {
-                webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
-                    let height = result as! CGFloat
-                    let scrollPoint = CGPoint(x: 0, y: height - webView.frame.size.height)
-                    webView.scrollView.setContentOffset(scrollPoint, animated: false)
-                    self.replied = false
-                })
-            } else if self.f5 == true {
-                webView.evaluateJavaScript("document.body.offsetHeight", completionHandler: {(result, error) in
-                    let scrollPoint = CGPoint.init(x: 0, y: self.scrollPosition)
-                    webView.scrollView.setContentOffset(scrollPoint, animated: false)
-                    self.f5 = false
-                })
-            } else if self.loaded == false {
-                let realm = try! Realm()
-                let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
-                if thisPost != nil && self.sender == "cell" {
-                    self.webView.scrollView.setContentOffset(CGPoint.init(x: 0, y: (thisPost?.position)!), animated: false)
-                } else {
+        webView.evaluateJavaScript("new Blazy();", completionHandler: {
+            result,error in
+            DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
+                if self.replied == true {
+                    webView.evaluateJavaScript("window.scrollTo(0,document.body.scrollHeight);", completionHandler: {(result, error) in
+                        self.replied = false
+                        NetworkActivityIndicatorManager.networkOperationFinished()
+                        self.activityIndicator.removeFromSuperview()
+                        webView.isHidden = false
+                    })
+                } else if self.f5 == true {
+                    webView.evaluateJavaScript("$(\"#\((self.scrollPosition))\").get(0).scrollIntoView();", completionHandler: {
+                        result,error in
+                        DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                            self.f5 = false
+                            NetworkActivityIndicatorManager.networkOperationFinished()
+                            self.activityIndicator.removeFromSuperview()
+                            webView.isHidden = false
+                        })
+                    })
+                } else if self.loaded == false {
+                    let realm = try! Realm()
+                    let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
+                    if thisPost != nil && self.sender == "cell" {
+                        self.webView.evaluateJavaScript("$(\"#\((thisPost?.position)!)\").get(0).scrollIntoView();", completionHandler: {
+                            result,error in
+                            DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                                NetworkActivityIndicatorManager.networkOperationFinished()
+                                self.activityIndicator.removeFromSuperview()
+                                webView.isHidden = false
+                            })
+                        })
+                    } else {
+                        NetworkActivityIndicatorManager.networkOperationFinished()
+                        self.activityIndicator.removeFromSuperview()
+                        webView.isHidden = false
+                    }
+                    self.loaded = true
                 }
-                self.loaded = true
-            }
+                else {
+                    NetworkActivityIndicatorManager.networkOperationFinished()
+                    self.activityIndicator.removeFromSuperview()
+                    webView.isHidden = false
+                }
+            })
         })
     }
     
@@ -610,9 +653,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self.f5buttonPressed()
         } else if message.name == "imageView" {
             let urlString = message.body as! String
-            let url = URL(string: urlString)
-            let agrume = Agrume(url: url!)
-            agrume.show(from: self)
+            var images = [SKPhoto]()
+            let photo = SKPhoto.photoWithImageURL(urlString)
+            images.append(photo)
+            let browser = SKPhotoBrowser(photos: images)
+            browser.initializePageIndex(0)
+            present(browser,animated: true,completion: nil)
         }
     }
     

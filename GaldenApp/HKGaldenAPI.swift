@@ -317,12 +317,12 @@ class HKGaldenAPI {
     
     func sizeTagCorrection(bbcode: String) -> String {
         var code = bbcode
-        code = code.replacingOccurrences(of: "[/size=1]", with: "[/size]")
-        code = code.replacingOccurrences(of: "[/size=2]", with: "[/size]")
-        code = code.replacingOccurrences(of: "[/size=3]", with: "[/size]")
-        code = code.replacingOccurrences(of: "[/size=4]", with: "[/size]")
-        code = code.replacingOccurrences(of: "[/size=5]", with: "[/size]")
-        code = code.replacingOccurrences(of: "[/size=6]", with: "[/size]")
+        code = code.replacingOccurrences(of: "/size=1", with: "/size")
+        code = code.replacingOccurrences(of: "/size=2", with: "/size")
+        code = code.replacingOccurrences(of: "/size=3", with: "/size")
+        code = code.replacingOccurrences(of: "/size=4", with: "/size")
+        code = code.replacingOccurrences(of: "/size=5", with: "/size")
+        code = code.replacingOccurrences(of: "/size=6", with: "/size")
         return code
     }
     

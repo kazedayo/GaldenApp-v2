@@ -41,7 +41,6 @@
 		424B61CB1FC06EFA000D71F0 /* content.css in Resources */ = {isa = PBXBuildFile; fileRef = 424B61CA1FC06EFA000D71F0 /* content.css */; };
 		4262C2101F95FAE2002EEC76 /* jssource.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20D1F95FAE0002EEC76 /* jssource.js */; };
 		4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20E1F95FAE1002EEC76 /* xbbcode.js */; };
-		427E604B20A1F0B500EC1EC2 /* redrawImg.js in Resources */ = {isa = PBXBuildFile; fileRef = 427E604A20A1F0B500EC1EC2 /* redrawImg.js */; };
 		42964F212085CF12000FA349 /* NetworkActivityIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */; };
 		42A979D42014BA43008C7629 /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */; };
 		42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8931F7923E1002CC13F /* AppDelegate.swift */; };
@@ -101,7 +100,6 @@
 		424B61CA1FC06EFA000D71F0 /* content.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = content.css; sourceTree = "<group>"; };
 		4262C20D1F95FAE0002EEC76 /* jssource.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jssource.js; sourceTree = "<group>"; };
 		4262C20E1F95FAE1002EEC76 /* xbbcode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xbbcode.js; sourceTree = "<group>"; };
-		427E604A20A1F0B500EC1EC2 /* redrawImg.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = redrawImg.js; sourceTree = "<group>"; };
 		42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkActivityIndicatorManager.swift; sourceTree = "<group>"; };
 		42A979D32014B9C4008C7629 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -210,7 +208,6 @@
 			children = (
 				4262C20D1F95FAE0002EEC76 /* jssource.js */,
 				4262C20E1F95FAE1002EEC76 /* xbbcode.js */,
-				427E604A20A1F0B500EC1EC2 /* redrawImg.js */,
 				424B61CA1FC06EFA000D71F0 /* content.css */,
 				424A472220734987005795A6 /* View Controllers */,
 				424A472120734965005795A6 /* Cells */,
@@ -360,7 +357,6 @@
 				4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */,
 				424B61CB1FC06EFA000D71F0 /* content.css in Resources */,
 				42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */,
-				427E604B20A1F0B500EC1EC2 /* redrawImg.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +377,6 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Agrume/Agrume.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Blueprints/Blueprints.framework",
 				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
@@ -392,6 +387,7 @@
 				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SKPhotoBrowser/SKPhotoBrowser.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyStoreKit/SwiftyStoreKit.framework",
@@ -399,7 +395,6 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Agrume.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Blueprints.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
@@ -410,6 +405,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SKPhotoBrowser.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyStoreKit.framework",

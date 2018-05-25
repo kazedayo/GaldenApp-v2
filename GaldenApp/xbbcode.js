@@ -227,7 +227,7 @@ var XBBCODE = (function() {
                     myUrl = "";
                 }*/
 
-               return '<img alt onclick="redrawImg($(this), \''+myUrl+'\');"src="http://m.hkgalden.com/img/image.png" />';
+               return '<img class="b-lazy" src="https://img.eservice-hk.net/upload/2018/05/17/213108_b95f899cf42b6a9472e11ab7f8c64f89.gif" data-src="'+myUrl+'" onclick="window.webkit.messageHandlers.imageView.postMessage(\''+myUrl+'\');">';
             },
             closeTag: function(params,content) {
                 return '';
@@ -244,7 +244,7 @@ var XBBCODE = (function() {
            myUrl = "";
            }
            
-           return '<img src="' + myUrl + '" /> ';
+           return '<img src="' + myUrl + '"> ';
            },
            closeTag: function(params,content) {
            return '';

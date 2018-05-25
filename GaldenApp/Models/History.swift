@@ -11,7 +11,7 @@ import RealmSwift
 class History: Object {
     @objc dynamic var threadID = ""
     @objc dynamic var page = 1
-    @objc dynamic var position = CGFloat(0.0)
+    @objc dynamic var position = ""
     
     override static func primaryKey() -> String? {
         return "threadID"

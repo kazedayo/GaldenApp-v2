@@ -1,12 +1,11 @@
 PODS:
-  - Agrume (5.0.0)
   - Alamofire (4.7.2)
   - Blueprints (0.1.5)
-  - Google-Mobile-Ads-SDK (7.30.0)
+  - Google-Mobile-Ads-SDK (7.31.0)
   - Hero (1.2.0)
-  - IQKeyboardManagerSwift (6.0.2)
+  - IQKeyboardManagerSwift (6.0.3)
   - KeychainSwift (11.0.0)
-  - Kingfisher (4.7.0)
+  - Kingfisher (4.8.0)
   - MarqueeLabel (3.1.4):
     - MarqueeLabel/ObjC (= 3.1.4)
   - MarqueeLabel/ObjC (3.1.4)
@@ -16,13 +15,13 @@ PODS:
   - Realm/Headers (3.5.0)
   - RealmSwift (3.5.0):
     - Realm (= 3.5.0)
+  - SKPhotoBrowser (5.1.0)
   - SnapKit (4.0.0)
   - SwiftyJSON (4.1.0)
   - SwiftyStoreKit (0.13.2)
   - URLNavigator (2.0.5)
 
 DEPENDENCIES:
-  - Agrume
   - Alamofire
   - Blueprints
   - Google-Mobile-Ads-SDK
@@ -33,6 +32,7 @@ DEPENDENCIES:
   - MarqueeLabel
   - PKHUD
   - RealmSwift
+  - SKPhotoBrowser
   - SnapKit
   - SwiftyJSON
   - SwiftyStoreKit
@@ -40,7 +40,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - Agrume
     - Alamofire
     - Blueprints
     - Google-Mobile-Ads-SDK
@@ -52,29 +51,30 @@ SPEC REPOS:
     - PKHUD
     - Realm
     - RealmSwift
+    - SKPhotoBrowser
     - SnapKit
     - SwiftyJSON
     - SwiftyStoreKit
     - URLNavigator
 
 SPEC CHECKSUMS:
-  Agrume: f73353c86a323aa64ff6ec7515f153b586294cf2
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   Blueprints: 6fdf738c5300ee3a6be32718ddccbfecaf10264b
-  Google-Mobile-Ads-SDK: 7404f68120ae8682afeb5af001fbf4aad731c78e
+  Google-Mobile-Ads-SDK: 6e529e748b45507a2ca904e0b5a52669ba3920c4
   Hero: 33dadf2cd1c98af71e213dcbc2902e6e03622a4e
-  IQKeyboardManagerSwift: 59d4b0e140bc546c3c76ae5bb35b3dafd10b8172
+  IQKeyboardManagerSwift: 04e8679f85e496bb2c474eeb9284052f1b3c391c
   KeychainSwift: bea6bd9f98af7b8d7ca4aa79fe105c00fab532db
-  Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
+  Kingfisher: 976d828df2b24834c6a3f2fc4d82cdbd26552be1
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
   Realm: 0378021c424e4e2bd6a0e63b27881e929d9b9ad1
   RealmSwift: 3322562622fda2ad596985ead4d8d8be30cf838c
+  SKPhotoBrowser: c20c1da34d737b4e3e101feead6c8dd92ebf860a
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   SwiftyStoreKit: b7563505440a68c9d9fa70bc43d8a97015519409
   URLNavigator: b7bdd352cc07f4f745547807a3ca2a82980a6cea
 
-PODFILE CHECKSUM: 442359453bffe8a4b52c41ff0de0083ba98227f2
+PODFILE CHECKSUM: 8a92224b3aa10250d3a8aec534908ab4a715666e
 
 COCOAPODS: 1.5.0

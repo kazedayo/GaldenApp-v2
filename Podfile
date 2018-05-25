@@ -20,7 +20,7 @@ target 'GaldenApp' do
   pod 'Blueprints'
   pod 'URLNavigator'
   pod 'SwiftyStoreKit'
-  pod 'Agrume'
+  pod 'SKPhotoBrowser'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

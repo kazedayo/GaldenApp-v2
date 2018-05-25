@@ -58,8 +58,9 @@ class PreviewViewController: UIViewController {
         
         webView.isOpaque = false
         webView.backgroundColor = .clear
-        previewText = HKGaldenAPI.shared.sizeTagCorrection(bbcode: contentText!)
-        previewText = HKGaldenAPI.shared.iconParse(bbcode: contentText!)
+        previewText = contentText!
+        previewText = HKGaldenAPI.shared.sizeTagCorrection(bbcode: previewText!)
+        previewText = HKGaldenAPI.shared.iconParse(bbcode: previewText!)
         xbbcodeBridge.shared.convertBBCodeToHTML(text: previewText!)
         webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((xbbcodeBridge.shared.convertedText!))</body></html>", baseURL: Bundle.main.bundleURL)
         backgroundView.addSubview(webView)
