@@ -17,17 +17,17 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
     
     let tableView = UITableView()
     let titleLabel = UILabel()
-    let titleView = UIView()
+    let backgroundView = UIView()
     
     lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
     var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
     var tableViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
-    var titleViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
+    var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tableViewOriginalPoint = CGPoint(x: tableView.frame.minX, y: tableView.frame.minY)
-        titleViewOriginalPoint = CGPoint(x: titleView.frame.minX, y: titleView.frame.minY)
+        backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)
     }
     
     override func viewDidLoad() {
@@ -39,32 +39,35 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        titleView.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: 700))]
-        titleView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        titleView.layer.cornerRadius = 10
-        view.addSubview(titleView)
+        backgroundView.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: 700))]
+        backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        backgroundView.layer.cornerRadius = 10
+        backgroundView.layer.shadowColor = UIColor.black.cgColor
+        backgroundView.layer.shadowOpacity = 1
+        backgroundView.layer.shadowOffset = CGSize.zero
+        backgroundView.layer.shadowRadius = 10
+        view.addSubview(backgroundView)
         
         titleLabel.text = titleText!
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.systemFont(ofSize: 15)
         titleLabel.textColor = .white
         titleLabel.textAlignment = .center
-        titleView.addSubview(titleLabel)
+        backgroundView.addSubview(titleLabel)
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.hero.modifiers = [.position(CGPoint(x: self.view.frame.midX, y: 1000))]
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tableView.layer.cornerRadius = 10
         tableView.register(PageSelectTableViewCell.self, forCellReuseIdentifier: "PageSelectTableViewCell")
-        view.addSubview(tableView)
+        backgroundView.addSubview(tableView)
         
-        titleView.snp.makeConstraints {
+        backgroundView.snp.makeConstraints {
             (make) -> Void in
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
+            make.bottom.equalTo(-15)
         }
         
         titleLabel.snp.makeConstraints {
@@ -72,15 +75,14 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
             make.top.equalTo(10)
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
-            make.bottom.equalTo(-10)
         }
         
         tableView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(titleView.snp.bottom).offset(10)
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
-            make.bottom.equalTo(-15)
+            make.bottom.equalTo(backgroundView.snp.bottom).offset(-15)
             make.height.equalTo(200)
         }
     }
@@ -175,7 +177,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         } else if sender.state == UIGestureRecognizerState.changed {
             if touchPoint.y - initialTouchPoint.y > 0 {
                 self.tableView.frame = CGRect(x: tableViewOriginalPoint.x, y: tableViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.tableView.frame.size.width, height: self.tableView.frame.size.height)
-                self.titleView.frame = CGRect(x: titleViewOriginalPoint.x, y: titleViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.titleView.frame.size.width, height: self.titleView.frame.size.height)
+                self.backgroundView.frame = CGRect(x: backgroundViewOriginalPoint.x, y: backgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
             }
         } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
             if touchPoint.y - initialTouchPoint.y > 100 {
@@ -183,7 +185,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
             } else {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.tableView.frame = CGRect(x: self.tableViewOriginalPoint.x, y: self.tableViewOriginalPoint.y, width: self.tableView.frame.size.width, height: self.tableView.frame.size.height)
-                    self.titleView.frame = CGRect(x: self.titleViewOriginalPoint.x, y: self.titleViewOriginalPoint.y, width: self.titleView.frame.size.width, height: self.titleView.frame.size.height)
+                    self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
                 })
             }
         }

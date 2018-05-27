@@ -13,7 +13,7 @@
 		4231DA782077299B00AB1DE5 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4231DA772077299B00AB1DE5 /* PreviewViewController.swift */; };
 		4231DA7A20774B7900AB1DE5 /* xbbcodeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4231DA7920774B7900AB1DE5 /* xbbcodeBridge.swift */; };
 		423E272D207458ED00F267CA /* IconCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423E272C207458ED00F267CA /* IconCollectionViewCell.swift */; };
-		424A47052073493E005795A6 /* UserDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46E92073493B005795A6 /* UserDetailViewController.swift */; };
+		424A47052073493E005795A6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46E92073493B005795A6 /* SettingsViewController.swift */; };
 		424A47062073493E005795A6 /* PageSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EA2073493B005795A6 /* PageSelectTableViewCell.swift */; };
 		424A47072073493E005795A6 /* FirstLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EB2073493B005795A6 /* FirstLoginViewController.swift */; };
 		424A47082073493E005795A6 /* OP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EC2073493B005795A6 /* OP.swift */; };
@@ -37,7 +37,7 @@
 		424A471C2073493E005795A6 /* Channels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47002073493D005795A6 /* Channels.swift */; };
 		424A471D2073493E005795A6 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47012073493E005795A6 /* LaunchViewController.swift */; };
 		424A471E2073493E005795A6 /* ThreadListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47022073493E005795A6 /* ThreadListViewController.swift */; };
-		424A47202073493E005795A6 /* ChannelSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47042073493E005795A6 /* ChannelSelectViewController.swift */; };
+		424A47202073493E005795A6 /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A47042073493E005795A6 /* SideMenuViewController.swift */; };
 		424B61CB1FC06EFA000D71F0 /* content.css in Resources */ = {isa = PBXBuildFile; fileRef = 424B61CA1FC06EFA000D71F0 /* content.css */; };
 		4262C2101F95FAE2002EEC76 /* jssource.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20D1F95FAE0002EEC76 /* jssource.js */; };
 		4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20E1F95FAE1002EEC76 /* xbbcode.js */; };
@@ -72,7 +72,7 @@
 		423720C02014B8EA00603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		423720C22014B93E00603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		423E272C207458ED00F267CA /* IconCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCollectionViewCell.swift; sourceTree = "<group>"; };
-		424A46E92073493B005795A6 /* UserDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailViewController.swift; sourceTree = "<group>"; };
+		424A46E92073493B005795A6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		424A46EA2073493B005795A6 /* PageSelectTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageSelectTableViewCell.swift; sourceTree = "<group>"; };
 		424A46EB2073493B005795A6 /* FirstLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstLoginViewController.swift; sourceTree = "<group>"; };
 		424A46EC2073493B005795A6 /* OP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OP.swift; sourceTree = "<group>"; };
@@ -96,7 +96,7 @@
 		424A47002073493D005795A6 /* Channels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channels.swift; sourceTree = "<group>"; };
 		424A47012073493E005795A6 /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		424A47022073493E005795A6 /* ThreadListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadListViewController.swift; sourceTree = "<group>"; };
-		424A47042073493E005795A6 /* ChannelSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelSelectViewController.swift; sourceTree = "<group>"; };
+		424A47042073493E005795A6 /* SideMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		424B61CA1FC06EFA000D71F0 /* content.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = content.css; sourceTree = "<group>"; };
 		4262C20D1F95FAE0002EEC76 /* jssource.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jssource.js; sourceTree = "<group>"; };
 		4262C20E1F95FAE1002EEC76 /* xbbcode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xbbcode.js; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 		424A472220734987005795A6 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				424A47042073493E005795A6 /* ChannelSelectViewController.swift */,
+				424A47042073493E005795A6 /* SideMenuViewController.swift */,
 				424A46F72073493C005795A6 /* ComposeViewController.swift */,
 				4231DA772077299B00AB1DE5 /* PreviewViewController.swift */,
 				424A46F12073493C005795A6 /* ContentMenuViewController.swift */,
@@ -163,7 +163,7 @@
 				424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */,
 				424A46F42073493C005795A6 /* PageSelectViewController.swift */,
 				424A47022073493E005795A6 /* ThreadListViewController.swift */,
-				424A46E92073493B005795A6 /* UserDetailViewController.swift */,
+				424A46E92073493B005795A6 /* SettingsViewController.swift */,
 				424A46ED2073493B005795A6 /* WelcomeViewController.swift */,
 			);
 			path = "View Controllers";
@@ -385,10 +385,13 @@
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/QuickLayout/QuickLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SKPhotoBrowser/SKPhotoBrowser.framework",
+				"${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftEntryKit/SwiftEntryKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyStoreKit/SwiftyStoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/URLNavigator/URLNavigator.framework",
@@ -403,10 +406,13 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QuickLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SKPhotoBrowser.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SideMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftEntryKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyStoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLNavigator.framework",
@@ -459,7 +465,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				424A47052073493E005795A6 /* UserDetailViewController.swift in Sources */,
+				424A47052073493E005795A6 /* SettingsViewController.swift in Sources */,
 				424A47072073493E005795A6 /* FirstLoginViewController.swift in Sources */,
 				424A47162073493E005795A6 /* BlockedTableViewCell.swift in Sources */,
 				424A47172073493E005795A6 /* BlockedUsers.swift in Sources */,
@@ -481,7 +487,7 @@
 				424A47102073493E005795A6 /* PageSelectViewController.swift in Sources */,
 				423E272D207458ED00F267CA /* IconCollectionViewCell.swift in Sources */,
 				42029C68207A44610001E142 /* URLNavigationMap.swift in Sources */,
-				424A47202073493E005795A6 /* ChannelSelectViewController.swift in Sources */,
+				424A47202073493E005795A6 /* SideMenuViewController.swift in Sources */,
 				424A471E2073493E005795A6 /* ThreadListViewController.swift in Sources */,
 				424A471C2073493E005795A6 /* Channels.swift in Sources */,
 				424A47132073493E005795A6 /* ComposeViewController.swift in Sources */,

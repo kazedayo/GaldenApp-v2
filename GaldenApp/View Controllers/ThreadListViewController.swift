@@ -10,6 +10,7 @@ import KeychainSwift
 import PKHUD
 import GoogleMobileAds
 import QuartzCore
+import SideMenu
 
 class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
     
@@ -25,17 +26,21 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     let keychain = KeychainSwift()
     let tableView = UITableView()
     let adBannerView = GADBannerView()
-    let channelVC = ChannelSelectViewController()
+    let sideMenuVC = SideMenuViewController()
     lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
-    lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-    lazy var channelSwitch = UIBarButtonItem(image: UIImage(named: "channel"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
-    lazy var newThread = UIBarButtonItem(image: UIImage(named: "Add"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
-    lazy var userDetail = UIBarButtonItem(image: UIImage(named: "user"), style: .plain, target: self, action: #selector(userDetailPressed))
+    lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
+    lazy var newThread = UIBarButtonItem(image: UIImage(named: "compose"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
     
     var reloadButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let menuLeftNavigationController = UISideMenuNavigationController(rootViewController: sideMenuVC)
+        SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
+        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
+        SideMenuManager.default.menuWidth = 150
+        SideMenuManager.default.menuFadeStatusBar = false
         
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
@@ -78,22 +83,21 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             if #available(iOS 11.0, *) {
                 make.bottom.equalTo(view.snp.bottomMargin)
             } else {
-                make.bottom.equalTo(view.snp.bottom).offset(-44)
+                make.bottom.equalTo(view.snp.bottom)
             }
             make.height.equalTo(50)
         }
-        
-        navigationController?.isToolbarHidden = false
         navigationController?.navigationBar.barStyle = .black
-        navigationController?.toolbar.barStyle = .black
-        navigationController?.toolbar.tintColor = .white
-        navigationController?.navigationBar.tintColor = .white
-        toolbarItems = [flexibleSpace,channelSwitch,flexibleSpace,newThread,flexibleSpace,userDetail,flexibleSpace]
-        navigationItem.title = HKGaldenAPI.shared.chList![channelNow]["name"].stringValue
         navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
+        navigationController?.navigationBar.tintColor = .white
+        navigationItem.leftBarButtonItem = sideMenuButton
+        navigationItem.rightBarButtonItem = newThread
+        navigationItem.leftBarButtonItem?.tintColor = .white
+        navigationItem.rightBarButtonItem?.tintColor = .white
+        navigationController?.navigationItem.leftBarButtonItem = sideMenuButton
+        navigationController?.navigationItem.rightBarButtonItem = newThread
+        navigationItem.title = HKGaldenAPI.shared.chList![channelNow]["name"].stringValue
         navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .bottom)
         
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = UIColor(white: 0.13, alpha: 1)
@@ -124,6 +128,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.isToolbarHidden = true
         self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         if (keychain.getBool("noAd") == true) {
             adBannerView.removeFromSuperview()
@@ -253,11 +258,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
-        channelVC.modalPresentationStyle = .overFullScreen
-        channelVC.hero.isEnabled = true
-        channelVC.hero.modalAnimationType = .fade
-        channelVC.mainVC = self
-        present(channelVC, animated: true, completion: nil)
+        sideMenuVC.mainVC = self
+        present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
     }
     
     @objc func newThreadButtonPressed() {
@@ -269,14 +271,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         composeVC.hero.modalAnimationType = .fade
         composeVC.threadVC = self
         present(composeVC, animated: true, completion: nil)
-    }
-    
-    @objc func userDetailPressed() {
-        let userVC = UserDetailViewController()
-        userVC.modalPresentationStyle = .overFullScreen
-        userVC.hero.isEnabled = true
-        userVC.hero.modalAnimationType = .fade
-        present(userVC, animated: true, completion: nil)
     }
     
     // MARK: - Navigation

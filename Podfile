@@ -21,6 +21,8 @@ target 'GaldenApp' do
   pod 'URLNavigator'
   pod 'SwiftyStoreKit'
   pod 'SKPhotoBrowser'
+  pod 'SideMenu'
+  pod 'SwiftEntryKit'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

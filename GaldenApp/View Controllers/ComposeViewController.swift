@@ -30,7 +30,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     let iconKeyboard = IconKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 265))
     
     let backgroundView = UIView()
-    let secondaryBackgroundView = UIView()
     let channelLabel = UILabel()
     let titleTextField = UITextField()
     let contentTextView = IQTextView()
@@ -46,12 +45,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
     var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
     var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
-    var secondaryBackgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)
-        secondaryBackgroundViewOriginalPoint = CGPoint(x: secondaryBackgroundView.frame.minX, y: secondaryBackgroundView.frame.minY)
     }
     
     override func viewDidLoad() {
@@ -64,12 +61,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         backgroundView.layer.cornerRadius = 10
         backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
+        backgroundView.layer.shadowColor = UIColor.black.cgColor
+        backgroundView.layer.shadowOpacity = 1
+        backgroundView.layer.shadowOffset = CGSize.zero
+        backgroundView.layer.shadowRadius = 10
         view.addSubview(backgroundView)
-        
-        secondaryBackgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        secondaryBackgroundView.layer.cornerRadius = 10
-        secondaryBackgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 700))]
-        view.addSubview(secondaryBackgroundView)
         
         channelLabel.text = HKGaldenAPI.shared.chList![channel]["name"].stringValue
         channelLabel.textColor = .white
@@ -148,7 +144,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         stackView.addArrangedSubview(imageButton)
         stackView.addArrangedSubview(urlButton)
         stackView.addArrangedSubview(iconButton)
-        secondaryBackgroundView.addSubview(stackView)
+        backgroundView.addSubview(stackView)
         
         backgroundView.snp.makeConstraints {
             (make) -> Void in
@@ -156,14 +152,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             make.trailing.equalTo(-15)
             make.bottom.equalTo(-15)
             make.height.equalTo(300)
-        }
-        
-        secondaryBackgroundView.snp.makeConstraints {
-            (make) -> Void in
-            make.leading.equalTo(15)
-            make.trailing.equalTo(-15)
-            make.bottom.equalTo(backgroundView.snp.top).offset(-10)
-            make.height.equalTo(45)
         }
         
         channelLabel.snp.makeConstraints {
@@ -184,6 +172,13 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         contentTextView.snp.makeConstraints {
             (make) -> Void in
+            make.top.equalTo(stackView.snp.bottom).offset(10)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+        }
+        
+        stackView.snp.makeConstraints {
+            (make) -> Void in
             if type == "reply" {
                 make.top.equalTo(channelLabel.snp.bottom).offset(10)
             } else {
@@ -191,14 +186,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             }
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
-        }
-        
-        stackView.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalToSuperview()
-            make.leading.equalTo(10)
-            make.trailing.equalTo(-10)
-            make.bottom.equalToSuperview()
         }
         
         previewButton.snp.makeConstraints {
@@ -527,7 +514,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         } else if sender.state == UIGestureRecognizerState.changed {
             if touchPoint.y - initialTouchPoint.y > 0 {
                 self.backgroundView.frame = CGRect(x: backgroundViewOriginalPoint.x, y: backgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-                self.secondaryBackgroundView.frame = CGRect(x: secondaryBackgroundViewOriginalPoint.x, y: secondaryBackgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.secondaryBackgroundView.frame.size.width, height: self.secondaryBackgroundView.frame.size.height)
             }
         } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
             if touchPoint.y - initialTouchPoint.y > 100 {
@@ -535,7 +521,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             } else {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-                    self.secondaryBackgroundView.frame = CGRect(x: self.secondaryBackgroundViewOriginalPoint.x, y: self.secondaryBackgroundViewOriginalPoint.y, width: self.secondaryBackgroundView.frame.size.width, height: self.secondaryBackgroundView.frame.size.height)
                 })
             }
         }

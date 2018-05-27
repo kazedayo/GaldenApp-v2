@@ -38,7 +38,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var sender = ""
     var ident = ""
     var titleLabel = MarqueeLabel()
-    private var shadowImageView: UIImageView?
     private var webView: WKWebView!
     
     //HKGalden API (NOT included in GitHub repo)
@@ -75,6 +74,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         view.addSubview(webView)
         
         navigationController?.delegate = self
+        navigationController?.isToolbarHidden = false
+        navigationController?.toolbar.barStyle = .black
+        navigationController?.toolbar.tintColor = .white
         toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,moreButton,flexibleSpace,nextButton]
         
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
@@ -84,8 +86,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         webView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.top.equalTo(view.snp.topMargin)
+            if (keychain.getBool("noAd") == true) {
+                make.bottom.equalTo(view.snp.bottomMargin)
+            } else {
+                make.bottom.equalTo(adBannerView.snp.top)
+            }
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
@@ -123,8 +129,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        prevButton.isEnabled = false
-        nextButton.isEnabled = false
+        //prevButton.isEnabled = false
+        //nextButton.isEnabled = false
         webView.configuration.userContentController.add(self, name: "quote")
         webView.configuration.userContentController.add(self, name: "block")
         webView.configuration.userContentController.add(self, name: "refresh")
@@ -138,8 +144,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             adBannerView.removeFromSuperview()
         } else {
             adBannerView.load(GADRequest())
-            webView.scrollView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
-            webView.scrollView.scrollIndicatorInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
         }
     }
     

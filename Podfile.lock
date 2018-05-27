@@ -10,13 +10,17 @@ PODS:
     - MarqueeLabel/ObjC (= 3.1.4)
   - MarqueeLabel/ObjC (3.1.4)
   - PKHUD (5.0.0)
+  - QuickLayout (2.0.2)
   - Realm (3.5.0):
     - Realm/Headers (= 3.5.0)
   - Realm/Headers (3.5.0)
   - RealmSwift (3.5.0):
     - Realm (= 3.5.0)
+  - SideMenu (4.0.0)
   - SKPhotoBrowser (5.1.0)
   - SnapKit (4.0.0)
+  - SwiftEntryKit (0.2.2):
+    - QuickLayout (= 2.0.2)
   - SwiftyJSON (4.1.0)
   - SwiftyStoreKit (0.13.2)
   - URLNavigator (2.0.5)
@@ -32,8 +36,10 @@ DEPENDENCIES:
   - MarqueeLabel
   - PKHUD
   - RealmSwift
+  - SideMenu
   - SKPhotoBrowser
   - SnapKit
+  - SwiftEntryKit
   - SwiftyJSON
   - SwiftyStoreKit
   - URLNavigator
@@ -49,10 +55,13 @@ SPEC REPOS:
     - Kingfisher
     - MarqueeLabel
     - PKHUD
+    - QuickLayout
     - Realm
     - RealmSwift
+    - SideMenu
     - SKPhotoBrowser
     - SnapKit
+    - SwiftEntryKit
     - SwiftyJSON
     - SwiftyStoreKit
     - URLNavigator
@@ -67,14 +76,17 @@ SPEC CHECKSUMS:
   Kingfisher: 976d828df2b24834c6a3f2fc4d82cdbd26552be1
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
+  QuickLayout: a730730b646b231fd4ef7cffaeb1e81fe0e1ca92
   Realm: 0378021c424e4e2bd6a0e63b27881e929d9b9ad1
   RealmSwift: 3322562622fda2ad596985ead4d8d8be30cf838c
+  SideMenu: 70ee5657df63ec3382660ec4ef470bf1cf5db07d
   SKPhotoBrowser: c20c1da34d737b4e3e101feead6c8dd92ebf860a
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  SwiftEntryKit: 59bb564c4c40ed76383a5f463b8d9086ecaeced0
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   SwiftyStoreKit: b7563505440a68c9d9fa70bc43d8a97015519409
   URLNavigator: b7bdd352cc07f4f745547807a3ca2a82980a6cea
 
-PODFILE CHECKSUM: 8a92224b3aa10250d3a8aec534908ab4a715666e
+PODFILE CHECKSUM: 3b09fe415d63277ce33e7d83cc4035d22f53cdb0
 
 COCOAPODS: 1.5.0

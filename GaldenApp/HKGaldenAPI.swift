@@ -11,6 +11,7 @@ import Alamofire
 import SwiftyJSON
 import KeychainSwift
 import PKHUD
+import SwiftEntryKit
 
 class HKGaldenAPI {
     
@@ -67,7 +68,7 @@ class HKGaldenAPI {
                 
             case .failure(let error):
                 print(error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                self.showError(error: error)
                 completion([ThreadList](),error)
             }
         }
@@ -147,7 +148,7 @@ class HKGaldenAPI {
                 
             case .failure(let error):
                 print(error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                self.showError(error: error)
                 completion(nil,nil,nil,nil,error)
             }
         }
@@ -183,7 +184,7 @@ class HKGaldenAPI {
                 completion(userName,id)
             case .failure(let error):
                 print(error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                self.showError(error: error)
             }
         }
     }
@@ -211,7 +212,8 @@ class HKGaldenAPI {
             NetworkActivityIndicatorManager.networkOperationFinished()
             if response.error != nil {
                 completion(response.error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                HUD.hide()
+                self.showError(error: response.error!)
             } else {
                 HUD.flash(.success,delay:1)
                 completion(nil)
@@ -229,7 +231,7 @@ class HKGaldenAPI {
             NetworkActivityIndicatorManager.networkOperationFinished()
             if response.error != nil {
                 completion(response.error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                self.showError(error: response.error!)
             } else {
                 completion(nil)
             }
@@ -251,7 +253,7 @@ class HKGaldenAPI {
                 completion(content)
             case .failure(let error):
                 print(error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                self.showError(error: error)
             }
         }
     }
@@ -310,7 +312,7 @@ class HKGaldenAPI {
                 completion(pageCount)
             case .failure(let error):
                 print(error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                self.showError(error: error)
             }
         }
     }
@@ -360,7 +362,7 @@ class HKGaldenAPI {
                 }
             case .failure(let error):
                 print(error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                self.showError(error: error)
             }
         })
     }
@@ -380,7 +382,7 @@ class HKGaldenAPI {
                 completion(status)
             case .failure(let error):
                 print(error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                self.showError(error: error)
             }
         }
     }
@@ -401,7 +403,7 @@ class HKGaldenAPI {
                 completion(status,newName)
             case .failure(let error):
                 print(error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                self.showError(error: error)
             }
         }
     }
@@ -441,8 +443,25 @@ class HKGaldenAPI {
                 completion()
             case .failure(let error):
                 print(error)
-                HUD.flash(.labeledError(title: "網絡錯誤", subtitle: nil), delay: 1)
+                self.showError(error: error)
             }
         }
+    }
+    
+    private func showError(error: Error) {
+        var attributes = EKAttributes.bottomFloat
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "f44336")!)
+        attributes.popBehavior = .animated(animation: .init(translate: .init(duration: 0.3), scale: .init(from: 1, to: 0.7, duration: 0.7)))
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.5, radius: 10, offset: .zero))
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        
+        let title = EKProperty.LabelContent(text: "網絡錯誤", style: .init(font: UIFont.systemFont(ofSize: 15), color: .white))
+        let description = EKProperty.LabelContent(text: error.localizedDescription, style: .init(font: UIFont.systemFont(ofSize: 12), color: .white))
+        let image = EKProperty.ImageContent(image: UIImage(named: "error")!, size: CGSize(width: 35, height: 35))
+        let simpleMessage = EKSimpleMessage(image: image, title: title, description: description)
+        let notificationMessage = EKNotificationMessage(simpleMessage: simpleMessage)
+        
+        let contentView = EKNotificationMessageView(with: notificationMessage)
+        SwiftEntryKit.display(entry: contentView, using: attributes)
     }
 }

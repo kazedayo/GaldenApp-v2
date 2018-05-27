@@ -46,6 +46,10 @@ class ContentMenuViewController: UIViewController {
         backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         backgroundView.layer.cornerRadius = 10
         backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
+        backgroundView.layer.shadowColor = UIColor.black.cgColor
+        backgroundView.layer.shadowOpacity = 1
+        backgroundView.layer.shadowOffset = CGSize.zero
+        backgroundView.layer.shadowRadius = 10
         view.addSubview(backgroundView)
         
         upvoteButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
