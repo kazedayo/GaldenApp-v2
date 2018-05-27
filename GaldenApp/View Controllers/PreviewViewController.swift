@@ -66,7 +66,7 @@ class PreviewViewController: UIViewController {
         previewText = HKGaldenAPI.shared.sizeTagCorrection(bbcode: previewText!)
         previewText = HKGaldenAPI.shared.iconParse(bbcode: previewText!)
         xbbcodeBridge.shared.convertBBCodeToHTML(text: previewText!)
-        webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"></head><body>\((xbbcodeBridge.shared.convertedText!))</body></html>", baseURL: Bundle.main.bundleURL)
+        webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\((xbbcodeBridge.shared.convertedText!))<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>", baseURL: Bundle.main.bundleURL)
         backgroundView.addSubview(webView)
         
         sendButton.setTitle("發表", for: .normal)
