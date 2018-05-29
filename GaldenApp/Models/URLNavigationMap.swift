@@ -134,5 +134,26 @@ struct URLNavigationMap {
             contentVC.pageNow = page
             return contentVC
         }
+        navigator.register("https://hkgalden.com/view/<string:id>/highlight/<string:uid>") {
+            url, values, context in
+            let contentVC = ContentViewController()
+            guard let id = values["id"] as? String else {return nil}
+            contentVC.threadIdReceived = id
+            return contentVC
+        }
+        navigator.register("http://hkgalden.com/view/<string:id>/highlight/<string:uid>") {
+            url, values, context in
+            let contentVC = ContentViewController()
+            guard let id = values["id"] as? String else {return nil}
+            contentVC.threadIdReceived = id
+            return contentVC
+        }
+        navigator.register("hkgalden.com/view/<string:id>/highlight/<string:uid>") {
+            url, values, context in
+            let contentVC = ContentViewController()
+            guard let id = values["id"] as? String else {return nil}
+            contentVC.threadIdReceived = id
+            return contentVC
+        }
     }
 }

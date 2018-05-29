@@ -218,51 +218,27 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let actionsheet = UIAlertController(title:"揀大細", message: nil, preferredStyle: .actionSheet)
         actionsheet.addAction(UIAlertAction(title:"超大",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[size=6]text[/size=6]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "size=6")
         }))
         actionsheet.addAction(UIAlertAction(title:"特大",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[size=5]text[/size=5]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "size=5")
         }))
         actionsheet.addAction(UIAlertAction(title:"大",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[size=4]text[/size=4]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "size=4")
         }))
         actionsheet.addAction(UIAlertAction(title:"一般",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[size=3]text[/size=3]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "size=3")
         }))
         actionsheet.addAction(UIAlertAction(title:"小",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[size=2]text[/size=2]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "size=2")
         }))
         actionsheet.addAction(UIAlertAction(title:"特小",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[size=1]text[/size=1]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "size=1")
         }))
         actionsheet.addAction(UIAlertAction(title:"冇嘢啦",style:.cancel,handler:nil))
         self.present(actionsheet,animated: true,completion: nil)
@@ -272,59 +248,31 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let actionsheet = UIAlertController(title:"字體格式", message: nil, preferredStyle: .actionSheet)
         actionsheet.addAction(UIAlertAction(title:"粗體",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[b]text[/b]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "b")
         }))
         actionsheet.addAction(UIAlertAction(title:"斜體",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[i]text[/i]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "i")
         }))
         actionsheet.addAction(UIAlertAction(title:"底線",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[u]text[/u]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "u")
         }))
         actionsheet.addAction(UIAlertAction(title:"刪除線",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[s]text[/s]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "s")
         }))
         actionsheet.addAction(UIAlertAction(title:"置左",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[left]text[/left]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "left")
         }))
         actionsheet.addAction(UIAlertAction(title:"置中",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[center]text[/center]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "center")
         }))
         actionsheet.addAction(UIAlertAction(title:"置右",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[right]text[/right]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "right")
         }))
         actionsheet.addAction(UIAlertAction(title:"冇嘢啦",style:.cancel,handler:nil))
         self.present(actionsheet,animated: true,completion: nil)
@@ -334,43 +282,23 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let actionsheet = UIAlertController(title:"揀顏色", message: nil, preferredStyle: .actionSheet)
         actionsheet.addAction(UIAlertAction(title:"紅色",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[red]text[/red]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "red")
         }))
         actionsheet.addAction(UIAlertAction(title:"橙色",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[orange]text[/orange]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "orange")
         }))
         actionsheet.addAction(UIAlertAction(title:"綠色",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[green]text[/green]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "green")
         }))
         actionsheet.addAction(UIAlertAction(title:"藍色",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[blue]text[/blue]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "blue")
         }))
         actionsheet.addAction(UIAlertAction(title:"紫色",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[purple]text[/purple]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "purple")
         }))
         actionsheet.addAction(UIAlertAction(title:"冇嘢啦",style:.cancel,handler:nil))
         present(actionsheet,animated: true,completion: nil)
@@ -389,11 +317,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         }))
         actionsheet.addAction(UIAlertAction(title:"[img] tag",style:.default,handler: {
             _ in
-            self.contentTextView.insertText("[img]text[/img]\n")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "img")
         }))
         actionsheet.addAction(UIAlertAction(title:"冇嘢啦",style:.cancel,handler:nil))
         present(actionsheet,animated: true,completion: nil)
@@ -403,27 +327,15 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let actionsheet = UIAlertController(title:"特別格式",message:nil,preferredStyle:.actionSheet)
         actionsheet.addAction(UIAlertAction(title: "[url] tag", style: .default, handler: {
             _ in
-            self.contentTextView.insertText("[url]text[/url]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "url")
         }))
         actionsheet.addAction(UIAlertAction(title: "[quote] tag", style: .default, handler: {
             _ in
-            self.contentTextView.insertText("[quote]text[/quote]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "quote")
         }))
         actionsheet.addAction(UIAlertAction(title: "[hide] tag", style: .default, handler: {
             _ in
-            self.contentTextView.insertText("[hide]text[/hide]")
-            let range = self.contentTextView.text.range(of: "text")
-            let nsRange = self.contentTextView.text.nsRange(from: range!)
-            self.contentTextView.selectedRange = nsRange
-            self.contentTextView.select(nsRange)
+            self.insertTag(tag: "hide")
         }))
         actionsheet.addAction(UIAlertAction(title:"冇嘢啦",style:.cancel,handler:nil))
         present(actionsheet,animated: true,completion: nil)
@@ -523,6 +435,23 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                     self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
                 })
             }
+        }
+    }
+    
+    private func insertTag(tag: String) {
+        if self.contentTextView.text(in: self.contentTextView.selectedTextRange!) != nil {
+            let text = self.contentTextView.text(in: self.contentTextView.selectedTextRange!)
+            self.contentTextView.insertText("[\(tag)]\(text!)[/\(tag))]")
+            let range = self.contentTextView.text.range(of: "\(text!)")
+            let nsRange = self.contentTextView.text.nsRange(from: range!)
+            self.contentTextView.selectedRange = nsRange
+            self.contentTextView.select(nsRange)
+        } else {
+            self.contentTextView.insertText("[\(tag)]text[/\(tag)]")
+            let range = self.contentTextView.text.range(of: "text")
+            let nsRange = self.contentTextView.text.nsRange(from: range!)
+            self.contentTextView.selectedRange = nsRange
+            self.contentTextView.select(nsRange)
         }
     }
 }

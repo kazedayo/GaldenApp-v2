@@ -8,6 +8,7 @@
 
 import UIKit
 import KeychainSwift
+import SideMenu
 
 class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
@@ -18,6 +19,7 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     let userID = UILabel()
     let logoutButton = UIButton()
     let settingsButton = UIButton()
+    let titleButton = UIButton()
     let keychain = KeychainSwift()
     
     override func viewDidAppear(_ animated: Bool) {
@@ -28,7 +30,10 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.isNavigationBarHidden = true
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.tintColor = .white
+        
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
         tableView.backgroundColor = .clear
@@ -37,6 +42,13 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         tableView.separatorStyle = .none
         tableView.register(ChannelListTableViewCell.self, forCellReuseIdentifier: "ChannelListTableViewCell")
         view.addSubview(tableView)
+        
+        titleButton.setImage(UIImage(named: "menuIcon"), for: .normal)
+        titleButton.setTitle("  1080-SIGNAL", for: .normal)
+        titleButton.setTitleColor(.lightGray, for: .normal)
+        titleButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        titleButton.isUserInteractionEnabled = false
+        view.addSubview(titleButton)
         
         userName.text = keychain.get("userName")!
         userName.textColor = .white
@@ -71,14 +83,16 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         stackView.addArrangedSubview(settingsButton)
         view.addSubview(stackView)
         
+        titleButton.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalToSuperview().offset(33)
+            make.leading.equalToSuperview().offset(15)
+            make.trailing.equalToSuperview().offset(-15)
+        }
+        
         userName.snp.makeConstraints {
             (make) -> Void in
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
-            } else {
-                // Fallback on earlier versions
-                make.top.equalToSuperview().offset(30)
-            }
+            make.top.equalTo(titleButton.snp.bottom).offset(20)
             make.leading.equalToSuperview().offset(15)
             make.trailing.equalToSuperview().offset(-15)
         }
@@ -147,9 +161,7 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     @objc func settingsButtonPressed(_ sender: UIButton) {
         let settingsVC = SettingsViewController()
-        settingsVC.modalPresentationStyle = .overCurrentContext
-        settingsVC.modalTransitionStyle = .crossDissolve
-        present(settingsVC, animated: true, completion: nil)
+        SideMenuManager.default.menuLeftNavigationController?.pushViewController(settingsVC, animated: true)
     }
     
     /*

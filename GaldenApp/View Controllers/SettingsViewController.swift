@@ -12,6 +12,7 @@ import PKHUD
 import RealmSwift
 import IQKeyboardManagerSwift
 import SwiftyStoreKit
+import SideMenu
 
 class SettingsViewController: UIViewController,UINavigationControllerDelegate,UITextViewDelegate,UIPopoverPresentationControllerDelegate {
 
@@ -91,7 +92,11 @@ class SettingsViewController: UIViewController,UINavigationControllerDelegate,UI
         
         adIAPButton.setImage(UIImage(named: "noAds"), for: .normal)
         adIAPButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        adIAPButton.setTitle(" 去除廣告", for: .normal)
+        if (keychain.getBool("noAd") == false) {
+            adIAPButton.setTitle(" 去除廣告", for: .normal)
+        } else {
+            adIAPButton.setTitle(" 多謝支持!", for: .normal)
+        }
         adIAPButton.tintColor = .white
         adIAPButton.imageView?.contentMode = .scaleAspectFit
         adIAPButton.addTarget(self, action: #selector(adIAPButtonPressed(_:)), for: .touchUpInside)
@@ -99,7 +104,7 @@ class SettingsViewController: UIViewController,UINavigationControllerDelegate,UI
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
-        stackView.alignment = .center
+        stackView.alignment = .leading
         stackView.spacing = 25
         stackView.addArrangedSubview(leaveNameButton)
         stackView.addArrangedSubview(changeNameButton)
@@ -111,8 +116,8 @@ class SettingsViewController: UIViewController,UINavigationControllerDelegate,UI
         stackView.snp.makeConstraints {
             (make) -> Void in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(10)
-            make.trailing.equalTo(-10)
+            make.leading.equalTo(25)
+            make.trailing.equalTo(-25)
         }
     }
     

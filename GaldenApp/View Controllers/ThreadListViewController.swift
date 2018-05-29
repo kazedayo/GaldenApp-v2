@@ -37,8 +37,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         super.viewDidLoad()
         
         let menuLeftNavigationController = UISideMenuNavigationController(rootViewController: sideMenuVC)
+        sideMenuVC.mainVC = self
         SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
-        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
+        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view, forMenu: .left)
+        SideMenuManager.default.menuPushStyle = .subMenu
         SideMenuManager.default.menuWidth = 150
         SideMenuManager.default.menuFadeStatusBar = false
         

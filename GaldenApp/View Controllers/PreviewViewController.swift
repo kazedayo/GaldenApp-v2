@@ -11,7 +11,7 @@ import WebKit
 import MarqueeLabel
 import PKHUD
 
-class PreviewViewController: UIViewController {
+class PreviewViewController: UIViewController,WKNavigationDelegate {
     
     var type: String?
     var topicID: String?
@@ -38,6 +38,7 @@ class PreviewViewController: UIViewController {
         super.viewDidLoad()
         xbbcodeBridge.shared.sender = "preview"
         view.addGestureRecognizer(swipeToDismiss)
+        webView.navigationDelegate = self
         
         backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         backgroundView.layer.cornerRadius = 10
@@ -167,6 +168,11 @@ class PreviewViewController: UIViewController {
                 }
             })
         }
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
+        webView.evaluateJavaScript("new Blazy();")
     }
     
 }
