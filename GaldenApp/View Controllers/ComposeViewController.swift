@@ -439,9 +439,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     private func insertTag(tag: String) {
-        if self.contentTextView.text(in: self.contentTextView.selectedTextRange!) != nil {
+        if self.contentTextView.text(in: self.contentTextView.selectedTextRange!) != "" {
             let text = self.contentTextView.text(in: self.contentTextView.selectedTextRange!)
-            self.contentTextView.insertText("[\(tag)]\(text!)[/\(tag))]")
+            self.contentTextView.insertText("[\(tag)]\(text!)[/\(tag)]")
             let range = self.contentTextView.text.range(of: "\(text!)")
             let nsRange = self.contentTextView.text.nsRange(from: range!)
             self.contentTextView.selectedRange = nsRange
