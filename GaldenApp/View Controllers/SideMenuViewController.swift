@@ -85,7 +85,7 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         
         titleButton.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalToSuperview().offset(33)
+            make.top.equalTo(view.snp.topMargin).offset(-33)
             make.leading.equalToSuperview().offset(15)
             make.trailing.equalToSuperview().offset(-15)
         }

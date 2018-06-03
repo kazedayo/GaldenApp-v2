@@ -65,7 +65,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
             (make) -> Void in
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
-            make.bottom.equalTo(-15)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-15)
         }
         
         titleLabel.snp.makeConstraints {
