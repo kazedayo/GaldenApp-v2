@@ -45,7 +45,7 @@ class WelcomeViewController: UIViewController {
             make.height.equalTo(30)
             make.leading.equalTo(25)
             make.trailing.equalTo(-25)
-            make.bottom.equalTo(-25)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-25)
         }
         // Do any additional setup after loading the view.
     }

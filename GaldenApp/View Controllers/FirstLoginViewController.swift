@@ -80,7 +80,7 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
             (make) -> Void in
             make.top.equalTo(passwordField.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
-            make.width.equalTo(50)
+            make.width.equalTo(100)
         }
         // Do any additional setup after loading the view.
     }

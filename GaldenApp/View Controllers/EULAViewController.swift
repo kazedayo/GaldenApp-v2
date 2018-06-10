@@ -45,7 +45,7 @@ class EULAViewController: UIViewController {
         
         eulaLabel.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(25)
+            make.top.equalTo(view.snp.topMargin).offset(25)
             make.leading.equalTo(25)
             make.trailing.equalTo(-25)
         }
@@ -61,7 +61,7 @@ class EULAViewController: UIViewController {
             make.top.equalTo(eulaContent.snp.bottom).offset(10)
             make.leading.equalTo(25)
             make.trailing.equalTo(-25)
-            make.bottom.equalTo(-10)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-25)
         }
         // Do any additional setup after loading the view.
     }
