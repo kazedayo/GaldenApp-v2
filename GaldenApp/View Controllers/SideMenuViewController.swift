@@ -25,6 +25,10 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tableView.selectRow(at: IndexPath.init(row: channelSelected, section: 0), animated: true, scrollPosition: .top)
+        HKGaldenAPI.shared.getUserDetail(completion: {
+            uname, uid in
+            self.userName.text = uname
+        })
     }
     
     override func viewDidLoad() {
@@ -50,7 +54,7 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         titleButton.isUserInteractionEnabled = false
         view.addSubview(titleButton)
         
-        userName.text = keychain.get("userName")!
+        userName.text = "撈緊..."
         userName.textColor = .white
         userName.font = UIFont.systemFont(ofSize: 15)
         view.addSubview(userName)

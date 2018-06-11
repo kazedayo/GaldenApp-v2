@@ -201,7 +201,7 @@ class SettingsViewController: UIViewController,UINavigationControllerDelegate,UI
                     success.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(success, animated: true, completion: nil)
                 case .error(let error):
-                    let failure = UIAlertController(title: "購買失敗:(", message: "debug info: \(error.code.rawValue)", preferredStyle: .alert)
+                    let failure = UIAlertController(title: "購買失敗:(", message: "debug info: \(error.code)", preferredStyle: .alert)
                     failure.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(failure, animated: true, completion: nil)
                 }

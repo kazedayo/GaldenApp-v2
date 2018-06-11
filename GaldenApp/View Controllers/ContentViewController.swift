@@ -77,6 +77,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         navigationController?.isToolbarHidden = false
         navigationController?.toolbar.barStyle = .black
         navigationController?.toolbar.tintColor = .white
+        prevButton.isEnabled = false
+        nextButton.isEnabled = false
+        replyButton.isEnabled = false
+        pageButton.isEnabled = false
+        moreButton.isEnabled = false
         toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,moreButton,flexibleSpace,nextButton]
         
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
@@ -262,7 +267,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func f5buttonPressed() {
         self.f5 = true
-        self.webView.evaluateJavaScript("$(\".showing\").last().attr(\"id\")", completionHandler: {
+        self.webView.evaluateJavaScript("$(\".comment\").last().attr(\"id\")", completionHandler: {
             result,error in
             let position = result as! String
             self.scrollPosition = position
@@ -430,8 +435,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     private func updateSequence() {
         webView.isHidden = true
         self.view.addSubview(activityIndicator)
-        self.prevButton.isEnabled = false
-        self.nextButton.isEnabled = false
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             count in
             self.pageCount = count
@@ -569,6 +572,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: WebView Delegate
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        replyButton.isEnabled = true
+        pageButton.isEnabled = true
+        moreButton.isEnabled = true
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         webView.evaluateJavaScript("new Blazy();", completionHandler: {
             result,error in
