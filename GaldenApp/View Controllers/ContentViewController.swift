@@ -399,11 +399,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     @objc func prevButtonPressed(_ sender: UIBarButtonItem) {
         pageNow -= 1
+        prevButton.isEnabled = false
+        nextButton.isEnabled = false
         updateSequence()
     }
     
     @objc func nextButtonPressed(_ sender: UIBarButtonItem) {
         pageNow += 1
+        prevButton.isEnabled = false
+        nextButton.isEnabled = false
         updateSequence()
     }
     
