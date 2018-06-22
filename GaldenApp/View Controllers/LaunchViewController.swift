@@ -9,7 +9,7 @@
 import UIKit
 import Kingfisher
 
-class LaunchViewController: UIViewController {
+class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
     
     let logo = UIImageView()
     let text = UILabel()
@@ -45,14 +45,20 @@ class LaunchViewController: UIViewController {
         text.snp.makeConstraints {
             (make) -> Void in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(200)
+            make.centerY.equalToSuperview().offset(100)
         }
         
         HKGaldenAPI.shared.getChannelList(completion: {
-            let mainVC = UINavigationController(rootViewController: ThreadListViewController())
-            mainVC.hero.isEnabled = true
-            mainVC.hero.modalAnimationType = .zoom
-            self.present(mainVC, animated: true, completion: nil)
+            var splitViewController =  UISplitViewController()
+            splitViewController.delegate = self
+            let rootViewController = ThreadListViewController()
+            let detailViewController = iPadPlaceholderDetailViewController()
+            let rootNavigationController = UINavigationController(rootViewController:rootViewController)
+            splitViewController.viewControllers = [rootNavigationController,detailViewController]
+            splitViewController.preferredDisplayMode = .allVisible
+            splitViewController.hero.isEnabled = true
+            splitViewController.hero.modalAnimationType = .zoom
+            self.present(splitViewController, animated: true, completion: nil)
         })
         // Do any additional setup after loading the view.
     }
@@ -72,5 +78,12 @@ class LaunchViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    func splitViewController(
+        _ splitViewController: UISplitViewController,
+        collapseSecondary secondaryViewController: UIViewController,
+        onto primaryViewController: UIViewController) -> Bool {
+        // Return true to prevent UIKit from applying its default behavior
+        return true
+    }
 }

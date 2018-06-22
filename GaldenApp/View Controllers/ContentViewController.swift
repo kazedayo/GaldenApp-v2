@@ -43,9 +43,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //HKGalden API (NOT included in GitHub repo)
     let keychain = KeychainSwift()
     
-    var activityIndicator = UIActivityIndicatorView()
-    var reloadButton = UIButton()
     let adBannerView = GADBannerView()
+    let activityIndicator = UIActivityIndicatorView()
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var replyButton = UIBarButtonItem(image: UIImage(named: "Reply"), style: .plain, target: self, action: #selector(replyButtonPressed))
     lazy var moreButton = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(moreButtonPressed))
@@ -57,6 +56,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         super.viewDidLoad()
         xbbcodeBridge.shared.sender = "content"
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
         
         let config = WKWebViewConfiguration()
         config.preferences.javaScriptEnabled = true
@@ -89,6 +91,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         adBannerView.rootViewController = self
         view.addSubview(adBannerView)
         
+        activityIndicator.snp.makeConstraints {
+            (make) -> Void in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        
         webView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(view.snp.topMargin)
@@ -112,13 +120,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             }
             make.height.equalTo(50)
         }
-        
-        activityIndicator.center = self.view.center
-        activityIndicator.startAnimating()
-        self.view.addSubview(activityIndicator)
-        reloadButton.center = self.view.center
-        reloadButton.setTitle("重新載入", for: .normal)
-        reloadButton.addTarget(self, action: #selector(reloadButtonPressed(_:)), for: .touchUpInside)
         
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             count in
@@ -411,10 +412,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         updateSequence()
     }
     
-    @objc func reloadButtonPressed(_ sender: UIButton) {
-        self.updateSequence()
-    }
-    
     //MARK: Private Functions
     
     private func buttonLogic() {
@@ -438,7 +435,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     private func updateSequence() {
         webView.isHidden = true
-        self.view.addSubview(activityIndicator)
+        activityIndicator.isHidden = false
         HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             count in
             self.pageCount = count
@@ -448,7 +445,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         HKGaldenAPI.shared.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
             op,comments,rated,blocked,error in
             if (error == nil) {
-                self.reloadButton.removeFromSuperview()
                 self.op = op!
                 self.comments = comments!
                 self.blockedUsers = blocked!
@@ -495,9 +491,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(self.convertedHTML)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
                 self.webView.loadHTMLString(self.pageHTML, baseURL: Bundle.main.bundleURL)
                 NetworkActivityIndicatorManager.networkOperationStarted()
-            } else {
-                self.activityIndicator.removeFromSuperview()
-                self.view.addSubview(self.reloadButton)
             }
         })
     }
@@ -576,6 +569,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: WebView Delegate
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        activityIndicator.isHidden = true
         replyButton.isEnabled = true
         pageButton.isEnabled = true
         moreButton.isEnabled = true
@@ -587,7 +581,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     webView.evaluateJavaScript("window.scrollTo(0,document.body.scrollHeight);", completionHandler: {(result, error) in
                         self.replied = false
                         NetworkActivityIndicatorManager.networkOperationFinished()
-                        self.activityIndicator.removeFromSuperview()
                         webView.isHidden = false
                     })
                 } else if self.f5 == true {
@@ -596,7 +589,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                         DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
                             self.f5 = false
                             NetworkActivityIndicatorManager.networkOperationFinished()
-                            self.activityIndicator.removeFromSuperview()
                             webView.isHidden = false
                         })
                     })
@@ -608,20 +600,17 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                             result,error in
                             DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
                                 NetworkActivityIndicatorManager.networkOperationFinished()
-                                self.activityIndicator.removeFromSuperview()
                                 webView.isHidden = false
                             })
                         })
                     } else {
                         NetworkActivityIndicatorManager.networkOperationFinished()
-                        self.activityIndicator.removeFromSuperview()
                         webView.isHidden = false
                     }
                     self.loaded = true
                 }
                 else {
                     NetworkActivityIndicatorManager.networkOperationFinished()
-                    self.activityIndicator.removeFromSuperview()
                     webView.isHidden = false
                 }
             })

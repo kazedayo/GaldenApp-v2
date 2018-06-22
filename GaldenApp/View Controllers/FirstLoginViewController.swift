@@ -9,7 +9,7 @@
 import UIKit
 import KeychainSwift
 
-class FirstLoginViewController: UIViewController,UITextFieldDelegate {
+class FirstLoginViewController: UIViewController,UITextFieldDelegate,UISplitViewControllerDelegate {
     
     let loginText = UILabel()
     let emailField = UITextField()
@@ -110,11 +110,17 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
                         self?.keychain.set(username, forKey: "userName")
                         self?.keychain.set(userid, forKey: "userID")
                         self?.keychain.set(true, forKey: "isLoggedIn")
-                        let mainVC = UINavigationController(rootViewController: ThreadListViewController())
-                        mainVC.hero.isEnabled = true
-                        mainVC.hero.modalAnimationType = .zoom
                         HKGaldenAPI.shared.getChannelList {
-                            self?.present(mainVC, animated: true, completion: nil)
+                            var splitViewController =  UISplitViewController()
+                            splitViewController.delegate = self
+                            let rootViewController = ThreadListViewController()
+                            let detailViewController = iPadPlaceholderDetailViewController()
+                            let rootNavigationController = UINavigationController(rootViewController:rootViewController)
+                            splitViewController.viewControllers = [rootNavigationController,detailViewController]
+                            splitViewController.preferredDisplayMode = .allVisible
+                            splitViewController.hero.isEnabled = true
+                            splitViewController.hero.modalAnimationType = .zoom
+                            self?.present(splitViewController, animated: true, completion: nil)
                         }
                     }
                 })
@@ -142,5 +148,11 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
         // Pass the selected object to the new view controller.
     }
     */
-
+    func splitViewController(
+        _ splitViewController: UISplitViewController,
+        collapseSecondary secondaryViewController: UIViewController,
+        onto primaryViewController: UIViewController) -> Bool {
+        // Return true to prevent UIKit from applying its default behavior
+        return true
+    }
 }

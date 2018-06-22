@@ -89,6 +89,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             }
             make.height.equalTo(50)
         }
+        
         navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         navigationController?.navigationBar.tintColor = .white
@@ -126,6 +127,15 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 refreshControl.endRefreshing()
             })
         })
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if tableView.indexPathForSelectedRow != nil && UIDevice.current.model.contains("iPhone") {
+            tableView.deselectRow(at: tableView.indexPathForSelectedRow!, animated: true)
+        }
+        if UIDevice.current.orientation.isPortrait && UIDevice.current.model.contains("iPhone") {
+            splitViewController?.viewControllers = [self.navigationController!,iPadPlaceholderDetailViewController()]
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -222,12 +232,22 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             tableView.deselectRow(at: indexPath, animated: true)
         } else {
             let contentVC = ContentViewController()
+            let contentNavVC = UINavigationController(rootViewController: contentVC)
+            contentNavVC.navigationBar.barStyle = .black
             let selectedThread = threads[indexPath.row].id
             contentVC.threadIdReceived = selectedThread
             contentVC.title = threads[indexPath.row].title
             contentVC.ident = threads[indexPath.row].ident
             contentVC.sender = "cell"
-            navigationController?.pushViewController(contentVC, animated: true)
+            if UIDevice.current.model.contains("iPhone") && UIDevice.current.orientation.isPortrait {
+                for subJson in HKGaldenAPI.shared.chList! {
+                    if subJson["ident"].stringValue == threads[indexPath.row].ident {
+                        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
+                    }
+                }
+            }
+            splitViewController?.showDetailViewController(contentNavVC, sender: self)
+            //navigationController?.pushViewController(contentVC, animated: true)
         }
     }
     

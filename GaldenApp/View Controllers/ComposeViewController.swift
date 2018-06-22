@@ -148,10 +148,12 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         backgroundView.snp.makeConstraints {
             (make) -> Void in
-            make.leading.equalTo(15)
-            make.trailing.equalTo(-15)
             make.bottom.equalTo(view.snp.bottomMargin).offset(-15)
             make.height.equalTo(300)
+            make.width.lessThanOrEqualTo(500)
+            make.leadingMargin.greaterThanOrEqualTo(15)
+            make.trailingMargin.greaterThanOrEqualTo(-15)
+            make.centerX.equalToSuperview()
         }
         
         channelLabel.snp.makeConstraints {
@@ -216,6 +218,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
 
     @objc func fontSizeButtonPressed(_ sender: UIButton) {
         let actionsheet = UIAlertController(title:"揀大細", message: nil, preferredStyle: .actionSheet)
+        actionsheet.popoverPresentationController?.sourceView = fontSizeButton
+        actionsheet.popoverPresentationController?.sourceRect = fontSizeButton.bounds
         actionsheet.addAction(UIAlertAction(title:"超大",style:.default,handler: {
             _ in
             self.insertTag(tag: "size=6")
@@ -246,6 +250,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     @objc func fontStyleButtonPressed(_ sender: UIButton) {
         let actionsheet = UIAlertController(title:"字體格式", message: nil, preferredStyle: .actionSheet)
+        actionsheet.popoverPresentationController?.sourceView = fontStyleButton
+        actionsheet.popoverPresentationController?.sourceRect = fontStyleButton.bounds
         actionsheet.addAction(UIAlertAction(title:"粗體",style:.default,handler: {
             _ in
             self.insertTag(tag: "b")
@@ -280,6 +286,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     @objc func fontColorButtonPressed(_ sender: UIButton) {
         let actionsheet = UIAlertController(title:"揀顏色", message: nil, preferredStyle: .actionSheet)
+        actionsheet.popoverPresentationController?.sourceView = fontColorButton
+        actionsheet.popoverPresentationController?.sourceRect = fontColorButton.bounds
         actionsheet.addAction(UIAlertAction(title:"紅色",style:.default,handler: {
             _ in
             self.insertTag(tag: "red")
@@ -306,6 +314,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     @objc func imageButtonPressed(_ sender: UIButton) {
         let actionsheet = UIAlertController(title:"噏圖(powered by eService-HK)",message:"你想...",preferredStyle:.actionSheet)
+        actionsheet.popoverPresentationController?.sourceView = imageButton
+        actionsheet.popoverPresentationController?.sourceRect = imageButton.bounds
         actionsheet.addAction(UIAlertAction(title:"揀相",style:.default,handler: {
             _ in
             let imagePicker = UIImagePickerController()
@@ -325,6 +335,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     @objc func urlButtonPressed(_ sender: UIButton) {
         let actionsheet = UIAlertController(title:"特別格式",message:nil,preferredStyle:.actionSheet)
+        actionsheet.popoverPresentationController?.sourceView = urlButton
+        actionsheet.popoverPresentationController?.sourceRect = urlButton.bounds
         actionsheet.addAction(UIAlertAction(title: "[url] tag", style: .default, handler: {
             _ in
             self.insertTag(tag: "url")

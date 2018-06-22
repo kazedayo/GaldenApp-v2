@@ -83,10 +83,12 @@ class ContentMenuViewController: UIViewController {
         
         backgroundView.snp.makeConstraints {
             (make) -> Void in
-            make.leading.equalTo(15)
-            make.trailing.equalTo(-15)
             make.bottom.equalTo(view.snp.bottomMargin).offset(-15)
             make.height.equalTo(200)
+            make.width.lessThanOrEqualTo(500)
+            make.leadingMargin.greaterThanOrEqualTo(15)
+            make.trailingMargin.greaterThanOrEqualTo(-15)
+            make.centerX.equalToSuperview()
         }
         
         stackView.snp.makeConstraints {
