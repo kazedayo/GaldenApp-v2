@@ -31,9 +31,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var blockedUsers = [String]()
     var pageHTML = ""
     var convertedHTML = ""
-    var replied = false
-    var f5 = false
-    var loaded = false
+    var navType: NavigationType = .normal
     var scrollPosition = ""
     var sender = ""
     var ident = ""
@@ -238,7 +236,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 status in
                 if status == "true" {
                     self.blockedUsers.append(self.op.userID)
-                    self.f5 = true
+                    self.navType = .refresh
                     self.scrollPosition = "0"
                     self.updateSequence()
                 }
@@ -248,7 +246,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 status in
                 if status == "true" {
                     self.blockedUsers.append(self.comments[Int(type)! + 1].userID)
-                    self.f5 = true
+                    self.navType = .refresh
                     self.scrollPosition = type
                     self.updateSequence()
                 }
@@ -258,7 +256,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 status in
                 if status == "true" {
                     self.blockedUsers.append(self.comments[Int(type)!].userID)
-                    self.f5 = true
+                    self.navType = .refresh
                     self.scrollPosition = type
                     self.updateSequence()
                 }
@@ -267,7 +265,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func f5buttonPressed() {
-        self.f5 = true
+        self.navType = .refresh
         self.webView.evaluateJavaScript("$(\".comment\").last().attr(\"id\")", completionHandler: {
             result,error in
             let position = result as! String
@@ -306,7 +304,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     @objc func replyButtonPressed() {
         let composeVC = ComposeViewController()
         composeVC.topicID = self.threadIdReceived
-        composeVC.type = "reply"
+        composeVC.composeType = .reply
         composeVC.modalPresentationStyle = .overFullScreen
         composeVC.hero.isEnabled = true
         composeVC.hero.modalAnimationType = .fade
@@ -318,7 +316,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         let composeVC = ComposeViewController()
         composeVC.topicID = self.threadIdReceived
         composeVC.content = self.quoteContent + "\n"
-        composeVC.type = "reply"
+        composeVC.composeType = .reply
         composeVC.modalPresentationStyle = .overFullScreen
         composeVC.hero.isEnabled = true
         composeVC.hero.modalAnimationType = .fade
@@ -360,7 +358,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self.pageCount = count
             self.pageNow = Int(self.pageCount)
             self.pageButton.title = "第\(self.pageNow)頁"
-            self.replied = true
+            self.navType = .reply
             xbbcodeBridge.shared.sender = "content"
             self.updateSequence()
         })
@@ -386,7 +384,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                         self.pageCount = count
                         self.pageNow = Int(self.pageCount)
                         self.pageButton.title = "第\(self.pageNow)頁"
-                        self.replied = true
+                        self.navType = .reply
                         self.updateSequence()
                     })
                 }
@@ -577,22 +575,23 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView.evaluateJavaScript("new Blazy();", completionHandler: {
             result,error in
             DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
-                if self.replied == true {
+                switch self.navType {
+                case .reply:
                     webView.evaluateJavaScript("window.scrollTo(0,document.body.scrollHeight);", completionHandler: {(result, error) in
-                        self.replied = false
                         NetworkActivityIndicatorManager.networkOperationFinished()
                         webView.isHidden = false
+                        self.navType = .normal
                     })
-                } else if self.f5 == true {
+                case .refresh:
                     webView.evaluateJavaScript("$(\"#\((self.scrollPosition))\").get(0).scrollIntoView();", completionHandler: {
                         result,error in
                         DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
-                            self.f5 = false
                             NetworkActivityIndicatorManager.networkOperationFinished()
                             webView.isHidden = false
+                            self.navType = .normal
                         })
                     })
-                } else if self.loaded == false {
+                case .normal:
                     let realm = try! Realm()
                     let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
                     if thisPost != nil && self.sender == "cell" {
@@ -607,11 +606,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                         NetworkActivityIndicatorManager.networkOperationFinished()
                         webView.isHidden = false
                     }
-                    self.loaded = true
-                }
-                else {
-                    NetworkActivityIndicatorManager.networkOperationFinished()
-                    webView.isHidden = false
                 }
             })
         })

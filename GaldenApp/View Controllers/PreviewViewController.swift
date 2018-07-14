@@ -13,7 +13,7 @@ import PKHUD
 
 class PreviewViewController: UIViewController,WKNavigationDelegate {
     
-    var type: String?
+    var composeType: ComposeType!
     var topicID: String?
     var channel: Int?
     var titleText: String?
@@ -54,7 +54,7 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
         titleLabel.animationDelay = 1
         titleLabel.marqueeType = .MLLeftRight
         titleLabel.fadeLength = 5
-        if type == "reply" {
+        if composeType == .reply {
             titleLabel.text = "回覆預覽"
         } else {
             titleLabel.text = titleText!
@@ -150,7 +150,7 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
     
     @objc func sendButtonPressed(_ sender: UIButton) {
         HUD.show(.progress)
-        if type == "newThread" {
+        if composeType == .newThread {
             HKGaldenAPI.shared.submitPost(channel: HKGaldenAPI.shared.chList![channel!]["ident"].stringValue, title: titleText!, content: contentText!, completion: {
                 error in
                 if error == nil {
@@ -159,7 +159,7 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
                     self.composeVC.threadVC?.unwindToThreadListAfterNewPost()
                 }
             })
-        } else if type == "reply" {
+        } else {
             HKGaldenAPI.shared.reply(topicID: topicID!, content: contentText!, completion: {
                 error in
                 if error == nil {

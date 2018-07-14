@@ -11,6 +11,7 @@ import PKHUD
 import GoogleMobileAds
 import QuartzCore
 import SideMenu
+import RealmSwift
 
 class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
     
@@ -24,6 +25,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     var selectedThreadTitle: String!
     
     let keychain = KeychainSwift()
+    let realm = try! Realm()
     let tableView = UITableView()
     let adBannerView = GADBannerView()
     let sideMenuVC = SideMenuViewController()
@@ -141,7 +143,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isToolbarHidden = true
-        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
+        //self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         if (keychain.getBool("noAd") == true) {
             adBannerView.removeFromSuperview()
             view.layoutSubviews()
@@ -152,6 +154,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)
@@ -205,6 +208,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             let count = self.threads[indexPath.row].count
             let rate = self.threads[indexPath.row].rate
             let isBlocked = self.threads[indexPath.row].isBlocked
+            let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
         if (isBlocked == true) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "BlockedTableViewCell") as! BlockedTableViewCell
             cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
@@ -213,6 +217,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
+            if (readThreads != nil) {
+                cell.accessoryView = UIImageView(image: UIImage(named:"read"))
+            } else {
+                cell.accessoryView = UIView()
+            }
             cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
             cell.threadTitleLabel.text = title
             cell.threadTitleLabel.textColor = .lightGray
@@ -287,7 +296,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func newThreadButtonPressed() {
         let composeVC = ComposeViewController()
         composeVC.channel = channelNow
-        composeVC.type = "newThread"
+        composeVC.composeType = .newThread
         composeVC.modalPresentationStyle = .overFullScreen
         composeVC.hero.isEnabled = true
         composeVC.hero.modalAnimationType = .fade

@@ -22,7 +22,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var channel = 0
     var content = ""
     var topicID = ""
-    var type = ""
+    var composeType: ComposeType!
     var kheight: CGFloat = 0
     var contentVC: ContentViewController?
     var threadVC: ThreadListViewController?
@@ -90,10 +90,17 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         backgroundView.addSubview(titleTextField)
         backgroundView.addSubview(contentTextView)
         
-        if type == "reply" {
+        if composeType == .reply {
             titleTextField.removeFromSuperview()
             channelLabel.text = "回覆"
             contentTextView.text = content
+        } else {
+            titleTextField.snp.makeConstraints {
+                (make) -> Void in
+                make.top.equalTo(channelLabel.snp.bottom).offset(10)
+                make.leading.equalTo(15)
+                make.trailing.equalTo(-15)
+            }
         }
         
         previewButton.setTitle("預覽", for: .normal)
@@ -163,15 +170,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             make.trailing.equalTo(-15)
         }
         
-        if type != "reply" {
-            titleTextField.snp.makeConstraints {
-                (make) -> Void in
-                make.top.equalTo(channelLabel.snp.bottom).offset(10)
-                make.leading.equalTo(15)
-                make.trailing.equalTo(-15)
-            }
-        }
-        
         contentTextView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(stackView.snp.bottom).offset(10)
@@ -181,7 +179,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         stackView.snp.makeConstraints {
             (make) -> Void in
-            if type == "reply" {
+            if composeType == .reply {
                 make.top.equalTo(channelLabel.snp.bottom).offset(10)
             } else {
                 make.top.equalTo(titleTextField.snp.bottom).offset(10)
@@ -355,7 +353,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     @objc func previewButtonPressed(_ sender: UIButton) {
         self.view.endEditing(true)
-        if (type == "newThread" && titleTextField.text == "") {
+        if (composeType == .newThread && titleTextField.text == "") {
             let alert = UIAlertController.init(title: "注意", message: "標題不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
             self.present(alert,animated: true,completion: nil)
@@ -367,10 +365,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         } else {
             let previewVC = PreviewViewController()
             previewVC.modalPresentationStyle = .overCurrentContext
-            previewVC.type = type
+            previewVC.composeType = composeType
             previewVC.contentText = contentTextView.text
             previewVC.composeVC = self
-            if type != "reply" {
+            if composeType != .reply {
                 previewVC.titleText = titleTextField.text
                 previewVC.channel = self.channel
             } else {

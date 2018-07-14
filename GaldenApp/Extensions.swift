@@ -125,3 +125,14 @@ extension UIColor {
         self.init(hexRGBA: rgb + "ff") // Add alpha = 1.0
     }
 }
+
+enum NavigationType {
+    case normal
+    case refresh
+    case reply
+}
+
+enum ComposeType {
+    case reply
+    case newThread
+}

@@ -146,11 +146,17 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
-        cell.channelTitle.textColor = .white
-        channelSelected = indexPath.row
-        mainVC?.unwindToThreadList(channelSelected: channelSelected)
-        dismiss(animated: true, completion: nil)
+        if keychain.get("userID")! == "7687" && indexPath.row == 12 {
+            let alert = UIAlertController(title: "#ng#", message: "you know too much", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .destructive, handler: nil))
+            present(alert,animated: true,completion: nil)
+        } else {
+            let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
+            cell.channelTitle.textColor = .white
+            channelSelected = indexPath.row
+            mainVC?.unwindToThreadList(channelSelected: channelSelected)
+            dismiss(animated: true, completion: nil)
+        }
     }
     
     @objc func logoutButtonPressed(_ sender: UIButton) {
