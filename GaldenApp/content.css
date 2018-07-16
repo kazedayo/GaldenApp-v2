@@ -152,7 +152,9 @@ div#text.usertable {
 	border: 1px solid #666;
 } 
 .xbbcode-hide {
-	color: #ffccd5
+    display: block;
+    border: 1px dashed #ffccd5;
+    color: #ffccd5;
 }
 .xbbcode-red {
 	color: red;

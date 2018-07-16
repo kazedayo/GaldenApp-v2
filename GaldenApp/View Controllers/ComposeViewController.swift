@@ -60,7 +60,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         iconKeyboard.keyboardDelegate = self
         backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         backgroundView.layer.cornerRadius = 10
-        backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
+        backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 0))]
         backgroundView.layer.shadowColor = UIColor.black.cgColor
         backgroundView.layer.shadowOpacity = 1
         backgroundView.layer.shadowOffset = CGSize.zero
@@ -155,7 +155,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         backgroundView.snp.makeConstraints {
             (make) -> Void in
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-15)
+            make.top.equalTo(view.snp.topMargin).offset(30)
             make.height.equalTo(300)
             make.width.lessThanOrEqualTo(500)
             make.leadingMargin.greaterThanOrEqualTo(15)
