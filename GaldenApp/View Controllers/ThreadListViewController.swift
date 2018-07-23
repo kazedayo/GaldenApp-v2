@@ -12,6 +12,7 @@ import GoogleMobileAds
 import QuartzCore
 import SideMenu
 import RealmSwift
+import SwiftEntryKit
 
 class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
     
@@ -277,13 +278,26 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 self.selectedThreadTitle = threads[indexPath.row].title
                 self.pageCount = ceil((Double(threads[indexPath.row].count)!)/25)
                 let pageVC = PageSelectViewController()
+                var attributes = EKAttributes()
+                attributes.position = .bottom
+                attributes.displayPriority = .normal
+                let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+                let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 300)
+                attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+                attributes.positionConstraints.verticalOffset = 20
+                attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+                attributes.displayDuration = .infinity
+                attributes.screenInteraction = .absorbTouches
+                attributes.entryInteraction = .forward
+                attributes.screenBackground = .visualEffect(style: .dark)
+                attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+                attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+                attributes.roundCorners = .all(radius: 10)
+                attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
                 pageVC.pageCount = self.pageCount!
                 pageVC.titleText = self.selectedThreadTitle
-                pageVC.hero.isEnabled = true
-                pageVC.hero.modalAnimationType = .fade
-                pageVC.modalPresentationStyle = .overFullScreen
                 pageVC.mainVC = self
-                present(pageVC, animated: true, completion: nil)
+                SwiftEntryKit.display(entry: pageVC, using: attributes)
             }
         }
     }
@@ -295,13 +309,26 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @objc func newThreadButtonPressed() {
         let composeVC = ComposeViewController()
+        var attributes = EKAttributes()
+        attributes.position = .bottom
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        attributes.positionConstraints.verticalOffset = 20
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .absorbTouches
+        attributes.entryInteraction = .absorbTouches
+        attributes.screenBackground = .visualEffect(style: .dark)
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         composeVC.channel = channelNow
         composeVC.composeType = .newThread
-        composeVC.modalPresentationStyle = .overFullScreen
-        composeVC.hero.isEnabled = true
-        composeVC.hero.modalAnimationType = .fade
         composeVC.threadVC = self
-        present(composeVC, animated: true, completion: nil)
+        SwiftEntryKit.display(entry: composeVC, using: attributes)
     }
     
     // MARK: - Navigation

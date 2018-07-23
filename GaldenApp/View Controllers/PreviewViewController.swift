@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 import MarqueeLabel
 import PKHUD
+import SwiftEntryKit
 
 class PreviewViewController: UIViewController,WKNavigationDelegate {
     
@@ -23,31 +24,13 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
     let titleLabel = MarqueeLabel()
     var webView = WKWebView()
     let sendButton = UIButton()
+    let backButton = UIButton()
     var composeVC: ComposeViewController!
-    
-    lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
-    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
-    var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         xbbcodeBridge.shared.sender = "preview"
-        view.addGestureRecognizer(swipeToDismiss)
         webView.navigationDelegate = self
-        
-        backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        backgroundView.layer.cornerRadius = 10
-        backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
-        backgroundView.layer.shadowColor = UIColor.black.cgColor
-        backgroundView.layer.shadowOpacity = 1
-        backgroundView.layer.shadowOffset = CGSize.zero
-        backgroundView.layer.shadowRadius = 10
-        view.addSubview(backgroundView)
         
         titleLabel.font = UIFont.systemFont(ofSize: 20)
         titleLabel.textColor = .white
@@ -59,7 +42,7 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
         } else {
             titleLabel.text = titleText!
         }
-        backgroundView.addSubview(titleLabel)
+        view.addSubview(titleLabel)
         
         webView.isOpaque = false
         webView.backgroundColor = .clear
@@ -68,7 +51,7 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
         previewText = HKGaldenAPI.shared.iconParse(bbcode: previewText!)
         xbbcodeBridge.shared.convertBBCodeToHTML(text: previewText!)
         webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\((xbbcodeBridge.shared.convertedText!))<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>", baseURL: Bundle.main.bundleURL)
-        backgroundView.addSubview(webView)
+        view.addSubview(webView)
         
         sendButton.setTitle("發表", for: .normal)
         sendButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
@@ -76,17 +59,15 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
         sendButton.borderWidth = 1
         sendButton.backgroundColor = UIColor(hexRGB: "0076ff")
         sendButton.addTarget(self, action: #selector(sendButtonPressed(_:)), for: .touchUpInside)
-        backgroundView.addSubview(sendButton)
+        view.addSubview(sendButton)
         
-        backgroundView.snp.makeConstraints {
-            (make) -> Void in
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-15)
-            make.height.equalTo(400)
-            make.width.lessThanOrEqualTo(500)
-            make.leadingMargin.greaterThanOrEqualTo(15)
-            make.trailingMargin.greaterThanOrEqualTo(-15)
-            make.centerX.equalToSuperview()
-        }
+        backButton.setTitle("返回", for: .normal)
+        backButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        backButton.cornerRadius = 5
+        backButton.borderWidth = 1
+        backButton.backgroundColor = .red
+        backButton.addTarget(self, action: #selector(backButtonPressed(_:)), for: .touchUpInside)
+        view.addSubview(backButton)
         
         titleLabel.snp.makeConstraints {
             (make) -> Void in
@@ -105,6 +86,13 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
         sendButton.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(webView.snp.bottom).offset(10)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+        }
+        
+        backButton.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(sendButton.snp.bottom).offset(10)
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
             make.bottom.equalTo(-15)
@@ -128,34 +116,13 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
     }
     */
     
-    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
-        let touchPoint = sender.location(in: self.view?.window)
-        
-        if sender.state == UIGestureRecognizerState.began {
-            initialTouchPoint = touchPoint
-        } else if sender.state == UIGestureRecognizerState.changed {
-            if touchPoint.y - initialTouchPoint.y > 0 {
-                self.backgroundView.frame = CGRect(x: backgroundViewOriginalPoint.x, y: backgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-            }
-        } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
-            if touchPoint.y - initialTouchPoint.y > 100 {
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-                })
-            }
-        }
-    }
-    
     @objc func sendButtonPressed(_ sender: UIButton) {
         HUD.show(.progress)
         if composeType == .newThread {
             HKGaldenAPI.shared.submitPost(channel: HKGaldenAPI.shared.chList![channel!]["ident"].stringValue, title: titleText!, content: contentText!, completion: {
                 error in
                 if error == nil {
-                    self.dismiss(animated: true, completion: nil)
-                    self.composeVC.dismiss(animated: true, completion: nil)
+                    SwiftEntryKit.dismiss()
                     self.composeVC.threadVC?.unwindToThreadListAfterNewPost()
                 }
             })
@@ -163,13 +130,30 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
             HKGaldenAPI.shared.reply(topicID: topicID!, content: contentText!, completion: {
                 error in
                 if error == nil {
-                    self.dismiss(animated: true, completion: nil)
-                    self.composeVC.dismiss(animated: true, completion: nil)
-                    xbbcodeBridge.shared.sender = "content"
+                    SwiftEntryKit.dismiss()
                     self.composeVC.contentVC?.unwindAfterReply()
                 }
             })
         }
+    }
+    
+    @objc func backButtonPressed(_ sender: UIButton) {
+        var attributes = EKAttributes()
+        attributes.position = .bottom
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        attributes.positionConstraints.verticalOffset = 20
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .absorbTouches
+        attributes.screenBackground = .visualEffect(style: .dark)
+        attributes.entryBackground = .color(color: UIColor(white: 0.2, alpha: 1))
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
+        SwiftEntryKit.display(entry: composeVC, using: attributes)
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

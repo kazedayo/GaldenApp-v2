@@ -15,15 +15,17 @@ import GoogleMobileAds
 import SwiftyJSON
 import Kingfisher
 import SKPhotoBrowser
+import SwiftEntryKit
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
     
     //MARK: Properties
     
     var threadIdReceived: String = ""
-    var isRated: Bool = false
+    var isRated: Bool!
     var pageNow: Int = 1
-    var op = OP(title: "",name: "",level: "",content: "",contentHTML: "",avatar: "",date: "",good: "",bad: "",gender: "",channel: "",quoteID:"",userID:"",ident:"")
+    var op: OP!
+    var poll: Poll?
     var comments = [Replies]()
     var replyCount = 1
     var pageCount = 0.0
@@ -179,6 +181,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         })
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        for subJson in HKGaldenAPI.shared.chList! {
+            if subJson["ident"].stringValue == self.ident {
+                self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
+            }
+        }
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if webView.isLoading == true {
@@ -276,40 +287,86 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     @objc func moreButtonPressed() {
         let menuVC = ContentMenuViewController()
-        menuVC.modalPresentationStyle = .overFullScreen
+        var attributes = EKAttributes()
+        attributes.position = .bottom
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 200)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        attributes.positionConstraints.verticalOffset = 20
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .absorbTouches
+        attributes.entryInteraction = .absorbTouches
+        attributes.screenBackground = .visualEffect(style: .dark)
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         menuVC.upvote = Int(self.op.good)!
         menuVC.downvote = Int(self.op.bad)!
         menuVC.opName = self.op.name
         menuVC.threadTitle = self.op.title
         menuVC.threadID = self.threadIdReceived
         menuVC.rated = self.isRated
-        menuVC.hero.isEnabled = true
-        menuVC.hero.modalAnimationType = .fade
+        menuVC.poll = self.poll
         menuVC.mainVC = self
-        present(menuVC, animated: true, completion: nil)
+        SwiftEntryKit.display(entry: menuVC, using: attributes)
     }
     
     @objc func pageButtonPressed() {
         let pageVC = PagePopoverTableViewController()
-        pageVC.modalPresentationStyle = .overFullScreen
+        var attributes = EKAttributes()
+        attributes.position = .bottom
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 200)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        attributes.positionConstraints.verticalOffset = 20
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .absorbTouches
+        attributes.entryInteraction = .forward
+        attributes.screenBackground = .visualEffect(style: .dark)
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
+        //pageVC.modalPresentationStyle = .popover
+        //pageVC.popoverPresentationController?.delegate = self
+        //pageVC.popoverPresentationController?.barButtonItem = pageButton
+        //pageVC.preferredContentSize = CGSize(width: 150, height: 200)
+        //pageVC.popoverPresentationController?.backgroundColor = UIColor(hexRGB: "#262626")!
         pageVC.threadID = self.threadIdReceived
         pageVC.pageCount = Int(self.pageCount)
         pageVC.pageSelected = self.pageNow
-        pageVC.hero.isEnabled = true
-        pageVC.hero.modalAnimationType = .fade
         pageVC.mainVC = self
-        present(pageVC, animated: true, completion: nil)
+        //present(pageVC, animated: true, completion: nil)
+        SwiftEntryKit.display(entry: pageVC, using: attributes)
     }
     
     @objc func replyButtonPressed() {
         let composeVC = ComposeViewController()
+        var attributes = EKAttributes()
+        attributes.position = .bottom
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        attributes.positionConstraints.verticalOffset = 20
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .absorbTouches
+        attributes.entryInteraction = .absorbTouches
+        attributes.screenBackground = .visualEffect(style: .dark)
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         composeVC.topicID = self.threadIdReceived
         composeVC.composeType = .reply
-        composeVC.modalPresentationStyle = .overFullScreen
-        composeVC.hero.isEnabled = true
-        composeVC.hero.modalAnimationType = .fade
         composeVC.contentVC = self
-        present(composeVC, animated: true, completion: nil)
+        SwiftEntryKit.display(entry: composeVC, using: attributes)
     }
     
     func quote() {
@@ -317,11 +374,23 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         composeVC.topicID = self.threadIdReceived
         composeVC.content = self.quoteContent + "\n"
         composeVC.composeType = .reply
-        composeVC.modalPresentationStyle = .overFullScreen
-        composeVC.hero.isEnabled = true
-        composeVC.hero.modalAnimationType = .fade
+        var attributes = EKAttributes()
+        attributes.position = .bottom
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        attributes.positionConstraints.verticalOffset = 20
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .absorbTouches
+        attributes.screenBackground = .visualEffect(style: .dark)
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         composeVC.contentVC = self
-        present(composeVC, animated: true, completion: nil)
+        SwiftEntryKit.display(entry: composeVC, using: attributes)
     }
     
     // MARK: - Navigation
@@ -441,12 +510,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         })
         pageButton.title = "第\(self.pageNow)頁"
         HKGaldenAPI.shared.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
-            op,comments,rated,blocked,error in
+            op,comments,rated,blocked,poll,error in
             if (error == nil) {
                 self.op = op!
                 self.comments = comments!
                 self.blockedUsers = blocked!
                 self.isRated = rated!
+                self.poll = poll
+                print(poll)
                 self.titleLabel.text = self.op.title
                 self.titleLabel.textColor = .white
                 self.titleLabel.font = UIFont.boldSystemFont(ofSize: 17)

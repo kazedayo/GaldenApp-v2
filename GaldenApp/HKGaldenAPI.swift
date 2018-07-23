@@ -74,7 +74,7 @@ class HKGaldenAPI {
         }
     }
     
-    func fetchContent(postId: String, pageNo: String, completion : @escaping (_ op: OP?,_ comments: [Replies]?,_ rated: Bool?,_ blockedUsers: [String]?, _ error: Error?)->Void) {
+    func fetchContent(postId: String, pageNo: String, completion : @escaping (_ op: OP?,_ comments: [Replies]?,_ rated: Bool?,_ blockedUsers: [String]?,_ poll: Poll?, _ error: Error?)->Void) {
         let keychain = KeychainSwift()
         let par: Parameters = ["id": postId, "ofs": pageNo]
         var head: HTTPHeaders
@@ -144,12 +144,27 @@ class HKGaldenAPI {
                 
                 let rated = json["rated"].boolValue
                 
-                completion(op,comments,rated,blocked,nil)
+                let pollid = json["polls"]["p_id"].stringValue
+                let optionString = json["polls"]["options"].stringValue
+                var options = [String:String]()
+                if optionString != "" {
+                    if let dataFromString = optionString.data(using: .utf8, allowLossyConversion: false) {
+                        let json = try! JSON(data: dataFromString)
+                        options = json.dictionaryObject! as! [String:String]
+                    }
+                }
+                let maxchoice = json["polls"]["max_choice"].intValue
+                let pollleak = json["polls"]["poll_leak"].intValue
+                let ended = json["polls"]["ended"].intValue
+                
+                let poll = Poll(pollID: pollid,options: options,maxChoice: maxchoice,pollleak: pollleak,ended: ended)
+                
+                completion(op,comments,rated,blocked,poll,nil)
                 
             case .failure(let error):
                 print(error)
                 self.showError(error: error)
-                completion(nil,nil,nil,nil,error)
+                completion(nil,nil,nil,nil,nil,error)
             }
         }
     }

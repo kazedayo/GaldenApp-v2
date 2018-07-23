@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftEntryKit
 
 class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
 
@@ -15,30 +16,14 @@ class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UIT
     var pageSelected: Int?
     var mainVC: ContentViewController?
     let tableView = UITableView()
-    let backgroundView = UIView()
-    lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
-    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
-    var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tableView.selectRow(at: IndexPath.init(row: pageSelected!-1, section: 0), animated: true, scrollPosition: .top)
-        backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        view.addGestureRecognizer(swipeToDismiss)
-        
-        backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        backgroundView.layer.cornerRadius = 10
-        backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
-        backgroundView.layer.shadowColor = UIColor.black.cgColor
-        backgroundView.layer.shadowOpacity = 1
-        backgroundView.layer.shadowOffset = CGSize.zero
-        backgroundView.layer.shadowRadius = 10
-        view.addSubview(backgroundView)
         
         tableView.backgroundColor = .clear
         tableView.delegate = self
@@ -47,17 +32,7 @@ class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UIT
         tableView.separatorStyle = .none
         tableView.register(PageSelectTableViewCell.self, forCellReuseIdentifier: "PageSelectTableViewCell")
         tableView.tableFooterView = UIView()
-        backgroundView.addSubview(tableView)
-        
-        backgroundView.snp.makeConstraints {
-            (make) -> Void in
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-15)
-            make.height.equalTo(200)
-            make.width.lessThanOrEqualTo(500)
-            make.leadingMargin.greaterThanOrEqualTo(15)
-            make.trailingMargin.greaterThanOrEqualTo(-15)
-            make.centerX.equalToSuperview()
-        }
+        view.addSubview(tableView)
         
         tableView.snp.makeConstraints {
             (make) -> Void in
@@ -98,28 +73,8 @@ class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UIT
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         pageSelected = indexPath.row + 1
-        dismiss(animated: true, completion: nil)
+        SwiftEntryKit.dismiss()
         mainVC?.unwindToContent(pageSelected: pageSelected!)
-    }
-    
-    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
-        let touchPoint = sender.location(in: self.view?.window)
-        
-        if sender.state == UIGestureRecognizerState.began {
-            initialTouchPoint = touchPoint
-        } else if sender.state == UIGestureRecognizerState.changed {
-            if touchPoint.y - initialTouchPoint.y > 0 {
-                self.backgroundView.frame = CGRect(x: backgroundViewOriginalPoint.x, y: backgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-            }
-        } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
-            if touchPoint.y - initialTouchPoint.y > 100 {
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-                })
-            }
-        }
     }
     
     /*

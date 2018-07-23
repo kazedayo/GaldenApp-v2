@@ -10,6 +10,7 @@ import UIKit
 import KeychainSwift
 import PKHUD
 import IQKeyboardManagerSwift
+import SwiftEntryKit
 
 protocol ComposeViewControllerDelegate: class {
     func unwindToThreadListAfterNewPost()
@@ -29,7 +30,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     let iconKeyboard = IconKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 265))
     
-    let backgroundView = UIView()
     let channelLabel = UILabel()
     let titleTextField = UITextField()
     let contentTextView = IQTextView()
@@ -42,34 +42,16 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     let urlButton = UIButton()
     let iconButton = UIButton()
     
-    lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
-    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
-    var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        view.addGestureRecognizer(swipeToDismiss)
         
         // Do any additional setup after loading the view.
+        navigationController?.isNavigationBarHidden = false
         iconKeyboard.keyboardDelegate = self
-        backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        backgroundView.layer.cornerRadius = 10
-        backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 0))]
-        backgroundView.layer.shadowColor = UIColor.black.cgColor
-        backgroundView.layer.shadowOpacity = 1
-        backgroundView.layer.shadowOffset = CGSize.zero
-        backgroundView.layer.shadowRadius = 10
-        view.addSubview(backgroundView)
         
         channelLabel.text = HKGaldenAPI.shared.chList![channel]["name"].stringValue
         channelLabel.textColor = .white
-        backgroundView.addSubview(channelLabel)
+        view.addSubview(channelLabel)
         
         titleTextField.delegate = self
         titleTextField.borderStyle = .roundedRect
@@ -87,8 +69,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         } else {
             // Fallback on earlier versions
         }
-        backgroundView.addSubview(titleTextField)
-        backgroundView.addSubview(contentTextView)
+        view.addSubview(titleTextField)
+        view.addSubview(contentTextView)
         
         if composeType == .reply {
             titleTextField.removeFromSuperview()
@@ -108,7 +90,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         previewButton.cornerRadius = 5
         previewButton.backgroundColor = UIColor(hexRGB: "0076ff")
         previewButton.addTarget(self, action: #selector(previewButtonPressed(_:)), for: .touchUpInside)
-        backgroundView.addSubview(previewButton)
+        view.addSubview(previewButton)
         
         fontSizeButton.setImage(UIImage(named: "FontSize"), for: .normal)
         fontSizeButton.tintColor = .white
@@ -151,17 +133,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         stackView.addArrangedSubview(imageButton)
         stackView.addArrangedSubview(urlButton)
         stackView.addArrangedSubview(iconButton)
-        backgroundView.addSubview(stackView)
-        
-        backgroundView.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(view.snp.topMargin).offset(30)
-            make.height.equalTo(300)
-            make.width.lessThanOrEqualTo(500)
-            make.leadingMargin.greaterThanOrEqualTo(15)
-            make.trailingMargin.greaterThanOrEqualTo(-15)
-            make.centerX.equalToSuperview()
-        }
+        view.addSubview(stackView)
         
         channelLabel.snp.makeConstraints {
             (make) -> Void in
@@ -364,7 +336,21 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             self.present(alert,animated: true,completion: nil)
         } else {
             let previewVC = PreviewViewController()
-            previewVC.modalPresentationStyle = .overCurrentContext
+            var attributes = EKAttributes()
+            attributes.position = .bottom
+            attributes.displayPriority = .normal
+            let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+            let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 400)
+            attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+            attributes.positionConstraints.verticalOffset = 20
+            attributes.scroll = .enabled(swipeable: false, pullbackAnimation: .jolt)
+            attributes.displayDuration = .infinity
+            attributes.screenInteraction = .absorbTouches
+            attributes.screenBackground = .visualEffect(style: .dark)
+            attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+            attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+            attributes.roundCorners = .all(radius: 10)
+            attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
             previewVC.composeType = composeType
             previewVC.contentText = contentTextView.text
             previewVC.composeVC = self
@@ -374,7 +360,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             } else {
                 previewVC.topicID = self.topicID
             }
-            present(previewVC, animated: true, completion: nil)
+            SwiftEntryKit.display(entry: previewVC, using: attributes)
         }
     }
     
@@ -425,26 +411,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             contentTextView.resignFirstResponder()
             contentTextView.inputView = nil
             contentTextView.becomeFirstResponder()
-        }
-    }
-    
-    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
-        let touchPoint = sender.location(in: self.view?.window)
-        
-        if sender.state == UIGestureRecognizerState.began {
-            initialTouchPoint = touchPoint
-        } else if sender.state == UIGestureRecognizerState.changed {
-            if touchPoint.y - initialTouchPoint.y > 0 {
-                self.backgroundView.frame = CGRect(x: backgroundViewOriginalPoint.x, y: backgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-            }
-        } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
-            if touchPoint.y - initialTouchPoint.y > 100 {
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-                })
-            }
         }
     }
     

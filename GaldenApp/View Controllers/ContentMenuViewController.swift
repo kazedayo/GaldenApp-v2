@@ -9,6 +9,7 @@
 import UIKit
 import KeychainSwift
 import PKHUD
+import SwiftEntryKit
 
 class ContentMenuViewController: UIViewController {
     
@@ -19,38 +20,18 @@ class ContentMenuViewController: UIViewController {
     var opName: String?
     var threadID: String?
     var shareContent: String?
+    var poll: Poll?
     var mainVC: ContentViewController?
     
     let upvoteButton = UIButton()
     let downvoteButton = UIButton()
     let lmButton = UIButton()
     let shareButton = UIButton()
-    let backgroundView = UIView()
     
     let keychain = KeychainSwift()
     
-    lazy var swipeToDismiss = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
-    var initialTouchPoint: CGPoint = CGPoint(x: 0,y: 0)
-    var backgroundViewOriginalPoint: CGPoint = CGPoint(x: 0,y: 0)
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        backgroundViewOriginalPoint = CGPoint(x: backgroundView.frame.minX, y: backgroundView.frame.minY)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        view.addGestureRecognizer(swipeToDismiss)
-        
-        backgroundView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        backgroundView.layer.cornerRadius = 10
-        backgroundView.hero.modifiers = [.position(CGPoint(x: view.frame.midX, y: 1000))]
-        backgroundView.layer.shadowColor = UIColor.black.cgColor
-        backgroundView.layer.shadowOpacity = 1
-        backgroundView.layer.shadowOffset = CGSize.zero
-        backgroundView.layer.shadowRadius = 10
-        view.addSubview(backgroundView)
         
         upvoteButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         upvoteButton.setTitleColor(UIColor(rgb:0x00cc33), for: .normal)
@@ -79,17 +60,7 @@ class ContentMenuViewController: UIViewController {
         stackView.addArrangedSubview(downvoteButton)
         stackView.addArrangedSubview(lmButton)
         stackView.addArrangedSubview(shareButton)
-        backgroundView.addSubview(stackView)
-        
-        backgroundView.snp.makeConstraints {
-            (make) -> Void in
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-15)
-            make.height.equalTo(200)
-            make.width.lessThanOrEqualTo(500)
-            make.leadingMargin.greaterThanOrEqualTo(15)
-            make.trailingMargin.greaterThanOrEqualTo(-15)
-            make.centerX.equalToSuperview()
-        }
+        view.addSubview(stackView)
         
         stackView.snp.makeConstraints {
             (make) -> Void in
@@ -123,7 +94,7 @@ class ContentMenuViewController: UIViewController {
     
     @objc func shareButtonPressed(_ sender: Any) {
         self.shareContent = self.threadTitle! + " // by: " + self.opName! + "\nShared via 1080-SIGNAL \nhttps://hkgalden.com/view/" + self.threadID!
-        dismiss(animated: true, completion: nil)
+        SwiftEntryKit.dismiss()
         mainVC?.share(shareContent: self.shareContent!)
     }
     
@@ -150,28 +121,8 @@ class ContentMenuViewController: UIViewController {
     }
     
     @objc func leaveNamePressed(_ sender: UIButton) {
-        dismiss(animated: true, completion: nil)
+        SwiftEntryKit.dismiss()
         mainVC?.lm()
-    }
-    
-    @objc func panGestureRecognizerHandler(_ sender: UIPanGestureRecognizer) {
-        let touchPoint = sender.location(in: self.view?.window)
-        
-        if sender.state == UIGestureRecognizerState.began {
-            initialTouchPoint = touchPoint
-        } else if sender.state == UIGestureRecognizerState.changed {
-            if touchPoint.y - initialTouchPoint.y > 0 {
-                self.backgroundView.frame = CGRect(x: backgroundViewOriginalPoint.x, y: backgroundViewOriginalPoint.y + (touchPoint.y - initialTouchPoint.y), width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-            }
-        } else if sender.state == UIGestureRecognizerState.ended || sender.state == UIGestureRecognizerState.cancelled {
-            if touchPoint.y - initialTouchPoint.y > 100 {
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.backgroundView.frame = CGRect(x: self.backgroundViewOriginalPoint.x, y: self.backgroundViewOriginalPoint.y, width: self.backgroundView.frame.size.width, height: self.backgroundView.frame.size.height)
-                })
-            }
-        }
     }
     
     /*
