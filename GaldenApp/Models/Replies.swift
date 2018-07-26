@@ -13,10 +13,10 @@ struct Replies {
     var level: String
     var content: String
     var contentHTML: String
+    var contentOriginal: String
     var avatar: String
     var date: String
     var gender: String
-    var quoteID: String
     var userID: String
     
     /*init(n: String,l: String,c: String,cH: String,a: String,d: String,g: String,qid: String,uid: String) {

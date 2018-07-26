@@ -99,9 +99,9 @@ class HKGaldenAPI {
                 let title = json["topic"]["title"].stringValue
                 let name = json["topic"]["uname"].stringValue
                 let level = json["topic"]["badge"].stringValue
-                var content = json["topic"]["content"].stringValue
+                let contentOriginal = json["topic"]["content"].stringValue
                 
-                content = self.sizeTagCorrection(bbcode: content)
+                var content = self.sizeTagCorrection(bbcode: contentOriginal)
                 content = self.iconParse(bbcode: content)
                 
                 let avatar = json["topic"]["avatarurl"].stringValue
@@ -110,28 +110,26 @@ class HKGaldenAPI {
                 let bad = json["topic"]["bad"].stringValue
                 let gender = json["topic"]["gender"].stringValue
                 let channel = json["topic"]["f_ident"].stringValue
-                let quoteid = json["topic"]["id"].stringValue
                 let userid = json["topic"]["uid"].stringValue
                 let ident = json["topic"]["f_ident"].stringValue
                 
-                let op = OP(title: title,name: name,level: level,content: content,contentHTML: "",avatar: avatar,date: date,good: good,bad: bad,gender: gender,channel: channel,quoteID: quoteid,userID: userid,ident: ident)
+                let op = OP(title: title,name: name,level: level,content: content,contentHTML: "",contentOriginal: contentOriginal,avatar: avatar,date: date,good: good,bad: bad,gender: gender,channel: channel,userID: userid,ident: ident)
                 
                 //fetch reply data
                 for (_,subJson):(String, JSON) in json["replys"] {
                     let name = subJson["uname"].stringValue
                     let level = subJson["badge"].stringValue
-                    var content = subJson["content"].stringValue
+                    let contentOriginal = subJson["content"].stringValue
                     
-                    content = self.sizeTagCorrection(bbcode: content)
+                    var content = self.sizeTagCorrection(bbcode: contentOriginal)
                     content = self.iconParse(bbcode: content)
                     
                     let avatar = subJson["avatar_url"].stringValue
                     let date = subJson["r_time"].stringValue
                     let gender = subJson["gender"].stringValue
-                    let quoteid = subJson["r_id"].stringValue
                     let userid = subJson["uid"].stringValue
                     
-                    comments.append(Replies(name: name,level: level,content: content,contentHTML: "",avatar: avatar,date: date,gender: gender,quoteID:quoteid,userID:userid))
+                    comments.append(Replies(name: name,level: level,content: content,contentHTML: "",contentOriginal: contentOriginal,avatar: avatar,date: date,gender: gender,userID:userid))
                     
                 }
                 
@@ -249,26 +247,6 @@ class HKGaldenAPI {
                 self.showError(error: response.error!)
             } else {
                 completion(nil)
-            }
-        }
-    }
-    
-    func quote(quoteType: String, quoteID: String, completion: @escaping (_ content: String)->Void ) {
-        let keychain = KeychainSwift()
-        let par = ["q_type": quoteType, "q_id": quoteID]
-        let head:HTTPHeaders = ["X-GALAPI-KEY": "6ff50828528b419ab5b5a3de1e5ea3b5e3cd4bed", "X-GALUSER-KEY": keychain.get("userKey")!]
-        NetworkActivityIndicatorManager.networkOperationStarted()
-        Alamofire.request("https://api.hkgalden.com/f/q",method:.get,parameters:par,headers:head).responseJSON {
-            response in
-            NetworkActivityIndicatorManager.networkOperationFinished()
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                let content = json["data"]["ctnt"].stringValue
-                completion(content)
-            case .failure(let error):
-                print(error)
-                self.showError(error: error)
             }
         }
     }

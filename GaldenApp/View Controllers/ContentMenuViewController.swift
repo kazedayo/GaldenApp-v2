@@ -20,7 +20,6 @@ class ContentMenuViewController: UIViewController {
     var opName: String?
     var threadID: String?
     var shareContent: String?
-    var poll: Poll?
     var mainVC: ContentViewController?
     
     let upvoteButton = UIButton()

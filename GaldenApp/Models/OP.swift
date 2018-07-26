@@ -14,13 +14,13 @@ struct OP {
     var level: String
     var content: String
     var contentHTML: String
+    var contentOriginal: String
     var avatar: String
     var date: String
     var good: String
     var bad: String
     var gender: String
     var channel: String
-    var quoteID: String
     var userID: String
     var ident: String
     /*init(t: String,n: String,l: String,c: String,cH: String,a: String,d: String,gd: String,b: String,ge: String,ch: String,qid: String,uid: String) {

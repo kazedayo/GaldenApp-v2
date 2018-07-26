@@ -155,6 +155,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        SwiftEntryKit.dismiss()
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "quote")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
@@ -221,23 +222,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func quoteButtonPressed(type: String) {
             if (pageNow == 1 && type == "op") {
-            HKGaldenAPI.shared.quote(quoteType: "t", quoteID: self.op.quoteID, completion: {
-                content in
-                self.quoteContent = content
+                self.quoteContent = "[quote]\(self.op.contentOriginal)[/quote]"
                 self.quote()
-            })
             } else if pageNow == 1 {
-                HKGaldenAPI.shared.quote(quoteType: "r", quoteID: self.comments[Int(type)! + 1].quoteID, completion: {
-                    content in
-                    self.quoteContent = content
-                    self.quote()
-                })
+                self.quoteContent = "[quote]\(self.comments[Int(type)! + 1].contentOriginal)[/quote]"
+                self.quote()
             } else {
-                HKGaldenAPI.shared.quote(quoteType: "r", quoteID: self.comments[Int(type)!].quoteID, completion: {
-                    content in
-                    self.quoteContent = content
-                    self.quote()
-                })
+                self.quoteContent = "[quote]\(self.comments[Int(type)!].contentOriginal)[/quote]"
+                self.quote()
         }
     }
     
@@ -309,7 +301,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         menuVC.threadTitle = self.op.title
         menuVC.threadID = self.threadIdReceived
         menuVC.rated = self.isRated
-        menuVC.poll = self.poll
         menuVC.mainVC = self
         SwiftEntryKit.display(entry: menuVC, using: attributes)
     }
@@ -517,7 +508,24 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self.blockedUsers = blocked!
                 self.isRated = rated!
                 self.poll = poll
-                print(poll)
+                if self.poll?.pollID != "" {
+                    var attributes = EKAttributes.bottomFloat
+                    attributes.displayDuration = .infinity
+                    attributes.entryBackground = .color(color: UIColor(hexRGB: "#43A047")!)
+                    attributes.positionConstraints.verticalOffset = 66
+                    attributes.popBehavior = .animated(animation: .init(translate: .init(duration: 0.3), scale: .init(from: 1, to: 0.7, duration: 0.7)))
+                    attributes.shadow = .active(with: .init(color: .black, opacity: 0.5, radius: 10, offset: .zero))
+                    attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+                    
+                    let title = EKProperty.LabelContent(text: "投票", style: .init(font: UIFont.systemFont(ofSize: 15), color: .white))
+                    let description = EKProperty.LabelContent(text: "Coming Soon...", style: .init(font: UIFont.systemFont(ofSize: 12), color: .white))
+                    let image = EKProperty.ImageContent(image: UIImage(named: "vote")!, size: CGSize(width: 35, height: 35))
+                    let simpleMessage = EKSimpleMessage(image: image, title: title, description: description)
+                    let notificationMessage = EKNotificationMessage(simpleMessage: simpleMessage)
+                    
+                    let contentView = EKNotificationMessageView(with: notificationMessage)
+                    SwiftEntryKit.display(entry: contentView, using: attributes)
+                }
                 self.titleLabel.text = self.op.title
                 self.titleLabel.textColor = .white
                 self.titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
