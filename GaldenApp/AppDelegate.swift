@@ -50,7 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         xbbcodeBridge.shared.initializeJS()
         URLNavigationMap.initialize(navigator: navigator)
         
-        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.enable = false
+        IQKeyboardManager.shared.enableAutoToolbar = true
         
         GADMobileAds.configure(withApplicationID: "ca-app-pub-6919429787140423~6701059788")
         

@@ -345,10 +345,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
         attributes.positionConstraints.verticalOffset = 20
+        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
+        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
+        attributes.positionConstraints.keyboardRelation = keyboardRelation
         attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
         attributes.displayDuration = .infinity
         attributes.screenInteraction = .absorbTouches
-        attributes.entryInteraction = .absorbTouches
+        attributes.entryInteraction = .forward
         attributes.screenBackground = .visualEffect(style: .dark)
         attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
         attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
