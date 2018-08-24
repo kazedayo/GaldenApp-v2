@@ -241,22 +241,24 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             }
             tableView.deselectRow(at: indexPath, animated: true)
         } else {
-            let contentVC = ContentViewController()
-            let contentNavVC = UINavigationController(rootViewController: contentVC)
-            contentNavVC.navigationBar.barStyle = .black
-            let selectedThread = threads[indexPath.row].id
-            contentVC.threadIdReceived = selectedThread
-            contentVC.title = threads[indexPath.row].title
-            contentVC.ident = threads[indexPath.row].ident
-            contentVC.sender = "cell"
-            if UIDevice.current.model.contains("iPhone") && UIDevice.current.orientation.isPortrait {
-                for subJson in HKGaldenAPI.shared.chList! {
-                    if subJson["ident"].stringValue == threads[indexPath.row].ident {
-                        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
+            DispatchQueue.main.async {
+                let contentVC = ContentViewController()
+                let contentNavVC = UINavigationController(rootViewController: contentVC)
+                contentNavVC.navigationBar.barStyle = .black
+                let selectedThread = self.threads[indexPath.row].id
+                contentVC.threadIdReceived = selectedThread
+                contentVC.title = self.threads[indexPath.row].title
+                contentVC.ident = self.threads[indexPath.row].ident
+                contentVC.sender = "cell"
+                if UIDevice.current.model.contains("iPhone") && UIDevice.current.orientation.isPortrait {
+                    for subJson in HKGaldenAPI.shared.chList! {
+                        if subJson["ident"].stringValue == self.threads[indexPath.row].ident {
+                            self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
+                        }
                     }
                 }
+                self.splitViewController?.showDetailViewController(contentNavVC, sender: self)
             }
-            splitViewController?.showDetailViewController(contentNavVC, sender: self)
             //navigationController?.pushViewController(contentVC, animated: true)
         }
     }

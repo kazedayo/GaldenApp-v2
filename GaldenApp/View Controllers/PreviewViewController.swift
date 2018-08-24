@@ -145,11 +145,15 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
         let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
         attributes.positionConstraints.verticalOffset = 20
+        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
+        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
+        attributes.positionConstraints.keyboardRelation = keyboardRelation
         attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
         attributes.displayDuration = .infinity
         attributes.screenInteraction = .absorbTouches
+        attributes.entryInteraction = .forward
         attributes.screenBackground = .visualEffect(style: .dark)
-        attributes.entryBackground = .color(color: UIColor(white: 0.2, alpha: 1))
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
         attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
         attributes.roundCorners = .all(radius: 10)
         attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)

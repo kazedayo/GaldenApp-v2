@@ -375,9 +375,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
         attributes.positionConstraints.verticalOffset = 20
+        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
+        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
+        attributes.positionConstraints.keyboardRelation = keyboardRelation
         attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
         attributes.displayDuration = .infinity
         attributes.screenInteraction = .absorbTouches
+        attributes.entryInteraction = .forward
         attributes.screenBackground = .visualEffect(style: .dark)
         attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
         attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
@@ -431,6 +435,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         let shareView = UIActivityViewController(activityItems:[shareContent],applicationActivities:nil)
         shareView.excludedActivityTypes = [.airDrop,.addToReadingList,.assignToContact,.openInIBooks,.saveToCameraRoll]
         DispatchQueue.main.asyncAfter(deadline: 0.5, execute: {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                shareView.popoverPresentationController?.sourceView = self.view
+                shareView.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.maxY, width: 0, height: 0)
+                shareView.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0) //Removes arrow as I dont want it
+            }
             self.present(shareView, animated: true, completion: nil)
         })
     }
@@ -721,7 +730,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         if message.name == "quote" {
             self.quoteButtonPressed(type: message.body as! String)
         } else if message.name == "block" {
-            let alert = UIAlertController.init(title: "扑柒", message: "你確定要扑柒此會然?", preferredStyle: .actionSheet)
+            let alert = UIAlertController.init(title: "扑柒", message: "你確定要扑柒此會然?", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
                 _ in
                 self.blockButtonPressed(type: message.body as! String)
