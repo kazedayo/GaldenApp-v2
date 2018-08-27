@@ -139,12 +139,11 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
     
     @objc func backButtonPressed(_ sender: UIButton) {
         var attributes = EKAttributes()
-        attributes.position = .bottom
+        attributes.position = .center
         attributes.displayPriority = .normal
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 500)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        attributes.positionConstraints.verticalOffset = 20
         let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
         let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
         attributes.positionConstraints.keyboardRelation = keyboardRelation

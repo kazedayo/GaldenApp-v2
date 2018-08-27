@@ -12,6 +12,7 @@ class History: Object {
     @objc dynamic var threadID = ""
     @objc dynamic var page = 1
     @objc dynamic var position = ""
+    @objc dynamic var replyCount = 0
     
     override static func primaryKey() -> String? {
         return "threadID"

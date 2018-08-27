@@ -21,8 +21,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     //MARK: Properties
     var channel = 0
-    var content = ""
-    var topicID = ""
+    var content: String!
+    var topicID: String!
     var composeType: ComposeType!
     var kheight: CGFloat = 0
     var contentVC: ContentViewController?
@@ -337,12 +337,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         } else {
             let previewVC = PreviewViewController()
             var attributes = EKAttributes()
-            attributes.position = .bottom
+            attributes.position = .center
             attributes.displayPriority = .normal
-            let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
-            let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 400)
+            let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
+            let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 500)
             attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-            attributes.positionConstraints.verticalOffset = 20
             attributes.scroll = .enabled(swipeable: false, pullbackAnimation: .jolt)
             attributes.displayDuration = .infinity
             attributes.screenInteraction = .absorbTouches

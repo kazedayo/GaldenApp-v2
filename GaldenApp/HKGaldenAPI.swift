@@ -53,7 +53,7 @@ class HKGaldenAPI {
                     var user: String = subJson["uname"].stringValue
                     user = user.replacingOccurrences(of: "\n", with: "")
                     let rate: String = subJson["rate"].stringValue
-                    let reply: String = subJson["count"].stringValue
+                    let reply: Int = subJson["count"].intValue
                     let channel: String = subJson["ident"].stringValue
                     let threadNo: String = subJson["id"].stringValue
                     let userid: String = subJson["uid"].stringValue
@@ -112,8 +112,9 @@ class HKGaldenAPI {
                 let channel = json["topic"]["f_ident"].stringValue
                 let userid = json["topic"]["uid"].stringValue
                 let ident = json["topic"]["f_ident"].stringValue
+                let count = json["topic"]["count"].intValue
                 
-                let op = OP(title: title,name: name,level: level,content: content,contentHTML: "",contentOriginal: contentOriginal,avatar: avatar,date: date,good: good,bad: bad,gender: gender,channel: channel,userID: userid,ident: ident)
+                let op = OP(title: title,name: name,level: level,content: content,contentHTML: "",contentOriginal: contentOriginal,avatar: avatar,date: date,good: good,bad: bad,gender: gender,channel: channel,userID: userid,ident: ident,count: count)
                 
                 //fetch reply data
                 for (_,subJson):(String, JSON) in json["replys"] {

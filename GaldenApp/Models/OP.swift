@@ -23,6 +23,7 @@ struct OP {
     var channel: String
     var userID: String
     var ident: String
+    var count: Int
     /*init(t: String,n: String,l: String,c: String,cH: String,a: String,d: String,gd: String,b: String,ge: String,ch: String,qid: String,uid: String) {
         title = t
         name = n

@@ -15,7 +15,7 @@ struct ThreadList {
     var ident: String
     var title: String
     var userName: String
-    var count: String
+    var count: Int
     var rate: String
     var userID: String
     var isBlocked: Bool

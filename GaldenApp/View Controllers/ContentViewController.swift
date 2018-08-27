@@ -21,22 +21,22 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     //MARK: Properties
     
-    var threadIdReceived: String = ""
+    var threadIdReceived: String!
     var isRated: Bool!
     var pageNow: Int = 1
     var op: OP!
     var poll: Poll?
     var comments = [Replies]()
-    var replyCount = 1
-    var pageCount = 0.0
-    var quoteContent = ""
+    var replyCount: Int!
+    var pageCount: Double!
+    var quoteContent: String?
     var blockedUsers = [String]()
-    var pageHTML = ""
-    var convertedHTML = ""
+    var pageHTML: String!
+    var convertedHTML: String!
     var navType: NavigationType = .normal
-    var scrollPosition = ""
-    var sender = ""
-    var ident = ""
+    var scrollPosition: String?
+    var sender: String?
+    var ident: String?
     var titleLabel = MarqueeLabel()
     private var webView: WKWebView!
     
@@ -99,12 +99,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         webView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin)
-            if (keychain.getBool("noAd") == true) {
-                make.bottom.equalTo(view.snp.bottomMargin)
-            } else {
-                make.bottom.equalTo(adBannerView.snp.top)
-            }
+            make.top.equalTo(view.snp.top)
+            make.bottom.equalTo(view.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
@@ -167,6 +163,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 let history = History()
                 history.threadID = self.threadIdReceived
                 history.page = self.pageNow
+                history.replyCount = self.replyCount
                 if position != nil {
                     history.position = position!
                 } else if self.pageNow == 1 {
@@ -184,6 +181,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if (keychain.getBool("noAd") == false) {
+            webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, adBannerView.frame.height, 0)
+        }
         for subJson in HKGaldenAPI.shared.chList! {
             if subJson["ident"].stringValue == self.ident {
                 self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
@@ -339,12 +339,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     @objc func replyButtonPressed() {
         let composeVC = ComposeViewController()
         var attributes = EKAttributes()
-        attributes.position = .bottom
+        attributes.position = .center
         attributes.displayPriority = .normal
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 500)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        attributes.positionConstraints.verticalOffset = 20
         let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
         let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
         attributes.positionConstraints.keyboardRelation = keyboardRelation
@@ -366,7 +365,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func quote() {
         let composeVC = ComposeViewController()
         composeVC.topicID = self.threadIdReceived
-        composeVC.content = self.quoteContent + "\n"
+        composeVC.content = self.quoteContent! + "\n"
         composeVC.composeType = .reply
         var attributes = EKAttributes()
         attributes.position = .bottom
@@ -520,6 +519,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self.blockedUsers = blocked!
                 self.isRated = rated!
                 self.poll = poll
+                self.replyCount = op!.count
                 if self.poll?.pollID != "" {
                     var attributes = EKAttributes.bottomFloat
                     attributes.displayDuration = .infinity
@@ -577,7 +577,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     self.convertedHTML.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
-                self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(self.convertedHTML)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+                self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(self.convertedHTML!)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
                 self.webView.loadHTMLString(self.pageHTML, baseURL: Bundle.main.bundleURL)
                 NetworkActivityIndicatorManager.networkOperationStarted()
             }
@@ -674,7 +674,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                         self.navType = .normal
                     })
                 case .refresh:
-                    webView.evaluateJavaScript("$(\"#\((self.scrollPosition))\").get(0).scrollIntoView();", completionHandler: {
+                    webView.evaluateJavaScript("$(\"#\((self.scrollPosition!))\").get(0).scrollIntoView();", completionHandler: {
                         result,error in
                         DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
                             NetworkActivityIndicatorManager.networkOperationFinished()

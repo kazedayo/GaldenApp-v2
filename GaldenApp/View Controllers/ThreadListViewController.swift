@@ -167,6 +167,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             self.tableView.contentInset = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
             self.tableView.scrollIndicatorInsets = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
         }
+        self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
     }
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
@@ -219,7 +220,20 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
             if (readThreads != nil) {
-                cell.accessoryView = UIImageView(image: UIImage(named:"read"))
+                let newReplyCount = self.threads[indexPath.row].count-readThreads!.replyCount
+                if (newReplyCount > 0) {
+                    let newReply = UILabel()
+                    newReply.clipsToBounds = true
+                    newReply.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+                    newReply.layer.cornerRadius = 5
+                    newReply.textColor = .white
+                    newReply.font = UIFont.systemFont(ofSize: 10)
+                    newReply.backgroundColor = .red
+                    newReply.textAlignment = .center
+                    newReply.text = String(self.threads[indexPath.row].count-readThreads!.replyCount)
+                    cell.accessoryView = newReply
+                }
+                //cell.accessoryView = UIImageView(image: UIImage(named: "read"))
             } else {
                 cell.accessoryView = UIView()
             }
@@ -278,24 +292,23 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
                 self.selectedThread = threads[indexPath.row].id
                 self.selectedThreadTitle = threads[indexPath.row].title
-                self.pageCount = ceil((Double(threads[indexPath.row].count)!)/25)
+                self.pageCount = ceil((Double(threads[indexPath.row].count))/25)
                 let pageVC = PageSelectViewController()
                 var attributes = EKAttributes()
-                attributes.position = .bottom
+                attributes.position = .center
                 attributes.displayPriority = .normal
-                let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+                let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.75)
                 let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 300)
                 attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-                attributes.positionConstraints.verticalOffset = 20
-                attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
                 attributes.displayDuration = .infinity
-                attributes.screenInteraction = .absorbTouches
+                attributes.screenInteraction = .dismiss
                 attributes.entryInteraction = .forward
                 attributes.screenBackground = .visualEffect(style: .dark)
                 attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
                 attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
                 attributes.roundCorners = .all(radius: 10)
-                attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
+                attributes.entranceAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25))
+                attributes.exitAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25))
                 pageVC.pageCount = self.pageCount!
                 pageVC.titleText = self.selectedThreadTitle
                 pageVC.mainVC = self
@@ -312,12 +325,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func newThreadButtonPressed() {
         let composeVC = ComposeViewController()
         var attributes = EKAttributes()
-        attributes.position = .bottom
+        attributes.position = .center
         attributes.displayPriority = .normal
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 500)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        attributes.positionConstraints.verticalOffset = 20
         let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
         let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
         attributes.positionConstraints.keyboardRelation = keyboardRelation
@@ -381,10 +393,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    func unwindAfterReply() {
-        
-    }
-    
     @objc func reloadButtonPressed(_ sender: UIButton) {
         self.updateSequence(append: false, completion: {})
     }
@@ -398,7 +406,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 } else {
                     self.threads = threads
                 }
-                self.tableView.reloadData()
+                //self.tableView.reloadData()
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
                 self.reloadButton.isHidden = true
                 self.tableView.isHidden = false
             } else {
