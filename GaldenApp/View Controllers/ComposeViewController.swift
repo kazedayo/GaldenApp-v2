@@ -336,20 +336,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             self.present(alert,animated: true,completion: nil)
         } else {
             let previewVC = PreviewViewController()
-            var attributes = EKAttributes()
-            attributes.position = .center
-            attributes.displayPriority = .normal
-            let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
-            let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 500)
-            attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-            attributes.scroll = .enabled(swipeable: false, pullbackAnimation: .jolt)
-            attributes.displayDuration = .infinity
-            attributes.screenInteraction = .absorbTouches
-            attributes.screenBackground = .visualEffect(style: .dark)
-            attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-            attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-            attributes.roundCorners = .all(radius: 10)
-            attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
             previewVC.composeType = composeType
             previewVC.contentText = contentTextView.text
             previewVC.composeVC = self
@@ -359,7 +345,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             } else {
                 previewVC.topicID = self.topicID
             }
-            SwiftEntryKit.display(entry: previewVC, using: attributes)
+            SwiftEntryKit.display(entry: previewVC, using: EntryAttributes.shared.centerEntry())
         }
     }
     

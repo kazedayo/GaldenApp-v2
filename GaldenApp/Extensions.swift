@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftEntryKit
 
 extension String {
     func nsRange(from range: Range<Index>) -> NSRange {
@@ -135,4 +136,70 @@ enum NavigationType {
 enum ComposeType {
     case reply
     case newThread
+}
+
+class EntryAttributes {
+    static let shared = EntryAttributes()
+    
+    public func centerEntry() -> EKAttributes {
+        var attributes = EKAttributes()
+        attributes.position = .center
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 500)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
+        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
+        attributes.positionConstraints.keyboardRelation = keyboardRelation
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .absorbTouches
+        attributes.entryInteraction = .forward
+        attributes.screenBackground = .visualEffect(style: .dark)
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
+        return attributes
+    }
+    
+    public func centerEntryZoom() -> EKAttributes {
+        var attributes = EKAttributes()
+        attributes.position = .center
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.75)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 300)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .dismiss
+        attributes.entryInteraction = .forward
+        attributes.screenBackground = .visualEffect(style: .dark)
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25))
+        attributes.exitAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25))
+        return attributes
+    }
+    
+    public func bottomEntry() -> EKAttributes {
+        var attributes = EKAttributes()
+        attributes.position = .bottom
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 200)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        attributes.positionConstraints.verticalOffset = 20
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .absorbTouches
+        attributes.entryInteraction = .absorbTouches
+        attributes.screenBackground = .visualEffect(style: .dark)
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
+        return attributes
+    }
+    
 }

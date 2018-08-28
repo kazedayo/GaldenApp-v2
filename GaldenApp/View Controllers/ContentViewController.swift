@@ -279,22 +279,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     @objc func moreButtonPressed() {
         let menuVC = ContentMenuViewController()
-        var attributes = EKAttributes()
-        attributes.position = .bottom
-        attributes.displayPriority = .normal
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 200)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        attributes.positionConstraints.verticalOffset = 20
-        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-        attributes.displayDuration = .infinity
-        attributes.screenInteraction = .absorbTouches
-        attributes.entryInteraction = .absorbTouches
-        attributes.screenBackground = .visualEffect(style: .dark)
-        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-        attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         menuVC.upvote = Int(self.op.good)!
         menuVC.downvote = Int(self.op.bad)!
         menuVC.opName = self.op.name
@@ -302,27 +286,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         menuVC.threadID = self.threadIdReceived
         menuVC.rated = self.isRated
         menuVC.mainVC = self
-        SwiftEntryKit.display(entry: menuVC, using: attributes)
+        SwiftEntryKit.display(entry: menuVC, using: EntryAttributes.shared.bottomEntry())
     }
     
     @objc func pageButtonPressed() {
         let pageVC = PagePopoverTableViewController()
-        var attributes = EKAttributes()
-        attributes.position = .bottom
-        attributes.displayPriority = .normal
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 200)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        attributes.positionConstraints.verticalOffset = 20
-        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-        attributes.displayDuration = .infinity
-        attributes.screenInteraction = .absorbTouches
-        attributes.entryInteraction = .forward
-        attributes.screenBackground = .visualEffect(style: .dark)
-        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-        attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         //pageVC.modalPresentationStyle = .popover
         //pageVC.popoverPresentationController?.delegate = self
         //pageVC.popoverPresentationController?.barButtonItem = pageButton
@@ -333,33 +301,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         pageVC.pageSelected = self.pageNow
         pageVC.mainVC = self
         //present(pageVC, animated: true, completion: nil)
-        SwiftEntryKit.display(entry: pageVC, using: attributes)
+        SwiftEntryKit.display(entry: pageVC, using: EntryAttributes.shared.bottomEntry())
     }
     
     @objc func replyButtonPressed() {
         let composeVC = ComposeViewController()
-        var attributes = EKAttributes()
-        attributes.position = .center
-        attributes.displayPriority = .normal
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 500)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
-        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
-        attributes.positionConstraints.keyboardRelation = keyboardRelation
-        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-        attributes.displayDuration = .infinity
-        attributes.screenInteraction = .absorbTouches
-        attributes.entryInteraction = .forward
-        attributes.screenBackground = .visualEffect(style: .dark)
-        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-        attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         composeVC.topicID = self.threadIdReceived
         composeVC.composeType = .reply
         composeVC.contentVC = self
-        SwiftEntryKit.display(entry: composeVC, using: attributes)
+        SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.bottomEntry())
     }
     
     func quote() {
@@ -367,27 +317,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         composeVC.topicID = self.threadIdReceived
         composeVC.content = self.quoteContent! + "\n"
         composeVC.composeType = .reply
-        var attributes = EKAttributes()
-        attributes.position = .bottom
-        attributes.displayPriority = .normal
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 350)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        attributes.positionConstraints.verticalOffset = 20
-        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
-        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
-        attributes.positionConstraints.keyboardRelation = keyboardRelation
-        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-        attributes.displayDuration = .infinity
-        attributes.screenInteraction = .absorbTouches
-        attributes.entryInteraction = .forward
-        attributes.screenBackground = .visualEffect(style: .dark)
-        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-        attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         composeVC.contentVC = self
-        SwiftEntryKit.display(entry: composeVC, using: attributes)
+        SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
     }
     
     // MARK: - Navigation

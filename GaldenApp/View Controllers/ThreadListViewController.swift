@@ -159,6 +159,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)
+            tableView.reloadRows(at: [indexPath!], with: .none)
         }
         if #available(iOS 11.0, *) {
             self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
@@ -167,7 +168,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             self.tableView.contentInset = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
             self.tableView.scrollIndicatorInsets = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
         }
-        self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
     }
     
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
@@ -232,6 +232,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                     newReply.textAlignment = .center
                     newReply.text = String(self.threads[indexPath.row].count-readThreads!.replyCount)
                     cell.accessoryView = newReply
+                } else {
+                    cell.accessoryView = UIView()
                 }
                 //cell.accessoryView = UIImageView(image: UIImage(named: "read"))
             } else {
@@ -294,25 +296,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 self.selectedThreadTitle = threads[indexPath.row].title
                 self.pageCount = ceil((Double(threads[indexPath.row].count))/25)
                 let pageVC = PageSelectViewController()
-                var attributes = EKAttributes()
-                attributes.position = .center
-                attributes.displayPriority = .normal
-                let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.75)
-                let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 300)
-                attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-                attributes.displayDuration = .infinity
-                attributes.screenInteraction = .dismiss
-                attributes.entryInteraction = .forward
-                attributes.screenBackground = .visualEffect(style: .dark)
-                attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-                attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-                attributes.roundCorners = .all(radius: 10)
-                attributes.entranceAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25))
-                attributes.exitAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25))
                 pageVC.pageCount = self.pageCount!
                 pageVC.titleText = self.selectedThreadTitle
                 pageVC.mainVC = self
-                SwiftEntryKit.display(entry: pageVC, using: attributes)
+                SwiftEntryKit.display(entry: pageVC, using: EntryAttributes.shared.centerEntryZoom())
             }
         }
     }
@@ -324,28 +311,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @objc func newThreadButtonPressed() {
         let composeVC = ComposeViewController()
-        var attributes = EKAttributes()
-        attributes.position = .center
-        attributes.displayPriority = .normal
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 500)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
-        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
-        attributes.positionConstraints.keyboardRelation = keyboardRelation
-        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-        attributes.displayDuration = .infinity
-        attributes.screenInteraction = .absorbTouches
-        attributes.entryInteraction = .forward
-        attributes.screenBackground = .visualEffect(style: .dark)
-        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-        attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         composeVC.channel = channelNow
         composeVC.composeType = .newThread
         composeVC.threadVC = self
-        SwiftEntryKit.display(entry: composeVC, using: attributes)
+        SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
     }
     
     // MARK: - Navigation
