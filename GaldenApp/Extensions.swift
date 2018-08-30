@@ -177,8 +177,8 @@ class EntryAttributes {
         attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
         attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
         attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25))
-        attributes.exitAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25))
+        attributes.entranceAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.15), fade: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.15))
+        attributes.exitAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.15), fade: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.15))
         return attributes
     }
     
@@ -192,8 +192,8 @@ class EntryAttributes {
         attributes.positionConstraints.verticalOffset = 20
         attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
         attributes.displayDuration = .infinity
-        attributes.screenInteraction = .absorbTouches
-        attributes.entryInteraction = .absorbTouches
+        attributes.screenInteraction = .dismiss
+        attributes.entryInteraction = .forward
         attributes.screenBackground = .visualEffect(style: .dark)
         attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
         attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))

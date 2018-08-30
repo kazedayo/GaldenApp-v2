@@ -309,7 +309,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         composeVC.topicID = self.threadIdReceived
         composeVC.composeType = .reply
         composeVC.contentVC = self
-        SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.bottomEntry())
+        SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
     }
     
     func quote() {
