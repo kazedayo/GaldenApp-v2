@@ -17,7 +17,7 @@ class WelcomeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
-        welcomeLabel.text = "歡迎使用\n1080-SIGNAL"
+        welcomeLabel.text = "歡迎使用\n1080-Green"
         welcomeLabel.textColor = .white
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = UIFont.systemFont(ofSize: 25)

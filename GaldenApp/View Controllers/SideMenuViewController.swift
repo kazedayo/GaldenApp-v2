@@ -48,7 +48,9 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         view.addSubview(tableView)
         
         titleButton.setImage(UIImage(named: "menuIcon"), for: .normal)
-        titleButton.setTitle("  1080-SIGNAL", for: .normal)
+        titleButton.imageView?.clipsToBounds = true
+        titleButton.imageView?.layer.cornerRadius = 5
+        titleButton.setTitle("  1080-Green", for: .normal)
         titleButton.setTitleColor(.lightGray, for: .normal)
         titleButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         titleButton.isUserInteractionEnabled = false

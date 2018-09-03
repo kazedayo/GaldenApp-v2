@@ -159,7 +159,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)
-            tableView.reloadRows(at: [indexPath!], with: .none)
+            tableView.reloadRows(at: [indexPath!], with: .fade)
         }
         if #available(iOS 11.0, *) {
             self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
@@ -376,7 +376,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                     self.threads = threads
                 }
                 //self.tableView.reloadData()
-                self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+                self.tableView.reloadData()
                 self.reloadButton.isHidden = true
                 self.tableView.isHidden = false
             } else {

@@ -23,6 +23,7 @@ target 'GaldenApp' do
   pod 'SKPhotoBrowser'
   pod 'SideMenu'
   pod 'SwiftEntryKit'
+  pod 'Apollo'
 
   target 'GaldenAppTests' do
     inherit! :search_paths
