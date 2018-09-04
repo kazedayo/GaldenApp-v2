@@ -83,7 +83,7 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
-        stackView.alignment = .center
+        stackView.alignment = .leading
         stackView.spacing = 15
         stackView.addArrangedSubview(logoutButton)
         stackView.addArrangedSubview(settingsButton)

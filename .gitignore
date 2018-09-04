@@ -45,6 +45,10 @@ Temporary Items
 build/
 DerivedData/
 
+## Apollo GraphQL nodejs modules
+node_modules
+package-lock.json
+
 ## Various settings
 *.pbxuser
 !default.pbxuser

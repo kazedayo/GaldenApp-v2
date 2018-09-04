@@ -12,11 +12,6 @@ import PKHUD
 import IQKeyboardManagerSwift
 import SwiftEntryKit
 
-protocol ComposeViewControllerDelegate: class {
-    func unwindToThreadListAfterNewPost()
-    func unwindAfterReply()
-}
-
 class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate,IconKeyboardDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
     //MARK: Properties
