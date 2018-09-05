@@ -111,8 +111,8 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate {
                         self?.keychain.set(userid, forKey: "userID")
                         self?.keychain.set(true, forKey: "isLoggedIn")
                         HKGaldenAPI.shared.getChannelList {
-                            let splitViewController = Configurations.shared.configureUI()
-                            self?.present(splitViewController, animated: true, completion: nil)
+                            let tabBarController = Configurations.shared.configureUI()
+                            self?.present(tabBarController, animated: true, completion: nil)
                         }
                     }
                 })

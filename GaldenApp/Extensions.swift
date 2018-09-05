@@ -189,12 +189,10 @@ class EntryAttributes {
     
 }
 
-class Configurations: UISplitViewControllerDelegate {
+class Configurations {
     static let shared = Configurations()
     
-    func configureUI() -> UISplitViewController {
-        var splitViewController =  UISplitViewController()
-        splitViewController.delegate = self
+    func configureUI() -> UITabBarController {
         let tabBarController = UITabBarController()
         let threadListViewController = ThreadListViewController()
         let settingsViewController = SettingsViewController()
@@ -204,11 +202,8 @@ class Configurations: UISplitViewControllerDelegate {
         settingsViewController.tabBarItem = UITabBarItem(title: "設定", image: UIImage(named: "settings"), tag: 2)
         let controllers = [threadListViewController,userViewController,settingsViewController]
         tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
-        let detailViewController = iPadPlaceholderDetailViewController()
-        splitViewController.viewControllers = [tabBarController,detailViewController]
-        splitViewController.preferredDisplayMode = .allVisible
-        splitViewController.hero.isEnabled = true
-        splitViewController.hero.modalAnimationType = .zoom
-        return splitViewController
+        tabBarController.hero.isEnabled = true
+        tabBarController.hero.modalAnimationType = .zoom
+        return tabBarController
     }
 }

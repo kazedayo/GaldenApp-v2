@@ -49,8 +49,8 @@ class LaunchViewController: UIViewController {
         }
         
         HKGaldenAPI.shared.getChannelList(completion: {
-            let splitViewController = Configurations.shared.configureUI()
-            self.present(splitViewController, animated: true, completion: nil)
+            let tabBarController = Configurations.shared.configureUI()
+            self.present(tabBarController, animated: true, completion: nil)
         })
         // Do any additional setup after loading the view.
     }

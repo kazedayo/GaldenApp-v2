@@ -251,15 +251,15 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         } else {
             DispatchQueue.main.async {
                 let contentVC = ContentViewController()
-                let contentNavVC = UINavigationController(rootViewController: contentVC)
+                //let contentNavVC = UINavigationController(rootViewController: contentVC)
                 let selectedThread = self.threads[indexPath.row].id
                 contentVC.threadIdReceived = selectedThread
                 contentVC.title = self.threads[indexPath.row].title
                 contentVC.ident = self.threads[indexPath.row].ident
                 contentVC.sender = "cell"
-                self.splitViewController?.showDetailViewController(contentNavVC, sender: self)
+                contentVC.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(contentVC, animated: true)
             }
-            //navigationController?.pushViewController(contentVC, animated: true)
         }
     }
     
