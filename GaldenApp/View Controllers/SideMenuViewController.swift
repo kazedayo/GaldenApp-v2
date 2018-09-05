@@ -80,21 +80,6 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         }
     }
     
-    @objc func logoutButtonPressed(_ sender: UIButton) {
-        HKGaldenAPI.shared.logout {
-            weak var pvc = self.presentingViewController
-            self.keychain.delete("isLoggedIn")
-            self.dismiss(animated: true, completion: {
-                pvc?.present(FirstLoginViewController(), animated: true, completion: nil)
-            })
-        }
-    }
-    
-    @objc func settingsButtonPressed(_ sender: UIButton) {
-        let settingsVC = SettingsViewController()
-        SideMenuManager.default.menuLeftNavigationController?.pushViewController(settingsVC, animated: true)
-    }
-    
     /*
     // MARK: - Navigation
 

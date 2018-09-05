@@ -7,12 +7,27 @@
 //
 
 import UIKit
+import KeychainSwift
 
 class UserViewController: UIViewController {
 
+    let keychain = KeychainSwift()
+    let logoutButton = UIButton()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        
+        logoutButton.setTitle("登出", for: .normal)
+        logoutButton.backgroundColor = .red
+        logoutButton.addTarget(self, action: #selector(logoutButtonPressed(_:)), for: .touchUpInside)
+        view.addSubview(logoutButton)
+        
+        logoutButton.snp.makeConstraints {
+            (make) -> Void in
+            make.center.equalTo(view.snp.center)
+            make.width.equalTo(300)
+        }
         // Do any additional setup after loading the view.
     }
     
@@ -27,4 +42,14 @@ class UserViewController: UIViewController {
     }
     */
 
+    @objc func logoutButtonPressed(_ sender: UIButton) {
+        HKGaldenAPI.shared.logout {
+            weak var pvc = self.presentingViewController
+            self.keychain.delete("isLoggedIn")
+            self.dismiss(animated: true, completion: {
+                pvc?.present(FirstLoginViewController(), animated: true, completion: nil)
+            })
+        }
+    }
+    
 }

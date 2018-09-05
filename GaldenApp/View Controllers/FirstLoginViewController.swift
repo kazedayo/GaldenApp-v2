@@ -9,7 +9,7 @@
 import UIKit
 import KeychainSwift
 
-class FirstLoginViewController: UIViewController,UITextFieldDelegate,UISplitViewControllerDelegate {
+class FirstLoginViewController: UIViewController,UITextFieldDelegate {
     
     let loginText = UILabel()
     let emailField = UITextField()
@@ -29,7 +29,7 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate,UISplitView
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
         loginText.hero.modifiers = [.fade,.position(CGPoint(x:UIScreen.main.bounds.midX,y:100))]
-        loginText.text = "請登入你的膠登帳戶"
+        loginText.text = "請登入你的郊登帳戶"
         loginText.textColor = .white
         loginText.textAlignment = .center
         view.addSubview(loginText)
@@ -66,21 +66,21 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate,UISplitView
             (make) -> Void in
             make.top.equalTo(loginText.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
-            make.width.equalTo(200)
+            make.width.equalTo(250)
         }
         
         passwordField.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(emailField.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
-            make.width.equalTo(200)
+            make.width.equalTo(250)
         }
         
         loginButton.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(passwordField.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
-            make.width.equalTo(100)
+            make.width.equalTo(175)
         }
         // Do any additional setup after loading the view.
     }
@@ -111,15 +111,7 @@ class FirstLoginViewController: UIViewController,UITextFieldDelegate,UISplitView
                         self?.keychain.set(userid, forKey: "userID")
                         self?.keychain.set(true, forKey: "isLoggedIn")
                         HKGaldenAPI.shared.getChannelList {
-                            var splitViewController =  UISplitViewController()
-                            splitViewController.delegate = self
-                            let rootViewController = ThreadListViewController()
-                            let detailViewController = iPadPlaceholderDetailViewController()
-                            let rootNavigationController = UINavigationController(rootViewController:rootViewController)
-                            splitViewController.viewControllers = [rootNavigationController,detailViewController]
-                            splitViewController.preferredDisplayMode = .allVisible
-                            splitViewController.hero.isEnabled = true
-                            splitViewController.hero.modalAnimationType = .zoom
+                            let splitViewController = Configurations.shared.configureUI()
                             self?.present(splitViewController, animated: true, completion: nil)
                         }
                     }

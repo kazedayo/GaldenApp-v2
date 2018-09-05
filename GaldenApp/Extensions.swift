@@ -188,3 +188,27 @@ class EntryAttributes {
     }
     
 }
+
+class Configurations: UISplitViewControllerDelegate {
+    static let shared = Configurations()
+    
+    func configureUI() -> UISplitViewController {
+        var splitViewController =  UISplitViewController()
+        splitViewController.delegate = self
+        let tabBarController = UITabBarController()
+        let threadListViewController = ThreadListViewController()
+        let settingsViewController = SettingsViewController()
+        let userViewController = UserViewController()
+        threadListViewController.tabBarItem = UITabBarItem(title: "睇post", image: UIImage(named: "posts"), tag: 0)
+        userViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
+        settingsViewController.tabBarItem = UITabBarItem(title: "設定", image: UIImage(named: "settings"), tag: 2)
+        let controllers = [threadListViewController,userViewController,settingsViewController]
+        tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
+        let detailViewController = iPadPlaceholderDetailViewController()
+        splitViewController.viewControllers = [tabBarController,detailViewController]
+        splitViewController.preferredDisplayMode = .allVisible
+        splitViewController.hero.isEnabled = true
+        splitViewController.hero.modalAnimationType = .zoom
+        return splitViewController
+    }
+}
