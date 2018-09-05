@@ -93,17 +93,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             make.height.equalTo(50)
         }
         
-        navigationController?.navigationBar.barStyle = .black
-        navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
-        navigationController?.navigationBar.tintColor = .white
         navigationItem.leftBarButtonItem = sideMenuButton
         navigationItem.rightBarButtonItem = newThread
-        navigationItem.leftBarButtonItem?.tintColor = .white
-        navigationItem.rightBarButtonItem?.tintColor = .white
         navigationController?.navigationItem.leftBarButtonItem = sideMenuButton
         navigationController?.navigationItem.rightBarButtonItem = newThread
         navigationItem.title = HKGaldenAPI.shared.chList![channelNow]["name"].stringValue
-        navigationController?.navigationBar.isTranslucent = true
         
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = UIColor(white: 0.13, alpha: 1)
@@ -144,7 +138,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isToolbarHidden = true
-        //self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         if (keychain.getBool("noAd") == true) {
             adBannerView.removeFromSuperview()
             view.layoutSubviews()
@@ -155,7 +148,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)
@@ -260,19 +252,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             DispatchQueue.main.async {
                 let contentVC = ContentViewController()
                 let contentNavVC = UINavigationController(rootViewController: contentVC)
-                contentNavVC.navigationBar.barStyle = .black
                 let selectedThread = self.threads[indexPath.row].id
                 contentVC.threadIdReceived = selectedThread
                 contentVC.title = self.threads[indexPath.row].title
                 contentVC.ident = self.threads[indexPath.row].ident
                 contentVC.sender = "cell"
-                if UIDevice.current.model.contains("iPhone") && UIDevice.current.orientation.isPortrait {
-                    for subJson in HKGaldenAPI.shared.chList! {
-                        if subJson["ident"].stringValue == self.threads[indexPath.row].ident {
-                            self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
-                        }
-                    }
-                }
                 self.splitViewController?.showDetailViewController(contentNavVC, sender: self)
             }
             //navigationController?.pushViewController(contentVC, animated: true)
@@ -342,7 +326,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         self.channelNow = channelSelected
         self.pageNow = 1
         self.navigationItem.title = HKGaldenAPI.shared.chList![channelNow]["name"].stringValue
-        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![channelNow]["color"].stringValue)
         self.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
         self.updateSequence(append: false, completion: {})
     }

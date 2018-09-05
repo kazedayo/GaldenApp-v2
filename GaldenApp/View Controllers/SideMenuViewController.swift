@@ -15,28 +15,17 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     var channelSelected = 0
     var mainVC: ThreadListViewController?
     let tableView = UITableView()
-    let userName = UILabel()
-    let userID = UILabel()
-    let logoutButton = UIButton()
-    let settingsButton = UIButton()
-    let titleButton = UIButton()
     let keychain = KeychainSwift()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tableView.selectRow(at: IndexPath.init(row: channelSelected, section: 0), animated: true, scrollPosition: .top)
-        HKGaldenAPI.shared.getUserDetail(completion: {
-            uname, uid in
-            self.userName.text = uname
-        })
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.isNavigationBarHidden = true
         
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
@@ -47,82 +36,12 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         tableView.register(ChannelListTableViewCell.self, forCellReuseIdentifier: "ChannelListTableViewCell")
         view.addSubview(tableView)
         
-        titleButton.setImage(UIImage(named: "menuIcon"), for: .normal)
-        titleButton.imageView?.clipsToBounds = true
-        titleButton.imageView?.layer.cornerRadius = 5
-        titleButton.setTitle("  1080-Green", for: .normal)
-        titleButton.setTitleColor(.lightGray, for: .normal)
-        titleButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        titleButton.isUserInteractionEnabled = false
-        view.addSubview(titleButton)
-        
-        userName.text = "撈緊..."
-        userName.textColor = .white
-        userName.font = UIFont.systemFont(ofSize: 15)
-        view.addSubview(userName)
-        
-        userID.text = keychain.get("userID")!
-        userID.textColor = .lightGray
-        userID.font = UIFont.systemFont(ofSize: 12)
-        view.addSubview(userID)
-        
-        logoutButton.setImage(UIImage(named: "logout"), for: .normal)
-        logoutButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        logoutButton.setTitle(" 登出", for: .normal)
-        logoutButton.tintColor = .white
-        logoutButton.imageView?.contentMode = .scaleAspectFit
-        logoutButton.addTarget(self, action: #selector(logoutButtonPressed(_:)), for: .touchUpInside)
-        
-        settingsButton.setImage(UIImage(named: "settings"), for: .normal)
-        settingsButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        settingsButton.setTitle(" 設定", for: .normal)
-        settingsButton.tintColor = .white
-        settingsButton.imageView?.contentMode = .scaleAspectFit
-        settingsButton.addTarget(self, action: #selector(settingsButtonPressed(_:)), for: .touchUpInside)
-        
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.alignment = .leading
-        stackView.spacing = 15
-        stackView.addArrangedSubview(logoutButton)
-        stackView.addArrangedSubview(settingsButton)
-        view.addSubview(stackView)
-        
-        titleButton.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(view.snp.topMargin).offset(-33)
-            make.leading.equalToSuperview().offset(15)
-            make.trailing.equalToSuperview().offset(-15)
-        }
-        
-        userName.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(titleButton.snp.bottom).offset(20)
-            make.leading.equalToSuperview().offset(15)
-            make.trailing.equalToSuperview().offset(-15)
-        }
-        
-        userID.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(userName.snp.bottom).offset(5)
-            make.leading.equalToSuperview().offset(15)
-            make.trailing.equalToSuperview().offset(-15)
-        }
-        
-        stackView.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(userID.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(15)
-            make.trailing.equalToSuperview().offset(-15)
-        }
-        
         tableView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(stackView.snp.bottom).offset(20)
+            make.top.equalTo(view.snp.topMargin)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(view.snp.bottomMargin)
         }
         // Do any additional setup after loading the view.
     }

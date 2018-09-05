@@ -137,11 +137,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView.configuration.userContentController.add(self, name: "block")
         webView.configuration.userContentController.add(self, name: "refresh")
         webView.configuration.userContentController.add(self, name: "imageView")
-        for subJson in HKGaldenAPI.shared.chList! {
-            if subJson["ident"].stringValue == self.ident {
-                self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
-            }
-        }
         if (keychain.getBool("noAd") == true) {
             adBannerView.removeFromSuperview()
         } else {
@@ -183,11 +178,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         super.viewDidAppear(animated)
         if (keychain.getBool("noAd") == false) {
             webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, adBannerView.frame.height, 0)
-        }
-        for subJson in HKGaldenAPI.shared.chList! {
-            if subJson["ident"].stringValue == self.ident {
-                self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
-            }
         }
     }
     
@@ -477,11 +467,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self.titleLabel.fadeLength = 5
                 self.titleLabel.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
                 self.titleLabel.textAlignment = .center
-                for subJson in HKGaldenAPI.shared.chList! {
-                    if subJson["ident"].stringValue == self.op.ident {
-                        self.navigationController?.navigationBar.barTintColor = UIColor(hexRGB:subJson["color"].stringValue)
-                    }
-                }
                 self.navigationItem.titleView = self.titleLabel
                 self.convertedHTML = ""
                 if self.pageNow == 1 {

@@ -15,21 +15,6 @@ extension String {
     }
 }
 
-extension UITabBar {
-    override open func sizeThatFits(_ size: CGSize) -> CGSize {
-        super.sizeThatFits(size)
-        var sizeThatFits = super.sizeThatFits(size)
-        sizeThatFits.height = 35
-        return sizeThatFits
-    }
-}
-
-extension UINavigationBar {
-    open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return CGSize(width: UIScreen.main.bounds.width, height: 35)
-    }
-}
-
 extension UIColor {
     
     /// Converts this `UIColor` instance to a 1x1 `UIImage` instance and returns it.

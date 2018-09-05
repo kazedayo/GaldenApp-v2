@@ -1,5 +1,5 @@
 //
-//  PollViewController.swift
+//  UserViewController.swift
 //  GaldenApp
 //
 //  Created by Kin Wa Lam on 24/7/2018.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PollViewController: UIViewController {
+class UserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

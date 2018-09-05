@@ -76,6 +76,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.statusBarStyle = .lightContent
         UIApplication.shared.isStatusBarHidden = false
         
+        UINavigationBar.appearance().barStyle = .black
+        UINavigationBar.appearance().tintColor = UIColor(hexRGB: "#568064")
+        UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#568064")
+        
+        UITabBar.appearance().barStyle = .black
+        UITabBar.appearance().tintColor = UIColor(hexRGB: "#568064")
+        
         if (keychain.getBool("isLoggedIn") == nil) {
             let root = WelcomeViewController()
             window?.rootViewController = root

@@ -6,7 +6,7 @@
     },
     {
       "idiom" : "universal",
-      "filename" : "HKGalden Icon 2.png",
+      "filename" : "today_apps@2x.png",
       "scale" : "2x"
     },
     {
@@ -17,5 +17,8 @@
   "info" : {
     "version" : 1,
     "author" : "xcode"
+  },
+  "properties" : {
+    "template-rendering-intent" : "template"
   }
 }
