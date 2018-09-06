@@ -25,7 +25,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     let iconKeyboard = IconKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 265))
     
-    let channelLabel = UILabel()
     let titleTextField = UITextField()
     let contentTextView = IQTextView()
     let previewButton = UIButton()
@@ -39,14 +38,13 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
         // Do any additional setup after loading the view.
         navigationController?.isNavigationBarHidden = false
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "預覽", style: .plain, target: self, action: #selector(previewButtonPressed(_:)))
         iconKeyboard.keyboardDelegate = self
-        
-        channelLabel.text = HKGaldenAPI.shared.chList![channel]["name"].stringValue
-        channelLabel.textColor = .white
-        view.addSubview(channelLabel)
         
         titleTextField.delegate = self
         titleTextField.borderStyle = .roundedRect
@@ -68,13 +66,14 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         view.addSubview(contentTextView)
         
         if composeType == .reply {
+            self.title = "回覆"
             titleTextField.removeFromSuperview()
-            channelLabel.text = "回覆"
             contentTextView.text = content
         } else {
+            self.title = HKGaldenAPI.shared.chList![channel]["name"].stringValue
             titleTextField.snp.makeConstraints {
                 (make) -> Void in
-                make.top.equalTo(channelLabel.snp.bottom).offset(10)
+                make.top.equalTo(view.snp.topMargin).offset(10)
                 make.leading.equalTo(15)
                 make.trailing.equalTo(-15)
             }
@@ -130,13 +129,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         stackView.addArrangedSubview(iconButton)
         view.addSubview(stackView)
         
-        channelLabel.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(10)
-            make.leading.equalTo(15)
-            make.trailing.equalTo(-15)
-        }
-        
         contentTextView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(stackView.snp.bottom).offset(10)
@@ -147,7 +139,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         stackView.snp.makeConstraints {
             (make) -> Void in
             if composeType == .reply {
-                make.top.equalTo(channelLabel.snp.bottom).offset(10)
+                make.top.equalTo(view.snp.topMargin).offset(10)
             } else {
                 make.top.equalTo(titleTextField.snp.bottom).offset(10)
             }
@@ -160,7 +152,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             make.top.equalTo(contentTextView.snp.bottom).offset(10)
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
-            make.bottom.equalTo(-10)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
         }
     }
     
@@ -340,7 +332,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             } else {
                 previewVC.topicID = self.topicID
             }
-            SwiftEntryKit.display(entry: previewVC, using: EntryAttributes.shared.centerEntry())
+            self.navigationController?.pushViewController(previewVC, animated: true)
         }
     }
     
@@ -410,4 +402,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             self.contentTextView.select(nsRange)
         }
     }
+    
+    @objc func cancelButtonPressed(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
+    
 }

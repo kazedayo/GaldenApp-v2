@@ -295,10 +295,12 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @objc func newThreadButtonPressed() {
         let composeVC = ComposeViewController()
+        let composeNavVC = UINavigationController(rootViewController: composeVC)
         composeVC.channel = channelNow
         composeVC.composeType = .newThread
         composeVC.threadVC = self
-        SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
+        //SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
+        present(composeNavVC, animated: true, completion: nil)
     }
     
     // MARK: - Navigation

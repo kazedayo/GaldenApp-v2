@@ -195,12 +195,12 @@ class Configurations {
     func configureUI() -> UITabBarController {
         let tabBarController = UITabBarController()
         let threadListViewController = ThreadListViewController()
-        let settingsViewController = SettingsViewController()
+        let settingsTableViewController = SettingsTableViewController.init(style: .grouped)
         let userViewController = UserViewController()
         threadListViewController.tabBarItem = UITabBarItem(title: "睇post", image: UIImage(named: "posts"), tag: 0)
         userViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
-        settingsViewController.tabBarItem = UITabBarItem(title: "設定", image: UIImage(named: "settings"), tag: 2)
-        let controllers = [threadListViewController,userViewController,settingsViewController]
+        settingsTableViewController.tabBarItem = UITabBarItem(title: "設定", image: UIImage(named: "settings"), tag: 2)
+        let controllers = [threadListViewController,userViewController,settingsTableViewController]
         tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
         tabBarController.hero.isEnabled = true
         tabBarController.hero.modalAnimationType = .zoom

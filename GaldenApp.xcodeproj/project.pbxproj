@@ -13,7 +13,6 @@
 		4231DA782077299B00AB1DE5 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4231DA772077299B00AB1DE5 /* PreviewViewController.swift */; };
 		4231DA7A20774B7900AB1DE5 /* xbbcodeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4231DA7920774B7900AB1DE5 /* xbbcodeBridge.swift */; };
 		423E272D207458ED00F267CA /* IconCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423E272C207458ED00F267CA /* IconCollectionViewCell.swift */; };
-		424A47052073493E005795A6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46E92073493B005795A6 /* SettingsViewController.swift */; };
 		424A47062073493E005795A6 /* PageSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EA2073493B005795A6 /* PageSelectTableViewCell.swift */; };
 		424A47072073493E005795A6 /* FirstLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EB2073493B005795A6 /* FirstLoginViewController.swift */; };
 		424A47082073493E005795A6 /* OP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EC2073493B005795A6 /* OP.swift */; };
@@ -43,6 +42,7 @@
 		4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20E1F95FAE1002EEC76 /* xbbcode.js */; };
 		42964F212085CF12000FA349 /* NetworkActivityIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */; };
 		429F17AF20D9470500618D0C /* iPadPlaceholderDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429F17AE20D9470500618D0C /* iPadPlaceholderDetailViewController.swift */; };
+		42A1C8102140A3C000C0C511 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */; };
 		42A979D42014BA43008C7629 /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */; };
 		42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8931F7923E1002CC13F /* AppDelegate.swift */; };
 		42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89A1F7923E1002CC13F /* Assets.xcassets */; };
@@ -75,7 +75,6 @@
 		423720C02014B8EA00603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		423720C22014B93E00603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		423E272C207458ED00F267CA /* IconCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCollectionViewCell.swift; sourceTree = "<group>"; };
-		424A46E92073493B005795A6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		424A46EA2073493B005795A6 /* PageSelectTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageSelectTableViewCell.swift; sourceTree = "<group>"; };
 		424A46EB2073493B005795A6 /* FirstLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstLoginViewController.swift; sourceTree = "<group>"; };
 		424A46EC2073493B005795A6 /* OP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OP.swift; sourceTree = "<group>"; };
@@ -105,6 +104,7 @@
 		4262C20E1F95FAE1002EEC76 /* xbbcode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xbbcode.js; sourceTree = "<group>"; };
 		42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkActivityIndicatorManager.swift; sourceTree = "<group>"; };
 		429F17AE20D9470500618D0C /* iPadPlaceholderDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadPlaceholderDetailViewController.swift; sourceTree = "<group>"; };
+		42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		42A979D32014B9C4008C7629 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8901F7923E1002CC13F /* GaldenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaldenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -171,7 +171,7 @@
 				424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */,
 				424A46F42073493C005795A6 /* PageSelectViewController.swift */,
 				424A47022073493E005795A6 /* ThreadListViewController.swift */,
-				424A46E92073493B005795A6 /* SettingsViewController.swift */,
+				42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */,
 				424A46ED2073493B005795A6 /* WelcomeViewController.swift */,
 			);
 			path = "View Controllers";
@@ -476,12 +476,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				424A47052073493E005795A6 /* SettingsViewController.swift in Sources */,
 				424A47072073493E005795A6 /* FirstLoginViewController.swift in Sources */,
 				424A47162073493E005795A6 /* BlockedTableViewCell.swift in Sources */,
 				424A47172073493E005795A6 /* BlockedUsers.swift in Sources */,
 				424A47112073493E005795A6 /* History.swift in Sources */,
 				424A47142073493E005795A6 /* HKGaldenAPI.swift in Sources */,
+				42A1C8102140A3C000C0C511 /* SettingsTableViewController.swift in Sources */,
 				42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */,
 				424A47092073493E005795A6 /* WelcomeViewController.swift in Sources */,
 				424A47082073493E005795A6 /* OP.swift in Sources */,

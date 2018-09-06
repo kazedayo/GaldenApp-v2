@@ -296,10 +296,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     @objc func replyButtonPressed() {
         let composeVC = ComposeViewController()
+        let composeNav = UINavigationController(rootViewController: composeVC)
         composeVC.topicID = self.threadIdReceived
         composeVC.composeType = .reply
         composeVC.contentVC = self
-        SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
+        //SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
+        present(composeNav, animated: true, completion: nil)
     }
     
     func quote() {

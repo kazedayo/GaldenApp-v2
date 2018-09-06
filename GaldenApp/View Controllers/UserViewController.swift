@@ -17,6 +17,7 @@ class UserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        self.title = "會員資料"
         
         logoutButton.setTitle("登出", for: .normal)
         logoutButton.backgroundColor = .red
