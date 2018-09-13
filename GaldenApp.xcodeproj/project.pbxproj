@@ -7,20 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		32EE3C5177EECCE65C9AC67A /* Pods_GaldenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092365D4D945F6E42B0DE552 /* Pods_GaldenAppTests.framework */; };
 		42029C68207A44610001E142 /* URLNavigationMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42029C67207A44610001E142 /* URLNavigationMap.swift */; };
 		42029C6A207CC5CC0001E142 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42029C69207CC5CC0001E142 /* StoreKit.framework */; };
 		4231DA782077299B00AB1DE5 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4231DA772077299B00AB1DE5 /* PreviewViewController.swift */; };
 		4231DA7A20774B7900AB1DE5 /* xbbcodeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4231DA7920774B7900AB1DE5 /* xbbcodeBridge.swift */; };
 		423E272D207458ED00F267CA /* IconCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423E272C207458ED00F267CA /* IconCollectionViewCell.swift */; };
 		424A47062073493E005795A6 /* PageSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EA2073493B005795A6 /* PageSelectTableViewCell.swift */; };
-		424A47072073493E005795A6 /* FirstLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EB2073493B005795A6 /* FirstLoginViewController.swift */; };
 		424A47082073493E005795A6 /* OP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EC2073493B005795A6 /* OP.swift */; };
-		424A47092073493E005795A6 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46ED2073493B005795A6 /* WelcomeViewController.swift */; };
-		424A470A2073493E005795A6 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EE2073493B005795A6 /* EULAViewController.swift */; };
 		424A470B2073493E005795A6 /* ThreadList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46EF2073493C005795A6 /* ThreadList.swift */; };
 		424A470C2073493E005795A6 /* ThreadListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F02073493C005795A6 /* ThreadListTableViewCell.swift */; };
-		424A470D2073493E005795A6 /* ContentMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F12073493C005795A6 /* ContentMenuViewController.swift */; };
 		424A470E2073493E005795A6 /* ChannelListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F22073493C005795A6 /* ChannelListTableViewCell.swift */; };
 		424A470F2073493E005795A6 /* PagePopoverTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */; };
 		424A47102073493E005795A6 /* PageSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F42073493C005795A6 /* PageSelectViewController.swift */; };
@@ -41,15 +36,18 @@
 		4262C2101F95FAE2002EEC76 /* jssource.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20D1F95FAE0002EEC76 /* jssource.js */; };
 		4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */ = {isa = PBXBuildFile; fileRef = 4262C20E1F95FAE1002EEC76 /* xbbcode.js */; };
 		42964F212085CF12000FA349 /* NetworkActivityIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */; };
+		4297113A2146AA7C000EA809 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429711392146AA7C000EA809 /* API.swift */; };
+		4298ED16214630E50043FAD7 /* queries.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 4298ED15214630E50043FAD7 /* queries.graphql */; };
 		429F17AF20D9470500618D0C /* iPadPlaceholderDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429F17AE20D9470500618D0C /* iPadPlaceholderDetailViewController.swift */; };
 		42A1C8102140A3C000C0C511 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */; };
-		42A979D42014BA43008C7629 /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */; };
 		42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8931F7923E1002CC13F /* AppDelegate.swift */; };
 		42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89A1F7923E1002CC13F /* Assets.xcassets */; };
 		42E7F89E1F7923E1002CC13F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89C1F7923E1002CC13F /* LaunchScreen.storyboard */; };
 		42E7F8A91F7923E2002CC13F /* GaldenAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */; };
 		42F7943C210621D200E53614 /* Poll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F7943B210621D200E53614 /* Poll.swift */; };
 		42F7943E21075BE100E53614 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F7943D21075BE100E53614 /* UserViewController.swift */; };
+		B148056AF8EBF956F1F30DEC /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231255155F2B522ED451A474 /* Pods_GaldenApp.framework */; };
+		C3A72FA59A1824F354229141 /* Pods_GaldenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB7C7C7F4136F4076A3DE93F /* Pods_GaldenAppTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,26 +61,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		092365D4D945F6E42B0DE552 /* Pods_GaldenAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3216F76A4E5F32869F0F36E4 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3347D35989AE9895ECE658C3 /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		231255155F2B522ED451A474 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42029C67207A44610001E142 /* URLNavigationMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLNavigationMap.swift; sourceTree = "<group>"; };
 		42029C69207CC5CC0001E142 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4231DA772077299B00AB1DE5 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		4231DA7920774B7900AB1DE5 /* xbbcodeBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xbbcodeBridge.swift; sourceTree = "<group>"; };
-		423720BC2014B7D600603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		423720BE2014B89700603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		423720C02014B8EA00603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		423720C22014B93E00603395 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		423E272C207458ED00F267CA /* IconCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCollectionViewCell.swift; sourceTree = "<group>"; };
 		424A46EA2073493B005795A6 /* PageSelectTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageSelectTableViewCell.swift; sourceTree = "<group>"; };
-		424A46EB2073493B005795A6 /* FirstLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstLoginViewController.swift; sourceTree = "<group>"; };
 		424A46EC2073493B005795A6 /* OP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OP.swift; sourceTree = "<group>"; };
-		424A46ED2073493B005795A6 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
-		424A46EE2073493B005795A6 /* EULAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		424A46EF2073493C005795A6 /* ThreadList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadList.swift; sourceTree = "<group>"; };
 		424A46F02073493C005795A6 /* ThreadListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadListTableViewCell.swift; sourceTree = "<group>"; };
-		424A46F12073493C005795A6 /* ContentMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentMenuViewController.swift; sourceTree = "<group>"; };
 		424A46F22073493C005795A6 /* ChannelListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelListTableViewCell.swift; sourceTree = "<group>"; };
 		424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagePopoverTableViewController.swift; sourceTree = "<group>"; };
 		424A46F42073493C005795A6 /* PageSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageSelectViewController.swift; sourceTree = "<group>"; };
@@ -103,10 +91,10 @@
 		4262C20D1F95FAE0002EEC76 /* jssource.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jssource.js; sourceTree = "<group>"; };
 		4262C20E1F95FAE1002EEC76 /* xbbcode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xbbcode.js; sourceTree = "<group>"; };
 		42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkActivityIndicatorManager.swift; sourceTree = "<group>"; };
+		429711392146AA7C000EA809 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		4298ED15214630E50043FAD7 /* queries.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = queries.graphql; sourceTree = "<group>"; };
 		429F17AE20D9470500618D0C /* iPadPlaceholderDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadPlaceholderDetailViewController.swift; sourceTree = "<group>"; };
 		42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
-		42A979D32014B9C4008C7629 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8901F7923E1002CC13F /* GaldenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaldenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8931F7923E1002CC13F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42E7F89A1F7923E1002CC13F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -117,9 +105,11 @@
 		42E7F8AA1F7923E2002CC13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42F7943B210621D200E53614 /* Poll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Poll.swift; sourceTree = "<group>"; };
 		42F7943D21075BE100E53614 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
-		5E399980B258AF2026630D8D /* Pods-GaldenAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		6190805695CCE41754519B0E /* Pods-GaldenApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.release.xcconfig"; sourceTree = "<group>"; };
-		AE09C78BE00384D4A5929212 /* Pods-GaldenApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.debug.xcconfig"; sourceTree = "<group>"; };
+		68945070CD49A9AB44D2A3DC /* Pods-GaldenApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.release.xcconfig"; sourceTree = "<group>"; };
+		75B41A72147C709CAC729D97 /* Pods-GaldenApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.debug.xcconfig"; sourceTree = "<group>"; };
+		82456CE00A7A4660CFAD6F6B /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		CB7C7C7F4136F4076A3DE93F /* Pods_GaldenAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD3DA2F50B5CAD2258E7FFE0 /* Pods-GaldenAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,8 +117,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42A979D42014BA43008C7629 /* Pods_GaldenApp.framework in Frameworks */,
 				42029C6A207CC5CC0001E142 /* StoreKit.framework in Frameworks */,
+				B148056AF8EBF956F1F30DEC /* Pods_GaldenApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,7 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				32EE3C5177EECCE65C9AC67A /* Pods_GaldenAppTests.framework in Frameworks */,
+				C3A72FA59A1824F354229141 /* Pods_GaldenAppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,18 +151,14 @@
 				424A47042073493E005795A6 /* SideMenuViewController.swift */,
 				424A46F72073493C005795A6 /* ComposeViewController.swift */,
 				4231DA772077299B00AB1DE5 /* PreviewViewController.swift */,
-				424A46F12073493C005795A6 /* ContentMenuViewController.swift */,
 				424A46FC2073493D005795A6 /* ContentViewController.swift */,
 				42F7943D21075BE100E53614 /* UserViewController.swift */,
-				424A46EE2073493B005795A6 /* EULAViewController.swift */,
-				424A46EB2073493B005795A6 /* FirstLoginViewController.swift */,
 				424A47012073493E005795A6 /* LaunchViewController.swift */,
 				429F17AE20D9470500618D0C /* iPadPlaceholderDetailViewController.swift */,
 				424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */,
 				424A46F42073493C005795A6 /* PageSelectViewController.swift */,
 				424A47022073493E005795A6 /* ThreadListViewController.swift */,
 				42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */,
-				424A46ED2073493B005795A6 /* WelcomeViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -198,8 +184,8 @@
 				42E7F8921F7923E1002CC13F /* GaldenApp */,
 				42E7F8A71F7923E2002CC13F /* GaldenAppTests */,
 				42E7F8911F7923E1002CC13F /* Products */,
-				78931FACBB27AADC9B5E1788 /* Pods */,
 				44717B75C39E1397AB701D29 /* Frameworks */,
+				55D06776ADB3172E0F872F4D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -224,6 +210,8 @@
 				424A46FD2073493D005795A6 /* Extensions.swift */,
 				424A46F82073493C005795A6 /* HKGaldenAPI.swift */,
 				42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */,
+				429711392146AA7C000EA809 /* API.swift */,
+				4298ED15214630E50043FAD7 /* queries.graphql */,
 				4231DA7920774B7900AB1DE5 /* xbbcodeBridge.swift */,
 				424A46F92073493D005795A6 /* IconKeyboard.swift */,
 				42E7F8931F7923E1002CC13F /* AppDelegate.swift */,
@@ -247,25 +235,19 @@
 			isa = PBXGroup;
 			children = (
 				42029C69207CC5CC0001E142 /* StoreKit.framework */,
-				42A979D52014BA43008C7629 /* Pods_GaldenApp.framework */,
-				42A979D32014B9C4008C7629 /* Pods_GaldenApp.framework */,
-				423720C22014B93E00603395 /* Pods_GaldenApp.framework */,
-				423720C02014B8EA00603395 /* Pods_GaldenApp.framework */,
-				423720BE2014B89700603395 /* Pods_GaldenApp.framework */,
-				423720BC2014B7D600603395 /* Pods_GaldenApp.framework */,
-				3216F76A4E5F32869F0F36E4 /* Pods_GaldenApp.framework */,
-				092365D4D945F6E42B0DE552 /* Pods_GaldenAppTests.framework */,
+				231255155F2B522ED451A474 /* Pods_GaldenApp.framework */,
+				CB7C7C7F4136F4076A3DE93F /* Pods_GaldenAppTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		78931FACBB27AADC9B5E1788 /* Pods */ = {
+		55D06776ADB3172E0F872F4D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AE09C78BE00384D4A5929212 /* Pods-GaldenApp.debug.xcconfig */,
-				6190805695CCE41754519B0E /* Pods-GaldenApp.release.xcconfig */,
-				3347D35989AE9895ECE658C3 /* Pods-GaldenAppTests.debug.xcconfig */,
-				5E399980B258AF2026630D8D /* Pods-GaldenAppTests.release.xcconfig */,
+				75B41A72147C709CAC729D97 /* Pods-GaldenApp.debug.xcconfig */,
+				68945070CD49A9AB44D2A3DC /* Pods-GaldenApp.release.xcconfig */,
+				82456CE00A7A4660CFAD6F6B /* Pods-GaldenAppTests.debug.xcconfig */,
+				FD3DA2F50B5CAD2258E7FFE0 /* Pods-GaldenAppTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -277,11 +259,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 42E7F8AD1F7923E2002CC13F /* Build configuration list for PBXNativeTarget "GaldenApp" */;
 			buildPhases = (
-				6CB18C2E3FFBC719D629BDA3 /* [CP] Check Pods Manifest.lock */,
+				5E0C257B01295FF9754087E4 /* [CP] Check Pods Manifest.lock */,
+				4298ED1221461F390043FAD7 /* Generate Apollo GraphQL API */,
 				42E7F88C1F7923E1002CC13F /* Sources */,
 				42E7F88D1F7923E1002CC13F /* Frameworks */,
 				42E7F88E1F7923E1002CC13F /* Resources */,
-				4F419E7458970D573B49BAFF /* [CP] Embed Pods Frameworks */,
+				0F7ED7C4DB4F44089DA0C765 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -296,7 +279,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 42E7F8B01F7923E2002CC13F /* Build configuration list for PBXNativeTarget "GaldenAppTests" */;
 			buildPhases = (
-				5D86E780739A876119903A00 /* [CP] Check Pods Manifest.lock */,
+				C9F64FD9F747606AA57DDF20 /* [CP] Check Pods Manifest.lock */,
 				42E7F8A01F7923E2002CC13F /* Sources */,
 				42E7F8A11F7923E2002CC13F /* Frameworks */,
 				42E7F8A21F7923E2002CC13F /* Resources */,
@@ -365,6 +348,7 @@
 				42E7F89E1F7923E1002CC13F /* LaunchScreen.storyboard in Resources */,
 				4262C2111F95FAE2002EEC76 /* xbbcode.js in Resources */,
 				424B61CB1FC06EFA000D71F0 /* content.css in Resources */,
+				4298ED16214630E50043FAD7 /* queries.graphql in Resources */,
 				42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -379,7 +363,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4F419E7458970D573B49BAFF /* [CP] Embed Pods Frameworks */ = {
+		0F7ED7C4DB4F44089DA0C765 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -402,6 +386,7 @@
 				"${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftEntryKit/SwiftEntryKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyStoreKit/SwiftyStoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/URLNavigator/URLNavigator.framework",
@@ -424,6 +409,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SideMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftEntryKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyStoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLNavigator.framework",
@@ -433,25 +419,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5D86E780739A876119903A00 /* [CP] Check Pods Manifest.lock */ = {
+		4298ED1221461F390043FAD7 /* Generate Apollo GraphQL API */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "Generate Apollo GraphQL API";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-GaldenAppTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "APOLLO_FRAMEWORK_PATH=\"$(eval find $FRAMEWORK_SEARCH_PATHS -name \"Apollo.framework\" -maxdepth 1)\"\n\nif [ -z \"$APOLLO_FRAMEWORK_PATH\" ]; then\necho \"error: Couldn't find Apollo.framework in FRAMEWORK_SEARCH_PATHS; make sure to add the framework to your project.\"\nexit 1\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}\"\n$APOLLO_FRAMEWORK_PATH/check-and-run-apollo-cli.sh codegen:generate --queries=\"$(find . -name '*.graphql')\" --schema=schema.json API.swift\n";
 		};
-		6CB18C2E3FFBC719D629BDA3 /* [CP] Check Pods Manifest.lock */ = {
+		5E0C257B01295FF9754087E4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -469,6 +451,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		C9F64FD9F747606AA57DDF20 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GaldenAppTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -476,14 +476,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				424A47072073493E005795A6 /* FirstLoginViewController.swift in Sources */,
 				424A47162073493E005795A6 /* BlockedTableViewCell.swift in Sources */,
 				424A47172073493E005795A6 /* BlockedUsers.swift in Sources */,
 				424A47112073493E005795A6 /* History.swift in Sources */,
 				424A47142073493E005795A6 /* HKGaldenAPI.swift in Sources */,
 				42A1C8102140A3C000C0C511 /* SettingsTableViewController.swift in Sources */,
 				42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */,
-				424A47092073493E005795A6 /* WelcomeViewController.swift in Sources */,
 				424A47082073493E005795A6 /* OP.swift in Sources */,
 				424A47192073493E005795A6 /* Extensions.swift in Sources */,
 				4231DA7A20774B7900AB1DE5 /* xbbcodeBridge.swift in Sources */,
@@ -506,10 +504,9 @@
 				424A471C2073493E005795A6 /* Channels.swift in Sources */,
 				424A47132073493E005795A6 /* ComposeViewController.swift in Sources */,
 				4231DA782077299B00AB1DE5 /* PreviewViewController.swift in Sources */,
-				424A470A2073493E005795A6 /* EULAViewController.swift in Sources */,
 				424A47062073493E005795A6 /* PageSelectTableViewCell.swift in Sources */,
+				4297113A2146AA7C000EA809 /* API.swift in Sources */,
 				424A470B2073493E005795A6 /* ThreadList.swift in Sources */,
-				424A470D2073493E005795A6 /* ContentMenuViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,7 +657,7 @@
 		};
 		42E7F8AE1F7923E2002CC13F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AE09C78BE00384D4A5929212 /* Pods-GaldenApp.debug.xcconfig */;
+			baseConfigurationReference = 75B41A72147C709CAC729D97 /* Pods-GaldenApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -685,7 +682,7 @@
 		};
 		42E7F8AF1F7923E2002CC13F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6190805695CCE41754519B0E /* Pods-GaldenApp.release.xcconfig */;
+			baseConfigurationReference = 68945070CD49A9AB44D2A3DC /* Pods-GaldenApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -710,7 +707,7 @@
 		};
 		42E7F8B11F7923E2002CC13F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3347D35989AE9895ECE658C3 /* Pods-GaldenAppTests.debug.xcconfig */;
+			baseConfigurationReference = 82456CE00A7A4660CFAD6F6B /* Pods-GaldenAppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -728,7 +725,7 @@
 		};
 		42E7F8B21F7923E2002CC13F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5E399980B258AF2026630D8D /* Pods-GaldenAppTests.release.xcconfig */;
+			baseConfigurationReference = FD3DA2F50B5CAD2258E7FFE0 /* Pods-GaldenAppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

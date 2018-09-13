@@ -19,7 +19,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var content: String!
     var topicID: String!
     var composeType: ComposeType!
-    var kheight: CGFloat = 0
     var contentVC: ContentViewController?
     var threadVC: ThreadListViewController?
     
@@ -27,7 +26,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     let titleTextField = UITextField()
     let contentTextView = IQTextView()
-    let previewButton = UIButton()
     
     let fontSizeButton = UIButton()
     let fontColorButton = UIButton()
@@ -39,6 +37,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
+                                               name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
+                                               name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         // Do any additional setup after loading the view.
         navigationController?.isNavigationBarHidden = false
@@ -52,6 +55,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         contentTextView.delegate = self
         contentTextView.layer.cornerRadius = 5
         contentTextView.placeholder = "內容"
+        contentTextView.becomeFirstResponder()
         if #available(iOS 11.0, *) {
             titleTextField.smartInsertDeleteType = .no
             titleTextField.smartQuotesType = .no
@@ -78,13 +82,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                 make.trailing.equalTo(-15)
             }
         }
-        
-        previewButton.setTitle("預覽", for: .normal)
-        previewButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        previewButton.cornerRadius = 5
-        previewButton.backgroundColor = UIColor(hexRGB: "0076ff")
-        previewButton.addTarget(self, action: #selector(previewButtonPressed(_:)), for: .touchUpInside)
-        view.addSubview(previewButton)
         
         fontSizeButton.setImage(UIImage(named: "FontSize"), for: .normal)
         fontSizeButton.tintColor = .white
@@ -134,6 +131,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             make.top.equalTo(stackView.snp.bottom).offset(10)
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
         }
         
         stackView.snp.makeConstraints {
@@ -146,14 +144,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
         }
-        
-        previewButton.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(contentTextView.snp.bottom).offset(10)
-            make.leading.equalTo(15)
-            make.trailing.equalTo(-15)
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
-        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func didReceiveMemoryWarning() {
@@ -405,6 +400,24 @@ class ComposeViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     @objc func cancelButtonPressed(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            contentTextView.snp.updateConstraints {
+                (make) -> Void in
+                make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight-10)
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: Notification) {
+        // keyboard is dismissed/hidden from the screen
+        contentTextView.snp.updateConstraints {
+            (make) -> Void in
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
+        }
     }
     
 }

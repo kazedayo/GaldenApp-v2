@@ -1,0 +1,59 @@
+query GetChannelList {
+	channels {
+		...ChannelDetails
+	}
+}
+
+query GetThreads($id: [String!]!,$page: Int!) {
+    threads(tagIds: $id,page: $page) {
+    	...ThreadListDetails
+    }
+}
+
+query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {
+	thread(id: $id,sorting: $sorting,page: $page) {
+		id
+		title
+		replies {
+			id
+			floor
+			author {
+				nickname
+				avatar
+				gender
+			}
+			content
+			parent {
+				content
+			}
+			date
+		}
+	}
+}
+
+fragment ChannelDetails on Channel {
+	id
+	name
+	tags {
+		...TagDetails
+	}
+}
+
+fragment TagDetails on Tag {
+	id
+	name
+	color
+}
+
+fragment ThreadListDetails on Thread {
+	id
+	title
+	replies {
+		authorNickname
+		date
+	}
+	totalReplies
+	tags {
+		...TagDetails
+	}
+}

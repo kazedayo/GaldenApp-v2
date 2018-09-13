@@ -14,6 +14,7 @@ class ThreadListTableViewCell: UITableViewCell {
     
     let threadTitleLabel = UILabel()
     let detailLabel = UILabel()
+    let tagLabel = UILabel()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,6 +37,11 @@ class ThreadListTableViewCell: UITableViewCell {
         detailLabel.font = UIFont.systemFont(ofSize: 12)
         contentView.addSubview(detailLabel)
         
+        tagLabel.clipsToBounds = true
+        tagLabel.layer.cornerRadius = 3
+        tagLabel.font = UIFont.systemFont(ofSize: 12)
+        contentView.addSubview(tagLabel)
+        
         threadTitleLabel.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(contentView).offset(10)
@@ -47,6 +53,12 @@ class ThreadListTableViewCell: UITableViewCell {
             (make) -> Void in
             make.top.equalTo(threadTitleLabel.snp.bottom).offset(10)
             make.leading.equalTo(10)
+            make.bottom.equalTo(contentView).offset(-10)
+        }
+        
+        tagLabel.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(threadTitleLabel.snp.bottom).offset(10)
             make.trailing.equalTo(-10)
             make.bottom.equalTo(contentView).offset(-10)
         }

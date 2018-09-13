@@ -24,6 +24,7 @@ target 'GaldenApp' do
   pod 'SideMenu'
   pod 'SwiftEntryKit'
   pod 'Apollo'
+  pod 'SwiftSoup'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

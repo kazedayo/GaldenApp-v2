@@ -16,12 +16,14 @@ import SwiftyJSON
 import Kingfisher
 import SKPhotoBrowser
 import SwiftEntryKit
+import SwiftSoup
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
     
     //MARK: Properties
     
     var threadIdReceived: String!
+    var tID: Int!
     var isRated: Bool!
     var pageNow: Int = 1
     var op: OP!
@@ -117,7 +119,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             make.height.equalTo(50)
         }
         
-        HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
+        /*HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             count in
             self.pageCount = count
             let realm = try! Realm()
@@ -126,7 +128,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 self.pageNow = thisPost!.page
             }
             self.updateSequence()
-        })
+        })*/
+        self.updateSequence()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -151,7 +154,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "imageView")
-        self.webView.evaluateJavaScript("$(\".showing\").last().attr(\"id\")", completionHandler: {
+        /*self.webView.evaluateJavaScript("$(\".showing\").last().attr(\"id\")", completionHandler: {
             result,error in
             if error == nil {
                 let position = result as? String
@@ -171,7 +174,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     realm.add(history,update: true)
                 }
             }
-        })
+        })*/
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -268,15 +271,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @objc func moreButtonPressed() {
-        let menuVC = ContentMenuViewController()
-        menuVC.upvote = Int(self.op.good)!
-        menuVC.downvote = Int(self.op.bad)!
-        menuVC.opName = self.op.name
-        menuVC.threadTitle = self.op.title
-        menuVC.threadID = self.threadIdReceived
-        menuVC.rated = self.isRated
-        menuVC.mainVC = self
-        SwiftEntryKit.display(entry: menuVC, using: EntryAttributes.shared.bottomEntry())
+        
     }
     
     @objc func pageButtonPressed() {
@@ -428,149 +423,73 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     private func updateSequence() {
         webView.isHidden = true
         activityIndicator.isHidden = false
-        HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
-            count in
-            self.pageCount = count
-            self.buttonLogic()
-        })
-        pageButton.title = "第\(self.pageNow)頁"
-        HKGaldenAPI.shared.fetchContent(postId: threadIdReceived, pageNo: String(pageNow), completion: {
-            op,comments,rated,blocked,poll,error in
-            if (error == nil) {
-                self.op = op!
-                self.comments = comments!
-                self.blockedUsers = blocked!
-                self.isRated = rated!
-                self.poll = poll
-                self.replyCount = op!.count
-                if self.poll?.pollID != "" {
-                    var attributes = EKAttributes.bottomFloat
-                    attributes.displayDuration = .infinity
-                    attributes.entryBackground = .color(color: UIColor(hexRGB: "#43A047")!)
-                    attributes.positionConstraints.verticalOffset = 66
-                    attributes.popBehavior = .animated(animation: .init(translate: .init(duration: 0.3), scale: .init(from: 1, to: 0.7, duration: 0.7)))
-                    attributes.shadow = .active(with: .init(color: .black, opacity: 0.5, radius: 10, offset: .zero))
-                    attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-                    
-                    let title = EKProperty.LabelContent(text: "投票", style: .init(font: UIFont.systemFont(ofSize: 15), color: .white))
-                    let description = EKProperty.LabelContent(text: "Coming Soon...", style: .init(font: UIFont.systemFont(ofSize: 12), color: .white))
-                    let image = EKProperty.ImageContent(image: UIImage(named: "vote")!, size: CGSize(width: 35, height: 35))
-                    let simpleMessage = EKSimpleMessage(image: image, title: title, description: description)
-                    let notificationMessage = EKNotificationMessage(simpleMessage: simpleMessage)
-                    
-                    let contentView = EKNotificationMessageView(with: notificationMessage)
-                    SwiftEntryKit.display(entry: contentView, using: attributes)
-                }
-                self.titleLabel.text = self.op.title
-                self.titleLabel.textColor = .white
-                self.titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
-                self.titleLabel.animationDelay = 1
-                self.titleLabel.marqueeType = .MLLeftRight
-                self.titleLabel.fadeLength = 5
-                self.titleLabel.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
-                self.titleLabel.textAlignment = .center
-                self.navigationItem.titleView = self.titleLabel
-                self.convertedHTML = ""
-                if self.pageNow == 1 {
-                    xbbcodeBridge.shared.convertBBCodeToHTML(text: op!.content)
-                    self.op.contentHTML = (xbbcodeBridge.shared.convertedText)!
-                    if (self.blockedUsers.contains(self.op.userID)) {
-                        self.op.contentHTML = "<div class=\"comment\" id=\"commentCount\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
-                    }
-                    self.constructOPHeader()
-                    self.convertedHTML.append(self.op.contentHTML)
-                }
+        let getThreadContentQuery = GetThreadContentQuery(id: tID, sorting: .dateAsc, page: pageNow)
+        apollo.fetch(query: getThreadContentQuery) {
+            [weak self] result,error in
+            guard let thread = result?.data?.thread else { return }
+            var contentHTML = self?.constructComments(thread: thread)
+            self?.titleLabel.text = thread.title
+            self?.titleLabel.textColor = .white
+            self?.titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
+            self?.titleLabel.animationDelay = 1
+            self?.titleLabel.marqueeType = .MLLeftRight
+            self?.titleLabel.fadeLength = 5
+            self?.titleLabel.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
+            self?.titleLabel.textAlignment = .center
+            self?.navigationItem.titleView = self?.titleLabel
+            self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
+            
+            /*if (self?.pageNow==Int((self?.pageCount)!)) {
+                contentHTML!.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
+            }*/
+            
+            var threadHTML = ""
+            threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML!)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+            
+            let doc = try! SwiftSoup.parse(threadHTML)
+            
+            //img parse
+            let img = try! doc.select("span[data-nodetype=img]")
+            let imgURL = try! img.attr("data-src")
+            try! img.wrap("<img class=\"b-lazy\" src=\"https://img.eservice-hk.net/upload/2018/05/17/213108_b95f899cf42b6a9472e11ab7f8c64f89.gif\" data-src=\"\(imgURL)\" onclick=\"window.webkit.messageHandlers.imageView.postMessage('\(imgURL)');\">")
+            try! doc.select("span[data-nodetype=img]").remove()
+            
+            //url parse
+            let a = try! doc.select("span[data-nodetype=a]")
+            let url = try! a.attr("data-href")
+            try! a.wrap("<a href=\"\(url)\">\(url)</a>")
+            try! doc.select("span[data-nodetype=a]").remove()
+            
+            threadHTML = try! doc.outerHtml()
                 
-                for index in 0..<self.comments.count {
-                    xbbcodeBridge.shared.convertBBCodeToHTML(text: comments![index].content)
-                    self.comments[index].contentHTML = (xbbcodeBridge.shared.convertedText)!
-                    if (self.blockedUsers.contains(self.comments[index].userID)) {
-                        self.comments[index].contentHTML = "<div class=\"comment\" id=\"commentCount\" style=\"text-align:center;color:#454545;\">已封鎖</div>"
-                    }
-                    self.constructCommentHeader(index: index)
-                    self.convertedHTML.append(self.comments[index].contentHTML)
-                }
-                
-                if (self.pageNow==Int(self.pageCount)) {
-                    self.convertedHTML.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
-                }
-                
-                self.pageHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(self.convertedHTML!)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
-                self.webView.loadHTMLString(self.pageHTML, baseURL: Bundle.main.bundleURL)
-                NetworkActivityIndicatorManager.networkOperationStarted()
+            self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
+            NetworkActivityIndicatorManager.networkOperationStarted()
+        }
+    }
+    
+    private func constructComments(thread: GetThreadContentQuery.Data.Thread) -> String {
+        let iconArray = ["https://i.imgur.com/PXPXwaRs.jpg","https://i.imgur.com/9AKjGrIs.jpg","https://i.imgur.com/sV2Q22ns.jpg"]
+        let randomIndex = Int(arc4random_uniform(UInt32(iconArray.count)))
+        var completedHTML = ""
+        for i in 0 ..< thread.replies.count {
+            var avatarurl = ""
+            if thread.replies[i].author.avatar == nil {
+                avatarurl = iconArray[randomIndex]
+            } else {
+                avatarurl = thread.replies[i].author.avatar!
             }
-        })
-    }
-    
-    private func constructOPHeader() {
-        let iconArray = ["https://i.imgur.com/PXPXwaRs.jpg","https://i.imgur.com/9AKjGrIs.jpg","https://i.imgur.com/sV2Q22ns.jpg"]
-        let randomIndex = Int(arc4random_uniform(UInt32(iconArray.count)))
-        if self.op.avatar == "" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "avatarurl", with: iconArray[randomIndex])
-        } else {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "avatarurl", with: "https://hkgalden.com/\(self.op.avatar)")
+            
+            var genderColor = ""
+            if thread.replies[i].author.gender == UserGender.m {
+                genderColor = "#6495ed"
+            } else if thread.replies[i].author.gender == UserGender.f {
+                genderColor = "#ff6961"
+            }
+            
+            let templateHTML = "<div class=\"comment\" id=\"\(thread.replies[i].floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(thread.replies[i].author.nickname)</td><td class=\"righttext\">\(thread.replies[i].date)</td></tr><tr><td class=\"lefttext\">label</td><td class=\"righttext\">#\(thread.replies[i].floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(thread.replies[i].content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(i)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(i)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
+            completedHTML.append(templateHTML)
         }
-        
-        if self.op.gender == "male" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">uname</td>", with: "<td class=\"lefttext\" style=\"color:#6495ed;\">\(self.op.name)</td>")
-        } else if self.op.gender == "female" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">uname</td>", with: "<td class=\"lefttext\" style=\"color:#ff6961;\">\(self.op.name)</td>")
-        }
-        
-        if self.op.level == "lv1" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\">\(self.op.userID)</td>")
-        } else if self.op.level == "lv2" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#9e3e3f;\">\(self.op.userID)</td>")
-        } else if self.op.level == "lv3" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#5549c9;\">\(self.op.userID)</td>")
-        } else if self.op.level == "lv5" {
-            self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#4b6690;\">\(self.op.userID)</td>")
-        }
-        
-        self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"righttext\">date</td>", with: "<td class=\"righttext\">\(self.op.date)</td>")
-        self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "<td class=\"righttext\">count</td>", with: "<td class=\"righttext\">OP</td>")
-        
-        self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "quotetype", with: "op")
-        self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "blocktype", with: "op")
-        self.op.contentHTML = self.op.contentHTML.replacingOccurrences(of: "commentCount", with: "0")
-    }
-    
-    private func constructCommentHeader(index: Int) {
-        self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "ratebutton", with: "")
-        let iconArray = ["https://i.imgur.com/PXPXwaRs.jpg","https://i.imgur.com/9AKjGrIs.jpg","https://i.imgur.com/sV2Q22ns.jpg"]
-        let randomIndex = Int(arc4random_uniform(UInt32(iconArray.count)))
-        if self.comments[index].avatar == "" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "avatarurl", with: iconArray[randomIndex])
-        } else {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "avatarurl", with: "https://hkgalden.com/\(self.comments[index].avatar)")
-        }
-        
-        if self.comments[index].gender == "male" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">uname</td>", with: "<td class=\"lefttext\" style=\"color:#6495ed;\">\(self.comments[index].name)</td>")
-        } else if self.comments[index].gender == "female" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">uname</td>", with: "<td class=\"lefttext\" style=\"color:#ff6961;\">\(self.comments[index].name)</td>")
-        }
-        
-        if self.comments[index].level == "lv1" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\">\(self.comments[index].userID)</td>")
-        } else if self.comments[index].level == "lv2" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#9e3e3f;\">\(self.comments[index].userID)</td>")
-        } else if self.comments[index].level == "lv3" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#5549c9;\">\(self.comments[index].userID)</td>")
-        } else if self.comments[index].level == "lv5" {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"lefttext\">label</td>", with: "<td class=\"lefttext\" style=\"color:#4b6690;\">\(self.comments[index].userID)</td>")
-        }
-        
-        self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"righttext\">date</td>", with: "<td class=\"righttext\">\(self.comments[index].date)</td>")
-        self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "<td class=\"righttext\">count</td>", with: "<td class=\"righttext\">#\(String((pageNow-1) * 25 + index + 1))</td>")
-        if pageNow == 1 {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "quotetype", with: "\(index - 1)")
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "blocktype", with: "\(index - 1)")
-        } else {
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "quotetype", with: "\(index)")
-            self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "blocktype", with: "\(index)")
-        }
-        self.comments[index].contentHTML = self.comments[index].contentHTML.replacingOccurrences(of: "commentCount", with: String((pageNow-1) * 25 + index + 1))
+        return completedHTML
     }
     
     //MARK: WebView Delegate
@@ -601,7 +520,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                         })
                     })
                 case .normal:
-                    let realm = try! Realm()
+                    /*let realm = try! Realm()
                     let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
                     if thisPost != nil && self.sender == "cell" {
                         self.webView.evaluateJavaScript("$(\"#\((thisPost?.position)!)\").get(0).scrollIntoView();", completionHandler: {
@@ -614,7 +533,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     } else {
                         NetworkActivityIndicatorManager.networkOperationFinished()
                         webView.isHidden = false
-                    }
+                    }*/
+                    NetworkActivityIndicatorManager.networkOperationFinished()
+                    webView.isHidden = false
                 }
             })
         })

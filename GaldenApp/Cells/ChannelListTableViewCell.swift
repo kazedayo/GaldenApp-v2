@@ -34,6 +34,7 @@ class ChannelListTableViewCell: UITableViewCell {
             make.leading.equalTo(10)
             make.trailing.equalTo(-10)
         }
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

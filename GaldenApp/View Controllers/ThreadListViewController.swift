@@ -17,11 +17,12 @@ import SwiftEntryKit
 class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
     
     //MARK: Properties
-    var threads = [ThreadList]()
-    var channelNow: Int = 0
+    var threads: [ThreadListDetails] = []
+    var channelNow: String = "bw"
+    var tagsId: [String] = []
     var pageNow: Int = 1
     var pageCount: Double?
-    var selectedThread: String!
+    var selectedThread: Int?
     var selectedPage: Int?
     var selectedThreadTitle: String!
     
@@ -30,9 +31,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     let tableView = UITableView()
     let adBannerView = GADBannerView()
     let sideMenuVC = SideMenuViewController()
-    lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
+    //lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
-    lazy var newThread = UIBarButtonItem(image: UIImage(named: "compose"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
+    //lazy var newThread = UIBarButtonItem(image: UIImage(named: "compose"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
     
     var reloadButton = UIButton()
     
@@ -65,7 +66,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
         tableView.register(BlockedTableViewCell.classForCoder(), forCellReuseIdentifier: "BlockedTableViewCell")
-        tableView.addGestureRecognizer(longPress)
+        //tableView.addGestureRecognizer(longPress)
         view.addSubview(tableView)
         
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
@@ -94,10 +95,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
         
         navigationItem.leftBarButtonItem = sideMenuButton
-        navigationItem.rightBarButtonItem = newThread
-        navigationController?.navigationItem.leftBarButtonItem = sideMenuButton
-        navigationController?.navigationItem.rightBarButtonItem = newThread
-        navigationItem.title = HKGaldenAPI.shared.chList![channelNow]["name"].stringValue
+        //navigationItem.rightBarButtonItem = newThread
+        navigationItem.title = "吹水臺"
         
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = UIColor(white: 0.13, alpha: 1)
@@ -197,69 +196,51 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Configure the cell...
-            let title = self.threads[indexPath.row].title
-            let uname = self.threads[indexPath.row].userName
-            let count = self.threads[indexPath.row].count
-            let rate = self.threads[indexPath.row].rate
-            let isBlocked = self.threads[indexPath.row].isBlocked
-            let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
-        if (isBlocked == true) {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "BlockedTableViewCell") as! BlockedTableViewCell
-            cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
-            cell.threadTitleLabel.text = "[已封鎖]"
-            cell.threadTitleLabel.textColor = .darkGray
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
-            if (readThreads != nil) {
-                let newReplyCount = self.threads[indexPath.row].count-readThreads!.replyCount
-                if (newReplyCount > 0) {
-                    let newReply = UILabel()
-                    newReply.clipsToBounds = true
-                    newReply.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
-                    newReply.layer.cornerRadius = 5
-                    newReply.textColor = .white
-                    newReply.font = UIFont.systemFont(ofSize: 10)
-                    newReply.backgroundColor = .red
-                    newReply.textAlignment = .center
-                    newReply.text = String(self.threads[indexPath.row].count-readThreads!.replyCount)
-                    cell.accessoryView = newReply
-                } else {
-                    cell.accessoryView = UIView()
-                }
-                //cell.accessoryView = UIImageView(image: UIImage(named: "read"))
+        let title = self.threads[indexPath.row].title
+        let nickName = self.threads[indexPath.row].replies.map {$0.authorNickname}
+        let count = self.threads[indexPath.row].totalReplies
+        //let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
+        /*if (readThreads != nil) {
+            let newReplyCount = count-readThreads!.replyCount
+            if (newReplyCount > 0) {
+                let newReply = UILabel()
+                newReply.clipsToBounds = true
+                newReply.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+                newReply.layer.cornerRadius = 5
+                newReply.textColor = .white
+                newReply.font = UIFont.systemFont(ofSize: 10)
+                newReply.backgroundColor = .red
+                newReply.textAlignment = .center
+                newReply.text = String(count-readThreads!.replyCount)
+                cell.accessoryView = newReply
             } else {
                 cell.accessoryView = UIView()
             }
-            cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
-            cell.threadTitleLabel.text = title
-            cell.threadTitleLabel.textColor = .lightGray
-            cell.detailLabel.text = "\(uname) // 回覆: \(count) // 評分: \(rate)"
-            cell.detailLabel.textColor = .darkGray
-            return cell
-        }
+            //cell.accessoryView = UIImageView(image: UIImage(named: "read"))
+        } else {
+            cell.accessoryView = UIView()
+        }*/
+        cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        cell.threadTitleLabel.text = title
+        cell.threadTitleLabel.textColor = .lightGray
+        cell.detailLabel.text = "\(nickName[0]) // 回覆: \(count)"
+        cell.detailLabel.textColor = .darkGray
+        let tags = self.threads[indexPath.row].tags.map {$0.fragments.tagDetails}
+        cell.tagLabel.text = "#\(tags[0].name)"
+        cell.tagLabel.textColor = UIColor(hexRGB: tags[0].color)
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (threads[indexPath.row].isBlocked == true) {
-            DispatchQueue.main.async {
-                let alert = UIAlertController(title:"喂喂喂",message:"扑咗就唔好心郁郁",preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title:"好囉",style:.cancel,handler:nil))
-                self.present(alert,animated: true,completion: nil)
-            }
-            tableView.deselectRow(at: indexPath, animated: true)
-        } else {
-            DispatchQueue.main.async {
-                let contentVC = ContentViewController()
-                //let contentNavVC = UINavigationController(rootViewController: contentVC)
-                let selectedThread = self.threads[indexPath.row].id
-                contentVC.threadIdReceived = selectedThread
-                contentVC.title = self.threads[indexPath.row].title
-                contentVC.ident = self.threads[indexPath.row].ident
-                contentVC.sender = "cell"
-                contentVC.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(contentVC, animated: true)
-            }
+        DispatchQueue.main.async {
+            let contentVC = ContentViewController()
+            let selectedThread = self.threads[indexPath.row].id
+            contentVC.tID = selectedThread
+            contentVC.title = self.threads[indexPath.row].title
+            contentVC.sender = "cell"
+            contentVC.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(contentVC, animated: true)
         }
     }
     
@@ -272,13 +253,13 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    @objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
+    /*@objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
             let touchPoint = sender.location(in: self.tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
                 self.selectedThread = threads[indexPath.row].id
                 self.selectedThreadTitle = threads[indexPath.row].title
-                self.pageCount = ceil((Double(threads[indexPath.row].count))/25)
+                self.pageCount = ceil((Double(threads[indexPath.row].totalReplies))/50)
                 let pageVC = PageSelectViewController()
                 pageVC.pageCount = self.pageCount!
                 pageVC.titleText = self.selectedThreadTitle
@@ -286,14 +267,14 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 SwiftEntryKit.display(entry: pageVC, using: EntryAttributes.shared.centerEntryZoom())
             }
         }
-    }
+    }*/
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
         sideMenuVC.mainVC = self
         present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
     }
     
-    @objc func newThreadButtonPressed() {
+    /*@objc func newThreadButtonPressed() {
         let composeVC = ComposeViewController()
         let composeNavVC = UINavigationController(rootViewController: composeVC)
         composeVC.channel = channelNow
@@ -301,7 +282,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         composeVC.threadVC = self
         //SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
         present(composeNavVC, animated: true, completion: nil)
-    }
+    }*/
     
     // MARK: - Navigation
 
@@ -324,10 +305,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     //Delegates
-    func unwindToThreadList(channelSelected: Int) {
-        self.channelNow = channelSelected
+    func unwindToThreadList(channel: ChannelDetails,tags: [TagDetails]) {
+        self.channelNow = channel.id
         self.pageNow = 1
-        self.navigationItem.title = HKGaldenAPI.shared.chList![channelNow]["name"].stringValue
+        self.tagsId = tags.compactMap {$0.id}
+        self.navigationItem.title = channel.name
         self.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
         self.updateSequence(append: false, completion: {})
     }
@@ -340,7 +322,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         self.selectedPage = pageSelected
         DispatchQueue.main.async {
             let contentVC = ContentViewController()
-            contentVC.threadIdReceived = self.selectedThread
+            //contentVC.threadIdReceived = self.selectedThread
             contentVC.title = self.selectedThreadTitle
             contentVC.pageNow = self.selectedPage!
             self.navigationController?.pushViewController(contentVC, animated: true)
@@ -352,22 +334,24 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     private func updateSequence(append: Bool, completion: @escaping ()->Void) {
-        HKGaldenAPI.shared.fetchThreadList(currentChannel: HKGaldenAPI.shared.chList![channelNow]["ident"].stringValue, pageNumber: String(pageNow), completion: {
-            threads,error in
+        let getThreadsQuery = GetThreadsQuery(id: tagsId, page: pageNow)
+        apollo.fetch(query: getThreadsQuery) {
+            [weak self] result, error in
             if (error == nil) {
                 if append == true {
-                    self.threads.append(contentsOf: threads)
+                    guard let threads = result?.data?.threads else { return }
+                    self?.threads.append(contentsOf: threads.map {$0.fragments.threadListDetails})
                 } else {
-                    self.threads = threads
+                    guard let threads = result?.data?.threads else { return }
+                    self?.threads = threads.map {$0.fragments.threadListDetails}
                 }
-                //self.tableView.reloadData()
-                self.tableView.reloadData()
-                self.reloadButton.isHidden = true
-                self.tableView.isHidden = false
+                self?.tableView.reloadData()
+                self?.reloadButton.isHidden = true
+                self?.tableView.isHidden = false
             } else {
-                self.reloadButton.isHidden = false
+                self?.reloadButton.isHidden = false
             }
-            completion()
-        })
+        }
+        completion()
     }
 }

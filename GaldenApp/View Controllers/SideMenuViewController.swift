@@ -9,17 +9,23 @@
 import UIKit
 import KeychainSwift
 import SideMenu
+import Apollo
 
 class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
-    var channelSelected = 0
+    var channelSelectedTags: [TagDetails]?
+    var channels: [ChannelDetails]!
     var mainVC: ThreadListViewController?
+    var firstloaded: Bool = false
     let tableView = UITableView()
     let keychain = KeychainSwift()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tableView.selectRow(at: IndexPath.init(row: channelSelected, section: 0), animated: true, scrollPosition: .top)
+        if firstloaded == false {
+            tableView.selectRow(at: IndexPath.init(row: 0, section: 0), animated: true, scrollPosition: .top)
+            firstloaded = true
+        }
     }
     
     override func viewDidLoad() {
@@ -43,6 +49,14 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
             make.trailing.equalToSuperview()
             make.bottom.equalTo(view.snp.bottomMargin)
         }
+        
+        let getChannelListQuery = GetChannelListQuery()
+        apollo.fetch(query: getChannelListQuery) {
+            [weak self] result, error in
+            guard let channels = result?.data?.channels else { return }
+            self?.channels = channels.map {$0.fragments.channelDetails}
+        }
+        
         // Do any additional setup after loading the view.
     }
     
@@ -52,32 +66,29 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return HKGaldenAPI.shared.chList!.count
+        return self.channels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChannelListTableViewCell") as! ChannelListTableViewCell
         let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor(hexRGB: HKGaldenAPI.shared.chList![indexPath.row]["color"].stringValue)
+        bgColorView.backgroundColor = UIColor(white: 0.25, alpha: 1)
         cell.selectedBackgroundView = bgColorView
-        let text = HKGaldenAPI.shared.chList![indexPath.row]["name"].stringValue
+        let text = self.channels[indexPath.row].name
         cell.channelTitle.text = text
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if keychain.get("userID")! == "7687" && indexPath.row == 12 {
-            let alert = UIAlertController(title: "#ng#", message: "you know too much", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .destructive, handler: nil))
-            present(alert,animated: true,completion: nil)
+        let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
+        cell.channelTitle.textColor = .white
+        if indexPath.row == 0 {
+            self.channelSelectedTags = []
         } else {
-            let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
-            cell.channelTitle.textColor = .white
-            channelSelected = indexPath.row
-            mainVC?.unwindToThreadList(channelSelected: channelSelected)
-            dismiss(animated: true, completion: nil)
+            self.channelSelectedTags = self.channels[indexPath.row].tags.map {$0.fragments.tagDetails}
         }
+        mainVC?.unwindToThreadList(channel: self.channels[indexPath.row], tags: self.channelSelectedTags!)
+        dismiss(animated: true, completion: nil)
     }
     
     /*

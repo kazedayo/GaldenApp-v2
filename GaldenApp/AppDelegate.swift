@@ -14,8 +14,10 @@ import IQKeyboardManagerSwift
 import URLNavigator
 import SwiftyStoreKit
 import RealmSwift
+import Apollo
 
 let navigator = Navigator()
+let apollo = ApolloClient(url: URL(string: "https://hkgalden.org/_")!)
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -83,13 +85,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBar.appearance().barStyle = .black
         UITabBar.appearance().tintColor = UIColor(hexRGB: "#568064")
         
-        if (keychain.getBool("isLoggedIn") == nil) {
-            let root = WelcomeViewController()
-            window?.rootViewController = root
-        } else {
-            let root = LaunchViewController()
-            window?.rootViewController = root
-        }
+        let root = LaunchViewController()
+        window?.rootViewController = root
         
         if (keychain.getBool("noAd") == nil) {
             keychain.set(false, forKey: "noAd")

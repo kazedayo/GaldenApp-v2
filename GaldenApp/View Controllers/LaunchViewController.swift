@@ -48,10 +48,10 @@ class LaunchViewController: UIViewController {
             make.centerY.equalToSuperview().offset(100)
         }
         
-        HKGaldenAPI.shared.getChannelList(completion: {
+        DispatchQueue.main.async {
             let tabBarController = Configurations.shared.configureUI()
             self.present(tabBarController, animated: true, completion: nil)
-        })
+        }
         // Do any additional setup after loading the view.
     }
 
@@ -70,12 +70,4 @@ class LaunchViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    
-    func splitViewController(
-        _ splitViewController: UISplitViewController,
-        collapseSecondary secondaryViewController: UIViewController,
-        onto primaryViewController: UIViewController) -> Bool {
-        // Return true to prevent UIKit from applying its default behavior
-        return true
-    }
 }
