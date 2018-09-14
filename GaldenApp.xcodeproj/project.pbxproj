@@ -36,7 +36,7 @@
 		42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89A1F7923E1002CC13F /* Assets.xcassets */; };
 		42E7F89E1F7923E1002CC13F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89C1F7923E1002CC13F /* LaunchScreen.storyboard */; };
 		42E7F8A91F7923E2002CC13F /* GaldenAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */; };
-		42F7943E21075BE100E53614 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F7943D21075BE100E53614 /* UserViewController.swift */; };
+		42F7943E21075BE100E53614 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F7943D21075BE100E53614 /* LoginViewController.swift */; };
 		B148056AF8EBF956F1F30DEC /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231255155F2B522ED451A474 /* Pods_GaldenApp.framework */; };
 		C3A72FA59A1824F354229141 /* Pods_GaldenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB7C7C7F4136F4076A3DE93F /* Pods_GaldenAppTests.framework */; };
 /* End PBXBuildFile section */
@@ -86,7 +86,7 @@
 		42E7F8A41F7923E2002CC13F /* GaldenAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GaldenAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaldenAppTests.swift; sourceTree = "<group>"; };
 		42E7F8AA1F7923E2002CC13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		42F7943D21075BE100E53614 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		42F7943D21075BE100E53614 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		68945070CD49A9AB44D2A3DC /* Pods-GaldenApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.release.xcconfig"; sourceTree = "<group>"; };
 		75B41A72147C709CAC729D97 /* Pods-GaldenApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.debug.xcconfig"; sourceTree = "<group>"; };
 		82456CE00A7A4660CFAD6F6B /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -134,7 +134,7 @@
 				424A46F72073493C005795A6 /* ComposeViewController.swift */,
 				4231DA772077299B00AB1DE5 /* PreviewViewController.swift */,
 				424A46FC2073493D005795A6 /* ContentViewController.swift */,
-				42F7943D21075BE100E53614 /* UserViewController.swift */,
+				42F7943D21075BE100E53614 /* LoginViewController.swift */,
 				424A47012073493E005795A6 /* LaunchViewController.swift */,
 				429F17AE20D9470500618D0C /* iPadPlaceholderDetailViewController.swift */,
 				424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */,
@@ -460,7 +460,7 @@
 				424A471D2073493E005795A6 /* LaunchViewController.swift in Sources */,
 				424A47152073493E005795A6 /* IconKeyboard.swift in Sources */,
 				424A47182073493E005795A6 /* ContentViewController.swift in Sources */,
-				42F7943E21075BE100E53614 /* UserViewController.swift in Sources */,
+				42F7943E21075BE100E53614 /* LoginViewController.swift in Sources */,
 				42964F212085CF12000FA349 /* NetworkActivityIndicatorManager.swift in Sources */,
 				424A470E2073493E005795A6 /* ChannelListTableViewCell.swift in Sources */,
 				424A47102073493E005795A6 /* PageSelectViewController.swift in Sources */,

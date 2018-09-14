@@ -1,5 +1,5 @@
 //
-//  UserViewController.swift
+//  LoginViewController.swift
 //  GaldenApp
 //
 //  Created by Kin Wa Lam on 24/7/2018.
@@ -9,22 +9,24 @@
 import UIKit
 import KeychainSwift
 
-class UserViewController: UIViewController {
+class LoginViewController: UIViewController {
 
     let keychain = KeychainSwift()
-    let logoutButton = UIButton()
+    let loginButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         self.title = "會員資料"
         
-        logoutButton.setTitle("登出", for: .normal)
-        logoutButton.backgroundColor = .red
-        logoutButton.addTarget(self, action: #selector(logoutButtonPressed(_:)), for: .touchUpInside)
-        view.addSubview(logoutButton)
+        loginButton.setTitle("登入", for: .normal)
+        loginButton.clipsToBounds = true
+        loginButton.layer.cornerRadius = 5
+        loginButton.backgroundColor = UIColor(hexRGB: "007aff")
+        loginButton.addTarget(self, action: #selector(loginButtonPressed(_:)), for: .touchUpInside)
+        view.addSubview(loginButton)
         
-        logoutButton.snp.makeConstraints {
+        loginButton.snp.makeConstraints {
             (make) -> Void in
             make.center.equalTo(view.snp.center)
             make.width.equalTo(300)
@@ -43,14 +45,8 @@ class UserViewController: UIViewController {
     }
     */
 
-    @objc func logoutButtonPressed(_ sender: UIButton) {
-        /*HKGaldenAPI.shared.logout {
-            weak var pvc = self.presentingViewController
-            self.keychain.delete("isLoggedIn")
-            self.dismiss(animated: true, completion: {
-                pvc?.present(FirstLoginViewController(), animated: true, completion: nil)
-            })
-        }*/
+    @objc func loginButtonPressed(_ sender: UIButton) {
+        
     }
     
 }

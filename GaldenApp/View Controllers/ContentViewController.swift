@@ -522,6 +522,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             try! h3.wrap("<h3>\(textH3)</h3>")
             try! doc.select("span[data-nodetype=h3]").remove()
             
+            //icon parse
+            let icon = try! doc.select("span[data-nodetype=smiley]")
+            let pack = try! icon.attr("data-pack-id")
+            let id = try! icon.attr("data-id")
+            try! icon.wrap("<img src=\"https://s.hkgalden.org/smilies/\(pack)/\(id).png\">")
+            try! doc.select("span[data-nodetype=smiley]").remove()
+            
             templateHTML = try! doc.html()
             completedHTML.append(templateHTML)
         }
