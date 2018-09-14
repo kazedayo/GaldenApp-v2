@@ -29,6 +29,13 @@ a {
     border: 1px solid #aaaaaa;
 }
 
+blockquote {
+    display: block;
+    margin-left: 10px;
+    padding-left: 5px;
+    border-left: 1px dotted gray;
+} 
+
 .user {
 	height: 60px;
 }
@@ -87,13 +94,7 @@ div#text.usertable {
 
 .xbbcode-b {
 	font-weight:bold;
-} 
-.xbbcode-blockquote {
-    display: block;
-    margin-left: 10px;
-    padding-left: 5px;
-    border-left: 1px dotted gray;
-} 
+}
 .xbbcode-center {
 	margin-left:auto;
 	margin-right:auto;

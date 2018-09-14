@@ -49,7 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Tell Realm to use this new configuration object for the default Realm
         Realm.Configuration.defaultConfiguration = config
         
-        xbbcodeBridge.shared.initializeJS()
         URLNavigationMap.initialize(navigator: navigator)
         
         IQKeyboardManager.shared.enable = true

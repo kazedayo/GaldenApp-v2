@@ -13,6 +13,7 @@ import QuartzCore
 import SideMenu
 import RealmSwift
 import SwiftEntryKit
+import SwiftDate
 
 class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
     
@@ -199,6 +200,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let title = self.threads[indexPath.row].title
         let nickName = self.threads[indexPath.row].replies.map {$0.authorNickname}
         let count = self.threads[indexPath.row].totalReplies
+        let dateMap = self.threads[indexPath.row].replies.map {$0.date}
+        let date = dateMap.last!.toISODate()
+        let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTraditional)
         //let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
         /*if (readThreads != nil) {
@@ -224,7 +228,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
         cell.threadTitleLabel.text = title
         cell.threadTitleLabel.textColor = .lightGray
-        cell.detailLabel.text = "\(nickName[0]) // 回覆: \(count)"
+        cell.detailLabel.text = "\(nickName[0]) // 回覆: \(count) // 最後回覆: \(relativeDate!)"
         cell.detailLabel.textColor = .darkGray
         let tags = self.threads[indexPath.row].tags.map {$0.fragments.tagDetails}
         cell.tagLabel.text = "#\(tags[0].name)"
@@ -335,7 +339,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     private func updateSequence(append: Bool, completion: @escaping ()->Void) {
         let getThreadsQuery = GetThreadsQuery(id: tagsId, page: pageNow)
-        apollo.fetch(query: getThreadsQuery) {
+        apollo.fetch(query: getThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result, error in
             if (error == nil) {
                 if append == true {

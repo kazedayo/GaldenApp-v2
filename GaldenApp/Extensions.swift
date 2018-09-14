@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftEntryKit
+import Hero
 
 extension String {
     func nsRange(from range: Range<Index>) -> NSRange {

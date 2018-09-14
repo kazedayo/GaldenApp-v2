@@ -25,6 +25,7 @@ target 'GaldenApp' do
   pod 'SwiftEntryKit'
   pod 'Apollo'
   pod 'SwiftSoup'
+  pod 'SwiftDate'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

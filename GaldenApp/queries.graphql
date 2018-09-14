@@ -13,21 +13,15 @@ query GetThreads($id: [String!]!,$page: Int!) {
 query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {
 	thread(id: $id,sorting: $sorting,page: $page) {
 		id
-		title
-		replies {
-			id
-			floor
-			author {
-				nickname
-				avatar
-				gender
-			}
-			content
-			parent {
-				content
-			}
-			date
-		}
+	    title
+	    totalReplies
+	    replies {
+	      ...CommentsRecursive
+	    }
+	    tags {
+	      name
+	      color
+	    }
 	}
 }
 
@@ -56,4 +50,39 @@ fragment ThreadListDetails on Thread {
 	tags {
 		...TagDetails
 	}
+}
+
+fragment CommentsRecursive on Reply {
+  ...CommentFields
+  parent {
+    ...CommentFields
+    parent {
+      ...CommentFields
+      parent {
+        ...CommentFields
+        parent {
+          ...CommentFields
+        }
+      }
+    }
+  }
+}
+
+fragment CommentFields on Reply {
+  id
+  floor
+  author {
+    id
+    avatar
+    nickname
+    gender
+    groups {
+      id
+      name
+    }
+  }
+  authorNickname
+  parentId
+  content
+  date
 }

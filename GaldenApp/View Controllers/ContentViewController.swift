@@ -17,6 +17,7 @@ import Kingfisher
 import SKPhotoBrowser
 import SwiftEntryKit
 import SwiftSoup
+import SwiftDate
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
     
@@ -26,10 +27,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var tID: Int!
     var isRated: Bool!
     var pageNow: Int = 1
-    var op: OP!
-    var poll: Poll?
-    var comments = [Replies]()
-    var replyCount: Int!
     var pageCount: Double!
     var quoteContent: String?
     var blockedUsers = [String]()
@@ -56,7 +53,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        xbbcodeBridge.shared.sender = "content"
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
         activityIndicator.startAnimating()
@@ -85,8 +81,17 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         nextButton.isEnabled = false
         replyButton.isEnabled = false
         pageButton.isEnabled = false
+        pageButton.tintColor = .white
         moreButton.isEnabled = false
         toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,moreButton,flexibleSpace,nextButton]
+        
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        titleLabel.animationDelay = 1
+        titleLabel.marqueeType = .MLLeftRight
+        titleLabel.fadeLength = 5
+        titleLabel.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
+        titleLabel.textAlignment = .center
         
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
         adBannerView.delegate = self
@@ -214,50 +219,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func quoteButtonPressed(type: String) {
-            if (pageNow == 1 && type == "op") {
-                self.quoteContent = "[quote]\(self.op.contentOriginal)[/quote]"
-                self.quote()
-            } else if pageNow == 1 {
-                self.quoteContent = "[quote]\(self.comments[Int(type)! + 1].contentOriginal)[/quote]"
-                self.quote()
-            } else {
-                self.quoteContent = "[quote]\(self.comments[Int(type)!].contentOriginal)[/quote]"
-                self.quote()
-        }
+        
     }
     
     func blockButtonPressed(type: String) {
-        if (pageNow == 1 && type == "op") {
-            HKGaldenAPI.shared.blockUser(uid: self.op.userID, completion: {
-                status in
-                if status == "true" {
-                    self.blockedUsers.append(self.op.userID)
-                    self.navType = .refresh
-                    self.scrollPosition = "0"
-                    self.updateSequence()
-                }
-            })
-        } else if pageNow == 1 {
-            HKGaldenAPI.shared.blockUser(uid: self.comments[Int(type)! + 1].userID, completion: {
-                status in
-                if status == "true" {
-                    self.blockedUsers.append(self.comments[Int(type)! + 1].userID)
-                    self.navType = .refresh
-                    self.scrollPosition = type
-                    self.updateSequence()
-                }
-            })
-        } else {
-            HKGaldenAPI.shared.blockUser(uid: self.comments[Int(type)!].userID, completion: {
-                status in
-                if status == "true" {
-                    self.blockedUsers.append(self.comments[Int(type)!].userID)
-                    self.navType = .refresh
-                    self.scrollPosition = type
-                    self.updateSequence()
-                }
-            })
-        }
+        
     }
     
     func f5buttonPressed() {
@@ -329,11 +295,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func unwindToContent(pageSelected: Int) {
         self.pageNow = pageSelected
         self.pageButton.title = "第\(self.pageNow)頁"
-        HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
-            count in
-            self.pageCount = count
-            self.updateSequence()
-        })
+        self.updateSequence()
     }
     
     func unwindAfterReply() {
@@ -343,7 +305,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self.pageNow = Int(self.pageCount)
             self.pageButton.title = "第\(self.pageNow)頁"
             self.navType = .reply
-            xbbcodeBridge.shared.sender = "content"
             self.updateSequence()
         })
     }
@@ -424,29 +385,76 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView.isHidden = true
         activityIndicator.isHidden = false
         let getThreadContentQuery = GetThreadContentQuery(id: tID, sorting: .dateAsc, page: pageNow)
-        apollo.fetch(query: getThreadContentQuery) {
+        apollo.fetch(query: getThreadContentQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
             guard let thread = result?.data?.thread else { return }
             var contentHTML = self?.constructComments(thread: thread)
             self?.titleLabel.text = thread.title
-            self?.titleLabel.textColor = .white
-            self?.titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
-            self?.titleLabel.animationDelay = 1
-            self?.titleLabel.marqueeType = .MLLeftRight
-            self?.titleLabel.fadeLength = 5
-            self?.titleLabel.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
-            self?.titleLabel.textAlignment = .center
             self?.navigationItem.titleView = self?.titleLabel
+            self?.pageCount = (Double(thread.totalReplies)/50.0).rounded(.up)
             self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
+            self?.buttonLogic()
             
-            /*if (self?.pageNow==Int((self?.pageCount)!)) {
+            if (self?.pageNow==Int((self?.pageCount)!)) {
                 contentHTML!.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
-            }*/
+            }
             
             var threadHTML = ""
             threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML!)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+                
+            self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
+            NetworkActivityIndicatorManager.networkOperationStarted()
+        }
+    }
+    
+    private func constructComments(thread: GetThreadContentQuery.Data.Thread) -> String {
+        let iconArray = ["https://i.imgur.com/PXPXwaRs.jpg","https://i.imgur.com/9AKjGrIs.jpg","https://i.imgur.com/sV2Q22ns.jpg"]
+        let randomIndex = Int(arc4random_uniform(UInt32(iconArray.count)))
+        var completedHTML = ""
+        for i in 0 ..< thread.replies.count {
+            var avatarurl = ""
+            let comment = thread.replies.map {$0.fragments.commentsRecursive}
+            if comment[i].fragments.commentFields.author.avatar == nil {
+                avatarurl = iconArray[randomIndex]
+            } else {
+                avatarurl = comment[i].fragments.commentFields.author.avatar!
+            }
             
-            let doc = try! SwiftSoup.parse(threadHTML)
+            var genderColor = ""
+            if comment[i].fragments.commentFields.author.gender == UserGender.m {
+                genderColor = "#6495ed"
+            } else if comment[i].fragments.commentFields.author.gender == UserGender.f {
+                genderColor = "#ff6961"
+            }
+            
+            let date = (comment[i].fragments.commentFields.date.toISODate()! + 8.hours).toString(DateToStringStyles.dateTime(.short))
+            
+            //quote recursive
+            var quoteHTML = ""
+            let rootParent = comment[i].parent
+            let firstLayer = rootParent?.parent
+            let secondLayer = firstLayer?.parent
+            let thirdLayer = secondLayer?.parent
+            if (rootParent?.fragments.commentFields.content != nil) {
+                quoteHTML = "<blockquote id=\"1\">\(rootParent!.fragments.commentFields.content)</blockquote>"
+                let doc = try! SwiftSoup.parse(quoteHTML)
+                var quote = try! doc.select("blockquote#1")
+                if (firstLayer?.fragments.commentFields.content != nil) {
+                    try! quote.prepend("<blockquote id=\"2\">\(firstLayer!.fragments.commentFields.content)</blockquote>")
+                    if (secondLayer?.fragments.commentFields.content != nil) {
+                        quote = try! doc.select("blockquote#2")
+                        try! quote.prepend("<blockquote id=\"3\">\(secondLayer!.fragments.commentFields.content)</blockquote>")
+                        if (thirdLayer?.fragments.commentFields.content != nil) {
+                            quote = try! doc.select("blockquote#3")
+                            try! quote.prepend("<blockquote id=\"4\">\(thirdLayer!.fragments.commentFields.content)</blockquote>")
+                        }
+                    }
+                }
+                quoteHTML = try! doc.html()
+            }
+            
+            var templateHTML = "<div class=\"comment\" id=\"\(comment[i].fragments.commentFields.floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(comment[i].fragments.commentFields.author.nickname)</td><td class=\"righttext\">\(date)</td></tr><tr><td class=\"lefttext\">郊登仔</td><td class=\"righttext\">#\(comment[i].fragments.commentFields.floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(quoteHTML)\(comment[i].fragments.commentFields.content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(i)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(i)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
+            let doc = try! SwiftSoup.parse(templateHTML)
             
             //img parse
             let img = try! doc.select("span[data-nodetype=img]")
@@ -460,33 +468,61 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             try! a.wrap("<a href=\"\(url)\">\(url)</a>")
             try! doc.select("span[data-nodetype=a]").remove()
             
-            threadHTML = try! doc.outerHtml()
-                
-            self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
-            NetworkActivityIndicatorManager.networkOperationStarted()
-        }
-    }
-    
-    private func constructComments(thread: GetThreadContentQuery.Data.Thread) -> String {
-        let iconArray = ["https://i.imgur.com/PXPXwaRs.jpg","https://i.imgur.com/9AKjGrIs.jpg","https://i.imgur.com/sV2Q22ns.jpg"]
-        let randomIndex = Int(arc4random_uniform(UInt32(iconArray.count)))
-        var completedHTML = ""
-        for i in 0 ..< thread.replies.count {
-            var avatarurl = ""
-            if thread.replies[i].author.avatar == nil {
-                avatarurl = iconArray[randomIndex]
-            } else {
-                avatarurl = thread.replies[i].author.avatar!
-            }
+            //b parse
+            let b = try! doc.select("span[data-nodetype=b]")
+            let textB = try! b.text()
+            try! b.wrap("<b>\(textB)</b>")
+            try! doc.select("span[data-nodetype=b]").remove()
             
-            var genderColor = ""
-            if thread.replies[i].author.gender == UserGender.m {
-                genderColor = "#6495ed"
-            } else if thread.replies[i].author.gender == UserGender.f {
-                genderColor = "#ff6961"
-            }
+            //i parse
+            let i = try! doc.select("span[data-nodetype=i]")
+            let textI = try! i.text()
+            try! i.wrap("<i>\(textI)</i>")
+            try! doc.select("span[data-nodetype=i]").remove()
             
-            let templateHTML = "<div class=\"comment\" id=\"\(thread.replies[i].floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(thread.replies[i].author.nickname)</td><td class=\"righttext\">\(thread.replies[i].date)</td></tr><tr><td class=\"lefttext\">label</td><td class=\"righttext\">#\(thread.replies[i].floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(thread.replies[i].content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(i)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(i)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
+            //u parse
+            let u = try! doc.select("span[data-nodetype=u]")
+            let textU = try! u.text()
+            try! u.wrap("<u>\(textU)</i>")
+            try! doc.select("span[data-nodetype=u]").remove()
+            
+            //s parse
+            let s = try! doc.select("span[data-nodetype=s]")
+            let textS = try! s.text()
+            try! s.wrap("<s>\(textS)</s>")
+            try! doc.select("span[data-nodetype=s]").remove()
+            
+            //center parse
+            let center = try! doc.select("span[data-nodetype=center]")
+            let textCenter = try! center.text()
+            try! center.wrap("<div align=\"center\">\(textCenter)</div>")
+            try! doc.select("span[data-nodetype=center]").remove()
+            
+            //right parse
+            let right = try! doc.select("span[data-nodetype=right]")
+            let textRight = try! right.text()
+            try! right.wrap("<div align=\"right\">\(textRight)</div>")
+            try! doc.select("span[data-nodetype=right]").remove()
+            
+            //h1 parse
+            let h1 = try! doc.select("span[data-nodetype=h1]")
+            let textH1 = try! h1.text()
+            try! h1.wrap("<h1>\(textH1)</h1>")
+            try! doc.select("span[data-nodetype=h1]").remove()
+            
+            //h2 parse
+            let h2 = try! doc.select("span[data-nodetype=h2]")
+            let textH2 = try! h2.text()
+            try! h2.wrap("<h2>\(textH2)</h2>")
+            try! doc.select("span[data-nodetype=h2]").remove()
+            
+            //h3 parse
+            let h3 = try! doc.select("span[data-nodetype=h3]")
+            let textH3 = try! h3.text()
+            try! h3.wrap("<h3>\(textH3)</h3>")
+            try! doc.select("span[data-nodetype=h3]").remove()
+            
+            templateHTML = try! doc.html()
             completedHTML.append(templateHTML)
         }
         return completedHTML
@@ -543,7 +579,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if navigationAction.navigationType == .linkActivated {
-            if (navigationAction.request.url?.absoluteString.contains("hkgalden.com/view/"))! {
+            if (navigationAction.request.url?.absoluteString.contains("hkgalden.org"))! {
                 navigator.pushURL(navigationAction.request.url!)
                 decisionHandler(.cancel)
             } else {

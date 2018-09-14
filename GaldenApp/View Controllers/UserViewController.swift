@@ -44,13 +44,13 @@ class UserViewController: UIViewController {
     */
 
     @objc func logoutButtonPressed(_ sender: UIButton) {
-        HKGaldenAPI.shared.logout {
+        /*HKGaldenAPI.shared.logout {
             weak var pvc = self.presentingViewController
             self.keychain.delete("isLoggedIn")
             self.dismiss(animated: true, completion: {
                 pvc?.present(FirstLoginViewController(), animated: true, completion: nil)
             })
-        }
+        }*/
     }
     
 }

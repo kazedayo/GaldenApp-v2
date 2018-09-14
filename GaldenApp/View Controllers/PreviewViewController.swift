@@ -30,7 +30,6 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "發表", style: .done, target: self, action: #selector(sendButtonPressed(_:)))
         
-        xbbcodeBridge.shared.sender = "preview"
         webView.navigationDelegate = self
         
         titleLabel.font = UIFont.systemFont(ofSize: 20)
@@ -50,8 +49,6 @@ class PreviewViewController: UIViewController,WKNavigationDelegate {
         previewText = contentText!
         previewText = HKGaldenAPI.shared.sizeTagCorrection(bbcode: previewText!)
         previewText = HKGaldenAPI.shared.iconParse(bbcode: previewText!)
-        xbbcodeBridge.shared.convertBBCodeToHTML(text: previewText!)
-        webView.loadHTMLString("<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\((xbbcodeBridge.shared.convertedText!))<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>", baseURL: Bundle.main.bundleURL)
         view.addSubview(webView)
         
         webView.snp.makeConstraints {

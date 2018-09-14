@@ -257,7 +257,9 @@ public final class GetThreadsQuery: GraphQLQuery {
 
 public final class GetThreadContentQuery: GraphQLQuery {
   public let operationDefinition =
-    "query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {\n  thread(id: $id, sorting: $sorting, page: $page) {\n    __typename\n    id\n    title\n    replies {\n      __typename\n      id\n      floor\n      author {\n        __typename\n        nickname\n        avatar\n        gender\n      }\n      content\n      parent {\n        __typename\n        content\n      }\n      date\n    }\n  }\n}"
+    "query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {\n  thread(id: $id, sorting: $sorting, page: $page) {\n    __typename\n    id\n    title\n    totalReplies\n    replies {\n      __typename\n      ...CommentsRecursive\n    }\n    tags {\n      __typename\n      name\n      color\n    }\n  }\n}"
+
+  public var queryDocument: String { return operationDefinition.appending(CommentsRecursive.fragmentDefinition).appending(CommentFields.fragmentDefinition) }
 
   public var id: Int
   public var sorting: ReplySorting
@@ -306,7 +308,9 @@ public final class GetThreadContentQuery: GraphQLQuery {
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(Int.self))),
         GraphQLField("title", type: .nonNull(.scalar(String.self))),
+        GraphQLField("totalReplies", type: .nonNull(.scalar(Int.self))),
         GraphQLField("replies", type: .nonNull(.list(.nonNull(.object(Reply.selections))))),
+        GraphQLField("tags", type: .nonNull(.list(.nonNull(.object(Tag.selections))))),
       ]
 
       public private(set) var resultMap: ResultMap
@@ -315,8 +319,8 @@ public final class GetThreadContentQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(id: Int, title: String, replies: [Reply]) {
-        self.init(unsafeResultMap: ["__typename": "Thread", "id": id, "title": title, "replies": replies.map { (value: Reply) -> ResultMap in value.resultMap }])
+      public init(id: Int, title: String, totalReplies: Int, replies: [Reply], tags: [Tag]) {
+        self.init(unsafeResultMap: ["__typename": "Thread", "id": id, "title": title, "totalReplies": totalReplies, "replies": replies.map { (value: Reply) -> ResultMap in value.resultMap }, "tags": tags.map { (value: Tag) -> ResultMap in value.resultMap }])
       }
 
       public var __typename: String {
@@ -346,6 +350,15 @@ public final class GetThreadContentQuery: GraphQLQuery {
         }
       }
 
+      public var totalReplies: Int {
+        get {
+          return resultMap["totalReplies"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "totalReplies")
+        }
+      }
+
       public var replies: [Reply] {
         get {
           return (resultMap["replies"] as! [ResultMap]).map { (value: ResultMap) -> Reply in Reply(unsafeResultMap: value) }
@@ -355,27 +368,27 @@ public final class GetThreadContentQuery: GraphQLQuery {
         }
       }
 
+      public var tags: [Tag] {
+        get {
+          return (resultMap["tags"] as! [ResultMap]).map { (value: ResultMap) -> Tag in Tag(unsafeResultMap: value) }
+        }
+        set {
+          resultMap.updateValue(newValue.map { (value: Tag) -> ResultMap in value.resultMap }, forKey: "tags")
+        }
+      }
+
       public struct Reply: GraphQLSelectionSet {
         public static let possibleTypes = ["Reply"]
 
         public static let selections: [GraphQLSelection] = [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLField("id", type: .nonNull(.scalar(String.self))),
-          GraphQLField("floor", type: .nonNull(.scalar(Int.self))),
-          GraphQLField("author", type: .nonNull(.object(Author.selections))),
-          GraphQLField("content", type: .nonNull(.scalar(String.self))),
-          GraphQLField("parent", type: .object(Parent.selections)),
-          GraphQLField("date", type: .nonNull(.scalar(String.self))),
+          GraphQLFragmentSpread(CommentsRecursive.self),
         ]
 
         public private(set) var resultMap: ResultMap
 
         public init(unsafeResultMap: ResultMap) {
           self.resultMap = unsafeResultMap
-        }
-
-        public init(id: String, floor: Int, author: Author, content: String, parent: Parent? = nil, date: String) {
-          self.init(unsafeResultMap: ["__typename": "Reply", "id": id, "floor": floor, "author": author.resultMap, "content": content, "parent": parent.flatMap { (value: Parent) -> ResultMap in value.resultMap }, "date": date])
         }
 
         public var __typename: String {
@@ -387,151 +400,76 @@ public final class GetThreadContentQuery: GraphQLQuery {
           }
         }
 
-        public var id: String {
+        public var fragments: Fragments {
           get {
-            return resultMap["id"]! as! String
+            return Fragments(unsafeResultMap: resultMap)
           }
           set {
-            resultMap.updateValue(newValue, forKey: "id")
+            resultMap += newValue.resultMap
           }
         }
 
-        public var floor: Int {
-          get {
-            return resultMap["floor"]! as! Int
-          }
-          set {
-            resultMap.updateValue(newValue, forKey: "floor")
-          }
-        }
-
-        public var author: Author {
-          get {
-            return Author(unsafeResultMap: resultMap["author"]! as! ResultMap)
-          }
-          set {
-            resultMap.updateValue(newValue.resultMap, forKey: "author")
-          }
-        }
-
-        public var content: String {
-          get {
-            return resultMap["content"]! as! String
-          }
-          set {
-            resultMap.updateValue(newValue, forKey: "content")
-          }
-        }
-
-        public var parent: Parent? {
-          get {
-            return (resultMap["parent"] as? ResultMap).flatMap { Parent(unsafeResultMap: $0) }
-          }
-          set {
-            resultMap.updateValue(newValue?.resultMap, forKey: "parent")
-          }
-        }
-
-        public var date: String {
-          get {
-            return resultMap["date"]! as! String
-          }
-          set {
-            resultMap.updateValue(newValue, forKey: "date")
-          }
-        }
-
-        public struct Author: GraphQLSelectionSet {
-          public static let possibleTypes = ["User"]
-
-          public static let selections: [GraphQLSelection] = [
-            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLField("nickname", type: .nonNull(.scalar(String.self))),
-            GraphQLField("avatar", type: .scalar(String.self)),
-            GraphQLField("gender", type: .nonNull(.scalar(UserGender.self))),
-          ]
-
+        public struct Fragments {
           public private(set) var resultMap: ResultMap
 
           public init(unsafeResultMap: ResultMap) {
             self.resultMap = unsafeResultMap
           }
 
-          public init(nickname: String, avatar: String? = nil, gender: UserGender) {
-            self.init(unsafeResultMap: ["__typename": "User", "nickname": nickname, "avatar": avatar, "gender": gender])
-          }
-
-          public var __typename: String {
+          public var commentsRecursive: CommentsRecursive {
             get {
-              return resultMap["__typename"]! as! String
+              return CommentsRecursive(unsafeResultMap: resultMap)
             }
             set {
-              resultMap.updateValue(newValue, forKey: "__typename")
-            }
-          }
-
-          public var nickname: String {
-            get {
-              return resultMap["nickname"]! as! String
-            }
-            set {
-              resultMap.updateValue(newValue, forKey: "nickname")
-            }
-          }
-
-          public var avatar: String? {
-            get {
-              return resultMap["avatar"] as? String
-            }
-            set {
-              resultMap.updateValue(newValue, forKey: "avatar")
-            }
-          }
-
-          public var gender: UserGender {
-            get {
-              return resultMap["gender"]! as! UserGender
-            }
-            set {
-              resultMap.updateValue(newValue, forKey: "gender")
+              resultMap += newValue.resultMap
             }
           }
         }
+      }
 
-        public struct Parent: GraphQLSelectionSet {
-          public static let possibleTypes = ["Reply"]
+      public struct Tag: GraphQLSelectionSet {
+        public static let possibleTypes = ["Tag"]
 
-          public static let selections: [GraphQLSelection] = [
-            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLField("content", type: .nonNull(.scalar(String.self))),
-          ]
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("name", type: .nonNull(.scalar(String.self))),
+          GraphQLField("color", type: .nonNull(.scalar(String.self))),
+        ]
 
-          public private(set) var resultMap: ResultMap
+        public private(set) var resultMap: ResultMap
 
-          public init(unsafeResultMap: ResultMap) {
-            self.resultMap = unsafeResultMap
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(name: String, color: String) {
+          self.init(unsafeResultMap: ["__typename": "Tag", "name": name, "color": color])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
           }
-
-          public init(content: String) {
-            self.init(unsafeResultMap: ["__typename": "Reply", "content": content])
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
           }
+        }
 
-          public var __typename: String {
-            get {
-              return resultMap["__typename"]! as! String
-            }
-            set {
-              resultMap.updateValue(newValue, forKey: "__typename")
-            }
+        public var name: String {
+          get {
+            return resultMap["name"]! as! String
           }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
 
-          public var content: String {
-            get {
-              return resultMap["content"]! as! String
-            }
-            set {
-              resultMap.updateValue(newValue, forKey: "content")
-            }
+        public var color: String {
+          get {
+            return resultMap["color"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "color")
           }
         }
       }
@@ -888,6 +826,523 @@ public struct ThreadListDetails: GraphQLFragment {
         }
         set {
           resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+}
+
+public struct CommentsRecursive: GraphQLFragment {
+  public static let fragmentDefinition =
+    "fragment CommentsRecursive on Reply {\n  __typename\n  ...CommentFields\n  parent {\n    __typename\n    ...CommentFields\n    parent {\n      __typename\n      ...CommentFields\n      parent {\n        __typename\n        ...CommentFields\n        parent {\n          __typename\n          ...CommentFields\n        }\n      }\n    }\n  }\n}"
+
+  public static let possibleTypes = ["Reply"]
+
+  public static let selections: [GraphQLSelection] = [
+    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+    GraphQLFragmentSpread(CommentFields.self),
+    GraphQLField("parent", type: .object(Parent.selections)),
+  ]
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  public var parent: Parent? {
+    get {
+      return (resultMap["parent"] as? ResultMap).flatMap { Parent(unsafeResultMap: $0) }
+    }
+    set {
+      resultMap.updateValue(newValue?.resultMap, forKey: "parent")
+    }
+  }
+
+  public var fragments: Fragments {
+    get {
+      return Fragments(unsafeResultMap: resultMap)
+    }
+    set {
+      resultMap += newValue.resultMap
+    }
+  }
+
+  public struct Fragments {
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public var commentFields: CommentFields {
+      get {
+        return CommentFields(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+  }
+
+  public struct Parent: GraphQLSelectionSet {
+    public static let possibleTypes = ["Reply"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLFragmentSpread(CommentFields.self),
+      GraphQLField("parent", type: .object(Parent.selections)),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    public var parent: Parent? {
+      get {
+        return (resultMap["parent"] as? ResultMap).flatMap { Parent(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "parent")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var commentFields: CommentFields {
+        get {
+          return CommentFields(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+
+    public struct Parent: GraphQLSelectionSet {
+      public static let possibleTypes = ["Reply"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLFragmentSpread(CommentFields.self),
+        GraphQLField("parent", type: .object(Parent.selections)),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var parent: Parent? {
+        get {
+          return (resultMap["parent"] as? ResultMap).flatMap { Parent(unsafeResultMap: $0) }
+        }
+        set {
+          resultMap.updateValue(newValue?.resultMap, forKey: "parent")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var commentFields: CommentFields {
+          get {
+            return CommentFields(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
+      public struct Parent: GraphQLSelectionSet {
+        public static let possibleTypes = ["Reply"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLFragmentSpread(CommentFields.self),
+          GraphQLField("parent", type: .object(Parent.selections)),
+        ]
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var parent: Parent? {
+          get {
+            return (resultMap["parent"] as? ResultMap).flatMap { Parent(unsafeResultMap: $0) }
+          }
+          set {
+            resultMap.updateValue(newValue?.resultMap, forKey: "parent")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var commentFields: CommentFields {
+            get {
+              return CommentFields(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct Parent: GraphQLSelectionSet {
+          public static let possibleTypes = ["Reply"]
+
+          public static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLFragmentSpread(CommentFields.self),
+          ]
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var commentFields: CommentFields {
+              get {
+                return CommentFields(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+public struct CommentFields: GraphQLFragment {
+  public static let fragmentDefinition =
+    "fragment CommentFields on Reply {\n  __typename\n  id\n  floor\n  author {\n    __typename\n    id\n    avatar\n    nickname\n    gender\n    groups {\n      __typename\n      id\n      name\n    }\n  }\n  authorNickname\n  parentId\n  content\n  date\n}"
+
+  public static let possibleTypes = ["Reply"]
+
+  public static let selections: [GraphQLSelection] = [
+    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+    GraphQLField("id", type: .nonNull(.scalar(String.self))),
+    GraphQLField("floor", type: .nonNull(.scalar(Int.self))),
+    GraphQLField("author", type: .nonNull(.object(Author.selections))),
+    GraphQLField("authorNickname", type: .nonNull(.scalar(String.self))),
+    GraphQLField("parentId", type: .scalar(String.self)),
+    GraphQLField("content", type: .nonNull(.scalar(String.self))),
+    GraphQLField("date", type: .nonNull(.scalar(String.self))),
+  ]
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(id: String, floor: Int, author: Author, authorNickname: String, parentId: String? = nil, content: String, date: String) {
+    self.init(unsafeResultMap: ["__typename": "Reply", "id": id, "floor": floor, "author": author.resultMap, "authorNickname": authorNickname, "parentId": parentId, "content": content, "date": date])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  public var id: String {
+    get {
+      return resultMap["id"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  public var floor: Int {
+    get {
+      return resultMap["floor"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "floor")
+    }
+  }
+
+  public var author: Author {
+    get {
+      return Author(unsafeResultMap: resultMap["author"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "author")
+    }
+  }
+
+  public var authorNickname: String {
+    get {
+      return resultMap["authorNickname"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "authorNickname")
+    }
+  }
+
+  public var parentId: String? {
+    get {
+      return resultMap["parentId"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "parentId")
+    }
+  }
+
+  public var content: String {
+    get {
+      return resultMap["content"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "content")
+    }
+  }
+
+  public var date: String {
+    get {
+      return resultMap["date"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "date")
+    }
+  }
+
+  public struct Author: GraphQLSelectionSet {
+    public static let possibleTypes = ["User"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("id", type: .nonNull(.scalar(String.self))),
+      GraphQLField("avatar", type: .scalar(String.self)),
+      GraphQLField("nickname", type: .nonNull(.scalar(String.self))),
+      GraphQLField("gender", type: .nonNull(.scalar(UserGender.self))),
+      GraphQLField("groups", type: .nonNull(.list(.nonNull(.object(Group.selections))))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(id: String, avatar: String? = nil, nickname: String, gender: UserGender, groups: [Group]) {
+      self.init(unsafeResultMap: ["__typename": "User", "id": id, "avatar": avatar, "nickname": nickname, "gender": gender, "groups": groups.map { (value: Group) -> ResultMap in value.resultMap }])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    public var id: String {
+      get {
+        return resultMap["id"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "id")
+      }
+    }
+
+    public var avatar: String? {
+      get {
+        return resultMap["avatar"] as? String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "avatar")
+      }
+    }
+
+    public var nickname: String {
+      get {
+        return resultMap["nickname"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "nickname")
+      }
+    }
+
+    public var gender: UserGender {
+      get {
+        return resultMap["gender"]! as! UserGender
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "gender")
+      }
+    }
+
+    public var groups: [Group] {
+      get {
+        return (resultMap["groups"] as! [ResultMap]).map { (value: ResultMap) -> Group in Group(unsafeResultMap: value) }
+      }
+      set {
+        resultMap.updateValue(newValue.map { (value: Group) -> ResultMap in value.resultMap }, forKey: "groups")
+      }
+    }
+
+    public struct Group: GraphQLSelectionSet {
+      public static let possibleTypes = ["Group"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("name", type: .nonNull(.scalar(String.self))),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(id: Int, name: String) {
+        self.init(unsafeResultMap: ["__typename": "Group", "id": id, "name": name])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var id: Int {
+        get {
+          return resultMap["id"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var name: String {
+        get {
+          return resultMap["name"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "name")
         }
       }
     }
