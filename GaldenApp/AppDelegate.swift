@@ -88,6 +88,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let root = LaunchViewController()
         window?.rootViewController = root
         
+        //development use(remove before publish)
+        keychain.set(true,forKey: "noAd")
+        
         if (keychain.getBool("noAd") == nil) {
             keychain.set(false, forKey: "noAd")
         }

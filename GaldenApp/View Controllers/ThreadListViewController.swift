@@ -30,7 +30,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     let tableView = UITableView()
     let adBannerView = GADBannerView()
     let sideMenuVC = SideMenuViewController()
-    //lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
+    lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
     //lazy var newThread = UIBarButtonItem(image: UIImage(named: "compose"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
     
@@ -65,7 +65,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
         tableView.register(BlockedTableViewCell.classForCoder(), forCellReuseIdentifier: "BlockedTableViewCell")
-        //tableView.addGestureRecognizer(longPress)
+        tableView.addGestureRecognizer(longPress)
         view.addSubview(tableView)
         
         adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
@@ -246,7 +246,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    /*@objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
+    @objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
             let touchPoint = sender.location(in: self.tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
@@ -260,7 +260,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 SwiftEntryKit.display(entry: pageVC, using: EntryAttributes.shared.centerEntryZoom())
             }
         }
-    }*/
+    }
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
         sideMenuVC.mainVC = self
@@ -315,9 +315,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         self.selectedPage = pageSelected
         DispatchQueue.main.async {
             let contentVC = ContentViewController()
-            //contentVC.threadIdReceived = self.selectedThread
+            contentVC.tID = self.selectedThread
             contentVC.title = self.selectedThreadTitle
             contentVC.pageNow = self.selectedPage!
+            contentVC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(contentVC, animated: true)
         }
     }
@@ -344,7 +345,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             } else {
                 self?.reloadButton.isHidden = false
             }
+            completion()
         }
-        completion()
     }
 }

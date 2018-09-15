@@ -367,6 +367,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     private func updateSequence() {
         webView.isHidden = true
         activityIndicator.isHidden = false
+        let realm = try! Realm()
+        let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.tID)
+        if thisPost != nil && self.sender == "cell" {
+            self.pageNow = thisPost!.page
+        }
         let getThreadContentQuery = GetThreadContentQuery(id: tID, sorting: .dateAsc, page: pageNow)
         apollo.fetch(query: getThreadContentQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
@@ -376,11 +381,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self?.navigationItem.titleView = self?.titleLabel
             self?.pageCount = (Double(thread.totalReplies)/50.0).rounded(.up)
             self?.totalReplies = thread.totalReplies
-            let realm = try! Realm()
-            let thisPost = realm.object(ofType: History.self, forPrimaryKey: self?.tID)
-            if thisPost != nil && self?.sender == "cell" {
-                self?.pageNow = thisPost!.page
-            }
             self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
             self?.buttonLogic()
             
@@ -426,7 +426,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             let thirdLayer = secondLayer?.parent
             if (rootParent?.fragments.commentFields.content != nil) {
                 quoteHTML = "<blockquote id=\"1\">\(rootParent!.fragments.commentFields.content)</blockquote>"
-                let doc = try! SwiftSoup.parse(quoteHTML)
+                var doc = try! SwiftSoup.parse(quoteHTML)
                 var quote = try! doc.select("blockquote#1")
                 if (firstLayer?.fragments.commentFields.content != nil) {
                     try! quote.prepend("<blockquote id=\"2\">\(firstLayer!.fragments.commentFields.content)</blockquote>")
@@ -439,89 +439,118 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                         }
                     }
                 }
+                doc = galdenParser(doc: doc)
                 quoteHTML = try! doc.html()
             }
             
             var templateHTML = "<div class=\"comment\" id=\"\(comment[i].fragments.commentFields.floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(comment[i].fragments.commentFields.author.nickname)</td><td class=\"righttext\">\(date)</td></tr><tr><td class=\"lefttext\">郊登仔</td><td class=\"righttext\">#\(comment[i].fragments.commentFields.floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(quoteHTML)\(comment[i].fragments.commentFields.content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(i)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(i)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
-            let doc = try! SwiftSoup.parse(templateHTML)
-            
-            //img parse
-            let img = try! doc.select("span[data-nodetype=img]")
-            let imgURL = try! img.attr("data-src")
-            try! img.wrap("<img class=\"b-lazy\" src=\"https://img.eservice-hk.net/upload/2018/05/17/213108_b95f899cf42b6a9472e11ab7f8c64f89.gif\" data-src=\"\(imgURL)\" onclick=\"window.webkit.messageHandlers.imageView.postMessage('\(imgURL)');\">")
-            try! doc.select("span[data-nodetype=img]").remove()
-            
-            //url parse
-            let a = try! doc.select("span[data-nodetype=a]")
-            let url = try! a.attr("data-href")
-            try! a.wrap("<a href=\"\(url)\">\(url)</a>")
-            try! doc.select("span[data-nodetype=a]").remove()
-            
-            //b parse
-            let b = try! doc.select("span[data-nodetype=b]")
-            let textB = try! b.text()
-            try! b.wrap("<b>\(textB)</b>")
-            try! doc.select("span[data-nodetype=b]").remove()
-            
-            //i parse
-            let i = try! doc.select("span[data-nodetype=i]")
-            let textI = try! i.text()
-            try! i.wrap("<i>\(textI)</i>")
-            try! doc.select("span[data-nodetype=i]").remove()
-            
-            //u parse
-            let u = try! doc.select("span[data-nodetype=u]")
-            let textU = try! u.text()
-            try! u.wrap("<u>\(textU)</i>")
-            try! doc.select("span[data-nodetype=u]").remove()
-            
-            //s parse
-            let s = try! doc.select("span[data-nodetype=s]")
-            let textS = try! s.text()
-            try! s.wrap("<s>\(textS)</s>")
-            try! doc.select("span[data-nodetype=s]").remove()
-            
-            //center parse
-            let center = try! doc.select("span[data-nodetype=center]")
-            let textCenter = try! center.text()
-            try! center.wrap("<div align=\"center\">\(textCenter)</div>")
-            try! doc.select("span[data-nodetype=center]").remove()
-            
-            //right parse
-            let right = try! doc.select("span[data-nodetype=right]")
-            let textRight = try! right.text()
-            try! right.wrap("<div align=\"right\">\(textRight)</div>")
-            try! doc.select("span[data-nodetype=right]").remove()
-            
-            //h1 parse
-            let h1 = try! doc.select("span[data-nodetype=h1]")
-            let textH1 = try! h1.text()
-            try! h1.wrap("<h1>\(textH1)</h1>")
-            try! doc.select("span[data-nodetype=h1]").remove()
-            
-            //h2 parse
-            let h2 = try! doc.select("span[data-nodetype=h2]")
-            let textH2 = try! h2.text()
-            try! h2.wrap("<h2>\(textH2)</h2>")
-            try! doc.select("span[data-nodetype=h2]").remove()
-            
-            //h3 parse
-            let h3 = try! doc.select("span[data-nodetype=h3]")
-            let textH3 = try! h3.text()
-            try! h3.wrap("<h3>\(textH3)</h3>")
-            try! doc.select("span[data-nodetype=h3]").remove()
-            
-            //icon parse
-            let icon = try! doc.select("span[data-nodetype=smiley]")
-            let pack = try! icon.attr("data-pack-id")
-            let id = try! icon.attr("data-id")
-            try! icon.wrap("<img src=\"https://s.hkgalden.org/smilies/\(pack)/\(id).png\">")
-            try! doc.select("span[data-nodetype=smiley]").remove()
-            
+            var doc = try! SwiftSoup.parse(templateHTML)
+            doc = galdenParser(doc: doc)
             templateHTML = try! doc.html()
             completedHTML.append(templateHTML)
         }
         return completedHTML
+    }
+    
+    func galdenParser(doc: Document) -> Document {
+        //img parse
+        let img = try! doc.select("span[data-nodetype=img]")
+        for i in 0 ..< img.size() {
+            let imgURL = try! img.get(i).attr("data-src")
+            try! img.get(i).wrap("<img class=\"b-lazy\" src=\"https://img.eservice-hk.net/upload/2018/05/17/213108_b95f899cf42b6a9472e11ab7f8c64f89.gif\" data-src=\"\(imgURL)\" onclick=\"window.webkit.messageHandlers.imageView.postMessage('\(imgURL)');\">")
+            try! img.get(i).remove()
+        }
+        
+        //url parse
+        let a = try! doc.select("span[data-nodetype=a]")
+        for i in 0 ..< a.size() {
+            let url = try! a.get(i).attr("data-href")
+            try! a.get(i).wrap("<a href=\"\(url)\">\(url)</a>")
+            try! a.get(i).remove()
+        }
+        
+        //b parse
+        let b = try! doc.select("span[data-nodetype=b]")
+        for i in 0 ..< b.size() {
+            let textB = try! b.get(i).text()
+            try! b.get(i).wrap("<b>\(textB)</b>")
+            try! b.get(i).remove()
+        }
+        
+        //i parse
+        let it = try! doc.select("span[data-nodetype=i]")
+        for i in 0 ..< it.size() {
+            let textI = try! it.get(i).text()
+            try! it.get(i).wrap("<i>\(textI)</i>")
+            try! it.get(i).remove()
+        }
+        
+        //u parse
+        let u = try! doc.select("span[data-nodetype=u]")
+        for i in 0 ..< u.size() {
+            let textU = try! u.get(i).text()
+            try! u.get(i).wrap("<u>\(textU)</u>")
+            try! u.get(i).remove()
+        }
+        
+        //s parse
+        let s = try! doc.select("span[data-nodetype=s]")
+        for i in 0 ..< s.size() {
+            let textS = try! s.get(i).text()
+            try! s.get(i).wrap("<s>\(textS)</s>")
+            try! s.get(i).remove()
+        }
+        
+        //center parse
+        let center = try! doc.select("span[data-nodetype=center]")
+        for i in 0 ..< center.size() {
+            let textCenter = try! center.get(i).text()
+            try! center.get(i).wrap("<div align=\"center\">\(textCenter)</div>")
+            try! center.get(i).remove()
+        }
+        
+        //right parse
+        let right = try! doc.select("span[data-nodetype=right]")
+        for i in 0 ..< right.size() {
+            let textRight = try! right.get(i).text()
+            try! right.get(i).wrap("<div align=\"right\">\(textRight)</div>")
+            try! right.get(i).remove()
+        }
+        
+        //h1 parse
+        let h1 = try! doc.select("span[data-nodetype=h1]")
+        for i in 0 ..< h1.size() {
+            let textH1 = try! h1.get(i).text()
+            try! h1.get(i).wrap("<h1>\(textH1)</h1>")
+            try! h1.get(i).remove()
+        }
+        
+        //h2 parse
+        let h2 = try! doc.select("span[data-nodetype=h2]")
+        for i in 0 ..< h2.size() {
+            let textH2 = try! h2.get(i).text()
+            try! h2.get(i).wrap("<h2>\(textH2)</h2>")
+            try! h2.get(i).remove()
+        }
+        
+        //h3 parse
+        let h3 = try! doc.select("span[data-nodetype=h3]")
+        for i in 0 ..< h3.size() {
+            let textH3 = try! h3.get(i).text()
+            try! h3.get(i).wrap("<h3>\(textH3)</h3>")
+            try! h3.get(i).remove()
+        }
+        
+        //icon parse
+        let icon = try! doc.select("span[data-nodetype=smiley]")
+        for i in 0..<icon.size() {
+            let pack = try! icon.get(i).attr("data-pack-id")
+            let id = try! icon.get(i).attr("data-id")
+            try! icon.get(i).wrap("<img src=\"https://s.hkgalden.org/smilies/\(pack)/\(id).png\">")
+            try! icon.get(i).remove()
+        }
+        
+        return doc
     }
     
     //MARK: WebView Delegate

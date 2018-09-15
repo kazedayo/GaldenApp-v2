@@ -59,7 +59,7 @@ class ThreadListTableViewCell: UITableViewCell {
         tagLabel.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(threadTitleLabel.snp.bottom).offset(10)
-            make.trailing.equalTo(-10)
+            make.leading.equalTo(detailLabel.snp.trailing).offset(10)
             make.bottom.equalTo(contentView).offset(-10)
         }
         
