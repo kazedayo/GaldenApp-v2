@@ -17,6 +17,7 @@ import RealmSwift
 import Apollo
 
 let navigator = Navigator()
+let keychain = KeychainSwift()
 let apollo = ApolloClient(url: URL(string: "https://hkgalden.org/_")!)
 
 @UIApplicationMain
@@ -33,13 +34,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 2,
+            schemaVersion: 3,
             
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
             migrationBlock: { migration, oldSchemaVersion in
                 // We haven’t migrated anything yet, so oldSchemaVersion == 0
-                if (oldSchemaVersion < 2) {
+                if (oldSchemaVersion < 3) {
                     // Nothing to do!
                     // Realm will automatically detect new properties and removed properties
                     // And will update the schema on disk automatically

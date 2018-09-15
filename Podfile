@@ -20,7 +20,7 @@ target 'GaldenApp' do
   pod 'Blueprints'
   pod 'URLNavigator'
   pod 'SwiftyStoreKit'
-  pod 'SKPhotoBrowser'
+  pod 'SKPhotoBrowser', '~> 5.1.0'
   pod 'SideMenu'
   pod 'SwiftEntryKit'
   pod 'Apollo'

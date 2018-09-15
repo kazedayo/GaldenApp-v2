@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import KeychainSwift
 import PKHUD
 import GoogleMobileAds
 import QuartzCore
@@ -27,7 +26,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     var selectedPage: Int?
     var selectedThreadTitle: String!
     
-    let keychain = KeychainSwift()
     let realm = try! Realm()
     let tableView = UITableView()
     let adBannerView = GADBannerView()
@@ -126,15 +124,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         })
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        if tableView.indexPathForSelectedRow != nil && UIDevice.current.model.contains("iPhone") {
-            tableView.deselectRow(at: tableView.indexPathForSelectedRow!, animated: true)
-        }
-        if UIDevice.current.orientation.isPortrait && UIDevice.current.model.contains("iPhone") {
-            splitViewController?.viewControllers = [self.navigationController!,iPadPlaceholderDetailViewController()]
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isToolbarHidden = true
@@ -203,9 +192,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let dateMap = self.threads[indexPath.row].replies.map {$0.date}
         let date = dateMap.last!.toISODate()
         let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTraditional)
-        //let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
+        let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
-        /*if (readThreads != nil) {
+        if (readThreads != nil) {
             let newReplyCount = count-readThreads!.replyCount
             if (newReplyCount > 0) {
                 let newReply = UILabel()
@@ -224,7 +213,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             //cell.accessoryView = UIImageView(image: UIImage(named: "read"))
         } else {
             cell.accessoryView = UIView()
-        }*/
+        }
         cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
         cell.threadTitleLabel.text = title
         cell.threadTitleLabel.textColor = .lightGray

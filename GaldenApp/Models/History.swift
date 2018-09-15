@@ -9,7 +9,7 @@
 import RealmSwift
 
 class History: Object {
-    @objc dynamic var threadID = ""
+    @objc dynamic var threadID = 0
     @objc dynamic var page = 1
     @objc dynamic var position = ""
     @objc dynamic var replyCount = 0

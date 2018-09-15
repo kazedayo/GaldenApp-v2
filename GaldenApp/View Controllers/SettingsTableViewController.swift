@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import KeychainSwift
 import RealmSwift
 import SwiftyStoreKit
 
@@ -20,8 +19,6 @@ class SettingsTableViewController: UITableViewController {
     let clearHistoryButton = UIButton()
     let sourceCodeButton = UIButton()
     let adIAPButton = UIButton()
-    
-    let keychain = KeychainSwift()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -181,7 +178,7 @@ class SettingsTableViewController: UITableViewController {
                 NetworkActivityIndicatorManager.networkOperationFinished()
                 switch result {
                 case .success(_):
-                    self.keychain.set(true, forKey: "noAd")
+                    keychain.set(true, forKey: "noAd")
                     self.adIAPButton.isEnabled = false
                     let success = UIAlertController(title: "購買成功!", message: "多謝支持!(重新啓動/入post再出post就會冇咗個廣告banner啦!)", preferredStyle: .alert)
                     success.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -204,7 +201,7 @@ class SettingsTableViewController: UITableViewController {
                     self.present(failure, animated: true, completion: nil)
                 }
                 else if results.restoredPurchases.count > 0 {
-                    self.keychain.set(true, forKey: "noAd")
+                    keychain.set(true, forKey: "noAd")
                     let success = UIAlertController(title: "恢復成功", message: "多謝支持!(重新啓動/入post再出post就會冇咗個廣告banner啦!)", preferredStyle: .alert)
                     success.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(success, animated: true, completion: nil)

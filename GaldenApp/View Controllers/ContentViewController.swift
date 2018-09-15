@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import KeychainSwift
 import MarqueeLabel
 import WebKit
 import RealmSwift
@@ -23,11 +22,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     //MARK: Properties
     
-    var threadIdReceived: String!
     var tID: Int!
     var isRated: Bool!
     var pageNow: Int = 1
     var pageCount: Double!
+    var totalReplies: Int?
     var quoteContent: String?
     var blockedUsers = [String]()
     var pageHTML: String!
@@ -38,9 +37,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var ident: String?
     var titleLabel = MarqueeLabel()
     private var webView: WKWebView!
-    
-    //HKGalden API (NOT included in GitHub repo)
-    let keychain = KeychainSwift()
     
     let adBannerView = GADBannerView()
     let activityIndicator = UIActivityIndicatorView()
@@ -123,24 +119,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             }
             make.height.equalTo(50)
         }
-        
-        /*HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
-            count in
-            self.pageCount = count
-            let realm = try! Realm()
-            let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
-            if thisPost != nil && self.sender == "cell" {
-                self.pageNow = thisPost!.page
-            }
-            self.updateSequence()
-        })*/
         self.updateSequence()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //prevButton.isEnabled = false
-        //nextButton.isEnabled = false
+        prevButton.isEnabled = false
+        nextButton.isEnabled = false
         webView.configuration.userContentController.add(self, name: "quote")
         webView.configuration.userContentController.add(self, name: "block")
         webView.configuration.userContentController.add(self, name: "refresh")
@@ -159,27 +144,25 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "imageView")
-        /*self.webView.evaluateJavaScript("$(\".showing\").last().attr(\"id\")", completionHandler: {
+        self.webView.evaluateJavaScript("$(\".showing\").last().attr(\"id\")", completionHandler: {
             result,error in
             if error == nil {
                 let position = result as? String
                 let history = History()
-                history.threadID = self.threadIdReceived
+                history.threadID = self.tID
                 history.page = self.pageNow
-                history.replyCount = self.replyCount
+                history.replyCount = self.totalReplies!
                 if position != nil {
                     history.position = position!
-                } else if self.pageNow == 1 {
-                    history.position = "0"
                 } else {
-                    history.position = String((self.pageNow-1) * 25 + 1)
+                    history.position = String((self.pageNow-1) * 50)
                 }
                 let realm = try! Realm()
                 try! realm.write {
                     realm.add(history,update: true)
                 }
             }
-        })*/
+        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -247,7 +230,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         //pageVC.popoverPresentationController?.barButtonItem = pageButton
         //pageVC.preferredContentSize = CGSize(width: 150, height: 200)
         //pageVC.popoverPresentationController?.backgroundColor = UIColor(hexRGB: "#262626")!
-        pageVC.threadID = self.threadIdReceived
+        pageVC.threadID = self.tID
         pageVC.pageCount = Int(self.pageCount)
         pageVC.pageSelected = self.pageNow
         pageVC.mainVC = self
@@ -256,22 +239,22 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @objc func replyButtonPressed() {
-        let composeVC = ComposeViewController()
+        /*let composeVC = ComposeViewController()
         let composeNav = UINavigationController(rootViewController: composeVC)
         composeVC.topicID = self.threadIdReceived
         composeVC.composeType = .reply
         composeVC.contentVC = self
         //SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
-        present(composeNav, animated: true, completion: nil)
+        present(composeNav, animated: true, completion: nil)*/
     }
     
     func quote() {
-        let composeVC = ComposeViewController()
+        /*let composeVC = ComposeViewController()
         composeVC.topicID = self.threadIdReceived
         composeVC.content = self.quoteContent! + "\n"
         composeVC.composeType = .reply
         composeVC.contentVC = self
-        SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
+        SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())*/
     }
     
     // MARK: - Navigation
@@ -299,14 +282,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func unwindAfterReply() {
-        HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
+        /*HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
             count in
             self.pageCount = count
             self.pageNow = Int(self.pageCount)
             self.pageButton.title = "第\(self.pageNow)頁"
             self.navType = .reply
             self.updateSequence()
-        })
+        })*/
     }
     
     func share(shareContent: String) {
@@ -323,10 +306,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func lm() {
-        let alert = UIAlertController.init(title: "一鍵留名", message: "確定?", preferredStyle: .actionSheet)
+        /*let alert = UIAlertController.init(title: "一鍵留名", message: "確定?", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
             _ in
-            HKGaldenAPI.shared.reply(topicID: self.threadIdReceived, content: self.keychain.get("LeaveNameText")!, completion: {
+            HKGaldenAPI.shared.reply(topicID: self.threadIdReceived, content: keychain.get("LeaveNameText")!, completion: {
                 error in
                 if error == nil {
                     HKGaldenAPI.shared.pageCount(postId: self.threadIdReceived, completion: {
@@ -343,7 +326,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         alert.addAction(UIAlertAction.init(title: "不了", style: .cancel, handler: nil))
         DispatchQueue.main.asyncAfter(deadline: 0.5, execute: {
             self.present(alert,animated: true)
-        })
+        })*/
     }
     
     @objc func prevButtonPressed(_ sender: UIBarButtonItem) {
@@ -392,6 +375,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self?.titleLabel.text = thread.title
             self?.navigationItem.titleView = self?.titleLabel
             self?.pageCount = (Double(thread.totalReplies)/50.0).rounded(.up)
+            self?.totalReplies = thread.totalReplies
+            let realm = try! Realm()
+            let thisPost = realm.object(ofType: History.self, forPrimaryKey: self?.tID)
+            if thisPost != nil && self?.sender == "cell" {
+                self?.pageNow = thisPost!.page
+            }
             self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
             self?.buttonLogic()
             
@@ -563,8 +552,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                         })
                     })
                 case .normal:
-                    /*let realm = try! Realm()
-                    let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.threadIdReceived)
+                    let realm = try! Realm()
+                    let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.tID)
                     if thisPost != nil && self.sender == "cell" {
                         self.webView.evaluateJavaScript("$(\"#\((thisPost?.position)!)\").get(0).scrollIntoView();", completionHandler: {
                             result,error in
@@ -576,7 +565,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     } else {
                         NetworkActivityIndicatorManager.networkOperationFinished()
                         webView.isHidden = false
-                    }*/
+                    }
                     NetworkActivityIndicatorManager.networkOperationFinished()
                     webView.isHidden = false
                 }

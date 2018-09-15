@@ -11,7 +11,7 @@ import SwiftEntryKit
 
 class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
 
-    var threadID: String?
+    var threadID: Int?
     var pageCount: Int = 0
     var pageSelected: Int?
     var mainVC: ContentViewController?

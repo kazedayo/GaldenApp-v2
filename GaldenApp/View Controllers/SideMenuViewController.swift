@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import KeychainSwift
 import SideMenu
 import Apollo
 
@@ -18,7 +17,6 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     var mainVC: ThreadListViewController?
     var firstloaded: Bool = false
     let tableView = UITableView()
-    let keychain = KeychainSwift()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

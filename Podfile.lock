@@ -4,21 +4,21 @@ PODS:
     - Apollo/Core (= 0.9.3)
   - Apollo/Core (0.9.3)
   - Blueprints (0.7.1)
-  - Google-Mobile-Ads-SDK (7.32.0)
-  - Hero (1.3.0)
+  - Google-Mobile-Ads-SDK (7.33.1)
+  - Hero (1.3.1)
   - IQKeyboardManagerSwift (6.1.1)
   - KeychainSwift (11.0.0)
-  - Kingfisher (4.8.1)
+  - Kingfisher (4.9.0)
   - MarqueeLabel (3.1.6):
     - MarqueeLabel/ObjC (= 3.1.6)
   - MarqueeLabel/ObjC (3.1.6)
   - PKHUD (5.1.0)
   - QuickLayout (2.0.2)
-  - Realm (3.7.6):
-    - Realm/Headers (= 3.7.6)
-  - Realm/Headers (3.7.6)
-  - RealmSwift (3.7.6):
-    - Realm (= 3.7.6)
+  - Realm (3.9.0):
+    - Realm/Headers (= 3.9.0)
+  - Realm/Headers (3.9.0)
+  - RealmSwift (3.9.0):
+    - Realm (= 3.9.0)
   - SideMenu (4.0.0)
   - SKPhotoBrowser (5.1.0)
   - SnapKit (4.0.0)
@@ -43,7 +43,7 @@ DEPENDENCIES:
   - PKHUD
   - RealmSwift
   - SideMenu
-  - SKPhotoBrowser
+  - SKPhotoBrowser (~> 5.1.0)
   - SnapKit
   - SwiftDate
   - SwiftEntryKit
@@ -81,16 +81,16 @@ SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Apollo: 38270f8bdc031ac07d4de3ec068a2289d7d287e0
   Blueprints: 13763dba4ecb22195333472835caddfc0872c7d7
-  Google-Mobile-Ads-SDK: 2aca87e46e860f1e1fc0fdc1201dd9caa4be9ba6
-  Hero: 3eecd3fd62dd2425cbc7e35505c557b86d5a379e
+  Google-Mobile-Ads-SDK: 71c6d3e8d8f52673fa5a83fc0d027623b11fde16
+  Hero: 1c3c625ba05856f305d29f5c270f8766c5ff2df7
   IQKeyboardManagerSwift: 977affaeb4d6e971975c7790a6850f31d38f1207
   KeychainSwift: bea6bd9f98af7b8d7ca4aa79fe105c00fab532db
-  Kingfisher: 868c1149679a7ab6869be118faa9b5aed154aaf0
+  Kingfisher: 64539b51826b778206daa6ed815d12653caa69dd
   MarqueeLabel: 0c41f08ef5773e29c0f71064a8fa788a2fd8b365
   PKHUD: 62ea46a1e88c4def1da784878d199bb54c841e3c
   QuickLayout: a730730b646b231fd4ef7cffaeb1e81fe0e1ca92
-  Realm: 9eaecad54712d6246d08ba34c10f354e4715d7d3
-  RealmSwift: 1fe08b4ebaeeaacf17f9ba0343f7b25c9fc31fa6
+  Realm: 3d36f208bf3aff8335dc3298742140182bde4edb
+  RealmSwift: aa4d11917bfcfaa3ed51f219102a487ecd895447
   SideMenu: 70ee5657df63ec3382660ec4ef470bf1cf5db07d
   SKPhotoBrowser: c20c1da34d737b4e3e101feead6c8dd92ebf860a
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
@@ -101,6 +101,6 @@ SPEC CHECKSUMS:
   SwiftyStoreKit: 9ebd15971e28aa2989825fe8bc092eb5f75dd0b2
   URLNavigator: 2357a32f3b3787b748bf87deb927761f8b0f7f53
 
-PODFILE CHECKSUM: e38b7ea811a3337ddf46da80b5b40404e818ff06
+PODFILE CHECKSUM: f90b669473ea801a08ee4321785027ac931454b9
 
 COCOAPODS: 1.5.3
