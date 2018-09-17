@@ -340,11 +340,13 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                     let getSessionUserQuery = GetSessionUserQuery()
                     apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
                         [weak self] result,error in
-                        let blockedUserIds = result?.data?.sessionUser?.blockedUserIds
-                        self?.threads = (self?.threads.filter {!blockedUserIds!.contains($0.replies[0].author.id)})!
-                        self?.tableView.reloadData()
-                        self?.reloadButton.isHidden = true
-                        self?.tableView.isHidden = false
+                        if error == nil {
+                            let blockedUserIds = result?.data?.sessionUser?.blockedUserIds
+                            self?.threads = (self?.threads.filter {!blockedUserIds!.contains($0.replies[0].author.id)})!
+                            self?.tableView.reloadData()
+                            self?.reloadButton.isHidden = true
+                            self?.tableView.isHidden = false
+                        }
                     }
                 } else {
                     self?.tableView.reloadData()

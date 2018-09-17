@@ -49,48 +49,50 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query:getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
-            let sessionUser = result?.data?.sessionUser
-            self?.sessionUser = sessionUser!
-            NetworkActivityIndicatorManager.networkOperationFinished()
-            
-            //avatar
-            if sessionUser?.avatar != nil {
-                self?.avatarView.kf.setImage(with: URL(string: (sessionUser?.avatar)!)!)
-            } else {
-                self?.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/mrD0tRG.png")!)
-            }
-            
-            //user name
-            self?.unameLabel.text = sessionUser?.nickname
-            if sessionUser?.gender == UserGender.m {
-                self?.unameLabel.textColor = UIColor(hexRGB: "6495ed")
-            } else if sessionUser?.gender == UserGender.f {
-                self?.unameLabel.textColor = UIColor(hexRGB: "ff6961")
-            }
-            
-            //user group
-            self?.ugroupLabel.text = "郊登仔"
-            self?.ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
-            if sessionUser?.groups.isEmpty == false {
-                self?.ugroupLabel.text = sessionUser?.groups[0].name
-                if sessionUser?.groups[0].id == "DEVELOPER" {
-                    self?.ugroupLabel.textColor = UIColor(hexRGB: "9e3e3f")
-                } else if sessionUser?.groups[0].id == "ADMIN" {
-                    self?.ugroupLabel.textColor = UIColor(hexRGB: "4b6690")
+            if error == nil {
+                let sessionUser = result?.data?.sessionUser
+                self?.sessionUser = sessionUser!
+                NetworkActivityIndicatorManager.networkOperationFinished()
+                
+                //avatar
+                if sessionUser?.avatar != nil {
+                    self?.avatarView.kf.setImage(with: URL(string: (sessionUser?.avatar)!)!)
+                } else {
+                    self?.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/mrD0tRG.png")!)
                 }
+                
+                //user name
+                self?.unameLabel.text = sessionUser?.nickname
+                if sessionUser?.gender == UserGender.m {
+                    self?.unameLabel.textColor = UIColor(hexRGB: "6495ed")
+                } else if sessionUser?.gender == UserGender.f {
+                    self?.unameLabel.textColor = UIColor(hexRGB: "ff6961")
+                }
+                
+                //user group
+                self?.ugroupLabel.text = "郊登仔"
+                self?.ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
+                if sessionUser?.groups.isEmpty == false {
+                    self?.ugroupLabel.text = sessionUser?.groups[0].name
+                    if sessionUser?.groups[0].id == "DEVELOPER" {
+                        self?.ugroupLabel.textColor = UIColor(hexRGB: "9e3e3f")
+                    } else if sessionUser?.groups[0].id == "ADMIN" {
+                        self?.ugroupLabel.textColor = UIColor(hexRGB: "4b6690")
+                    }
+                }
+                
+                let refreshControl = UIRefreshControl()
+                refreshControl.backgroundColor = UIColor(white: 0.13, alpha: 1)
+                refreshControl.addTarget(self, action: #selector(self!.refresh(refreshControl:)), for: .valueChanged)
+                if #available(iOS 10.0, *) {
+                    self?.tableView.refreshControl = refreshControl
+                } else {
+                    // Fallback on earlier versions
+                    self?.tableView.addSubview(refreshControl)
+                }
+                
+                self?.getUserThreads(completion: {})
             }
-            
-            let refreshControl = UIRefreshControl()
-            refreshControl.backgroundColor = UIColor(white: 0.13, alpha: 1)
-            refreshControl.addTarget(self, action: #selector(self!.refresh(refreshControl:)), for: .valueChanged)
-            if #available(iOS 10.0, *) {
-                self?.tableView.refreshControl = refreshControl
-            } else {
-                // Fallback on earlier versions
-                self?.tableView.addSubview(refreshControl)
-            }
-            
-            self?.getUserThreads(completion: {})
         }
         view.addSubview(avatarView)
         view.addSubview(unameLabel)
@@ -212,10 +214,12 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
-            self?.userThreads = (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!
-            self?.tableView.reloadData()
-            NetworkActivityIndicatorManager.networkOperationFinished()
-            completion()
+            if error == nil {
+                self?.userThreads = (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!
+                self?.tableView.reloadData()
+                NetworkActivityIndicatorManager.networkOperationFinished()
+                completion()
+            }
         }
     }
     
@@ -224,10 +228,12 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query: getBlockedUsersQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
-            self?.blockedUsers = (result?.data?.blockedUsers)!
-            self?.tableView.reloadData()
-            NetworkActivityIndicatorManager.networkOperationFinished()
-            completion()
+            if error == nil {
+                self?.blockedUsers = (result?.data?.blockedUsers)!
+                self?.tableView.reloadData()
+                NetworkActivityIndicatorManager.networkOperationFinished()
+                completion()
+            }
         }
     }
     

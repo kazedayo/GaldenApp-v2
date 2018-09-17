@@ -51,9 +51,11 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query: getChannelListQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result, error in
-            guard let channels = result?.data?.channels else { return }
-            self?.channels = channels.map {$0.fragments.channelDetails}
-            NetworkActivityIndicatorManager.networkOperationFinished()
+            if error == nil {
+                guard let channels = result?.data?.channels else { return }
+                self?.channels = channels.map {$0.fragments.channelDetails}
+                NetworkActivityIndicatorManager.networkOperationFinished()
+            }
         }
         
         // Do any additional setup after loading the view.

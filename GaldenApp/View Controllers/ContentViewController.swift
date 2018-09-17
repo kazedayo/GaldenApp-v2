@@ -376,23 +376,25 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         let getThreadContentQuery = GetThreadContentQuery(id: tID, sorting: .dateAsc, page: pageNow)
         apollo.fetch(query: getThreadContentQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
-            guard let thread = result?.data?.thread else { return }
-            var contentHTML = self?.constructComments(thread: thread)
-            self?.titleLabel.text = thread.title
-            self?.navigationItem.titleView = self?.titleLabel
-            self?.pageCount = (Double(thread.totalReplies)/50.0).rounded(.up)
-            self?.totalReplies = thread.totalReplies
-            self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
-            self?.buttonLogic()
-            
-            if (self?.pageNow==Int((self?.pageCount)!)) {
-                contentHTML!.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
-            }
-            
-            var threadHTML = ""
-            threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML!)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+            if error == nil {
+                guard let thread = result?.data?.thread else { return }
+                var contentHTML = self?.constructComments(thread: thread)
+                self?.titleLabel.text = thread.title
+                self?.navigationItem.titleView = self?.titleLabel
+                self?.pageCount = (Double(thread.totalReplies)/50.0).rounded(.up)
+                self?.totalReplies = thread.totalReplies
+                self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
+                self?.buttonLogic()
                 
-            self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
+                if (self?.pageNow==Int((self?.pageCount)!)) {
+                    contentHTML!.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
+                }
+                
+                var threadHTML = ""
+                threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML!)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+                
+                self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
+            }
         }
     }
     
