@@ -13,12 +13,13 @@ import SideMenu
 import RealmSwift
 import SwiftEntryKit
 import SwiftDate
+import Apollo
 
 class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
     
     //MARK: Properties
     var threads: [ThreadListDetails] = []
-    var channelNow: String = "bw"
+    var channelId: String = "bw"
     var tagsId: [String] = []
     var pageNow: Int = 1
     var pageCount: Double?
@@ -64,7 +65,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
-        tableView.register(BlockedTableViewCell.classForCoder(), forCellReuseIdentifier: "BlockedTableViewCell")
         tableView.addGestureRecognizer(longPress)
         view.addSubview(tableView)
         
@@ -298,10 +298,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     //Delegates
-    func unwindToThreadList(channel: ChannelDetails,tags: [TagDetails]) {
-        self.channelNow = channel.id
+    func unwindToThreadList(channel: ChannelDetails) {
+        self.channelId = channel.id
         self.pageNow = 1
-        self.tagsId = tags.compactMap {$0.id}
         self.navigationItem.title = channel.name
         self.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
         self.updateSequence(append: false, completion: {})
@@ -328,15 +327,16 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     private func updateSequence(append: Bool, completion: @escaping ()->Void) {
-        let getThreadsQuery = GetThreadsQuery(id: tagsId, page: pageNow)
+        let getThreadsQuery = GetThreadsQuery(id: channelId, page: pageNow)
+        NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query: getThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result, error in
             if (error == nil) {
                 if append == true {
-                    guard let threads = result?.data?.threads else { return }
+                    guard let threads = result?.data?.threadsByChannel else { return }
                     self?.threads.append(contentsOf: threads.map {$0.fragments.threadListDetails})
                 } else {
-                    guard let threads = result?.data?.threads else { return }
+                    guard let threads = result?.data?.threadsByChannel else { return }
                     self?.threads = threads.map {$0.fragments.threadListDetails}
                 }
                 self?.tableView.reloadData()
@@ -345,6 +345,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             } else {
                 self?.reloadButton.isHidden = false
             }
+            NetworkActivityIndicatorManager.networkOperationFinished()
             completion()
         }
     }

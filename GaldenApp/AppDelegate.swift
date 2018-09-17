@@ -18,7 +18,15 @@ import Apollo
 
 let navigator = Navigator()
 let keychain = KeychainSwift()
-let apollo = ApolloClient(url: URL(string: "https://hkgalden.org/_")!)
+var apollo: ApolloClient = {
+    let configuration = URLSessionConfiguration.default
+    // Add additional headers as needed
+    configuration.httpAdditionalHeaders = ["Authorization": "Bearer \(keychain.get("userKey") ?? "")"] // Replace `<token>`
+    
+    let url = URL(string: "https://hkgalden.org/_")!
+    
+    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+}()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

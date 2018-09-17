@@ -1,0 +1,202 @@
+//
+//  UserViewController.swift
+//  GaldenApp
+//
+//  Created by Kin Wa Lam on 24/7/2018.
+//  Copyright © 2018 1080@galden. All rights reserved.
+//
+
+import UIKit
+import Kingfisher
+import SwiftDate
+
+class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+    
+    var userThreads: [ThreadListDetails] = []
+    var sessionUser: GetSessionUserQuery.Data.SessionUser? = nil
+    
+    let avatarView = UIImageView()
+    let unameLabel = UILabel()
+    let ugroupLabel = UILabel()
+    let tableView = UITableView()
+    let segmentControl = UISegmentedControl.init(items: ["起底","封鎖名單"])
+    lazy var logoutButton = UIBarButtonItem(title: "登出", style: .done, target: self, action: #selector(logoutButtonPressed(_:)))
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        self.title = "會員資料"
+        navigationItem.rightBarButtonItem = logoutButton
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        tableView.separatorInset = UIEdgeInsetsMake(0, 10, 0, 0)
+        tableView.separatorColor = UIColor(white: 0.10, alpha: 1)
+        tableView.estimatedRowHeight = 50
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
+        view.addSubview(tableView)
+        
+        segmentControl.tintColor = UIColor(hexRGB: "#568064")
+        segmentControl.selectedSegmentIndex = 0
+        view.addSubview(segmentControl)
+        
+        let getSessionUserQuery = GetSessionUserQuery()
+        NetworkActivityIndicatorManager.networkOperationStarted()
+        apollo.fetch(query:getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
+            [weak self] result,error in
+            let sessionUser = result?.data?.sessionUser
+            self?.sessionUser = sessionUser!
+            NetworkActivityIndicatorManager.networkOperationFinished()
+            
+            //avatar
+            self?.avatarView.kf.setImage(with: URL(string: (sessionUser?.avatar)!)!)
+            
+            //user name
+            self?.unameLabel.text = sessionUser?.nickname
+            if sessionUser?.gender == UserGender.m {
+                self?.unameLabel.textColor = UIColor(hexRGB: "6495ed")
+            } else if sessionUser?.gender == UserGender.f {
+                self?.unameLabel.textColor = UIColor(hexRGB: "ff6961")
+            }
+            
+            //user group
+            self?.ugroupLabel.text = "郊登仔"
+            self?.ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
+            if sessionUser?.groups.isEmpty == false {
+                self?.ugroupLabel.text = sessionUser?.groups[0].name
+                if sessionUser?.groups[0].id == "DEVELOPER" {
+                    self?.ugroupLabel.textColor = UIColor(hexRGB: "9e3e3f")
+                } else if sessionUser?.groups[0].id == "ADMIN" {
+                    self?.ugroupLabel.textColor = UIColor(hexRGB: "4b6690")
+                }
+            }
+            
+            let refreshControl = UIRefreshControl()
+            refreshControl.backgroundColor = UIColor(white: 0.13, alpha: 1)
+            refreshControl.addTarget(self, action: #selector(self!.refresh(refreshControl:)), for: .valueChanged)
+            if #available(iOS 10.0, *) {
+                self?.tableView.refreshControl = refreshControl
+            } else {
+                // Fallback on earlier versions
+                self?.tableView.addSubview(refreshControl)
+            }
+            
+            self?.getUserThreads(completion: {})
+        }
+        view.addSubview(avatarView)
+        view.addSubview(unameLabel)
+        view.addSubview(ugroupLabel)
+        
+        avatarView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(view.snp.topMargin).offset(20)
+            make.leading.equalTo(20)
+            make.width.equalTo(50)
+            make.height.equalTo(50)
+        }
+        
+        unameLabel.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(view.snp.topMargin).offset(20)
+            make.leading.equalTo(avatarView.snp.trailing).offset(10)
+        }
+        
+        ugroupLabel.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(unameLabel.snp.bottom).offset(10)
+            make.leading.equalTo(avatarView.snp.trailing).offset(10)
+        }
+        
+        segmentControl.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(ugroupLabel.snp.bottom).offset(20)
+            make.centerX.equalToSuperview()
+        }
+        
+        tableView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(segmentControl.snp.bottom).offset(20)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(view.snp.bottomMargin)
+        }
+        
+        // Do any additional setup after loading the view.
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var count = 0
+        if segmentControl.selectedSegmentIndex == 0 {
+            count = userThreads.count
+        } else if segmentControl.selectedSegmentIndex == 1 {
+            
+        }
+        return count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cellToReturn: UITableViewCell!
+        if segmentControl.selectedSegmentIndex == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
+            let title = self.userThreads[indexPath.row].title
+            let nickName = self.userThreads[indexPath.row].replies.map {$0.authorNickname}
+            let count = self.userThreads[indexPath.row].totalReplies
+            let dateMap = self.userThreads[indexPath.row].replies.map {$0.date}
+            let date = dateMap.last!.toISODate()
+            let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTraditional)
+            cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
+            cell.threadTitleLabel.text = title
+            cell.threadTitleLabel.textColor = .lightGray
+            cell.detailLabel.text = "\(nickName[0]) // 回覆: \(count) // 最後回覆: \(relativeDate!)"
+            cell.detailLabel.textColor = .darkGray
+            let tags = self.userThreads[indexPath.row].tags.map {$0.fragments.tagDetails}
+            cell.tagLabel.text = "#\(tags[0].name)"
+            cell.tagLabel.textColor = UIColor(hexRGB: tags[0].color)
+            cellToReturn = cell
+        } else if segmentControl.selectedSegmentIndex == 1 {
+            
+        }
+        return cellToReturn
+    }
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
+    
+    @objc func logoutButtonPressed(_ sender: UIBarButtonItem) {
+        
+    }
+    
+    private func getUserThreads(completion: @escaping ()->Void) {
+        let getUserThreadsQuery = GetUserThreadsQuery(id:self.sessionUser!.id,page:1)
+        NetworkActivityIndicatorManager.networkOperationStarted()
+        apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
+            [weak self] result,error in
+            self?.userThreads = (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!
+            self?.tableView.reloadData()
+            NetworkActivityIndicatorManager.networkOperationFinished()
+            completion()
+        }
+    }
+    
+    @objc func refresh(refreshControl: UIRefreshControl) {
+        DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
+            if self.segmentControl.selectedSegmentIndex == 0 {
+                self.getUserThreads(completion: {
+                    refreshControl.endRefreshing()
+                })
+            } else if self.segmentControl.selectedSegmentIndex == 1 {
+                refreshControl.endRefreshing()
+            }
+        })
+    }
+    
+}

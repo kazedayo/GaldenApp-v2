@@ -197,14 +197,32 @@ class Configurations {
         let tabBarController = UITabBarController()
         let threadListViewController = ThreadListViewController()
         let settingsTableViewController = SettingsTableViewController.init(style: .grouped)
+        let userViewController = UserViewController()
         let loginViewController = LoginViewController()
         threadListViewController.tabBarItem = UITabBarItem(title: "睇post", image: UIImage(named: "posts"), tag: 0)
-        loginViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
+        userViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
         settingsTableViewController.tabBarItem = UITabBarItem(title: "設定", image: UIImage(named: "settings"), tag: 2)
-        let controllers = [threadListViewController,loginViewController,settingsTableViewController]
-        tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
+        loginViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
+        if keychain.get("userKey") != nil {
+            let controllers = [threadListViewController,userViewController,settingsTableViewController]
+            tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
+        } else {
+            let controllers = [threadListViewController,loginViewController,settingsTableViewController]
+            tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
+        }
         tabBarController.hero.isEnabled = true
         tabBarController.hero.modalAnimationType = .zoom
         return tabBarController
+    }
+    
+    func reconfigureAfterLogin() -> [UIViewController] {
+        let threadListViewController = ThreadListViewController()
+        let settingsTableViewController = SettingsTableViewController.init(style: .grouped)
+        let userViewController = UserViewController()
+        threadListViewController.tabBarItem = UITabBarItem(title: "睇post", image: UIImage(named: "posts"), tag: 0)
+        userViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
+        settingsTableViewController.tabBarItem = UITabBarItem(title: "設定", image: UIImage(named: "settings"), tag: 2)
+        let controllers = [threadListViewController,userViewController,settingsTableViewController].map { UINavigationController(rootViewController: $0)}
+        return controllers
     }
 }

@@ -161,14 +161,14 @@ public final class GetChannelListQuery: GraphQLQuery {
 
 public final class GetThreadsQuery: GraphQLQuery {
   public let operationDefinition =
-    "query GetThreads($id: [String!]!, $page: Int!) {\n  threads(tagIds: $id, page: $page) {\n    __typename\n    ...ThreadListDetails\n  }\n}"
+    "query GetThreads($id: String!, $page: Int!) {\n  threadsByChannel(channelId: $id, page: $page) {\n    __typename\n    ...ThreadListDetails\n  }\n}"
 
   public var queryDocument: String { return operationDefinition.appending(ThreadListDetails.fragmentDefinition).appending(TagDetails.fragmentDefinition) }
 
-  public var id: [String]
+  public var id: String
   public var page: Int
 
-  public init(id: [String], page: Int) {
+  public init(id: String, page: Int) {
     self.id = id
     self.page = page
   }
@@ -181,7 +181,7 @@ public final class GetThreadsQuery: GraphQLQuery {
     public static let possibleTypes = ["Query"]
 
     public static let selections: [GraphQLSelection] = [
-      GraphQLField("threads", arguments: ["tagIds": GraphQLVariable("id"), "page": GraphQLVariable("page")], type: .nonNull(.list(.nonNull(.object(Thread.selections))))),
+      GraphQLField("threadsByChannel", arguments: ["channelId": GraphQLVariable("id"), "page": GraphQLVariable("page")], type: .nonNull(.list(.nonNull(.object(ThreadsByChannel.selections))))),
     ]
 
     public private(set) var resultMap: ResultMap
@@ -190,20 +190,116 @@ public final class GetThreadsQuery: GraphQLQuery {
       self.resultMap = unsafeResultMap
     }
 
-    public init(threads: [Thread]) {
-      self.init(unsafeResultMap: ["__typename": "Query", "threads": threads.map { (value: Thread) -> ResultMap in value.resultMap }])
+    public init(threadsByChannel: [ThreadsByChannel]) {
+      self.init(unsafeResultMap: ["__typename": "Query", "threadsByChannel": threadsByChannel.map { (value: ThreadsByChannel) -> ResultMap in value.resultMap }])
     }
 
-    public var threads: [Thread] {
+    public var threadsByChannel: [ThreadsByChannel] {
       get {
-        return (resultMap["threads"] as! [ResultMap]).map { (value: ResultMap) -> Thread in Thread(unsafeResultMap: value) }
+        return (resultMap["threadsByChannel"] as! [ResultMap]).map { (value: ResultMap) -> ThreadsByChannel in ThreadsByChannel(unsafeResultMap: value) }
       }
       set {
-        resultMap.updateValue(newValue.map { (value: Thread) -> ResultMap in value.resultMap }, forKey: "threads")
+        resultMap.updateValue(newValue.map { (value: ThreadsByChannel) -> ResultMap in value.resultMap }, forKey: "threadsByChannel")
       }
     }
 
-    public struct Thread: GraphQLSelectionSet {
+    public struct ThreadsByChannel: GraphQLSelectionSet {
+      public static let possibleTypes = ["Thread"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLFragmentSpread(ThreadListDetails.self),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var threadListDetails: ThreadListDetails {
+          get {
+            return ThreadListDetails(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class GetUserThreadsQuery: GraphQLQuery {
+  public let operationDefinition =
+    "query GetUserThreads($id: String!, $page: Int!) {\n  threadsByUser(userId: $id, page: $page) {\n    __typename\n    ...ThreadListDetails\n  }\n}"
+
+  public var queryDocument: String { return operationDefinition.appending(ThreadListDetails.fragmentDefinition).appending(TagDetails.fragmentDefinition) }
+
+  public var id: String
+  public var page: Int
+
+  public init(id: String, page: Int) {
+    self.id = id
+    self.page = page
+  }
+
+  public var variables: GraphQLMap? {
+    return ["id": id, "page": page]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("threadsByUser", arguments: ["userId": GraphQLVariable("id"), "page": GraphQLVariable("page")], type: .nonNull(.list(.nonNull(.object(ThreadsByUser.selections))))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(threadsByUser: [ThreadsByUser]) {
+      self.init(unsafeResultMap: ["__typename": "Query", "threadsByUser": threadsByUser.map { (value: ThreadsByUser) -> ResultMap in value.resultMap }])
+    }
+
+    public var threadsByUser: [ThreadsByUser] {
+      get {
+        return (resultMap["threadsByUser"] as! [ResultMap]).map { (value: ResultMap) -> ThreadsByUser in ThreadsByUser(unsafeResultMap: value) }
+      }
+      set {
+        resultMap.updateValue(newValue.map { (value: ThreadsByUser) -> ResultMap in value.resultMap }, forKey: "threadsByUser")
+      }
+    }
+
+    public struct ThreadsByUser: GraphQLSelectionSet {
       public static let possibleTypes = ["Thread"]
 
       public static let selections: [GraphQLSelection] = [
@@ -470,6 +566,165 @@ public final class GetThreadContentQuery: GraphQLQuery {
           }
           set {
             resultMap.updateValue(newValue, forKey: "color")
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class GetSessionUserQuery: GraphQLQuery {
+  public let operationDefinition =
+    "query GetSessionUser {\n  sessionUser {\n    __typename\n    id\n    nickname\n    avatar\n    gender\n    groups {\n      __typename\n      id\n      name\n    }\n  }\n}"
+
+  public init() {
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("sessionUser", type: .object(SessionUser.selections)),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(sessionUser: SessionUser? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "sessionUser": sessionUser.flatMap { (value: SessionUser) -> ResultMap in value.resultMap }])
+    }
+
+    public var sessionUser: SessionUser? {
+      get {
+        return (resultMap["sessionUser"] as? ResultMap).flatMap { SessionUser(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "sessionUser")
+      }
+    }
+
+    public struct SessionUser: GraphQLSelectionSet {
+      public static let possibleTypes = ["SessionUser"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(String.self))),
+        GraphQLField("nickname", type: .nonNull(.scalar(String.self))),
+        GraphQLField("avatar", type: .scalar(String.self)),
+        GraphQLField("gender", type: .nonNull(.scalar(UserGender.self))),
+        GraphQLField("groups", type: .nonNull(.list(.nonNull(.object(Group.selections))))),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(id: String, nickname: String, avatar: String? = nil, gender: UserGender, groups: [Group]) {
+        self.init(unsafeResultMap: ["__typename": "SessionUser", "id": id, "nickname": nickname, "avatar": avatar, "gender": gender, "groups": groups.map { (value: Group) -> ResultMap in value.resultMap }])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var id: String {
+        get {
+          return resultMap["id"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var nickname: String {
+        get {
+          return resultMap["nickname"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "nickname")
+        }
+      }
+
+      public var avatar: String? {
+        get {
+          return resultMap["avatar"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "avatar")
+        }
+      }
+
+      public var gender: UserGender {
+        get {
+          return resultMap["gender"]! as! UserGender
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "gender")
+        }
+      }
+
+      public var groups: [Group] {
+        get {
+          return (resultMap["groups"] as! [ResultMap]).map { (value: ResultMap) -> Group in Group(unsafeResultMap: value) }
+        }
+        set {
+          resultMap.updateValue(newValue.map { (value: Group) -> ResultMap in value.resultMap }, forKey: "groups")
+        }
+      }
+
+      public struct Group: GraphQLSelectionSet {
+        public static let possibleTypes = ["Group"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(String.self))),
+          GraphQLField("name", type: .nonNull(.scalar(String.self))),
+        ]
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(id: String, name: String) {
+          self.init(unsafeResultMap: ["__typename": "Group", "id": id, "name": name])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var id: String {
+          get {
+            return resultMap["id"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        public var name: String {
+          get {
+            return resultMap["name"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
           }
         }
       }
@@ -1305,7 +1560,7 @@ public struct CommentFields: GraphQLFragment {
 
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("id", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("id", type: .nonNull(.scalar(String.self))),
         GraphQLField("name", type: .nonNull(.scalar(String.self))),
       ]
 
@@ -1315,7 +1570,7 @@ public struct CommentFields: GraphQLFragment {
         self.resultMap = unsafeResultMap
       }
 
-      public init(id: Int, name: String) {
+      public init(id: String, name: String) {
         self.init(unsafeResultMap: ["__typename": "Group", "id": id, "name": name])
       }
 
@@ -1328,9 +1583,9 @@ public struct CommentFields: GraphQLFragment {
         }
       }
 
-      public var id: Int {
+      public var id: String {
         get {
-          return resultMap["id"]! as! Int
+          return resultMap["id"]! as! String
         }
         set {
           resultMap.updateValue(newValue, forKey: "id")

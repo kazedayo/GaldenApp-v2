@@ -4,10 +4,16 @@ query GetChannelList {
 	}
 }
 
-query GetThreads($id: [String!]!,$page: Int!) {
-    threads(tagIds: $id,page: $page) {
+query GetThreads($id: String!,$page: Int!) {
+    threadsByChannel(channelId: $id,page: $page) {
     	...ThreadListDetails
     }
+}
+
+query GetUserThreads($id: String!,$page: Int!) {
+	threadsByUser(userId: $id,page: $page) {
+		...ThreadListDetails
+	}
 }
 
 query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {
@@ -22,6 +28,19 @@ query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {
 	      name
 	      color
 	    }
+	}
+}
+
+query GetSessionUser {
+	sessionUser {
+		id
+		nickname
+		avatar
+		gender
+		groups{
+			id
+			name
+		}
 	}
 }
 

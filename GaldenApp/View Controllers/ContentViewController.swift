@@ -119,6 +119,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             }
             make.height.equalTo(50)
         }
+        let realm = try! Realm()
+        let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.tID)
+        if thisPost != nil && self.sender == "cell" {
+            self.pageNow = thisPost!.page
+        }
         self.updateSequence()
     }
     
@@ -367,11 +372,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     private func updateSequence() {
         webView.isHidden = true
         activityIndicator.isHidden = false
-        let realm = try! Realm()
-        let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.tID)
-        if thisPost != nil && self.sender == "cell" {
-            self.pageNow = thisPost!.page
-        }
+        NetworkActivityIndicatorManager.networkOperationStarted()
         let getThreadContentQuery = GetThreadContentQuery(id: tID, sorting: .dateAsc, page: pageNow)
         apollo.fetch(query: getThreadContentQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
@@ -392,19 +393,16 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML!)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
                 
             self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
-            NetworkActivityIndicatorManager.networkOperationStarted()
         }
     }
     
     private func constructComments(thread: GetThreadContentQuery.Data.Thread) -> String {
-        let iconArray = ["https://i.imgur.com/PXPXwaRs.jpg","https://i.imgur.com/9AKjGrIs.jpg","https://i.imgur.com/sV2Q22ns.jpg"]
-        let randomIndex = Int(arc4random_uniform(UInt32(iconArray.count)))
         var completedHTML = ""
         for i in 0 ..< thread.replies.count {
             var avatarurl = ""
             let comment = thread.replies.map {$0.fragments.commentsRecursive}
             if comment[i].fragments.commentFields.author.avatar == nil {
-                avatarurl = iconArray[randomIndex]
+                avatarurl = "https://i.imgur.com/mrD0tRG.png"
             } else {
                 avatarurl = comment[i].fragments.commentFields.author.avatar!
             }
@@ -414,6 +412,18 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 genderColor = "#6495ed"
             } else if comment[i].fragments.commentFields.author.gender == UserGender.f {
                 genderColor = "#ff6961"
+            }
+            
+            var groupColor = "#aaaaaa"
+            var groupName = "郊登仔"
+            if comment[i].fragments.commentFields.author.groups.isEmpty == false {
+                if comment[i].fragments.commentFields.author.groups[0].id == "DEVELOPER" {
+                    groupColor = "#9e3e3f"
+                    groupName = comment[i].fragments.commentFields.author.groups[0].name
+                } else if comment[i].fragments.commentFields.author.groups[0].id == "ADMIN" {
+                    groupColor = "#4b6690"
+                    groupName = comment[i].fragments.commentFields.author.groups[0].name
+                }
             }
             
             let date = (comment[i].fragments.commentFields.date.toISODate()! + 8.hours).toString(DateToStringStyles.dateTime(.short))
@@ -443,7 +453,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 quoteHTML = try! doc.html()
             }
             
-            var templateHTML = "<div class=\"comment\" id=\"\(comment[i].fragments.commentFields.floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(comment[i].fragments.commentFields.author.nickname)</td><td class=\"righttext\">\(date)</td></tr><tr><td class=\"lefttext\">郊登仔</td><td class=\"righttext\">#\(comment[i].fragments.commentFields.floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(quoteHTML)\(comment[i].fragments.commentFields.content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(i)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(i)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
+            var templateHTML = "<div class=\"comment\" id=\"\(comment[i].fragments.commentFields.floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(comment[i].fragments.commentFields.author.nickname)</td><td class=\"righttext\">\(date)</td></tr><tr><td class=\"lefttext\" style=\"color:\(groupColor)\">\(groupName)</td><td class=\"righttext\">#\(comment[i].fragments.commentFields.floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(quoteHTML)\(comment[i].fragments.commentFields.content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(i)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(i)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
             var doc = try! SwiftSoup.parse(templateHTML)
             doc = galdenParser(doc: doc)
             templateHTML = try! doc.html()
@@ -546,7 +556,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         for i in 0..<icon.size() {
             let pack = try! icon.get(i).attr("data-pack-id")
             let id = try! icon.get(i).attr("data-id")
-            try! icon.get(i).wrap("<img src=\"https://s.hkgalden.org/smilies/\(pack)/\(id).png\">")
+            let width = try! icon.get(i).attr("data-sx")
+            let height = try! icon.get(i).attr("data-sy")
+            try! icon.get(i).wrap("<img src=\"https://s.hkgalden.org/smilies/\(pack)/\(id).png\" width=\"\(width)\" height=\"\(height)\">")
             try! icon.get(i).remove()
         }
         

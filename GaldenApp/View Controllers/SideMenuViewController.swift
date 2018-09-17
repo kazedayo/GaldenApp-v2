@@ -12,7 +12,6 @@ import Apollo
 
 class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
-    var channelSelectedTags: [TagDetails]?
     var channels: [ChannelDetails]!
     var mainVC: ThreadListViewController?
     var firstloaded: Bool = false
@@ -49,10 +48,12 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         }
         
         let getChannelListQuery = GetChannelListQuery()
-        apollo.fetch(query: getChannelListQuery) {
+        NetworkActivityIndicatorManager.networkOperationStarted()
+        apollo.fetch(query: getChannelListQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result, error in
             guard let channels = result?.data?.channels else { return }
             self?.channels = channels.map {$0.fragments.channelDetails}
+            NetworkActivityIndicatorManager.networkOperationFinished()
         }
         
         // Do any additional setup after loading the view.
@@ -80,12 +81,7 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
         cell.channelTitle.textColor = .white
-        if indexPath.row == 0 {
-            self.channelSelectedTags = []
-        } else {
-            self.channelSelectedTags = self.channels[indexPath.row].tags.map {$0.fragments.tagDetails}
-        }
-        mainVC?.unwindToThreadList(channel: self.channels[indexPath.row], tags: self.channelSelectedTags!)
+        mainVC?.unwindToThreadList(channel: self.channels[indexPath.row])
         dismiss(animated: true, completion: nil)
     }
     
