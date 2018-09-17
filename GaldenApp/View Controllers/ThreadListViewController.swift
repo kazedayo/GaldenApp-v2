@@ -20,7 +20,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     //MARK: Properties
     var threads: [ThreadListDetails] = []
     var channelId: String = "bw"
-    var tagsId: [String] = []
     var pageNow: Int = 1
     var pageCount: Double?
     var selectedThread: Int?
@@ -111,7 +110,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         reloadButton.setTitle("重新載入", for: .normal)
         reloadButton.isHidden = true
         reloadButton.addTarget(self, action: #selector(reloadButtonPressed(_:)), for: .touchUpInside)
-        
         updateSequence(append: false, completion: {})
     }
     
@@ -332,16 +330,27 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         apollo.fetch(query: getThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result, error in
             if (error == nil) {
+                guard let threads = result?.data?.threadsByChannel else { return }
                 if append == true {
-                    guard let threads = result?.data?.threadsByChannel else { return }
                     self?.threads.append(contentsOf: threads.map {$0.fragments.threadListDetails})
                 } else {
-                    guard let threads = result?.data?.threadsByChannel else { return }
                     self?.threads = threads.map {$0.fragments.threadListDetails}
                 }
-                self?.tableView.reloadData()
-                self?.reloadButton.isHidden = true
-                self?.tableView.isHidden = false
+                if keychain.get("userKey") != nil {
+                    let getSessionUserQuery = GetSessionUserQuery()
+                    apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
+                        [weak self] result,error in
+                        let blockedUserIds = result?.data?.sessionUser?.blockedUserIds
+                        self?.threads = (self?.threads.filter {!blockedUserIds!.contains($0.replies[0].author.id)})!
+                        self?.tableView.reloadData()
+                        self?.reloadButton.isHidden = true
+                        self?.tableView.isHidden = false
+                    }
+                } else {
+                    self?.tableView.reloadData()
+                    self?.reloadButton.isHidden = true
+                    self?.tableView.isHidden = false
+                }
             } else {
                 self?.reloadButton.isHidden = false
             }

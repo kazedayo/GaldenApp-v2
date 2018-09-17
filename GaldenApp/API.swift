@@ -573,9 +573,9 @@ public final class GetThreadContentQuery: GraphQLQuery {
   }
 }
 
-public final class GetSessionUserQuery: GraphQLQuery {
+public final class GetBlockedUsersQuery: GraphQLQuery {
   public let operationDefinition =
-    "query GetSessionUser {\n  sessionUser {\n    __typename\n    id\n    nickname\n    avatar\n    gender\n    groups {\n      __typename\n      id\n      name\n    }\n  }\n}"
+    "query GetBlockedUsers {\n  blockedUsers {\n    __typename\n    id\n    nickname\n    avatar\n    gender\n    groups {\n      __typename\n      id\n      name\n    }\n  }\n}"
 
   public init() {
   }
@@ -584,7 +584,7 @@ public final class GetSessionUserQuery: GraphQLQuery {
     public static let possibleTypes = ["Query"]
 
     public static let selections: [GraphQLSelection] = [
-      GraphQLField("sessionUser", type: .object(SessionUser.selections)),
+      GraphQLField("blockedUsers", type: .nonNull(.list(.nonNull(.object(BlockedUser.selections))))),
     ]
 
     public private(set) var resultMap: ResultMap
@@ -593,21 +593,21 @@ public final class GetSessionUserQuery: GraphQLQuery {
       self.resultMap = unsafeResultMap
     }
 
-    public init(sessionUser: SessionUser? = nil) {
-      self.init(unsafeResultMap: ["__typename": "Query", "sessionUser": sessionUser.flatMap { (value: SessionUser) -> ResultMap in value.resultMap }])
+    public init(blockedUsers: [BlockedUser]) {
+      self.init(unsafeResultMap: ["__typename": "Query", "blockedUsers": blockedUsers.map { (value: BlockedUser) -> ResultMap in value.resultMap }])
     }
 
-    public var sessionUser: SessionUser? {
+    public var blockedUsers: [BlockedUser] {
       get {
-        return (resultMap["sessionUser"] as? ResultMap).flatMap { SessionUser(unsafeResultMap: $0) }
+        return (resultMap["blockedUsers"] as! [ResultMap]).map { (value: ResultMap) -> BlockedUser in BlockedUser(unsafeResultMap: value) }
       }
       set {
-        resultMap.updateValue(newValue?.resultMap, forKey: "sessionUser")
+        resultMap.updateValue(newValue.map { (value: BlockedUser) -> ResultMap in value.resultMap }, forKey: "blockedUsers")
       }
     }
 
-    public struct SessionUser: GraphQLSelectionSet {
-      public static let possibleTypes = ["SessionUser"]
+    public struct BlockedUser: GraphQLSelectionSet {
+      public static let possibleTypes = ["User"]
 
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
@@ -625,7 +625,7 @@ public final class GetSessionUserQuery: GraphQLQuery {
       }
 
       public init(id: String, nickname: String, avatar: String? = nil, gender: UserGender, groups: [Group]) {
-        self.init(unsafeResultMap: ["__typename": "SessionUser", "id": id, "nickname": nickname, "avatar": avatar, "gender": gender, "groups": groups.map { (value: Group) -> ResultMap in value.resultMap }])
+        self.init(unsafeResultMap: ["__typename": "User", "id": id, "nickname": nickname, "avatar": avatar, "gender": gender, "groups": groups.map { (value: Group) -> ResultMap in value.resultMap }])
       }
 
       public var __typename: String {
@@ -679,6 +679,175 @@ public final class GetSessionUserQuery: GraphQLQuery {
         }
         set {
           resultMap.updateValue(newValue.map { (value: Group) -> ResultMap in value.resultMap }, forKey: "groups")
+        }
+      }
+
+      public struct Group: GraphQLSelectionSet {
+        public static let possibleTypes = ["Group"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(String.self))),
+          GraphQLField("name", type: .nonNull(.scalar(String.self))),
+        ]
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(id: String, name: String) {
+          self.init(unsafeResultMap: ["__typename": "Group", "id": id, "name": name])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var id: String {
+          get {
+            return resultMap["id"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        public var name: String {
+          get {
+            return resultMap["name"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class GetSessionUserQuery: GraphQLQuery {
+  public let operationDefinition =
+    "query GetSessionUser {\n  sessionUser {\n    __typename\n    id\n    nickname\n    avatar\n    gender\n    groups {\n      __typename\n      id\n      name\n    }\n    blockedUserIds\n  }\n}"
+
+  public init() {
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("sessionUser", type: .object(SessionUser.selections)),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(sessionUser: SessionUser? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "sessionUser": sessionUser.flatMap { (value: SessionUser) -> ResultMap in value.resultMap }])
+    }
+
+    public var sessionUser: SessionUser? {
+      get {
+        return (resultMap["sessionUser"] as? ResultMap).flatMap { SessionUser(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "sessionUser")
+      }
+    }
+
+    public struct SessionUser: GraphQLSelectionSet {
+      public static let possibleTypes = ["SessionUser"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(String.self))),
+        GraphQLField("nickname", type: .nonNull(.scalar(String.self))),
+        GraphQLField("avatar", type: .scalar(String.self)),
+        GraphQLField("gender", type: .nonNull(.scalar(UserGender.self))),
+        GraphQLField("groups", type: .nonNull(.list(.nonNull(.object(Group.selections))))),
+        GraphQLField("blockedUserIds", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(id: String, nickname: String, avatar: String? = nil, gender: UserGender, groups: [Group], blockedUserIds: [String]) {
+        self.init(unsafeResultMap: ["__typename": "SessionUser", "id": id, "nickname": nickname, "avatar": avatar, "gender": gender, "groups": groups.map { (value: Group) -> ResultMap in value.resultMap }, "blockedUserIds": blockedUserIds])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var id: String {
+        get {
+          return resultMap["id"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var nickname: String {
+        get {
+          return resultMap["nickname"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "nickname")
+        }
+      }
+
+      public var avatar: String? {
+        get {
+          return resultMap["avatar"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "avatar")
+        }
+      }
+
+      public var gender: UserGender {
+        get {
+          return resultMap["gender"]! as! UserGender
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "gender")
+        }
+      }
+
+      public var groups: [Group] {
+        get {
+          return (resultMap["groups"] as! [ResultMap]).map { (value: ResultMap) -> Group in Group(unsafeResultMap: value) }
+        }
+        set {
+          resultMap.updateValue(newValue.map { (value: Group) -> ResultMap in value.resultMap }, forKey: "groups")
+        }
+      }
+
+      public var blockedUserIds: [String] {
+        get {
+          return resultMap["blockedUserIds"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "blockedUserIds")
         }
       }
 
@@ -908,7 +1077,7 @@ public struct TagDetails: GraphQLFragment {
 
 public struct ThreadListDetails: GraphQLFragment {
   public static let fragmentDefinition =
-    "fragment ThreadListDetails on Thread {\n  __typename\n  id\n  title\n  replies {\n    __typename\n    authorNickname\n    date\n  }\n  totalReplies\n  tags {\n    __typename\n    ...TagDetails\n  }\n}"
+    "fragment ThreadListDetails on Thread {\n  __typename\n  id\n  title\n  replies {\n    __typename\n    author {\n      __typename\n      id\n    }\n    authorNickname\n    date\n  }\n  totalReplies\n  tags {\n    __typename\n    ...TagDetails\n  }\n}"
 
   public static let possibleTypes = ["Thread"]
 
@@ -990,6 +1159,7 @@ public struct ThreadListDetails: GraphQLFragment {
 
     public static let selections: [GraphQLSelection] = [
       GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("author", type: .nonNull(.object(Author.selections))),
       GraphQLField("authorNickname", type: .nonNull(.scalar(String.self))),
       GraphQLField("date", type: .nonNull(.scalar(String.self))),
     ]
@@ -1000,8 +1170,8 @@ public struct ThreadListDetails: GraphQLFragment {
       self.resultMap = unsafeResultMap
     }
 
-    public init(authorNickname: String, date: String) {
-      self.init(unsafeResultMap: ["__typename": "Reply", "authorNickname": authorNickname, "date": date])
+    public init(author: Author, authorNickname: String, date: String) {
+      self.init(unsafeResultMap: ["__typename": "Reply", "author": author.resultMap, "authorNickname": authorNickname, "date": date])
     }
 
     public var __typename: String {
@@ -1010,6 +1180,15 @@ public struct ThreadListDetails: GraphQLFragment {
       }
       set {
         resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    public var author: Author {
+      get {
+        return Author(unsafeResultMap: resultMap["author"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "author")
       }
     }
 
@@ -1028,6 +1207,43 @@ public struct ThreadListDetails: GraphQLFragment {
       }
       set {
         resultMap.updateValue(newValue, forKey: "date")
+      }
+    }
+
+    public struct Author: GraphQLSelectionSet {
+      public static let possibleTypes = ["User"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(String.self))),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(id: String) {
+        self.init(unsafeResultMap: ["__typename": "User", "id": id])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var id: String {
+        get {
+          return resultMap["id"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
+        }
       }
     }
   }

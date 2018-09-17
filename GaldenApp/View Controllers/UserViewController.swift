@@ -13,6 +13,7 @@ import SwiftDate
 class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     var userThreads: [ThreadListDetails] = []
+    var blockedUsers: [GetBlockedUsersQuery.Data.BlockedUser] = []
     var sessionUser: GetSessionUserQuery.Data.SessionUser? = nil
     
     let avatarView = UIImageView()
@@ -36,10 +37,12 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
+        tableView.register(UserTableViewCell.classForCoder(), forCellReuseIdentifier: "UserTableViewCell")
         view.addSubview(tableView)
         
         segmentControl.tintColor = UIColor(hexRGB: "#568064")
         segmentControl.selectedSegmentIndex = 0
+        segmentControl.addTarget(self, action: #selector(onChange(_:)), for: .valueChanged)
         view.addSubview(segmentControl)
         
         let getSessionUserQuery = GetSessionUserQuery()
@@ -51,7 +54,11 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             NetworkActivityIndicatorManager.networkOperationFinished()
             
             //avatar
-            self?.avatarView.kf.setImage(with: URL(string: (sessionUser?.avatar)!)!)
+            if sessionUser?.avatar != nil {
+                self?.avatarView.kf.setImage(with: URL(string: (sessionUser?.avatar)!)!)
+            } else {
+                self?.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/mrD0tRG.png")!)
+            }
             
             //user name
             self?.unameLabel.text = sessionUser?.nickname
@@ -131,7 +138,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         if segmentControl.selectedSegmentIndex == 0 {
             count = userThreads.count
         } else if segmentControl.selectedSegmentIndex == 1 {
-            
+            count = blockedUsers.count
         }
         return count
     }
@@ -156,7 +163,32 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             cell.tagLabel.textColor = UIColor(hexRGB: tags[0].color)
             cellToReturn = cell
         } else if segmentControl.selectedSegmentIndex == 1 {
-            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UserTableViewCell") as! UserTableViewCell
+            cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
+            let avatar = self.blockedUsers[indexPath.row].avatar
+            let nickname = self.blockedUsers[indexPath.row].nickname
+            let gender = self.blockedUsers[indexPath.row].gender
+            let groups = self.blockedUsers[indexPath.row].groups
+            if avatar != nil {
+                cell.avatarView.kf.setImage(with: URL(string: (avatar)!)!)
+            } else {
+                cell.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/mrD0tRG.png")!)
+            }
+            cell.unameLabel.text = nickname
+            if gender == UserGender.m {
+                cell.unameLabel.textColor = UIColor(hexRGB: "6495ed")
+            } else if gender == UserGender.f {
+                cell.unameLabel.textColor = UIColor(hexRGB: "ff6961")
+            }
+            if groups.isEmpty == false {
+                cell.ugroupLabel.text = groups[0].name
+                if groups[0].id == "DEVELOPER" {
+                    cell.ugroupLabel.textColor = UIColor(hexRGB: "9e3e3f")
+                } else if groups[0].id == "ADMIN" {
+                    cell.ugroupLabel.textColor = UIColor(hexRGB: "4b6690")
+                }
+            }
+            cellToReturn = cell
         }
         return cellToReturn
     }
@@ -187,6 +219,18 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
     }
     
+    private func getBlockedUsers(completion: @escaping ()-> Void) {
+        let getBlockedUsersQuery = GetBlockedUsersQuery()
+        NetworkActivityIndicatorManager.networkOperationStarted()
+        apollo.fetch(query: getBlockedUsersQuery,cachePolicy: .fetchIgnoringCacheData) {
+            [weak self] result,error in
+            self?.blockedUsers = (result?.data?.blockedUsers)!
+            self?.tableView.reloadData()
+            NetworkActivityIndicatorManager.networkOperationFinished()
+            completion()
+        }
+    }
+    
     @objc func refresh(refreshControl: UIRefreshControl) {
         DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
             if self.segmentControl.selectedSegmentIndex == 0 {
@@ -194,9 +238,24 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     refreshControl.endRefreshing()
                 })
             } else if self.segmentControl.selectedSegmentIndex == 1 {
-                refreshControl.endRefreshing()
+                self.getBlockedUsers(completion: {
+                    refreshControl.endRefreshing()
+                })
             }
         })
+    }
+    
+    @objc func onChange(_ sender: UISegmentedControl) {
+        tableView.isHidden = true
+        if segmentControl.selectedSegmentIndex == 0 {
+            getUserThreads(completion: {
+                self.tableView.isHidden = false
+            })
+        } else if segmentControl.selectedSegmentIndex == 1 {
+            getBlockedUsers(completion: {
+                self.tableView.isHidden = false
+            })
+        }
     }
     
 }

@@ -31,6 +31,7 @@
 		4297113A2146AA7C000EA809 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429711392146AA7C000EA809 /* API.swift */; };
 		4298ED16214630E50043FAD7 /* queries.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 4298ED15214630E50043FAD7 /* queries.graphql */; };
 		42A1C8102140A3C000C0C511 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */; };
+		42B14966214FBD3800A9DEA3 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B14965214FBD3800A9DEA3 /* UserTableViewCell.swift */; };
 		42CDE188214F4FEE00793A8D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CDE187214F4FEE00793A8D /* LoginViewController.swift */; };
 		42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8931F7923E1002CC13F /* AppDelegate.swift */; };
 		42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89A1F7923E1002CC13F /* Assets.xcassets */; };
@@ -77,6 +78,7 @@
 		429711392146AA7C000EA809 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		4298ED15214630E50043FAD7 /* queries.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = queries.graphql; sourceTree = "<group>"; };
 		42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		42B14965214FBD3800A9DEA3 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		42CDE187214F4FEE00793A8D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		42E7F8901F7923E1002CC13F /* GaldenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaldenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8931F7923E1002CC13F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				424A46F22073493C005795A6 /* ChannelListTableViewCell.swift */,
 				424A46EA2073493B005795A6 /* PageSelectTableViewCell.swift */,
 				424A46F02073493C005795A6 /* ThreadListTableViewCell.swift */,
+				42B14965214FBD3800A9DEA3 /* UserTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -450,6 +453,7 @@
 				424A47142073493E005795A6 /* HKGaldenAPI.swift in Sources */,
 				42A1C8102140A3C000C0C511 /* SettingsTableViewController.swift in Sources */,
 				42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */,
+				42B14966214FBD3800A9DEA3 /* UserTableViewCell.swift in Sources */,
 				424A47192073493E005795A6 /* Extensions.swift in Sources */,
 				424A470C2073493E005795A6 /* ThreadListTableViewCell.swift in Sources */,
 				424A470F2073493E005795A6 /* PagePopoverTableViewController.swift in Sources */,

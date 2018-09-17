@@ -31,6 +31,19 @@ query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {
 	}
 }
 
+query GetBlockedUsers {
+	blockedUsers {
+		id
+		nickname
+		avatar
+		gender
+		groups {
+			id
+			name
+		}
+	}
+}
+
 query GetSessionUser {
 	sessionUser {
 		id
@@ -41,6 +54,7 @@ query GetSessionUser {
 			id
 			name
 		}
+		blockedUserIds
 	}
 }
 
@@ -62,6 +76,9 @@ fragment ThreadListDetails on Thread {
 	id
 	title
 	replies {
+		author {
+			id
+		}
 		authorNickname
 		date
 	}
