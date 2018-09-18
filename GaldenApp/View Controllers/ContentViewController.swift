@@ -34,7 +34,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var navType: NavigationType = .normal
     var scrollPosition: String?
     var sender: String?
-    var ident: String?
     var titleLabel = MarqueeLabel()
     private var webView: WKWebView!
     
@@ -560,7 +559,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             let id = try! icon.get(i).attr("data-id")
             let width = try! icon.get(i).attr("data-sx")
             let height = try! icon.get(i).attr("data-sy")
-            try! icon.get(i).wrap("<img src=\"https://s.hkgalden.org/smilies/\(pack)/\(id).png\" width=\"\(width)\" height=\"\(height)\">")
+            try! icon.get(i).wrap("<img src=\"https://s.hkgalden.org/smilies/\(pack)/\(id).gif\" width=\"\(width)\" height=\"\(height)\">")
             try! icon.get(i).remove()
         }
         
