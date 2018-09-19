@@ -19,6 +19,7 @@ PODS:
   - Realm/Headers (3.9.0)
   - RealmSwift (3.9.0):
     - Realm (= 3.9.0)
+  - RichEditorView (5.0.0)
   - SideMenu (4.0.0)
   - SKPhotoBrowser (5.1.0)
   - SnapKit (4.0.0)
@@ -42,6 +43,7 @@ DEPENDENCIES:
   - MarqueeLabel
   - PKHUD
   - RealmSwift
+  - RichEditorView
   - SideMenu
   - SKPhotoBrowser (~> 5.1.0)
   - SnapKit
@@ -67,6 +69,7 @@ SPEC REPOS:
     - QuickLayout
     - Realm
     - RealmSwift
+    - RichEditorView
     - SideMenu
     - SKPhotoBrowser
     - SnapKit
@@ -91,6 +94,7 @@ SPEC CHECKSUMS:
   QuickLayout: a730730b646b231fd4ef7cffaeb1e81fe0e1ca92
   Realm: 3d36f208bf3aff8335dc3298742140182bde4edb
   RealmSwift: aa4d11917bfcfaa3ed51f219102a487ecd895447
+  RichEditorView: 1bbb07b87ca2d479ac29a6877014b38b8df233ef
   SideMenu: 70ee5657df63ec3382660ec4ef470bf1cf5db07d
   SKPhotoBrowser: c20c1da34d737b4e3e101feead6c8dd92ebf860a
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
@@ -101,6 +105,6 @@ SPEC CHECKSUMS:
   SwiftyStoreKit: 9ebd15971e28aa2989825fe8bc092eb5f75dd0b2
   URLNavigator: 2357a32f3b3787b748bf87deb927761f8b0f7f53
 
-PODFILE CHECKSUM: f90b669473ea801a08ee4321785027ac931454b9
+PODFILE CHECKSUM: 030644deff0829e2f627974d65af508ce9b5f57f
 
 COCOAPODS: 1.5.3

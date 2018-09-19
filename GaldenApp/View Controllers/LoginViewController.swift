@@ -76,7 +76,11 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
                 return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
             }()
             SwiftEntryKit.dismiss()
-            let controllers = Configurations.shared.reconfigureAfterLogin()
+            var controllers = (tabBarController?.viewControllers)!
+            let userViewController = UserViewController()
+            userViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
+            let nav = UINavigationController(rootViewController: userViewController)
+            controllers[1] = nav
             tabBarController?.setViewControllers(controllers, animated: false)
         }
         decisionHandler(.allow)

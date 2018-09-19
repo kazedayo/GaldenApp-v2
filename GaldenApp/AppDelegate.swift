@@ -27,6 +27,7 @@ var apollo: ApolloClient = {
     
     return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
 }()
+var sessionUser: GetSessionUserQuery.Data.SessionUser?
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -53,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     // Realm will automatically detect new properties and removed properties
                     // And will update the schema on disk automatically
                 }
-        })
+        },deleteRealmIfMigrationNeeded: true)
         
         // Tell Realm to use this new configuration object for the default Realm
         Realm.Configuration.defaultConfiguration = config

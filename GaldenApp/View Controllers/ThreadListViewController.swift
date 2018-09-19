@@ -32,7 +32,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     let sideMenuVC = SideMenuViewController()
     lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
-    //lazy var newThread = UIBarButtonItem(image: UIImage(named: "compose"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
+    lazy var newThread = UIBarButtonItem(image: UIImage(named: "compose"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
     
     var reloadButton = UIButton()
     
@@ -265,15 +265,14 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
     }
     
-    /*@objc func newThreadButtonPressed() {
+    @objc func newThreadButtonPressed() {
         let composeVC = ComposeViewController()
         let composeNavVC = UINavigationController(rootViewController: composeVC)
-        composeVC.channel = channelNow
+        composeVC.channel = channelId
         composeVC.composeType = .newThread
         composeVC.threadVC = self
-        //SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
         present(composeNavVC, animated: true, completion: nil)
-    }*/
+    }
     
     // MARK: - Navigation
 
@@ -337,22 +336,15 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                     self?.threads = threads.map {$0.fragments.threadListDetails}
                 }
                 if keychain.get("userKey") != nil {
-                    let getSessionUserQuery = GetSessionUserQuery()
-                    apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
-                        [weak self] result,error in
-                        if error == nil {
-                            let blockedUserIds = result?.data?.sessionUser?.blockedUserIds
-                            self?.threads = (self?.threads.filter {!blockedUserIds!.contains($0.replies[0].author.id)})!
-                            self?.tableView.reloadData()
-                            self?.reloadButton.isHidden = true
-                            self?.tableView.isHidden = false
-                        }
-                    }
-                } else {
+                    let blockedUserIds = sessionUser?.blockedUserIds
+                    self?.threads = (self?.threads.filter {!(blockedUserIds?.contains($0.replies[0].author.id))!})!
                     self?.tableView.reloadData()
                     self?.reloadButton.isHidden = true
                     self?.tableView.isHidden = false
                 }
+                self?.tableView.reloadData()
+                self?.reloadButton.isHidden = true
+                self?.tableView.isHidden = false
             } else {
                 self?.reloadButton.isHidden = false
             }

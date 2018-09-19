@@ -26,6 +26,7 @@ target 'GaldenApp' do
   pod 'Apollo'
   pod 'SwiftSoup'
   pod 'SwiftDate'
+  pod 'RichEditorView'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

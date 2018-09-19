@@ -49,8 +49,17 @@ class LaunchViewController: UIViewController {
         }
         
         DispatchQueue.main.async {
-            let tabBarController = Configurations.shared.configureUI()
-            self.present(tabBarController, animated: true, completion: nil)
+            if keychain.get("userKey") != nil {
+                let getSessionUserQuery = GetSessionUserQuery()
+                apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
+                    [weak self] result,error in
+                    if error == nil {
+                        sessionUser = result?.data?.sessionUser
+                        let tabBarController = Configurations.shared.configureUI()
+                        self?.present(tabBarController, animated: true, completion: nil)
+                    }
+                }
+            }
         }
         // Do any additional setup after loading the view.
     }
