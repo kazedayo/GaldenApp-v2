@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import Apollo
 
 class LaunchViewController: UIViewController {
     
@@ -48,17 +49,26 @@ class LaunchViewController: UIViewController {
             make.centerY.equalToSuperview().offset(100)
         }
         
-        DispatchQueue.main.async {
-            if keychain.get("userKey") != nil {
-                let getSessionUserQuery = GetSessionUserQuery()
-                apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
-                    [weak self] result,error in
-                    if error == nil {
+        if keychain.get("userKey") != nil {
+            let getSessionUserQuery = GetSessionUserQuery()
+            apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
+                [weak self] result,error in
+                if error == nil {
+                    if result?.data?.sessionUser == nil {
+                        keychain.delete("userKey")
+                        //reconfigure apollo
+                        apollo = Configurations.shared.configureApollo()
+                    } else {
                         sessionUser = result?.data?.sessionUser
-                        let tabBarController = Configurations.shared.configureUI()
-                        self?.present(tabBarController, animated: true, completion: nil)
                     }
+                    let tabBarController = Configurations.shared.configureUI()
+                    self?.present(tabBarController, animated: true, completion: nil)
                 }
+            }
+        } else {
+            DispatchQueue.main.async {
+                let tabBarController = Configurations.shared.configureUI()
+                self.present(tabBarController, animated: true, completion: nil)
             }
         }
         // Do any additional setup after loading the view.

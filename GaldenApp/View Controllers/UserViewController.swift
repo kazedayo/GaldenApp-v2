@@ -124,6 +124,16 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let indexPath = tableView.indexPathForSelectedRow
+        if indexPath != nil {
+            tableView.deselectRow(at: indexPath!, animated: true)
+            tableView.reloadRows(at: [indexPath!], with: .fade)
+        }
+        self.navigationController?.isToolbarHidden = true
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var count = 0
         if segmentControl.selectedSegmentIndex == 0 {
@@ -143,7 +153,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             let count = self.userThreads[indexPath.row].totalReplies
             let dateMap = self.userThreads[indexPath.row].replies.map {$0.date}
             let date = dateMap.last!.toISODate()
-            let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTraditional)
+            let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan)
             cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
             cell.threadTitleLabel.text = title
             cell.threadTitleLabel.textColor = .lightGray
@@ -183,7 +193,48 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
         return cellToReturn
     }
-
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if segmentControl.selectedSegmentIndex == 0 {
+            DispatchQueue.main.async {
+                let contentVC = ContentViewController()
+                let selectedThread = self.userThreads[indexPath.row].id
+                contentVC.tID = selectedThread
+                contentVC.title = self.userThreads[indexPath.row].title
+                contentVC.sender = "cell"
+                contentVC.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(contentVC, animated: true)
+            }
+        } else if segmentControl.selectedSegmentIndex == 1 {
+            let alert = UIAlertController(title: "解除封鎖", message: "你確定要解除封鎖此會員?", preferredStyle: .alert)
+            let yes = UIAlertAction(title: "55", style: .destructive, handler: {
+                action in
+                let unblockUserMutation = UnblockUserMutation(id: self.blockedUsers[indexPath.row].id)
+                apollo.perform(mutation: unblockUserMutation) {
+                    [weak self] result,error in
+                    if result?.data?.unblockUser == true {
+                        let success = UIAlertController(title: "成功", message: "你已解除此會員封鎖", preferredStyle: .alert)
+                        let ok = UIAlertAction(title: "OK", style: .cancel, handler: {
+                            action in
+                            self?.getBlockedUsers {
+                                success.dismiss(animated: true, completion: nil)
+                            }
+                        })
+                        success.addAction(ok)
+                        self?.present(success,animated: true,completion: nil)
+                    }
+                }
+            })
+            let no = UIAlertAction(title: "不了", style: .cancel, handler: {
+                action in
+                tableView.deselectRow(at: indexPath, animated: true)
+            })
+            alert.addAction(yes)
+            alert.addAction(no)
+            present(alert,animated: true,completion: nil)
+        }
+    }
+    
     /*
     // MARK: - Navigation
 

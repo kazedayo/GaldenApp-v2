@@ -9,7 +9,6 @@
 import UIKit
 import KeychainSwift
 import PKHUD
-import GoogleMobileAds
 import IQKeyboardManagerSwift
 import URLNavigator
 import SwiftyStoreKit
@@ -18,16 +17,8 @@ import Apollo
 
 let navigator = Navigator()
 let keychain = KeychainSwift()
-var apollo: ApolloClient = {
-    let configuration = URLSessionConfiguration.default
-    // Add additional headers as needed
-    configuration.httpAdditionalHeaders = ["Authorization": "Bearer \(keychain.get("userKey") ?? "")"] // Replace `<token>`
-    
-    let url = URL(string: "https://hkgalden.org/_")!
-    
-    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-}()
-var sessionUser: GetSessionUserQuery.Data.SessionUser?
+var apollo: ApolloClient = Configurations.shared.configureApollo()
+var sessionUser: GetSessionUserQuery.Data.SessionUser? = nil
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -64,8 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = true
         
-        GADMobileAds.configure(withApplicationID: "ca-app-pub-6919429787140423~6701059788")
-        
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
             for purchase in purchases {
                 switch purchase.transaction.transactionState {
@@ -96,9 +85,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let root = LaunchViewController()
         window?.rootViewController = root
-        
-        //development use(remove before publish)
-        keychain.set(true,forKey: "noAd")
         
         if (keychain.getBool("noAd") == nil) {
             keychain.set(false, forKey: "noAd")

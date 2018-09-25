@@ -7,7 +7,6 @@
 
 import UIKit
 import PKHUD
-import GoogleMobileAds
 import QuartzCore
 import SideMenu
 import RealmSwift
@@ -15,7 +14,7 @@ import SwiftEntryKit
 import SwiftDate
 import Apollo
 
-class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,GADBannerViewDelegate,UIPopoverPresentationControllerDelegate {
+class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UIPopoverPresentationControllerDelegate {
     
     //MARK: Properties
     var threads: [ThreadListDetails] = []
@@ -28,7 +27,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     let realm = try! Realm()
     let tableView = UITableView()
-    let adBannerView = GADBannerView()
     let sideMenuVC = SideMenuViewController()
     lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
@@ -66,11 +64,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
         tableView.addGestureRecognizer(longPress)
         view.addSubview(tableView)
-        
-        adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
-        adBannerView.delegate = self
-        adBannerView.rootViewController = self
-        view.addSubview(adBannerView)
         
         tableView.snp.makeConstraints {
             (make) -> Void in
@@ -122,17 +115,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         })
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.isToolbarHidden = true
-        if (keychain.getBool("noAd") == true) {
-            adBannerView.removeFromSuperview()
-            view.layoutSubviews()
-        } else {
-            adBannerView.load(GADRequest())
-        }
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let indexPath = tableView.indexPathForSelectedRow
@@ -140,29 +122,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             tableView.deselectRow(at: indexPath!, animated: true)
             tableView.reloadRows(at: [indexPath!], with: .fade)
         }
-        if #available(iOS 11.0, *) {
-            self.tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
-            self.tableView.scrollIndicatorInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: adBannerView.frame.height, right: 0)
-        } else {
-            self.tableView.contentInset = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
-            self.tableView.scrollIndicatorInsets = UIEdgeInsets.init(top: (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height, left: 0, bottom: (navigationController?.toolbar.frame.height)! + adBannerView.frame.height, right: 0)
-        }
-    }
-    
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        //print("Banner loaded successfully")
-        // Reposition the banner ad to create a slide down effect
-        let translateTransform = CGAffineTransform(translationX: 0, y: bannerView.bounds.size.height)
-        bannerView.transform = translateTransform
-        
-        UIView.animate(withDuration: 0.5) {
-            bannerView.transform = CGAffineTransform.identity
-        }
-    }
-    
-    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
-        //print("Fail to receive ads")
-        print(error)
     }
     
     override func didReceiveMemoryWarning() {
@@ -189,7 +148,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let count = self.threads[indexPath.row].totalReplies
         let dateMap = self.threads[indexPath.row].replies.map {$0.date}
         let date = dateMap.last!.toISODate()
-        let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTraditional)
+        let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan)
         let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
         if (readThreads != nil) {
@@ -338,9 +297,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 if keychain.get("userKey") != nil {
                     let blockedUserIds = sessionUser?.blockedUserIds
                     self?.threads = (self?.threads.filter {!(blockedUserIds?.contains($0.replies[0].author.id))!})!
-                    self?.tableView.reloadData()
-                    self?.reloadButton.isHidden = true
-                    self?.tableView.isHidden = false
                 }
                 self?.tableView.reloadData()
                 self?.reloadButton.isHidden = true

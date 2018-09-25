@@ -49,11 +49,8 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
     */
     
     @objc func loginButtonPressed(_ sender: UIButton) {
-        print("entry displayed")
-        var attributes = EntryAttributes.shared.centerEntryZoom()
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.8)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.8)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        //print("entry displayed")
+        var attributes = EntryAttributes.shared.loginEntry()
         let url = URL(string: "https://hkgalden.org/oauth/v1/authorize?client_id=15897154848030720.apis.hkgalden.org")
         let request = URLRequest(url: url!)
         webView.load(request)
@@ -64,24 +61,22 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
         let urlStr = navigationAction.request.url?.absoluteString
         if (urlStr?.contains("http://localhost/callback"))! {
             let userKey = urlStr!.replacingOccurrences(of: "http://localhost/callback?token=", with: "")
-            print(userKey)
+            //print(userKey)
             keychain.set(userKey, forKey: "userKey")
-            apollo = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["Authorization": "Bearer \(keychain.get("userKey") ?? "")"] // Replace `<token>`
-                
-                let url = URL(string: "https://hkgalden.org/_")!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
-            SwiftEntryKit.dismiss()
-            var controllers = (tabBarController?.viewControllers)!
-            let userViewController = UserViewController()
-            userViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
-            let nav = UINavigationController(rootViewController: userViewController)
-            controllers[1] = nav
-            tabBarController?.setViewControllers(controllers, animated: false)
+            //reconfigure apollo
+            apollo = Configurations.shared.configureApollo()
+            let getSessionUserQuery = GetSessionUserQuery()
+            apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
+                [weak self] result,error in
+                sessionUser = result?.data?.sessionUser
+                SwiftEntryKit.dismiss()
+                var controllers = (self?.tabBarController?.viewControllers)!
+                let userViewController = UserViewController()
+                userViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
+                let nav = UINavigationController(rootViewController: userViewController)
+                controllers[1] = nav
+                self?.tabBarController?.setViewControllers(controllers, animated: false)
+            }
         }
         decisionHandler(.allow)
     }

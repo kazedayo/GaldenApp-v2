@@ -47,11 +47,7 @@ class SettingsTableViewController: UITableViewController {
         sourceCell.addSubview(sourceCodeButton)
         
         adIAPButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        if (keychain.getBool("noAd") == false) {
-            adIAPButton.setTitle(" 去除廣告", for: .normal)
-        } else {
-            adIAPButton.setTitle(" 多謝支持!", for: .normal)
-        }
+        adIAPButton.setTitle(" 捐獻", for: .normal)
         adIAPButton.tintColor = .white
         adIAPButton.addTarget(self, action: #selector(adIAPButtonPressed(_:)), for: .touchUpInside)
         iapCell.addSubview(adIAPButton)
@@ -170,7 +166,7 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @objc func adIAPButtonPressed(_ sender: UIButton) {
-        let alert = UIAlertController(title: "去除廣告", message: "支持廢青開發工作", preferredStyle: .alert)
+        let alert = UIAlertController(title: "捐獻箱", message: "支持廢青開發工作", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "畀錢!", style: .default, handler: {
             _ in
             NetworkActivityIndicatorManager.networkOperationStarted()
@@ -180,36 +176,13 @@ class SettingsTableViewController: UITableViewController {
                 case .success(_):
                     keychain.set(true, forKey: "noAd")
                     self.adIAPButton.isEnabled = false
-                    let success = UIAlertController(title: "購買成功!", message: "多謝支持!(重新啓動/入post再出post就會冇咗個廣告banner啦!)", preferredStyle: .alert)
+                    let success = UIAlertController(title: "購買成功!", message: "多謝支持!", preferredStyle: .alert)
                     success.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(success, animated: true, completion: nil)
                 case .error(let error):
                     let failure = UIAlertController(title: "購買失敗:(", message: "debug info: \(error.code)", preferredStyle: .alert)
                     failure.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(failure, animated: true, completion: nil)
-                }
-            }
-        }))
-        alert.addAction(UIAlertAction(title: "恢復購買", style: .default, handler: {
-            _ in
-            NetworkActivityIndicatorManager.networkOperationStarted()
-            SwiftyStoreKit.restorePurchases(atomically: true) { results in
-                NetworkActivityIndicatorManager.networkOperationFinished()
-                if results.restoreFailedPurchases.count > 0 {
-                    let failure = UIAlertController(title: "恢復失敗:(", message: "請稍後再試", preferredStyle: .alert)
-                    failure.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                    self.present(failure, animated: true, completion: nil)
-                }
-                else if results.restoredPurchases.count > 0 {
-                    keychain.set(true, forKey: "noAd")
-                    let success = UIAlertController(title: "恢復成功", message: "多謝支持!(重新啓動/入post再出post就會冇咗個廣告banner啦!)", preferredStyle: .alert)
-                    success.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                    self.present(success, animated: true, completion: nil)
-                }
-                else {
-                    let none = UIAlertController(title: "冇嘢恢復", message: "你未畀錢喎ching #ng#", preferredStyle: .alert)
-                    none.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                    self.present(none, animated: true, completion: nil)
                 }
             }
         }))

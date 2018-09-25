@@ -10,7 +10,6 @@ import UIKit
 import MarqueeLabel
 import WebKit
 import RealmSwift
-import GoogleMobileAds
 import SwiftyJSON
 import Kingfisher
 import SKPhotoBrowser
@@ -18,7 +17,7 @@ import SwiftEntryKit
 import SwiftSoup
 import SwiftDate
 
-class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,GADBannerViewDelegate {
+class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler {
     
     //MARK: Properties
     
@@ -34,14 +33,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var navType: NavigationType = .normal
     var scrollPosition: String?
     var sender: String?
+    var comments: [CommentsRecursive]?
     var titleLabel = MarqueeLabel()
     private var webView: WKWebView!
     
-    let adBannerView = GADBannerView()
     let activityIndicator = UIActivityIndicatorView()
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var replyButton = UIBarButtonItem(image: UIImage(named: "Reply"), style: .plain, target: self, action: #selector(replyButtonPressed))
-    lazy var moreButton = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(moreButtonPressed))
+    lazy var shareButton = UIBarButtonItem(image: UIImage(named: "Share"), style: .plain, target: self, action: #selector(share))
     lazy var pageButton = UIBarButtonItem(title: "撈緊...", style: .plain, target: self, action: #selector(pageButtonPressed))
     lazy var prevButton = UIBarButtonItem(image: UIImage(named: "previous"), style: .plain, target: self, action: #selector(prevButtonPressed(_:)))
     lazy var nextButton = UIBarButtonItem(image: UIImage(named: "next"), style: .plain, target: self, action: #selector(nextButtonPressed(_:)))
@@ -77,8 +76,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         replyButton.isEnabled = false
         pageButton.isEnabled = false
         pageButton.tintColor = .white
-        moreButton.isEnabled = false
-        toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,moreButton,flexibleSpace,nextButton]
+        shareButton.isEnabled = false
+        toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,shareButton,flexibleSpace,nextButton]
         
         titleLabel.textColor = .white
         titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
@@ -87,11 +86,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         titleLabel.fadeLength = 5
         titleLabel.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
         titleLabel.textAlignment = .center
-        
-        adBannerView.adUnitID = "ca-app-pub-6919429787140423/1613095078"
-        adBannerView.delegate = self
-        adBannerView.rootViewController = self
-        view.addSubview(adBannerView)
         
         activityIndicator.snp.makeConstraints {
             (make) -> Void in
@@ -107,17 +101,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             make.trailing.equalToSuperview()
         }
         
-        adBannerView.snp.makeConstraints {
-            (make) -> Void in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                make.bottom.equalTo(view.snp.bottomMargin)
-            } else {
-                make.bottom.equalTo(view.snp.bottom).offset(-44)
-            }
-            make.height.equalTo(50)
-        }
         let realm = try! Realm()
         let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.tID)
         if thisPost != nil && self.sender == "cell" {
@@ -134,11 +117,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView.configuration.userContentController.add(self, name: "block")
         webView.configuration.userContentController.add(self, name: "refresh")
         webView.configuration.userContentController.add(self, name: "imageView")
-        if (keychain.getBool("noAd") == true) {
-            adBannerView.removeFromSuperview()
-        } else {
-            adBannerView.load(GADRequest())
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -169,13 +147,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         })
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if (keychain.getBool("noAd") == false) {
-            webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, adBannerView.frame.height, 0)
-        }
-    }
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if webView.isLoading == true {
@@ -189,28 +160,41 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         // Dispose of any resources that can be recreated.
     }
     
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        //print("Banner loaded successfully")
-        // Reposition the banner ad to create a slide down effect
-        let translateTransform = CGAffineTransform(translationX: 0, y: bannerView.bounds.size.height)
-        bannerView.transform = translateTransform
-        
-        UIView.animate(withDuration: 0.5) {
-            bannerView.transform = CGAffineTransform.identity
+    func quoteButtonPressed(index: String) {
+        let parentID = comments![Int(index)!].fragments.commentFields.id
+        let composeVC = ComposeViewController()
+        let composeNav = UINavigationController(rootViewController: composeVC)
+        composeVC.topicID = self.tID
+        composeVC.composeType = .reply
+        composeVC.quoteID = parentID
+        composeVC.contentVC = self
+        present(composeNav, animated: true, completion: nil)
+    }
+    
+    func blockButtonPressed(index: String) {
+        let blockUserMutation = BlockUserMutation(id: comments![Int(index)!].fragments.commentFields.author.id)
+        apollo.perform(mutation: blockUserMutation) {
+            [weak self] result,error in
+            if result?.data?.blockUser == true {
+                let getSessionUserQuery = GetSessionUserQuery()
+                apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
+                    [weak self] result, error in
+                    sessionUser = result?.data?.sessionUser
+                    let alert = UIAlertController(title: "成功", message: "你已封鎖此會員", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "OK", style: .cancel, handler: {
+                        action in
+                        self?.updateSequence()
+                    })
+                    alert.addAction(action)
+                    self?.present(alert,animated: true,completion: nil)
+                }
+            } else {
+                let alert = UIAlertController(title: "失敗", message: "請再試", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                alert.addAction(action)
+                self?.present(alert,animated: true,completion: nil)
+            }
         }
-    }
-    
-    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
-        //print("Fail to receive ads")
-        print(error)
-    }
-    
-    func quoteButtonPressed(type: String) {
-        
-    }
-    
-    func blockButtonPressed(type: String) {
-        
     }
     
     func f5buttonPressed() {
@@ -221,10 +205,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             self.scrollPosition = position
             self.updateSequence()
         })
-    }
-    
-    @objc func moreButtonPressed() {
-        
     }
     
     @objc func pageButtonPressed() {
@@ -243,13 +223,19 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @objc func replyButtonPressed() {
-        /*let composeVC = ComposeViewController()
-        let composeNav = UINavigationController(rootViewController: composeVC)
-        composeVC.topicID = self.threadIdReceived
-        composeVC.composeType = .reply
-        composeVC.contentVC = self
-        //SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())
-        present(composeNav, animated: true, completion: nil)*/
+        if keychain.get("userKey") != nil {
+            let composeVC = ComposeViewController()
+            let composeNav = UINavigationController(rootViewController: composeVC)
+            composeVC.topicID = self.tID
+            composeVC.composeType = .reply
+            composeVC.contentVC = self
+            present(composeNav, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: nil, message: "請先登入", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alert.addAction(ok)
+            present(alert,animated: true,completion: nil)
+        }
     }
     
     func quote() {
@@ -286,19 +272,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func unwindAfterReply() {
-        /*HKGaldenAPI.shared.pageCount(postId: threadIdReceived, completion: {
-            count in
-            self.pageCount = count
-            self.pageNow = Int(self.pageCount)
-            self.pageButton.title = "第\(self.pageNow)頁"
-            self.navType = .reply
-            self.updateSequence()
-        })*/
+        self.updateSequence()
     }
     
-    func share(shareContent: String) {
-        let shareView = UIActivityViewController(activityItems:[shareContent],applicationActivities:nil)
-        shareView.excludedActivityTypes = [.airDrop,.addToReadingList,.assignToContact,.openInIBooks,.saveToCameraRoll]
+    @objc func share() {
+        let shareView = UIActivityViewController(activityItems:["https://hkgalden.org/forum/thread/\(tID!)/\(pageNow)"],applicationActivities:nil)
         DispatchQueue.main.asyncAfter(deadline: 0.5, execute: {
             if UIDevice.current.userInterfaceIdiom == .pad {
                 shareView.popoverPresentationController?.sourceView = self.view
@@ -376,16 +354,18 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         apollo.fetch(query: getThreadContentQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
             if error == nil {
+                var contentHTML: String?
                 guard let thread = result?.data?.thread else { return }
-                var contentHTML = self?.constructComments(thread: thread)
+                contentHTML = self?.constructComments(thread: thread)
                 self?.titleLabel.text = thread.title
                 self?.navigationItem.titleView = self?.titleLabel
-                self?.pageCount = (Double(thread.totalReplies)/50.0).rounded(.up)
+                let totalPage = ceil(Double(thread.totalReplies)/50.0)
+                self?.pageCount = totalPage
                 self?.totalReplies = thread.totalReplies
                 self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
                 self?.buttonLogic()
                 
-                if (self?.pageNow==Int((self?.pageCount)!)) {
+                if (self?.pageNow==Int(totalPage)) {
                     contentHTML!.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
@@ -399,9 +379,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     private func constructComments(thread: GetThreadContentQuery.Data.Thread) -> String {
         var completedHTML = ""
-        for i in 0 ..< thread.replies.count {
+        var comment = thread.replies.map {$0.fragments.commentsRecursive}
+        var blockedUserIds = [String]()
+        if keychain.get("userKey") != nil {
+            blockedUserIds = (sessionUser?.blockedUserIds)!
+            comment = comment.filter {!blockedUserIds.contains($0.fragments.commentFields.author.id)}
+        }
+        self.comments = comment
+        for i in 0 ..< comment.count {
             var avatarurl = ""
-            let comment = thread.replies.map {$0.fragments.commentsRecursive}
             if comment[i].fragments.commentFields.author.avatar == nil {
                 avatarurl = "https://i.imgur.com/mrD0tRG.png"
             } else {
@@ -435,29 +421,41 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             let firstLayer = rootParent?.parent
             let secondLayer = firstLayer?.parent
             let thirdLayer = secondLayer?.parent
-            if (rootParent?.fragments.commentFields.content != nil) {
-                quoteHTML = "<blockquote id=\"1\">\(rootParent!.fragments.commentFields.content)</blockquote>"
-                var doc = try! SwiftSoup.parse(quoteHTML)
-                var quote = try! doc.select("blockquote#1")
-                if (firstLayer?.fragments.commentFields.content != nil) {
-                    try! quote.prepend("<blockquote id=\"2\">\(firstLayer!.fragments.commentFields.content)</blockquote>")
-                    if (secondLayer?.fragments.commentFields.content != nil) {
-                        quote = try! doc.select("blockquote#2")
-                        try! quote.prepend("<blockquote id=\"3\">\(secondLayer!.fragments.commentFields.content)</blockquote>")
-                        if (thirdLayer?.fragments.commentFields.content != nil) {
-                            quote = try! doc.select("blockquote#3")
-                            try! quote.prepend("<blockquote id=\"4\">\(thirdLayer!.fragments.commentFields.content)</blockquote>")
-                        }
-                    }
-                }
-                doc = galdenParser(doc: doc)
-                quoteHTML = try! doc.html()
+            
+            //construct quote chain
+            var doc = try! SwiftSoup.parse(quoteHTML)
+            if (rootParent?.fragments.commentFields.content != nil && blockedUserIds.contains((rootParent?.fragments.commentFields.author.id)!) == false) {
+                try! doc.body()!.prepend("<blockquote>\(rootParent!.fragments.commentFields.content)</blockquote>")
             }
+            if (firstLayer?.fragments.commentFields.content != nil && blockedUserIds.contains((firstLayer?.fragments.commentFields.author.id)!) == false) {
+                if try! doc.select("blockquote").last() == nil {
+                    try! doc.body()!.prepend("<blockquote>\(firstLayer!.fragments.commentFields.content)</blockquote>")
+                } else {
+                    try! doc.select("blockquote").last()!.prepend("<blockquote>\(firstLayer!.fragments.commentFields.content)</blockquote>")
+                }
+            }
+            if (secondLayer?.fragments.commentFields.content != nil && blockedUserIds.contains((secondLayer?.fragments.commentFields.author.id)!) == false) {
+                if try! doc.select("blockquote").last() == nil {
+                    try! doc.body()!.prepend("<blockquote>\(secondLayer!.fragments.commentFields.content)</blockquote>")
+                } else {
+                    try! doc.select("blockquote").last()!.prepend("<blockquote>\(secondLayer!.fragments.commentFields.content)</blockquote>")
+                }
+            }
+            if (thirdLayer?.fragments.commentFields.content != nil && blockedUserIds.contains((thirdLayer?.fragments.commentFields.author.id)!) == false) {
+                if try! doc.select("blockquote").last() == nil {
+                    try! doc.body()!.prepend("<blockquote>\(thirdLayer!.fragments.commentFields.content)</blockquote>")
+                } else {
+                    try! doc.select("blockquote").last()!.prepend("<blockquote>\(thirdLayer!.fragments.commentFields.content)</blockquote>")
+                }
+            }
+                
+            doc = galdenParser(doc: doc)
+            quoteHTML = try! doc.body()!.html()
             
             var templateHTML = "<div class=\"comment\" id=\"\(comment[i].fragments.commentFields.floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(comment[i].fragments.commentFields.author.nickname)</td><td class=\"righttext\">\(date)</td></tr><tr><td class=\"lefttext\" style=\"color:\(groupColor)\">\(groupName)</td><td class=\"righttext\">#\(comment[i].fragments.commentFields.floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(quoteHTML)\(comment[i].fragments.commentFields.content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(i)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(i)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
-            var doc = try! SwiftSoup.parse(templateHTML)
+            doc = try! SwiftSoup.parse(templateHTML)
             doc = galdenParser(doc: doc)
-            templateHTML = try! doc.html()
+            templateHTML = try! doc.body()!.html()
             completedHTML.append(templateHTML)
         }
         return completedHTML
@@ -513,7 +511,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
         
         //center parse
-        let center = try! doc.select("span[data-nodetype=center]")
+        let center = try! doc.select("p[data-nodetype=center]")
         for i in 0 ..< center.size() {
             let textCenter = try! center.get(i).text()
             try! center.get(i).wrap("<div align=\"center\">\(textCenter)</div>")
@@ -521,7 +519,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
         
         //right parse
-        let right = try! doc.select("span[data-nodetype=right]")
+        let right = try! doc.select("p[data-nodetype=right]")
         for i in 0 ..< right.size() {
             let textRight = try! right.get(i).text()
             try! right.get(i).wrap("<div align=\"right\">\(textRight)</div>")
@@ -572,7 +570,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         activityIndicator.isHidden = true
         replyButton.isEnabled = true
         pageButton.isEnabled = true
-        moreButton.isEnabled = true
+        shareButton.isEnabled = true
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         webView.evaluateJavaScript("new Blazy();", completionHandler: {
             result,error in
@@ -587,7 +585,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 case .refresh:
                     webView.evaluateJavaScript("$(\"#\((self.scrollPosition!))\").get(0).scrollIntoView();", completionHandler: {
                         result,error in
-                        DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                        DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
                             NetworkActivityIndicatorManager.networkOperationFinished()
                             webView.isHidden = false
                             self.navType = .normal
@@ -599,7 +597,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     if thisPost != nil && self.sender == "cell" {
                         self.webView.evaluateJavaScript("$(\"#\((thisPost?.position)!)\").get(0).scrollIntoView();", completionHandler: {
                             result,error in
-                            DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                            DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
                                 NetworkActivityIndicatorManager.networkOperationFinished()
                                 webView.isHidden = false
                             })
@@ -641,15 +639,29 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "quote" {
-            self.quoteButtonPressed(type: message.body as! String)
+            if keychain.get("userKey") != nil {
+                self.quoteButtonPressed(index: message.body as! String)
+            } else {
+                let alert = UIAlertController(title: nil, message: "請先登入", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                alert.addAction(ok)
+                present(alert,animated: true,completion: nil)
+            }
         } else if message.name == "block" {
-            let alert = UIAlertController.init(title: "扑柒", message: "你確定要扑柒此會然?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
-                _ in
-                self.blockButtonPressed(type: message.body as! String)
-            }))
-            alert.addAction(UIAlertAction.init(title: "不了", style: .cancel, handler: nil))
-            present(alert,animated: true)
+            if keychain.get("userKey") != nil {
+                let alert = UIAlertController.init(title: "封鎖會員", message: "你確定要封鎖此會員?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
+                    _ in
+                    self.blockButtonPressed(index: message.body as! String)
+                }))
+                alert.addAction(UIAlertAction.init(title: "不了", style: .cancel, handler: nil))
+                present(alert,animated: true)
+            } else {
+                let alert = UIAlertController(title: nil, message: "請先登入", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                alert.addAction(ok)
+                present(alert,animated: true,completion: nil)
+            }
         } else if message.name == "refresh" {
             self.f5buttonPressed()
         } else if message.name == "imageView" {

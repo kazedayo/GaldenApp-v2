@@ -901,6 +901,188 @@ public final class GetSessionUserQuery: GraphQLQuery {
   }
 }
 
+public final class BlockUserMutation: GraphQLMutation {
+  public let operationDefinition =
+    "mutation BlockUser($id: String!) {\n  blockUser(id: $id)\n}"
+
+  public var id: String
+
+  public init(id: String) {
+    self.id = id
+  }
+
+  public var variables: GraphQLMap? {
+    return ["id": id]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Mutation"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("blockUser", arguments: ["id": GraphQLVariable("id")], type: .nonNull(.scalar(Bool.self))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(blockUser: Bool) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "blockUser": blockUser])
+    }
+
+    public var blockUser: Bool {
+      get {
+        return resultMap["blockUser"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "blockUser")
+      }
+    }
+  }
+}
+
+public final class UnblockUserMutation: GraphQLMutation {
+  public let operationDefinition =
+    "mutation UnblockUser($id: String!) {\n  unblockUser(id: $id)\n}"
+
+  public var id: String
+
+  public init(id: String) {
+    self.id = id
+  }
+
+  public var variables: GraphQLMap? {
+    return ["id": id]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Mutation"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("unblockUser", arguments: ["id": GraphQLVariable("id")], type: .nonNull(.scalar(Bool.self))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(unblockUser: Bool) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "unblockUser": unblockUser])
+    }
+
+    public var unblockUser: Bool {
+      get {
+        return resultMap["unblockUser"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "unblockUser")
+      }
+    }
+  }
+}
+
+public final class ReplyThreadMutation: GraphQLMutation {
+  public let operationDefinition =
+    "mutation ReplyThread($threadId: Int!, $parentId: String, $html: String!) {\n  replyThread(threadId: $threadId, parentId: $parentId, html: $html) {\n    __typename\n    ...CommentsRecursive\n  }\n}"
+
+  public var queryDocument: String { return operationDefinition.appending(CommentsRecursive.fragmentDefinition).appending(CommentFields.fragmentDefinition) }
+
+  public var threadId: Int
+  public var parentId: String?
+  public var html: String
+
+  public init(threadId: Int, parentId: String? = nil, html: String) {
+    self.threadId = threadId
+    self.parentId = parentId
+    self.html = html
+  }
+
+  public var variables: GraphQLMap? {
+    return ["threadId": threadId, "parentId": parentId, "html": html]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Mutation"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("replyThread", arguments: ["threadId": GraphQLVariable("threadId"), "parentId": GraphQLVariable("parentId"), "html": GraphQLVariable("html")], type: .nonNull(.object(ReplyThread.selections))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(replyThread: ReplyThread) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "replyThread": replyThread.resultMap])
+    }
+
+    public var replyThread: ReplyThread {
+      get {
+        return ReplyThread(unsafeResultMap: resultMap["replyThread"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "replyThread")
+      }
+    }
+
+    public struct ReplyThread: GraphQLSelectionSet {
+      public static let possibleTypes = ["Reply"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLFragmentSpread(CommentsRecursive.self),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var commentsRecursive: CommentsRecursive {
+          get {
+            return CommentsRecursive(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+  }
+}
+
 public struct ChannelDetails: GraphQLFragment {
   public static let fragmentDefinition =
     "fragment ChannelDetails on Channel {\n  __typename\n  id\n  name\n  tags {\n    __typename\n    ...TagDetails\n  }\n}"

@@ -3,27 +3,26 @@ PODS:
   - Apollo (0.9.3):
     - Apollo/Core (= 0.9.3)
   - Apollo/Core (0.9.3)
-  - Blueprints (0.7.1)
-  - Google-Mobile-Ads-SDK (7.33.1)
+  - Blueprints (0.7.2)
   - Hero (1.3.1)
   - IQKeyboardManagerSwift (6.1.1)
-  - KeychainSwift (11.0.0)
-  - Kingfisher (4.9.0)
-  - MarqueeLabel (3.1.6):
-    - MarqueeLabel/ObjC (= 3.1.6)
-  - MarqueeLabel/ObjC (3.1.6)
+  - KeychainSwift (12.0.0)
+  - Kingfisher (4.10.0)
+  - MarqueeLabel (3.2.0):
+    - MarqueeLabel/ObjC (= 3.2.0)
+  - MarqueeLabel/ObjC (3.2.0)
   - PKHUD (5.1.0)
   - QuickLayout (2.0.2)
-  - Realm (3.9.0):
-    - Realm/Headers (= 3.9.0)
-  - Realm/Headers (3.9.0)
-  - RealmSwift (3.9.0):
-    - Realm (= 3.9.0)
+  - Realm (3.10.0):
+    - Realm/Headers (= 3.10.0)
+  - Realm/Headers (3.10.0)
+  - RealmSwift (3.10.0):
+    - Realm (= 3.10.0)
   - RichEditorView (5.0.0)
   - SideMenu (4.0.0)
   - SKPhotoBrowser (5.1.0)
-  - SnapKit (4.0.0)
-  - SwiftDate (5.0.7)
+  - SnapKit (4.0.1)
+  - SwiftDate (5.0.9)
   - SwiftEntryKit (0.6.0):
     - QuickLayout (= 2.0.2)
   - SwiftSoup (1.7.2)
@@ -35,7 +34,6 @@ DEPENDENCIES:
   - Alamofire
   - Apollo
   - Blueprints
-  - Google-Mobile-Ads-SDK
   - Hero
   - IQKeyboardManagerSwift
   - KeychainSwift
@@ -45,7 +43,7 @@ DEPENDENCIES:
   - RealmSwift
   - RichEditorView
   - SideMenu
-  - SKPhotoBrowser (~> 5.1.0)
+  - SKPhotoBrowser
   - SnapKit
   - SwiftDate
   - SwiftEntryKit
@@ -59,7 +57,6 @@ SPEC REPOS:
     - Alamofire
     - Apollo
     - Blueprints
-    - Google-Mobile-Ads-SDK
     - Hero
     - IQKeyboardManagerSwift
     - KeychainSwift
@@ -83,28 +80,27 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Apollo: 38270f8bdc031ac07d4de3ec068a2289d7d287e0
-  Blueprints: 13763dba4ecb22195333472835caddfc0872c7d7
-  Google-Mobile-Ads-SDK: 71c6d3e8d8f52673fa5a83fc0d027623b11fde16
+  Blueprints: cf5f81988848a747cffd2f77ed18ef6a12d69f18
   Hero: 1c3c625ba05856f305d29f5c270f8766c5ff2df7
   IQKeyboardManagerSwift: 977affaeb4d6e971975c7790a6850f31d38f1207
-  KeychainSwift: bea6bd9f98af7b8d7ca4aa79fe105c00fab532db
-  Kingfisher: 64539b51826b778206daa6ed815d12653caa69dd
-  MarqueeLabel: 0c41f08ef5773e29c0f71064a8fa788a2fd8b365
+  KeychainSwift: d5e776578587ee5958ce36601df22f168f65138a
+  Kingfisher: 43c4b802d8b5256cf1f4379e9cd10b329be6d3e2
+  MarqueeLabel: 440a502b91a9179bd98f9fff00ba1150650a1c0e
   PKHUD: 62ea46a1e88c4def1da784878d199bb54c841e3c
   QuickLayout: a730730b646b231fd4ef7cffaeb1e81fe0e1ca92
-  Realm: 3d36f208bf3aff8335dc3298742140182bde4edb
-  RealmSwift: aa4d11917bfcfaa3ed51f219102a487ecd895447
+  Realm: 85ab9e4f779d66f6e9ffeb118dc25b7f130c96ac
+  RealmSwift: 69121c8b86d0ae005fb779efdb10e606732e1c74
   RichEditorView: 1bbb07b87ca2d479ac29a6877014b38b8df233ef
   SideMenu: 70ee5657df63ec3382660ec4ef470bf1cf5db07d
   SKPhotoBrowser: c20c1da34d737b4e3e101feead6c8dd92ebf860a
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  SwiftDate: f053fb89250c59af5eff777f3b832d2b9dd57403
+  SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
+  SwiftDate: 52b718d32ec006861a2be2756cbfa482d438e781
   SwiftEntryKit: ba070426598304c5773d84b54ed8b0763b5f2060
   SwiftSoup: e5f61d37e3d802a4b5db81b4945de3da9bfdf115
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   SwiftyStoreKit: 9ebd15971e28aa2989825fe8bc092eb5f75dd0b2
   URLNavigator: 2357a32f3b3787b748bf87deb927761f8b0f7f53
 
-PODFILE CHECKSUM: 030644deff0829e2f627974d65af508ce9b5f57f
+PODFILE CHECKSUM: be721277c27a51f58ea402aa0325759bad7f0734
 
 COCOAPODS: 1.5.3

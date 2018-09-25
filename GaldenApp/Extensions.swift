@@ -9,6 +9,7 @@
 import UIKit
 import SwiftEntryKit
 import Hero
+import Apollo
 
 extension String {
     func nsRange(from range: Range<Index>) -> NSRange {
@@ -188,6 +189,28 @@ class EntryAttributes {
         return attributes
     }
     
+    public func loginEntry() -> EKAttributes {
+        var attributes = EKAttributes()
+        attributes.position = .center
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.8)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.8)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
+        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
+        attributes.positionConstraints.keyboardRelation = keyboardRelation
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .dismiss
+        attributes.entryInteraction = .forward
+        attributes.screenBackground = .visualEffect(style: .dark)
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
+        return attributes
+    }
+    
 }
 
 class Configurations {
@@ -213,5 +236,15 @@ class Configurations {
         tabBarController.hero.isEnabled = true
         tabBarController.hero.modalAnimationType = .zoom
         return tabBarController
+    }
+    
+    func configureApollo() -> ApolloClient {
+        let configuration = URLSessionConfiguration.default
+        // Add additional headers as needed
+        configuration.httpAdditionalHeaders = ["Authorization": "Bearer \(keychain.get("userKey") ?? "")"] // Replace `<token>`
+        
+        let url = URL(string: "https://hkgalden.org/_")!
+        
+        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
     }
 }
