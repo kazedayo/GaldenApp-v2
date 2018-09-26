@@ -50,7 +50,7 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
     
     @objc func loginButtonPressed(_ sender: UIButton) {
         //print("entry displayed")
-        var attributes = EntryAttributes.shared.loginEntry()
+        let attributes = EntryAttributes.shared.loginEntry()
         let url = URL(string: "https://hkgalden.org/oauth/v1/authorize?client_id=15897154848030720.apis.hkgalden.org")
         let request = URLRequest(url: url!)
         webView.load(request)

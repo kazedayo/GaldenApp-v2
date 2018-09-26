@@ -16,8 +16,8 @@ protocol IconKeyboardDelegate: class {
 
 class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
     
-    let iconCode = ["[369]","#adore#","#yup#","O:-)",":-[","#ass#","[banghead]",":D","[bomb]","[bouncer]","[bouncy]","#bye#","[censored]","#cn#",":o)",":~(","xx(",":-]","#ng#","#fire#","[flowerface]",":-(","fuck","@_@","#good#","#hehe#","#hoho#","#kill#","#kill2#","^3^","#love#","#no#","[offtopic]",":O","[photo]","[shocking]","[slick]",":)","[sosad]","#oh#",":P",";-)","?_?","???","[yipes]","Z_Z","#lol#"]
-    let iconUrl = ["369","adore","agree","angel","angry","ass","banghead","biggrin","bomb","bouncer","bouncy","bye","censored","chicken","clown","cry","dead","devil","donno","fire","flowerface","frown","fuck","@","good","hehe","hoho","kill","kill2","kiss","love","no","offtopic","oh","photo","shocking","slick","smile","sosad","surprise","tongue","wink","wonder","wonder2","yipes","z","lol"].map({URL(string:"https://hkgalden.com/face/hkg/\($0).gif")!})
+    var segmentedControl: UISegmentedControl!
+    var collectionView: UICollectionView!
     weak var keyboardDelegate: IconKeyboardDelegate?
     
     override init(frame: CGRect) {
@@ -29,19 +29,34 @@ class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
         layout.itemSize = CGSize(width: 100, height: 50)
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .darkGray
+        
+        collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height), collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.clipsToBounds = true
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(IconCollectionViewCell.self, forCellWithReuseIdentifier: "iconCell")
         addSubview(collectionView)
         
+        let items = iconPack!.compactMap {$0.title}
+        segmentedControl = UISegmentedControl(items: items)
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(onChange(sender:)), for: .valueChanged)
+        addSubview(segmentedControl)
+        
         collectionView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
+        }
+        
+        segmentedControl.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(10)
+            make.leading.equalTo(20)
+            make.trailing.equalTo(-20)
+            make.bottom.equalTo(collectionView.snp.top).offset(-10)
         }
     }
     
@@ -50,19 +65,30 @@ class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return iconCode.count
+        return iconPack![segmentedControl.selectedSegmentIndex].smilies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "iconCell", for: indexPath) as! IconCollectionViewCell
         
-        cell.iconImage.kf.setImage(with: iconUrl[indexPath.item])
+        let id = iconPack![segmentedControl.selectedSegmentIndex].id
+        let iconid = iconPack![segmentedControl.selectedSegmentIndex].smilies[indexPath.item].id
+        cell.iconImage.kf.setImage(with: URL(string: "https://s.hkgalden.org/smilies/\(id)/\(iconid).gif")!)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        keyboardDelegate?.keyWasTapped(character: iconCode[indexPath.item])
+        let id = iconPack![segmentedControl.selectedSegmentIndex].id
+        let iconid = iconPack![segmentedControl.selectedSegmentIndex].smilies[indexPath.item].id
+        let alt = iconPack![segmentedControl.selectedSegmentIndex].smilies[indexPath.item].alt
+        let width = iconPack![segmentedControl.selectedSegmentIndex].smilies[indexPath.item].width
+        let height = iconPack![segmentedControl.selectedSegmentIndex].smilies[indexPath.item].height
+        keyboardDelegate?.keyWasTapped(character: "<img class=\"icon\" src=\"https://s.hkgalden.org/smilies/\(id)/\(iconid).gif\" data-nodetype=\"smiley\" data-id=\"\(iconid)\" data-pack-id=\"\(id)\" data-sx=\"\(width)\" data-sy=\"\(height)\" data-alt=\"\(alt)\">")
+    }
+    
+    @objc func onChange(sender: UISegmentedControl) {
+        collectionView.reloadData()
     }
     
 }

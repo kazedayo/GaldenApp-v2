@@ -73,18 +73,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             make.bottom.equalToSuperview()
         }
         
-        adBannerView.snp.makeConstraints {
-            (make) -> Void in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            if #available(iOS 11.0, *) {
-                make.bottom.equalTo(view.snp.bottomMargin)
-            } else {
-                make.bottom.equalTo(view.snp.bottom)
-            }
-            make.height.equalTo(50)
-        }
-        
         navigationItem.leftBarButtonItem = sideMenuButton
         //navigationItem.rightBarButtonItem = newThread
         navigationItem.title = "吹水臺"
@@ -122,6 +110,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             tableView.deselectRow(at: indexPath!, animated: true)
             tableView.reloadRows(at: [indexPath!], with: .fade)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isToolbarHidden = true
     }
     
     override func didReceiveMemoryWarning() {

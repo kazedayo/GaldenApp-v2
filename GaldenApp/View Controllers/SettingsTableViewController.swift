@@ -23,11 +23,7 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "設定"
-        if keychain.getBool("noAd") == true {
-            adIAPButton.isEnabled = false
-        } else {
-            adIAPButton.isEnabled = true
-        }
+        
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.separatorColor = UIColor(white: 0.15, alpha: 1)
         clearHistoryCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
@@ -35,18 +31,15 @@ class SettingsTableViewController: UITableViewController {
         iapCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         
         clearHistoryButton.setTitleColor(.red, for: .normal)
-        clearHistoryButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         clearHistoryButton.setTitle(" 清除歷史", for: .normal)
         clearHistoryButton.addTarget(self, action: #selector(clearButtonPressed(_:)), for: .touchUpInside)
         clearHistoryCell.addSubview(clearHistoryButton)
         
-        sourceCodeButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         sourceCodeButton.setTitle(" Source", for: .normal)
         sourceCodeButton.tintColor = .white
         sourceCodeButton.addTarget(self, action: #selector(sourceButtonPressed(_:)), for: .touchUpInside)
         sourceCell.addSubview(sourceCodeButton)
         
-        adIAPButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         adIAPButton.setTitle(" 捐獻", for: .normal)
         adIAPButton.tintColor = .white
         adIAPButton.addTarget(self, action: #selector(adIAPButtonPressed(_:)), for: .touchUpInside)
@@ -60,17 +53,26 @@ class SettingsTableViewController: UITableViewController {
         
         clearHistoryButton.snp.makeConstraints {
             (make) -> Void in
-            make.center.equalToSuperview()
+            make.top.equalTo(10)
+            make.leading.equalTo(10)
+            make.trailing.equalTo(-10)
+            make.bottom.equalTo(-10)
         }
         
         sourceCodeButton.snp.makeConstraints {
             (make) -> Void in
-            make.center.equalToSuperview()
+            make.top.equalTo(10)
+            make.leading.equalTo(10)
+            make.trailing.equalTo(-10)
+            make.bottom.equalTo(-10)
         }
         
         adIAPButton.snp.makeConstraints {
             (make) -> Void in
-            make.center.equalToSuperview()
+            make.top.equalTo(10)
+            make.leading.equalTo(10)
+            make.trailing.equalTo(-10)
+            make.bottom.equalTo(-10)
         }
     }
 

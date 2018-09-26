@@ -1,0 +1,13 @@
+mutation BlockUser($id: String!) {
+	blockUser(id: $id)
+}
+
+mutation UnblockUser($id: String!) {
+	unblockUser(id: $id)
+}
+
+mutation ReplyThread($threadId: Int!,$parentId: String,$html: String!) {
+	replyThread(threadId: $threadId,parentId: $parentId, html: $html) {
+		...CommentsRecursive
+	}
+}

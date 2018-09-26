@@ -901,6 +901,93 @@ public final class GetSessionUserQuery: GraphQLQuery {
   }
 }
 
+public final class GetIconPacksQuery: GraphQLQuery {
+  public let operationDefinition =
+    "query GetIconPacks {\n  installedPacks {\n    __typename\n    ...IconPacks\n  }\n}"
+
+  public var queryDocument: String { return operationDefinition.appending(IconPacks.fragmentDefinition) }
+
+  public init() {
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("installedPacks", type: .nonNull(.list(.nonNull(.object(InstalledPack.selections))))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(installedPacks: [InstalledPack]) {
+      self.init(unsafeResultMap: ["__typename": "Query", "installedPacks": installedPacks.map { (value: InstalledPack) -> ResultMap in value.resultMap }])
+    }
+
+    public var installedPacks: [InstalledPack] {
+      get {
+        return (resultMap["installedPacks"] as! [ResultMap]).map { (value: ResultMap) -> InstalledPack in InstalledPack(unsafeResultMap: value) }
+      }
+      set {
+        resultMap.updateValue(newValue.map { (value: InstalledPack) -> ResultMap in value.resultMap }, forKey: "installedPacks")
+      }
+    }
+
+    public struct InstalledPack: GraphQLSelectionSet {
+      public static let possibleTypes = ["SmileyPack"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLFragmentSpread(IconPacks.self),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var iconPacks: IconPacks {
+          get {
+            return IconPacks(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+  }
+}
+
 public final class BlockUserMutation: GraphQLMutation {
   public let operationDefinition =
     "mutation BlockUser($id: String!) {\n  blockUser(id: $id)\n}"
@@ -1078,6 +1165,133 @@ public final class ReplyThreadMutation: GraphQLMutation {
             resultMap += newValue.resultMap
           }
         }
+      }
+    }
+  }
+}
+
+public struct IconPacks: GraphQLFragment {
+  public static let fragmentDefinition =
+    "fragment IconPacks on SmileyPack {\n  __typename\n  id\n  title\n  smilies {\n    __typename\n    id\n    alt\n    width\n    height\n  }\n}"
+
+  public static let possibleTypes = ["SmileyPack"]
+
+  public static let selections: [GraphQLSelection] = [
+    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+    GraphQLField("id", type: .nonNull(.scalar(String.self))),
+    GraphQLField("title", type: .nonNull(.scalar(String.self))),
+    GraphQLField("smilies", type: .nonNull(.list(.nonNull(.object(Smily.selections))))),
+  ]
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(id: String, title: String, smilies: [Smily]) {
+    self.init(unsafeResultMap: ["__typename": "SmileyPack", "id": id, "title": title, "smilies": smilies.map { (value: Smily) -> ResultMap in value.resultMap }])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  public var id: String {
+    get {
+      return resultMap["id"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  public var title: String {
+    get {
+      return resultMap["title"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "title")
+    }
+  }
+
+  public var smilies: [Smily] {
+    get {
+      return (resultMap["smilies"] as! [ResultMap]).map { (value: ResultMap) -> Smily in Smily(unsafeResultMap: value) }
+    }
+    set {
+      resultMap.updateValue(newValue.map { (value: Smily) -> ResultMap in value.resultMap }, forKey: "smilies")
+    }
+  }
+
+  public struct Smily: GraphQLSelectionSet {
+    public static let possibleTypes = ["Smiley"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("id", type: .nonNull(.scalar(String.self))),
+      GraphQLField("alt", type: .nonNull(.scalar(String.self))),
+      GraphQLField("width", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("height", type: .nonNull(.scalar(Int.self))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(id: String, alt: String, width: Int, height: Int) {
+      self.init(unsafeResultMap: ["__typename": "Smiley", "id": id, "alt": alt, "width": width, "height": height])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    public var id: String {
+      get {
+        return resultMap["id"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "id")
+      }
+    }
+
+    public var alt: String {
+      get {
+        return resultMap["alt"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "alt")
+      }
+    }
+
+    public var width: Int {
+      get {
+        return resultMap["width"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "width")
+      }
+    }
+
+    public var height: Int {
+      get {
+        return resultMap["height"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "height")
       }
     }
   }

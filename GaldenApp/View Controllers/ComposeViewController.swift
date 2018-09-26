@@ -24,7 +24,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     var contentVC: ContentViewController?
     var threadVC: ThreadListViewController?
     
-    let iconKeyboard = IconKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 265))
+    let iconKeyboard = IconKeyboard()
     
     let titleTextField = UITextField()
     let contentTextView = RichEditorView()
@@ -48,6 +48,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed(_:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "發表", style: .done, target: self, action: #selector(submitButtonPressed(_:)))
         iconKeyboard.keyboardDelegate = self
+        let insertIcon = RichEditorOptionItem(image: UIImage(named: "Icon"), title: "Icon") { toolbar in
+            self.callIconKeyboard()
+            return
+        }
+        toolbar.options.insert(insertIcon, at: 0)
         
         contentTextView.webView.isOpaque = false
         contentTextView.webView.backgroundColor = .clear
@@ -241,6 +246,14 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             try! h3.get(i).tagName("span")
         }
         
+        //icon parse
+        let icon = try! doc.select("img.icon")
+        for i in 0 ..< icon.size() {
+            try! icon.get(i).removeClass("icon")
+            try! icon.get(i).removeAttr("src")
+            try! icon.get(i).tagName("span")
+        }
+        
         var parsedHtml = "<div id=\"pmc\"><p>\(try! doc.body()!.html())</div>"
         parsedHtml = parsedHtml.replacingOccurrences(of: "<br>", with: "</p>")
         return parsedHtml
@@ -279,20 +292,16 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }
     
     func keyWasTapped(character: String) {
-       // contentTextView.insertText("\(character) ")
+        //contentTextView.becomeFirstResponder()
+        contentTextView.html.append("\(character)")
+        SwiftEntryKit.dismiss()
     }
     
-    /*@objc func callIconKeyboard(_ sender: UIButton) {
-        if contentTextView.inputView == nil {
-            contentTextView.resignFirstResponder()
-            contentTextView.inputView = iconKeyboard
-            contentTextView.becomeFirstResponder()
-        } else {
-            contentTextView.resignFirstResponder()
-            contentTextView.inputView = nil
-            contentTextView.becomeFirstResponder()
-        }
-    }*/
+    @objc func callIconKeyboard() {
+        //contentTextView.resignFirstResponder()
+        let attributes = EntryAttributes.shared.iconEntry()
+        SwiftEntryKit.display(entry: iconKeyboard, using: attributes)
+    }
     
     @objc func cancelButtonPressed(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
@@ -315,5 +324,4 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             make.bottom.equalTo(view.snp.bottomMargin)
         }
     }
-    
 }

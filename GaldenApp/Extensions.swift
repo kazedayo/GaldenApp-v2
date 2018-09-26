@@ -128,6 +128,27 @@ enum ComposeType {
 class EntryAttributes {
     static let shared = EntryAttributes()
     
+    public func iconEntry() -> EKAttributes {
+        var attributes = EKAttributes()
+        attributes.position = .top
+        attributes.displayPriority = .normal
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.3)
+        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
+        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
+        attributes.positionConstraints.keyboardRelation = keyboardRelation
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .dismiss
+        attributes.entryInteraction = .forward
+        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
+        attributes.roundCorners = .all(radius: 10)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .top, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
+        return attributes
+    }
+    
     public func centerEntry() -> EKAttributes {
         var attributes = EKAttributes()
         attributes.position = .center

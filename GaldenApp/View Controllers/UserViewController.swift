@@ -131,6 +131,10 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             tableView.deselectRow(at: indexPath!, animated: true)
             tableView.reloadRows(at: [indexPath!], with: .fade)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationController?.isToolbarHidden = true
     }
     

@@ -58,6 +58,23 @@ query GetSessionUser {
 	}
 }
 
+query GetIconPacks {
+	installedPacks{
+		...IconPacks
+	}
+}
+
+fragment IconPacks on SmileyPack {
+	id
+	title
+	smilies{
+		id
+		alt
+		width
+		height
+	}
+}
+
 fragment ChannelDetails on Channel {
 	id
 	name

@@ -61,6 +61,12 @@ class LaunchViewController: UIViewController {
                     } else {
                         sessionUser = result?.data?.sessionUser
                     }
+                    let getIconPacksQuery = GetIconPacksQuery()
+                    apollo.fetch(query: getIconPacksQuery,cachePolicy: .fetchIgnoringCacheData) {
+                        [weak self] result,error in
+                        iconPack = result?.data?.installedPacks.map {$0.fragments.iconPacks}
+                        
+                    }
                     let tabBarController = Configurations.shared.configureUI()
                     self?.present(tabBarController, animated: true, completion: nil)
                 }
