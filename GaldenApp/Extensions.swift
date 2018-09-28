@@ -133,7 +133,7 @@ class EntryAttributes {
         attributes.position = .top
         attributes.displayPriority = .normal
         let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.3)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.4)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
         let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
         let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)

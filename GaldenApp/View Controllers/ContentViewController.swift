@@ -272,7 +272,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func unwindAfterReply() {
-        self.updateSequence()
+        DispatchQueue.main.async {
+            self.updateSequence()
+        }
     }
     
     @objc func share() {
@@ -389,7 +391,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         for i in 0 ..< comment.count {
             var avatarurl = ""
             if comment[i].fragments.commentFields.author.avatar == nil {
-                avatarurl = "https://i.imgur.com/mrD0tRG.png"
+                avatarurl = "https://i.imgur.com/2lya6uS.png"
             } else {
                 avatarurl = comment[i].fragments.commentFields.author.avatar!
             }

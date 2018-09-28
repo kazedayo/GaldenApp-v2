@@ -16,6 +16,7 @@ protocol IconKeyboardDelegate: class {
 
 class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
     
+    var iconPack: [IconPacks]!
     var segmentedControl: UISegmentedControl!
     var collectionView: UICollectionView!
     weak var keyboardDelegate: IconKeyboardDelegate?
@@ -23,40 +24,47 @@ class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let layout = VerticalBlueprintLayout()
-        layout.itemsPerRow = 3
-        layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10)
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
-        layout.itemSize = CGSize(width: 100, height: 50)
-        
-        collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height), collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.clipsToBounds = true
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(IconCollectionViewCell.self, forCellWithReuseIdentifier: "iconCell")
-        addSubview(collectionView)
-        
-        let items = iconPack!.compactMap {$0.title}
-        segmentedControl = UISegmentedControl(items: items)
-        segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.addTarget(self, action: #selector(onChange(sender:)), for: .valueChanged)
-        addSubview(segmentedControl)
-        
-        collectionView.snp.makeConstraints {
-            (make) -> Void in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
-        segmentedControl.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(10)
-            make.leading.equalTo(20)
-            make.trailing.equalTo(-20)
-            make.bottom.equalTo(collectionView.snp.top).offset(-10)
+        let getIconPacksQuery = GetIconPacksQuery()
+        apollo.fetch(query: getIconPacksQuery,cachePolicy: .fetchIgnoringCacheData) {
+            [weak self] result,error in
+            self?.iconPack = result?.data?.installedPacks.map {$0.fragments.iconPacks}
+            
+            let layout = VerticalBlueprintLayout()
+            layout.itemsPerRow = 3
+            layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10)
+            layout.minimumLineSpacing = 10
+            layout.minimumInteritemSpacing = 10
+            layout.itemSize = CGSize(width: 100, height: 50)
+            
+            self?.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+            self?.collectionView.backgroundColor = .clear
+            self?.collectionView.clipsToBounds = true
+            self?.collectionView.delegate = self
+            self?.collectionView.dataSource = self
+            self?.collectionView.register(IconCollectionViewCell.self, forCellWithReuseIdentifier: "iconCell")
+            self?.addSubview((self?.collectionView)!)
+            
+            let items = self?.iconPack!.compactMap {$0.title}
+            self?.segmentedControl = UISegmentedControl(items: items)
+            self?.segmentedControl.selectedSegmentIndex = 0
+            self?.segmentedControl.tintColor = UIColor(hexRGB: "#568064")
+            self?.segmentedControl.addTarget(self, action: #selector(self?.onChange(sender:)), for: .valueChanged)
+            self?.addSubview((self?.segmentedControl)!)
+            
+            self?.collectionView.snp.makeConstraints {
+                (make) -> Void in
+                make.leading.equalToSuperview()
+                make.trailing.equalToSuperview()
+                make.bottom.equalToSuperview()
+            }
+            
+            self?.segmentedControl.snp.makeConstraints {
+                (make) -> Void in
+                make.top.equalTo(10)
+                make.leading.equalTo(20)
+                make.trailing.equalTo(-20)
+                make.bottom.equalTo((self?.collectionView.snp.top)!).offset(-10)
+            }
         }
     }
     

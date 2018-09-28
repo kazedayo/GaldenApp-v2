@@ -19,7 +19,6 @@ let navigator = Navigator()
 let keychain = KeychainSwift()
 var apollo: ApolloClient = Configurations.shared.configureApollo()
 var sessionUser: GetSessionUserQuery.Data.SessionUser? = nil
-var iconPack: [IconPacks]? = nil
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

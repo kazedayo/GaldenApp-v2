@@ -172,12 +172,10 @@ class SettingsTableViewController: UITableViewController {
         alert.addAction(UIAlertAction(title: "畀錢!", style: .default, handler: {
             _ in
             NetworkActivityIndicatorManager.networkOperationStarted()
-            SwiftyStoreKit.purchaseProduct("1080signaladfree", quantity: 1, atomically: true) { result in
+            SwiftyStoreKit.purchaseProduct("dollarDonation", quantity: 1, atomically: true) { result in
                 NetworkActivityIndicatorManager.networkOperationFinished()
                 switch result {
                 case .success(_):
-                    keychain.set(true, forKey: "noAd")
-                    self.adIAPButton.isEnabled = false
                     let success = UIAlertController(title: "購買成功!", message: "多謝支持!", preferredStyle: .alert)
                     success.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(success, animated: true, completion: nil)

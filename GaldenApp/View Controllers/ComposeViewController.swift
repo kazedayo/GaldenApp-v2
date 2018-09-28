@@ -12,8 +12,9 @@ import IQKeyboardManagerSwift
 import SwiftEntryKit
 import RichEditorView
 import SwiftSoup
+import ImageIO
 
-class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,RichEditorDelegate {
+class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,RichEditorDelegate,RichEditorToolbarDelegate {
     
     //MARK: Properties
     var channel: String!
@@ -30,7 +31,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     let contentTextView = RichEditorView()
     lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44))
-        toolbar.options = [RichEditorDefaultOption.clear,RichEditorDefaultOption.undo,RichEditorDefaultOption.redo,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
+        toolbar.options = [RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.clear,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
         return toolbar
     }()
     
@@ -58,6 +59,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         contentTextView.webView.backgroundColor = .clear
         contentTextView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         toolbar.editor = contentTextView
+        toolbar.delegate = self
         contentTextView.delegate = self
         
         titleTextField.delegate = self
@@ -114,6 +116,40 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         editor.becomeFirstResponder()
     }
     
+    func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar) {
+        let alert = UIAlertController(title: nil, message: "鏈結網址", preferredStyle: .alert)
+        alert.addTextField {
+            textfield in
+            textfield.placeholder = "url"
+        }
+        let ok = UIAlertAction(title: "OK", style: .default, handler: {
+            _ in
+            let textfield = alert.textFields?.first
+            toolbar.editor?.insertComponent("<a href=\"\((textfield?.text)!)\">\((textfield?.text)!)</a>")
+        })
+        let cancel = UIAlertAction(title: "不了", style: .cancel, handler: nil)
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        present(alert,animated: true,completion: nil)
+    }
+    
+    func richEditorToolbarInsertImage(_ toolbar: RichEditorToolbar) {
+        let alert = UIAlertController(title: nil, message: "圖片網址", preferredStyle: .alert)
+        alert.addTextField {
+            textfield in
+            textfield.placeholder = "url"
+        }
+        let ok = UIAlertAction(title: "OK", style: .default, handler: {
+            _ in
+            let textfield = alert.textFields?.first
+            toolbar.editor?.insertImage((textfield?.text)!, alt: "")
+        })
+        let cancel = UIAlertAction(title: "不了", style: .cancel, handler: nil)
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        present(alert,animated: true,completion: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -149,7 +185,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             }))
             self.present(alert,animated: true,completion: nil)
         } else {
-            print(contentTextView.contentHTML)
             let parsedHtml = galdenParse(input: contentTextView.contentHTML)
             let replyThreadMutation = ReplyThreadMutation(threadId: topicID, parentId: quoteID, html: parsedHtml)
             HUD.show(.progress)
@@ -164,6 +199,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                     print(error!)
                 }
             }
+            //print(parsedHtml)
         }
     }
     
@@ -249,9 +285,37 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         //icon parse
         let icon = try! doc.select("img.icon")
         for i in 0 ..< icon.size() {
-            try! icon.get(i).removeClass("icon")
+            try! icon.get(i).removeAttr("class")
             try! icon.get(i).removeAttr("src")
             try! icon.get(i).tagName("span")
+        }
+        
+        //image parse
+        let img = try! doc.select("img")
+        for i in 0 ..< img.size() {
+            let src = try! img.get(i).attr("src")
+            try! img.removeAttr("src")
+            try! img.removeAttr("alt")
+            try! img.attr("data-nodetype", "img")
+            try! img.attr("data-src", src)
+            let url = URL(string: src)
+            if let imageSource = CGImageSourceCreateWithURL(url! as CFURL, nil) {
+                if let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as Dictionary? {
+                    let pixelWidth = imageProperties[kCGImagePropertyPixelWidth] as! Int
+                    let pixelHeight = imageProperties[kCGImagePropertyPixelHeight] as! Int
+                    try! img.attr("data-sx", String(pixelWidth))
+                    try! img.attr("data-sy", String(pixelHeight))
+                }
+            }
+            try! img.tagName("span")
+        }
+        
+        //url parse
+        let url = try! doc.select("a")
+        for i in 0 ..< url.size() {
+            let href = try! url.get(i).attr("href")
+            try! url.get(i).wrap("<span data-nodetype=\"a\" data-href=\"\(href)\"></span>")
+            try! url.get(i).remove()
         }
         
         var parsedHtml = "<div id=\"pmc\"><p>\(try! doc.body()!.html())</div>"
@@ -292,8 +356,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }
     
     func keyWasTapped(character: String) {
-        //contentTextView.becomeFirstResponder()
-        contentTextView.html.append("\(character)")
+        contentTextView.insertComponent(character)
         SwiftEntryKit.dismiss()
     }
     

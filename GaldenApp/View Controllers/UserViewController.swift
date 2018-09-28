@@ -48,7 +48,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         if sessionUser?.avatar != nil {
             avatarView.kf.setImage(with: URL(string: (sessionUser?.avatar)!)!)
         } else {
-            avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/mrD0tRG.png")!)
+            avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/2lya6uS.png")!)
         }
         
         //user name
@@ -177,7 +177,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             if avatar != nil {
                 cell.avatarView.kf.setImage(with: URL(string: (avatar)!)!)
             } else {
-                cell.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/mrD0tRG.png")!)
+                cell.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/2lya6uS.png")!)
             }
             cell.unameLabel.text = nickname
             if gender == UserGender.m {
