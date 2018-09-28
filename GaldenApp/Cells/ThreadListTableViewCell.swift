@@ -29,17 +29,20 @@ class ThreadListTableViewCell: UITableViewCell {
         selectedBackgroundView = bgColorView
         
         threadTitleLabel.textColor = .lightGray
-        threadTitleLabel.font = UIFont.systemFont(ofSize: 15)
+        threadTitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        threadTitleLabel.adjustsFontForContentSizeCategory = true
         threadTitleLabel.numberOfLines = 0
         contentView.addSubview(threadTitleLabel)
         
         detailLabel.textColor = .darkGray
-        detailLabel.font = UIFont.systemFont(ofSize: 12)
+        detailLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        detailLabel.adjustsFontForContentSizeCategory = true
         contentView.addSubview(detailLabel)
         
         tagLabel.clipsToBounds = true
         tagLabel.layer.cornerRadius = 3
-        tagLabel.font = UIFont.systemFont(ofSize: 12)
+        tagLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        tagLabel.adjustsFontForContentSizeCategory = true
         contentView.addSubview(tagLabel)
         
         threadTitleLabel.snp.makeConstraints {

@@ -24,7 +24,10 @@ class UserTableViewCell: UITableViewCell {
         let bgColorView = UIView()
         bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
         selectedBackgroundView = bgColorView
-        ugroupLabel.font = UIFont.systemFont(ofSize: 12)
+        unameLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        unameLabel.adjustsFontForContentSizeCategory = true
+        ugroupLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        ugroupLabel.adjustsFontForContentSizeCategory = true
         contentView.addSubview(avatarView)
         contentView.addSubview(unameLabel)
         

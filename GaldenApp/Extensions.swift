@@ -145,7 +145,8 @@ class EntryAttributes {
         attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
         attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
         attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .top, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
+        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.25, anchorPosition: .top, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
+        attributes.exitAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.25, anchorPosition: .top, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         return attributes
     }
     
