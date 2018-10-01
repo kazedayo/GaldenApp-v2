@@ -19,7 +19,6 @@
 		424A47102073493E005795A6 /* PageSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F42073493C005795A6 /* PageSelectViewController.swift */; };
 		424A47112073493E005795A6 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F52073493C005795A6 /* History.swift */; };
 		424A47132073493E005795A6 /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F72073493C005795A6 /* ComposeViewController.swift */; };
-		424A47142073493E005795A6 /* HKGaldenAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F82073493C005795A6 /* HKGaldenAPI.swift */; };
 		424A47152073493E005795A6 /* IconKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F92073493D005795A6 /* IconKeyboard.swift */; };
 		424A47182073493E005795A6 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46FC2073493D005795A6 /* ContentViewController.swift */; };
 		424A47192073493E005795A6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46FD2073493D005795A6 /* Extensions.swift */; };
@@ -37,6 +36,7 @@
 		42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89A1F7923E1002CC13F /* Assets.xcassets */; };
 		42E7F89E1F7923E1002CC13F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89C1F7923E1002CC13F /* LaunchScreen.storyboard */; };
 		42E7F8A91F7923E2002CC13F /* GaldenAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */; };
+		42EA3C5C2161B08300EFFBDB /* eula.txt in Resources */ = {isa = PBXBuildFile; fileRef = 42EA3C5B2161B08300EFFBDB /* eula.txt */; };
 		42F7943E21075BE100E53614 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F7943D21075BE100E53614 /* UserViewController.swift */; };
 		E7BD5CD2BF305799B8371B0E /* Pods_GaldenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 138A2700E2D52E6ACF025148 /* Pods_GaldenAppTests.framework */; };
 /* End PBXBuildFile section */
@@ -66,7 +66,6 @@
 		424A46F42073493C005795A6 /* PageSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageSelectViewController.swift; sourceTree = "<group>"; };
 		424A46F52073493C005795A6 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		424A46F72073493C005795A6 /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
-		424A46F82073493C005795A6 /* HKGaldenAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKGaldenAPI.swift; sourceTree = "<group>"; };
 		424A46F92073493D005795A6 /* IconKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconKeyboard.swift; sourceTree = "<group>"; };
 		424A46FC2073493D005795A6 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		424A46FD2073493D005795A6 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -88,6 +87,7 @@
 		42E7F8A41F7923E2002CC13F /* GaldenAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GaldenAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaldenAppTests.swift; sourceTree = "<group>"; };
 		42E7F8AA1F7923E2002CC13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42EA3C5B2161B08300EFFBDB /* eula.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = eula.txt; sourceTree = "<group>"; };
 		42F7943D21075BE100E53614 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		718F70BCCE7D1EC1D9906F1F /* Pods-GaldenAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		BC94281C1A27FF1F279211B4 /* Pods-GaldenApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -192,7 +192,6 @@
 				424A472120734965005795A6 /* Cells */,
 				424A4723207349A5005795A6 /* Models */,
 				424A46FD2073493D005795A6 /* Extensions.swift */,
-				424A46F82073493C005795A6 /* HKGaldenAPI.swift */,
 				42964F202085CF12000FA349 /* NetworkActivityIndicatorManager.swift */,
 				429711392146AA7C000EA809 /* API.swift */,
 				4298ED15214630E50043FAD7 /* queries.graphql */,
@@ -201,6 +200,7 @@
 				42E7F8931F7923E1002CC13F /* AppDelegate.swift */,
 				42E7F89A1F7923E1002CC13F /* Assets.xcassets */,
 				42E7F89C1F7923E1002CC13F /* LaunchScreen.storyboard */,
+				42EA3C5B2161B08300EFFBDB /* eula.txt */,
 				42E7F89F1F7923E1002CC13F /* Info.plist */,
 			);
 			path = GaldenApp;
@@ -281,8 +281,17 @@
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
 							com.apple.InAppPurchase = {
 								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 0;
+							};
+							com.apple.iCloud = {
+								enabled = 0;
 							};
 						};
 					};
@@ -318,6 +327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42E7F89E1F7923E1002CC13F /* LaunchScreen.storyboard in Resources */,
+				42EA3C5C2161B08300EFFBDB /* eula.txt in Resources */,
 				424B61CB1FC06EFA000D71F0 /* content.css in Resources */,
 				4298ED16214630E50043FAD7 /* queries.graphql in Resources */,
 				42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */,
@@ -355,8 +365,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Apollo/Apollo.framework",
 				"${BUILT_PRODUCTS_DIR}/Blueprints/Blueprints.framework",
 				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
@@ -375,13 +384,11 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftDate/SwiftDate.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftEntryKit/SwiftEntryKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyStoreKit/SwiftyStoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/URLNavigator/URLNavigator.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Apollo.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Blueprints.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
@@ -400,13 +407,12 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftDate.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftEntryKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyStoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLNavigator.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8D701E37F22837BD1F9B6259 /* [CP] Check Pods Manifest.lock */ = {
@@ -453,7 +459,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				424A47112073493E005795A6 /* History.swift in Sources */,
-				424A47142073493E005795A6 /* HKGaldenAPI.swift in Sources */,
 				42A1C8102140A3C000C0C511 /* SettingsTableViewController.swift in Sources */,
 				42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */,
 				42B14966214FBD3800A9DEA3 /* UserTableViewCell.swift in Sources */,

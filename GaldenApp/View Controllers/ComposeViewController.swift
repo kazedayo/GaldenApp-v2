@@ -14,7 +14,7 @@ import RichEditorView
 import SwiftSoup
 import ImageIO
 
-class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,RichEditorDelegate,RichEditorToolbarDelegate {
+class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,RichEditorToolbarDelegate {
     
     //MARK: Properties
     var channel: String!
@@ -321,38 +321,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         var parsedHtml = "<div id=\"pmc\"><p>\(try! doc.body()!.html())</div>"
         parsedHtml = parsedHtml.replacingOccurrences(of: "<br>", with: "</p>")
         return parsedHtml
-    }
-    
-    //MARK: ImagePickerDelegate
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        HUD.show(.progress)
-        if #available(iOS 11.0, *) {
-            let imageURL = info[UIImagePickerControllerImageURL] as! URL
-            HKGaldenAPI.shared.imageUpload(imageURL: imageURL, completion: {
-                url in
-                HUD.flash(.success, delay: 1.0)
-                self.dismiss(animated: true, completion: nil)
-            })
-        } else {
-            //obtaining saving path
-            let fileManager = FileManager.default
-            let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-            let imagePath = documentsPath?.appendingPathComponent("image.jpg")
-            
-            // extract image from the picker and save it
-            if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                try! UIImageJPEGRepresentation(pickedImage, 1.0)?.write(to: imagePath!)
-            }
-            HKGaldenAPI.shared.imageUpload(imageURL: imagePath!, completion: {
-                url in
-                HUD.flash(.success, delay: 1.0)
-                self.dismiss(animated: true, completion: nil)
-            })
-        }
     }
     
     func keyWasTapped(character: String) {

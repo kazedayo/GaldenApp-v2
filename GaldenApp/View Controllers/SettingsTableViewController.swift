@@ -32,16 +32,22 @@ class SettingsTableViewController: UITableViewController {
         
         clearHistoryButton.setTitleColor(.red, for: .normal)
         clearHistoryButton.setTitle(" 清除歷史", for: .normal)
+        clearHistoryButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        clearHistoryButton.titleLabel?.adjustsFontForContentSizeCategory = true
         clearHistoryButton.addTarget(self, action: #selector(clearButtonPressed(_:)), for: .touchUpInside)
         clearHistoryCell.addSubview(clearHistoryButton)
         
         sourceCodeButton.setTitle(" Source", for: .normal)
         sourceCodeButton.tintColor = .white
+        sourceCodeButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        sourceCodeButton.titleLabel?.adjustsFontForContentSizeCategory = true
         sourceCodeButton.addTarget(self, action: #selector(sourceButtonPressed(_:)), for: .touchUpInside)
         sourceCell.addSubview(sourceCodeButton)
         
         adIAPButton.setTitle(" 捐獻", for: .normal)
         adIAPButton.tintColor = .white
+        adIAPButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        adIAPButton.titleLabel?.adjustsFontForContentSizeCategory = true
         adIAPButton.addTarget(self, action: #selector(adIAPButtonPressed(_:)), for: .touchUpInside)
         iapCell.addSubview(adIAPButton)
 

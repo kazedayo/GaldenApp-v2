@@ -10,7 +10,6 @@ import UIKit
 import MarqueeLabel
 import WebKit
 import RealmSwift
-import SwiftyJSON
 import Kingfisher
 import SKPhotoBrowser
 import SwiftEntryKit
@@ -272,9 +271,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func unwindAfterReply() {
-        DispatchQueue.main.async {
-            self.updateSequence()
-        }
+        self.navType = .reply
+        self.updateSequence()
     }
     
     @objc func share() {

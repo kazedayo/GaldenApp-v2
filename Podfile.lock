@@ -1,5 +1,4 @@
 PODS:
-  - Alamofire (4.7.3)
   - Apollo (0.9.3):
     - Apollo/Core (= 0.9.3)
   - Apollo/Core (0.9.3)
@@ -26,12 +25,10 @@ PODS:
   - SwiftEntryKit (0.6.0):
     - QuickLayout (= 2.0.2)
   - SwiftSoup (1.7.2)
-  - SwiftyJSON (4.1.0)
   - SwiftyStoreKit (0.13.3)
   - URLNavigator (2.0.6)
 
 DEPENDENCIES:
-  - Alamofire
   - Apollo
   - Blueprints
   - Hero
@@ -48,13 +45,11 @@ DEPENDENCIES:
   - SwiftDate
   - SwiftEntryKit
   - SwiftSoup
-  - SwiftyJSON
   - SwiftyStoreKit
   - URLNavigator
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - Alamofire
     - Apollo
     - Blueprints
     - Hero
@@ -73,12 +68,10 @@ SPEC REPOS:
     - SwiftDate
     - SwiftEntryKit
     - SwiftSoup
-    - SwiftyJSON
     - SwiftyStoreKit
     - URLNavigator
 
 SPEC CHECKSUMS:
-  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Apollo: 38270f8bdc031ac07d4de3ec068a2289d7d287e0
   Blueprints: cf5f81988848a747cffd2f77ed18ef6a12d69f18
   Hero: 1c3c625ba05856f305d29f5c270f8766c5ff2df7
@@ -97,10 +90,9 @@ SPEC CHECKSUMS:
   SwiftDate: 52b718d32ec006861a2be2756cbfa482d438e781
   SwiftEntryKit: ba070426598304c5773d84b54ed8b0763b5f2060
   SwiftSoup: e5f61d37e3d802a4b5db81b4945de3da9bfdf115
-  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   SwiftyStoreKit: 9ebd15971e28aa2989825fe8bc092eb5f75dd0b2
   URLNavigator: 2357a32f3b3787b748bf87deb927761f8b0f7f53
 
-PODFILE CHECKSUM: be721277c27a51f58ea402aa0325759bad7f0734
+PODFILE CHECKSUM: da43535572539dc5e52b0596b6e1980b8b05268e
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0.beta.1

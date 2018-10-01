@@ -153,7 +153,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         if segmentControl.selectedSegmentIndex == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
             let title = self.userThreads[indexPath.row].title
-            let nickName = self.userThreads[indexPath.row].replies.map {$0.authorNickname}
             let count = self.userThreads[indexPath.row].totalReplies
             let dateMap = self.userThreads[indexPath.row].replies.map {$0.date}
             let date = dateMap.last!.toISODate()
@@ -161,7 +160,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
             cell.threadTitleLabel.text = title
             cell.threadTitleLabel.textColor = .lightGray
-            cell.detailLabel.text = "\(nickName[0]) // 回覆: \(count) // 最後回覆: \(relativeDate!)"
+            cell.detailLabel.text = "你的回覆: \(count) // 最後一次回覆: \(relativeDate!)"
             cell.detailLabel.textColor = .darkGray
             let tags = self.userThreads[indexPath.row].tags.map {$0.fragments.tagDetails}
             cell.tagLabel.text = "#\(tags[0].name)"

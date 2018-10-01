@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import Apollo
+import SwiftEntryKit
 
 class LaunchViewController: UIViewController {
     
@@ -47,6 +48,20 @@ class LaunchViewController: UIViewController {
             (make) -> Void in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().offset(100)
+        }
+        
+        if keychain.get("firstLaunch") == nil {
+            let eulatTextView = UITextView()
+            eulatTextView.isEditable = false
+            eulatTextView.clipsToBounds = true
+            eulatTextView.backgroundColor = .clear
+            eulatTextView.textColor = UIColor(hexRGB: "aaaaaa")
+            eulatTextView.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            eulatTextView.adjustsFontForContentSizeCategory = true
+            eulatTextView.text = try! String(contentsOfFile: Bundle.main.path(forResource: "eula", ofType: "txt")!)
+            keychain.set(false, forKey: "firstLaunch")
+            let attributes = EntryAttributes.shared.loginEntry()
+            SwiftEntryKit.display(entry: eulatTextView, using: attributes)
         }
         
         if keychain.get("userKey") != nil {

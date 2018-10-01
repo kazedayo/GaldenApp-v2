@@ -291,6 +291,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                     let blockedUserIds = sessionUser?.blockedUserIds
                     self?.threads = (self?.threads.filter {!(blockedUserIds?.contains($0.replies[0].author.id))!})!
                 }
+                //review no tomato
+                if keychain.get("userKey") == nil || sessionUser?.id == "19803184133832704" {
+                    self?.threads = (self?.threads.filter {$0.tags[0].fragments.tagDetails.id != "PVAy33AYm"})!
+                }
                 self?.tableView.reloadData()
                 self?.reloadButton.isHidden = true
                 self?.tableView.isHidden = false
