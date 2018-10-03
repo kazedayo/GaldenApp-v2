@@ -574,42 +574,34 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         webView.evaluateJavaScript("new Blazy();", completionHandler: {
             result,error in
-            DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
-                switch self.navType {
-                case .reply:
-                    webView.evaluateJavaScript("window.scrollTo(0,document.body.scrollHeight);", completionHandler: {(result, error) in
-                        NetworkActivityIndicatorManager.networkOperationFinished()
-                        webView.isHidden = false
-                        self.navType = .normal
-                    })
-                case .refresh:
-                    webView.evaluateJavaScript("$(\"#\((self.scrollPosition!))\").get(0).scrollIntoView();", completionHandler: {
+            switch self.navType {
+            case .reply:
+                webView.evaluateJavaScript("window.scrollTo(0,document.body.scrollHeight);", completionHandler: {(result, error) in
+                    NetworkActivityIndicatorManager.networkOperationFinished()
+                    webView.isHidden = false
+                    self.navType = .normal
+                })
+            case .refresh:
+                webView.evaluateJavaScript("$(\"#\((self.scrollPosition!))\").get(0).scrollIntoView();", completionHandler: {
+                    result,error in
+                    NetworkActivityIndicatorManager.networkOperationFinished()
+                    webView.isHidden = false
+                    self.navType = .normal
+                })
+            case .normal:
+                let realm = try! Realm()
+                let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.tID)
+                if thisPost != nil && self.sender == "cell" {
+                    self.webView.evaluateJavaScript("$(\"#\((thisPost?.position)!)\").get(0).scrollIntoView();", completionHandler: {
                         result,error in
-                        DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
-                            NetworkActivityIndicatorManager.networkOperationFinished()
-                            webView.isHidden = false
-                            self.navType = .normal
-                        })
-                    })
-                case .normal:
-                    let realm = try! Realm()
-                    let thisPost = realm.object(ofType: History.self, forPrimaryKey: self.tID)
-                    if thisPost != nil && self.sender == "cell" {
-                        self.webView.evaluateJavaScript("$(\"#\((thisPost?.position)!)\").get(0).scrollIntoView();", completionHandler: {
-                            result,error in
-                            DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
-                                NetworkActivityIndicatorManager.networkOperationFinished()
-                                webView.isHidden = false
-                            })
-                        })
-                    } else {
                         NetworkActivityIndicatorManager.networkOperationFinished()
                         webView.isHidden = false
-                    }
+                    })
+                } else {
                     NetworkActivityIndicatorManager.networkOperationFinished()
                     webView.isHidden = false
                 }
-            })
+            }
         })
     }
     
