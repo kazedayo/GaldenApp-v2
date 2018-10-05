@@ -249,7 +249,13 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     */
     
     @objc func logoutButtonPressed(_ sender: UIBarButtonItem) {
-        
+        keychain.delete("userKey")
+        var controllers = tabBarController?.viewControllers
+        let loginViewController = LoginViewController()
+        loginViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
+        let nav = UINavigationController(rootViewController: loginViewController)
+        controllers![1] = nav
+        tabBarController?.setViewControllers(controllers, animated: false)
     }
     
     private func getUserThreads(completion: @escaping ()->Void) {
