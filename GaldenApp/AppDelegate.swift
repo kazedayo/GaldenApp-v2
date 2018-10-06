@@ -90,6 +90,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             keychain.set(false, forKey: "noAd")
         }
         
+        if(keychain.getBool("loadImage") == nil) {
+            keychain.set(true, forKey: "loadImage")
+        }
+        
         if let url = launchOptions?[.url] as? URL {
             let opened = navigator.open(url)
             if !opened {

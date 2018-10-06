@@ -465,9 +465,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         //img parse
         let img = try! doc.select("span[data-nodetype=img]")
         for i in 0 ..< img.size() {
-            let imgURL = try! img.get(i).attr("data-src")
-            try! img.get(i).wrap("<img class=\"b-lazy\" src=\"https://img.eservice-hk.net/upload/2018/05/17/213108_b95f899cf42b6a9472e11ab7f8c64f89.gif\" data-src=\"\(imgURL)\" onclick=\"window.webkit.messageHandlers.imageView.postMessage('\(imgURL)');\">")
-            try! img.get(i).remove()
+            if keychain.getBool("loadImage") == true {
+                let imgURL = try! img.get(i).attr("data-src")
+                try! img.get(i).wrap("<img class=\"b-lazy\" src=\"https://img.eservice-hk.net/upload/2018/05/17/213108_b95f899cf42b6a9472e11ab7f8c64f89.gif\" data-src=\"\(imgURL)\" onclick=\"window.webkit.messageHandlers.imageView.postMessage('\(imgURL)');\">")
+                try! img.get(i).remove()
+            } else {
+                let imgURL = try! img.get(i).attr("data-src")
+                try! img.get(i).wrap("<img onclick=\"redrawImg($(this),'\(imgURL)');\" src=\"https://m.hkgalden.com/img/image.png\">")
+                try! img.get(i).remove()
+            }
         }
         
         //url parse

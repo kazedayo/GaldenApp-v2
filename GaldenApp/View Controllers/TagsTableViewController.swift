@@ -45,17 +45,17 @@ class TagsTableViewController: UITableViewController {
         return channels[section].tags.count
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return channels[section].name
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 30))
+        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 18))
         titleLabel.clipsToBounds = true
         titleLabel.text = channels[section].name
         titleLabel.textColor = .lightGray
         titleLabel.textAlignment = .center
-        titleLabel.backgroundColor = UIColor(white: 0.2, alpha: 1)
+        titleLabel.backgroundColor = .clear
         return titleLabel
     }
 

@@ -15,10 +15,13 @@ class SettingsTableViewController: UITableViewController {
     var clearHistoryCell = UITableViewCell()
     var sourceCell = UITableViewCell()
     var iapCell = UITableViewCell()
+    var imageCell = UITableViewCell()
     
     let clearHistoryButton = UIButton()
     let sourceCodeButton = UIButton()
     let adIAPButton = UIButton()
+    let imageLabel = UILabel()
+    let imageToggle = UISwitch()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +32,7 @@ class SettingsTableViewController: UITableViewController {
         clearHistoryCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         sourceCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         iapCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
+        imageCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         
         clearHistoryButton.setTitleColor(.red, for: .normal)
         clearHistoryButton.setTitle(" 清除歷史", for: .normal)
@@ -50,6 +54,21 @@ class SettingsTableViewController: UITableViewController {
         adIAPButton.titleLabel?.adjustsFontForContentSizeCategory = true
         adIAPButton.addTarget(self, action: #selector(adIAPButtonPressed(_:)), for: .touchUpInside)
         iapCell.addSubview(adIAPButton)
+        
+        imageLabel.text = "自動載入圖片"
+        imageLabel.textColor = .white
+        imageLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        imageLabel.adjustsFontForContentSizeCategory = true
+        imageCell.addSubview(imageLabel)
+        
+        if keychain.getBool("loadImage") == true {
+            imageToggle.isOn = true
+        } else {
+            imageToggle.isOn = false
+        }
+        imageToggle.onTintColor = UIColor(hexRGB: "#568064")
+        imageToggle.addTarget(self, action: #selector(imageToggleChanged(_:)), for: .valueChanged)
+        imageCell.addSubview(imageToggle)
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -61,7 +80,6 @@ class SettingsTableViewController: UITableViewController {
             (make) -> Void in
             make.top.equalTo(10)
             make.leading.equalTo(10)
-            make.trailing.equalTo(-10)
             make.bottom.equalTo(-10)
         }
         
@@ -69,7 +87,6 @@ class SettingsTableViewController: UITableViewController {
             (make) -> Void in
             make.top.equalTo(10)
             make.leading.equalTo(10)
-            make.trailing.equalTo(-10)
             make.bottom.equalTo(-10)
         }
         
@@ -77,6 +94,19 @@ class SettingsTableViewController: UITableViewController {
             (make) -> Void in
             make.top.equalTo(10)
             make.leading.equalTo(10)
+            make.bottom.equalTo(-10)
+        }
+        
+        imageLabel.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(10)
+            make.leading.equalTo(10)
+            make.bottom.equalTo(-10)
+        }
+        
+        imageToggle.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(10)
             make.trailing.equalTo(-10)
             make.bottom.equalTo(-10)
         }
@@ -91,7 +121,7 @@ class SettingsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 3
+        return 4
     }
 
     
@@ -100,6 +130,7 @@ class SettingsTableViewController: UITableViewController {
         case 0: return self.clearHistoryCell
         case 1: return self.sourceCell
         case 2: return self.iapCell
+        case 3: return self.imageCell
         default: fatalError("unknown row")
         }
     }
@@ -194,6 +225,14 @@ class SettingsTableViewController: UITableViewController {
         }))
         alert.addAction(UIAlertAction(title: "不了", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func imageToggleChanged(_ sender: UISwitch) {
+        if imageToggle.isOn {
+            keychain.set(true, forKey: "loadImage")
+        } else {
+            keychain.set(false, forKey: "loadImage")
+        }
     }
 
 }

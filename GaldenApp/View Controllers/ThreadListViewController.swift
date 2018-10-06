@@ -190,9 +190,13 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if (threads.count - indexPath.row) == 1 {
             self.pageNow += 1
-            DispatchQueue.main.async {
-                self.updateSequence(append: true, completion: {})
-            }
+            let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+            spinner.startAnimating()
+            spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: tableView.bounds.width, height: CGFloat(44))
+            
+            self.tableView.tableFooterView = spinner
+            self.tableView.tableFooterView?.isHidden = false
+            self.updateSequence(append: true, completion: {})
         }
     }
     
