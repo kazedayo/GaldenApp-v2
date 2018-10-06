@@ -74,7 +74,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
         
         navigationItem.leftBarButtonItem = sideMenuButton
-        //navigationItem.rightBarButtonItem = newThread
+        navigationItem.rightBarButtonItem = newThread
         navigationItem.title = "吹水臺"
         
         let refreshControl = UIRefreshControl()
@@ -220,7 +220,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func newThreadButtonPressed() {
         let composeVC = ComposeViewController()
         let composeNavVC = UINavigationController(rootViewController: composeVC)
-        composeVC.channel = channelId
         composeVC.composeType = .newThread
         composeVC.threadVC = self
         present(composeNavVC, animated: true, completion: nil)

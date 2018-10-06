@@ -11,3 +11,7 @@ mutation ReplyThread($threadId: Int!,$parentId: String,$html: String!) {
 		...CommentsRecursive
 	}
 }
+
+mutation CreateThread($title: String!, $tags: [String!]!, $html: String!) {
+	createThread(title: $title, tags: $tags,html: $html)
+}

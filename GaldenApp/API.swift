@@ -1170,6 +1170,52 @@ public final class ReplyThreadMutation: GraphQLMutation {
   }
 }
 
+public final class CreateThreadMutation: GraphQLMutation {
+  public let operationDefinition =
+    "mutation CreateThread($title: String!, $tags: [String!]!, $html: String!) {\n  createThread(title: $title, tags: $tags, html: $html)\n}"
+
+  public var title: String
+  public var tags: [String]
+  public var html: String
+
+  public init(title: String, tags: [String], html: String) {
+    self.title = title
+    self.tags = tags
+    self.html = html
+  }
+
+  public var variables: GraphQLMap? {
+    return ["title": title, "tags": tags, "html": html]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Mutation"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("createThread", arguments: ["title": GraphQLVariable("title"), "tags": GraphQLVariable("tags"), "html": GraphQLVariable("html")], type: .nonNull(.scalar(Int.self))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(createThread: Int) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "createThread": createThread])
+    }
+
+    public var createThread: Int {
+      get {
+        return resultMap["createThread"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "createThread")
+      }
+    }
+  }
+}
+
 public struct IconPacks: GraphQLFragment {
   public static let fragmentDefinition =
     "fragment IconPacks on SmileyPack {\n  __typename\n  id\n  title\n  smilies {\n    __typename\n    id\n    alt\n    width\n    height\n  }\n}"
