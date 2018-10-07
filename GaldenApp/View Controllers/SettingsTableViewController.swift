@@ -29,6 +29,7 @@ class SettingsTableViewController: UITableViewController {
         
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.separatorColor = UIColor(white: 0.15, alpha: 1)
+        tableView.allowsSelection = false
         clearHistoryCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         sourceCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         iapCell.backgroundColor = UIColor(white: 0.2, alpha: 1)

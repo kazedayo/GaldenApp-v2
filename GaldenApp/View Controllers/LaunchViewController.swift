@@ -73,6 +73,10 @@ class LaunchViewController: UIViewController {
                         keychain.delete("userKey")
                         //reconfigure apollo
                         apollo = Configurations.shared.configureApollo()
+                        let alert = UIAlertController(title: "Session Expired", message: "請重新登入　", preferredStyle: .alert)
+                        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                        alert.addAction(action)
+                        self?.present(alert, animated: true, completion: nil)
                     } else {
                         sessionUser = result?.data?.sessionUser
                     }

@@ -186,8 +186,8 @@ class EntryAttributes {
         attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
         attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
         attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.15), fade: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.15))
-        attributes.exitAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.15), fade: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.15))
+        attributes.entranceAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25))
+        attributes.exitAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25))
         return attributes
     }
     
@@ -229,7 +229,8 @@ class EntryAttributes {
         attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
         attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
         attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
+        attributes.entranceAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25))
+        attributes.exitAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25))
         return attributes
     }
     
