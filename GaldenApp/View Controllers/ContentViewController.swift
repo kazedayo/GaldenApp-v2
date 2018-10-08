@@ -480,89 +480,86 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         let color = try! doc.select("span[data-nodetype=color]")
         for i in 0 ..< color.size() {
             let colorHex = try! color.get(i).attr("data-value")
-            let text = try! color.get(i).text()
-            try! color.get(i).wrap("<font color=\"#\(colorHex)\">\(text)</font>")
-            try! color.get(i).remove()
+            try! color.get(i).removeAttr("data-nodetype")
+            try! color.get(i).removeAttr("data-value")
+            try! color.get(i).attr("color", "#\(colorHex)")
+            try! color.get(i).tagName("font")
         }
         
         //url parse
         let a = try! doc.select("span[data-nodetype=a]")
         for i in 0 ..< a.size() {
             let url = try! a.get(i).attr("data-href")
-            try! a.get(i).wrap("<a href=\"\(url)\">\(url)</a>")
-            try! a.get(i).remove()
+            try! a.get(i).removeAttr("data-nodetype")
+            try! a.get(i).removeAttr("data-href")
+            try! a.get(i).attr("href", url)
+            try! a.get(i).text(url)
+            try! a.get(i).tagName("a")
         }
         
         //b parse
         let b = try! doc.select("span[data-nodetype=b]")
         for i in 0 ..< b.size() {
-            let textB = try! b.get(i).text()
-            try! b.get(i).wrap("<b>\(textB)</b>")
-            try! b.get(i).remove()
+            try! b.get(i).removeAttr("data-nodetype")
+            try! b.get(i).tagName("b")
         }
         
         //i parse
         let it = try! doc.select("span[data-nodetype=i]")
         for i in 0 ..< it.size() {
-            let textI = try! it.get(i).text()
-            try! it.get(i).wrap("<i>\(textI)</i>")
-            try! it.get(i).remove()
+            try! it.get(i).removeAttr("data-nodetype")
+            try! it.get(i).tagName("i")
         }
         
         //u parse
         let u = try! doc.select("span[data-nodetype=u]")
         for i in 0 ..< u.size() {
-            let textU = try! u.get(i).text()
-            try! u.get(i).wrap("<u>\(textU)</u>")
-            try! u.get(i).remove()
+            try! u.get(i).removeAttr("data-nodetype")
+            try! u.get(i).tagName("u")
         }
         
         //s parse
         let s = try! doc.select("span[data-nodetype=s]")
         for i in 0 ..< s.size() {
-            let textS = try! s.get(i).text()
-            try! s.get(i).wrap("<s>\(textS)</s>")
-            try! s.get(i).remove()
+            try! s.get(i).removeAttr("data-nodetype")
+            try! s.get(i).tagName("s")
         }
         
         //center parse
         let center = try! doc.select("p[data-nodetype=center]")
         for i in 0 ..< center.size() {
-            let textCenter = try! center.get(i).text()
-            try! center.get(i).wrap("<div align=\"center\">\(textCenter)</div>")
-            try! center.get(i).remove()
+            try! center.get(i).removeAttr("data-nodetype")
+            try! center.get(i).attr("align", "center")
+            try! center.get(i).tagName("div")
         }
         
         //right parse
         let right = try! doc.select("p[data-nodetype=right]")
         for i in 0 ..< right.size() {
-            let textRight = try! right.get(i).text()
-            try! right.get(i).wrap("<div align=\"right\">\(textRight)</div>")
-            try! right.get(i).remove()
+            try! right.get(i).removeAttr("data-nodetype")
+            try! right.get(i).attr("align", "right")
+            try! right.get(i).tagName("div")
         }
         
         //h1 parse
         let h1 = try! doc.select("span[data-nodetype=h1]")
         for i in 0 ..< h1.size() {
-            let textH1 = try! h1.get(i).text()
-            try! h1.get(i).wrap("<h1>\(textH1)</h1>")
-            try! h1.get(i).remove()
+            try! h1.get(i).removeAttr("data-nodetype")
+            try! h1.get(i).tagName("h1")
         }
         
         //h2 parse
         let h2 = try! doc.select("span[data-nodetype=h2]")
         for i in 0 ..< h2.size() {
-            let textH2 = try! h2.get(i).text()
-            try! h2.get(i).wrap("<h2>\(textH2)</h2>")
-            try! h2.get(i).remove()
+            try! h2.get(i).removeAttr("data-nodetype")
+            try! h2.get(i).tagName("h2")
         }
         
         //h3 parse
         let h3 = try! doc.select("span[data-nodetype=h3]")
         for i in 0 ..< h3.size() {
-            let textH3 = try! h3.get(i).text()
-            try! h3.get(i).wrap("<h3>\(textH3)</h3>")
-            try! h3.get(i).remove()
+            try! h3.get(i).removeAttr("data-nodetype")
+            try! h3.get(i).tagName("h3")
         }
         
         //icon parse
