@@ -13,8 +13,9 @@ import SwiftEntryKit
 import RichEditorView
 import SwiftSoup
 import ImageIO
+import IGColorPicker
 
-class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,RichEditorToolbarDelegate {
+class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,RichEditorToolbarDelegate,ColorPickerViewDelegate {
     
     //MARK: Properties
     var tagID: String?
@@ -47,7 +48,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }()
     lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44))
-        toolbar.options = [RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.clear,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
+        toolbar.options = [RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.clear,RichEditorDefaultOption.textColor,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
         return toolbar
     }()
     
@@ -180,6 +181,19 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         present(alert,animated: true,completion: nil)
     }
     
+    func richEditorToolbarChangeTextColor(_ toolbar: RichEditorToolbar) {
+        let colorPicker = ColorPickerView()
+        colorPicker.delegate = self
+        colorPicker.colors = [UIColor(hexRGB: "ffffff"),UIColor(hexRGB: "f44f44"),UIColor(hexRGB: "ff8f00"),UIColor(hexRGB: "eecc28"),UIColor(hexRGB: "f6ef1b"),UIColor(hexRGB: "c1e823"),UIColor(hexRGB: "85e41d"),UIColor(hexRGB: "64b31c"),UIColor(hexRGB: "0ad849"),UIColor(hexRGB: "0ee6b4"),UIColor(hexRGB: "22b4e0"),UIColor(hexRGB: "208ce8"),UIColor(hexRGB: "4c5aff"),UIColor(hexRGB: "8858fd"),UIColor(hexRGB: "bb7ef2"),UIColor(hexRGB: "d800ff"),UIColor(hexRGB: "ff50b0"),UIColor(hexRGB: "ffc7c7"),UIColor(hexRGB: "808080"),UIColor(hexRGB: "000000")] as! [UIColor]
+        let attributes = EntryAttributes.shared.iconEntry()
+        SwiftEntryKit.display(entry: colorPicker, using: attributes)
+    }
+    
+    func colorPickerView(_ colorPickerView: ColorPickerView, didSelectItemAt indexPath: IndexPath) {
+        // A color has been selected
+        self.contentTextView.setTextColor(colorPickerView.colors[indexPath.item])
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -268,6 +282,17 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         }
         for i in 0 ..< div.size() {
             try! div.get(i).tagName("p")
+        }
+        
+        //color parse
+        let color = try! doc.select("font[color]")
+        for i in 0 ..< color.size() {
+            var hex = try! color.get(i).attr("color")
+            hex = hex.replacingOccurrences(of: "#", with: "")
+            try! color.get(i).removeAttr("color")
+            try! color.get(i).attr("data-nodetype", "color")
+            try! color.get(i).attr("data-value", hex)
+            try! color.get(i).tagName("span")
         }
         
         //b parse

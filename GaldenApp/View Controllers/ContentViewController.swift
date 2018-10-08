@@ -476,6 +476,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             }
         }
         
+        //color parse
+        let color = try! doc.select("span[data-nodetype=color]")
+        for i in 0 ..< color.size() {
+            let colorHex = try! color.get(i).attr("data-value")
+            let text = try! color.get(i).text()
+            try! color.get(i).wrap("<font color=\"#\(colorHex)\">\(text)</font>")
+            try! color.get(i).remove()
+        }
+        
         //url parse
         let a = try! doc.select("span[data-nodetype=a]")
         for i in 0 ..< a.size() {
