@@ -15,6 +15,7 @@ import SKPhotoBrowser
 import SwiftEntryKit
 import SwiftSoup
 import SwiftDate
+import SafariServices
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler {
     
@@ -624,12 +625,18 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 decisionHandler(.cancel)
             } else {
                 let url = navigationAction.request.url
-                if #available(iOS 10.0, *) {
+                /*if #available(iOS 10.0, *) {
                     UIApplication.shared.open(url!, options: [:], completionHandler: nil)
                 } else {
                     // Fallback on earlier versions
                     UIApplication.shared.openURL(url!)
-                }
+                }*/
+                let sfVC = SFSafariViewController(url: url!)
+                sfVC.preferredControlTintColor = UIColor(hexRGB: "#568064")
+                sfVC.preferredBarTintColor = .black
+                sfVC.modalPresentationStyle = .overCurrentContext
+                sfVC.modalTransitionStyle = .coverVertical
+                present(sfVC, animated: true, completion: nil)
                 decisionHandler(.cancel)
             }
         } else {
