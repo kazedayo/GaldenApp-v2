@@ -160,15 +160,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             } else {
                 cell.accessoryView = UIView()
             }
-            //cell.accessoryView = UIImageView(image: UIImage(named: "read"))
         } else {
             cell.accessoryView = UIView()
         }
-        cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
         cell.threadTitleLabel.text = title
-        cell.threadTitleLabel.textColor = .lightGray
         cell.detailLabel.text = "\(nickName[0]) // 回覆: \(count) // 最後回覆: \(relativeDate!)"
-        cell.detailLabel.textColor = .darkGray
         let tags = self.threads[indexPath.row].tags.map {$0.fragments.tagDetails}
         cell.tagLabel.text = "#\(tags[0].name)"
         cell.tagLabel.textColor = UIColor(hexRGB: tags[0].color)

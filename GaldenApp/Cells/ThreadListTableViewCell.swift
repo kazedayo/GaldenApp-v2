@@ -28,6 +28,8 @@ class ThreadListTableViewCell: UITableViewCell {
         bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
         selectedBackgroundView = bgColorView
         
+        backgroundColor = UIColor(white: 0.15, alpha: 1)
+        
         threadTitleLabel.textColor = .lightGray
         threadTitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         threadTitleLabel.adjustsFontForContentSizeCategory = true

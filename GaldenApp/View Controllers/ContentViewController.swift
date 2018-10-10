@@ -634,8 +634,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 let sfVC = SFSafariViewController(url: url!)
                 sfVC.preferredControlTintColor = UIColor(hexRGB: "#568064")
                 sfVC.preferredBarTintColor = .black
-                sfVC.modalPresentationStyle = .overCurrentContext
-                sfVC.modalTransitionStyle = .coverVertical
                 present(sfVC, animated: true, completion: nil)
                 decisionHandler(.cancel)
             }
