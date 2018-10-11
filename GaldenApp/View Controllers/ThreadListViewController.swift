@@ -144,24 +144,23 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan)
         let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
+        cell.accessoryView = nil
         if (readThreads != nil) {
-            let newReplyCount = count-readThreads!.replyCount
-            if (newReplyCount > 0) {
-                let newReply = UILabel()
-                newReply.clipsToBounds = true
-                newReply.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
-                newReply.layer.cornerRadius = 5
-                newReply.textColor = .white
-                newReply.font = UIFont.systemFont(ofSize: 10)
-                newReply.backgroundColor = .red
-                newReply.textAlignment = .center
-                newReply.text = String(count-readThreads!.replyCount)
-                cell.accessoryView = newReply
-            } else {
-                cell.accessoryView = UIView()
+            DispatchQueue.main.async {
+                let newReplyCount = count-readThreads!.replyCount
+                if (newReplyCount > 0) {
+                    let newReply = UILabel()
+                    newReply.clipsToBounds = true
+                    newReply.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+                    newReply.layer.cornerRadius = 5
+                    newReply.textColor = .white
+                    newReply.font = UIFont.systemFont(ofSize: 10)
+                    newReply.backgroundColor = .red
+                    newReply.textAlignment = .center
+                    newReply.text = String(count-readThreads!.replyCount)
+                    cell.accessoryView = newReply
+                }
             }
-        } else {
-            cell.accessoryView = UIView()
         }
         cell.threadTitleLabel.text = title
         cell.detailLabel.text = "\(nickName[0]) // 回覆: \(count) // 最後回覆: \(relativeDate!)"

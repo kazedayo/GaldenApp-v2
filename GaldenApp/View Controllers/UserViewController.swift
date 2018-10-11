@@ -23,6 +23,11 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     lazy var logoutButton = UIBarButtonItem(title: "登出", style: .done, target: self, action: #selector(logoutButtonPressed(_:)))
     
     override func viewDidLoad() {
+        
+        DispatchQueue.main.async {
+            self.getUserThreads(completion: {})
+        }
+        
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         self.title = "會員資料"
@@ -80,8 +85,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             // Fallback on earlier versions
             tableView.addSubview(refreshControl)
         }
-        
-        getUserThreads(completion: {})
         
         view.addSubview(avatarView)
         view.addSubview(unameLabel)

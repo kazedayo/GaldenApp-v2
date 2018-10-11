@@ -22,12 +22,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     //MARK: Properties
     
     var tID: Int!
-    var isRated: Bool!
     var pageNow: Int = 1
     var pageCount: Double!
     var totalReplies: Int?
-    var quoteContent: String?
-    var blockedUsers = [String]()
     var pageHTML: String!
     var convertedHTML: String!
     var navType: NavigationType = .normal
@@ -238,15 +235,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
     }
     
-    func quote() {
-        /*let composeVC = ComposeViewController()
-        composeVC.topicID = self.threadIdReceived
-        composeVC.content = self.quoteContent! + "\n"
-        composeVC.composeType = .reply
-        composeVC.contentVC = self
-        SwiftEntryKit.display(entry: composeVC, using: EntryAttributes.shared.centerEntry())*/
-    }
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -286,30 +274,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             }
             self.present(shareView, animated: true, completion: nil)
         })
-    }
-    
-    func lm() {
-        /*let alert = UIAlertController.init(title: "一鍵留名", message: "確定?", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
-            _ in
-            HKGaldenAPI.shared.reply(topicID: self.threadIdReceived, content: keychain.get("LeaveNameText")!, completion: {
-                error in
-                if error == nil {
-                    HKGaldenAPI.shared.pageCount(postId: self.threadIdReceived, completion: {
-                        count in
-                        self.pageCount = count
-                        self.pageNow = Int(self.pageCount)
-                        self.pageButton.title = "第\(self.pageNow)頁"
-                        self.navType = .reply
-                        self.updateSequence()
-                    })
-                }
-            })
-        }))
-        alert.addAction(UIAlertAction.init(title: "不了", style: .cancel, handler: nil))
-        DispatchQueue.main.asyncAfter(deadline: 0.5, execute: {
-            self.present(alert,animated: true)
-        })*/
     }
     
     @objc func prevButtonPressed(_ sender: UIBarButtonItem) {
@@ -357,21 +321,23 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             if error == nil {
                 var contentHTML: String?
                 guard let thread = result?.data?.thread else { return }
-                contentHTML = self?.constructComments(thread: thread)
-                self?.titleLabel.text = thread.title
-                self?.navigationItem.titleView = self?.titleLabel
                 let totalPage = ceil(Double(thread.totalReplies)/50.0)
                 self?.pageCount = totalPage
                 self?.totalReplies = thread.totalReplies
-                self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
-                self?.buttonLogic()
                 
+                DispatchQueue.main.async {
+                    self?.titleLabel.text = thread.title
+                    self?.navigationItem.titleView = self?.titleLabel
+                    self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
+                    self?.buttonLogic()
+                }
+                
+                contentHTML = self?.constructComments(thread: thread)
                 if (self?.pageNow==Int(totalPage)) {
                     contentHTML!.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
-                var threadHTML = ""
-                threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML!)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+                let threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML!)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
                 
                 self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
             }
