@@ -12,7 +12,7 @@ import SwiftEntryKit
 class TagsTableViewController: UITableViewController {
 
     var channels = [ChannelDetails]()
-    var composeVC: ComposeViewController!
+    var composeVC: ThreadComposeViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()

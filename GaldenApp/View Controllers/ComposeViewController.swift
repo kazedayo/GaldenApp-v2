@@ -18,34 +18,13 @@ import IGColorPicker
 class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,RichEditorToolbarDelegate,ColorPickerViewDelegate,ColorPickerViewDelegateFlowLayout {
     
     //MARK: Properties
-    var tagID: String?
     var topicID: Int!
     var quoteID: String?
-    var composeType: ComposeType!
     var contentVC: ContentViewController?
-    var threadVC: ThreadListViewController?
     
     let iconKeyboard = IconKeyboard()
     
-    let titleTextField = UITextField()
     let contentTextView = RichEditorView()
-    lazy var selectTagLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor(hexRGB: "aaaaaa")
-        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        label.adjustsFontForContentSizeCategory = true
-        label.text = "標籤: "
-        return label
-    }()
-    lazy var tagButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = UIColor(hexRGB: "#568064")
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.setTitle("選擇...", for: .normal)
-        button.addTarget(self, action: #selector(tagButtonPressed(_:)), for: .touchUpInside)
-        return button
-    }()
     lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44))
         toolbar.options = [RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.clear,RichEditorDefaultOption.textColor,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
@@ -79,56 +58,14 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         toolbar.delegate = self
         contentTextView.delegate = self
         
-        titleTextField.delegate = self
-        titleTextField.borderStyle = .none
-        titleTextField.borderColor = .clear
-        titleTextField.backgroundColor = .clear
-        titleTextField.attributedPlaceholder = NSAttributedString(string: "標題", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
-        titleTextField.textColor = UIColor(hexRGB: "aaaaaa")
-        if #available(iOS 11.0, *) {
-            titleTextField.smartInsertDeleteType = .no
-            titleTextField.smartQuotesType = .no
-            titleTextField.smartDashesType = .no
-        } else {
-            // Fallback on earlier versions
-        }
         view.addSubview(contentTextView)
         
-        if composeType == .reply {
-            self.title = "回覆"
-        } else {
-            self.title = "發表主題"
-            view.addSubview(titleTextField)
-            view.addSubview(selectTagLabel)
-            view.addSubview(tagButton)
-            titleTextField.snp.makeConstraints {
-                (make) -> Void in
-                make.top.equalTo(view.snp.topMargin).offset(10)
-                make.leading.equalTo(view.snp.leadingMargin).offset(0)
-                make.trailing.equalTo(view.snp.trailingMargin).offset(0)
-            }
-            selectTagLabel.snp.makeConstraints {
-                (make) -> Void in
-                make.top.equalTo(contentTextView.snp.bottom).offset(10)
-                make.leading.equalTo(view.snp.leadingMargin).offset(2)
-                make.bottom.equalTo(view.snp.bottomMargin)
-            }
-            tagButton.snp.makeConstraints {
-                (make) -> Void in
-                make.top.equalTo(contentTextView.snp.bottom).offset(10)
-                make.leading.equalTo(selectTagLabel.snp.trailing).offset(10)
-                make.bottom.equalTo(view.snp.bottomMargin)
-            }
-        }
+        self.title = "回覆"
         
         contentTextView.snp.makeConstraints {
             (make) -> Void in
-            if composeType == .reply {
-                make.top.equalTo(view.snp.topMargin).offset(10)
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
-            } else {
-                make.top.equalTo(titleTextField.snp.bottom).offset(10)
-            }
+            make.top.equalTo(view.snp.topMargin).offset(10)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
         }
@@ -224,14 +161,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     @objc func submitButtonPressed(_ sender: UIButton) {
         self.view.endEditing(true)
-        if (composeType == .newThread && titleTextField.text == "") {
-            let alert = UIAlertController.init(title: "注意", message: "標題不可爲空", preferredStyle: .alert)
-            alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
-                action in
-                self.contentTextView.becomeFirstResponder()
-            }))
-            self.present(alert,animated: true,completion: nil)
-        }
         if (contentTextView.contentHTML == "" || contentTextView.contentHTML == "<br>") {
             let alert = UIAlertController.init(title: "注意", message: "內容不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
@@ -242,46 +171,22 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         } else {
             let parsedHtml = galdenParse(input: contentTextView.contentHTML)
             HUD.show(.progress)
-            if composeType == .reply {
-                let replyThreadMutation = ReplyThreadMutation(threadId: topicID, parentId: quoteID, html: parsedHtml)
-                apollo.perform(mutation: replyThreadMutation) {
-                    [weak self] result, error in
-                    if error == nil {
-                        HUD.flash(.success)
-                        self?.dismiss(animated: true, completion: nil)
-                        self?.contentVC?.unwindAfterReply()
-                    } else {
-                        HUD.flash(.error)
-                        print(error!)
-                    }
-                }
-            } else {
-                if tagID == nil {
-                    let alert = UIAlertController.init(title: "注意", message: "請選擇標籤", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
-                        action in
-                        self.contentTextView.becomeFirstResponder()
-                    }))
-                    self.present(alert,animated: true,completion: nil)
+            let replyThreadMutation = ReplyThreadMutation(threadId: topicID, parentId: quoteID, html: parsedHtml)
+            apollo.perform(mutation: replyThreadMutation) {
+                [weak self] result, error in
+                if error == nil {
+                    HUD.flash(.success)
+                    self?.dismiss(animated: true, completion: nil)
+                    self?.contentVC?.unwindAfterReply()
                 } else {
-                    let createThreadMutation = CreateThreadMutation(title: titleTextField.text!, tags: [tagID!], html: parsedHtml)
-                    apollo.perform(mutation: createThreadMutation) {
-                        [weak self] result, error in
-                        if error == nil {
-                            HUD.flash(.success)
-                            self?.dismiss(animated: true, completion: nil)
-                            self?.threadVC?.unwindToThreadListAfterNewPost()
-                        } else {
-                            HUD.flash(.error)
-                            print(error!)
-                        }
-                    }
+                    HUD.flash(.error)
+                    print(error!)
                 }
             }
         }
     }
     
-    private func galdenParse(input: String) -> String {
+    func galdenParse(input: String) -> String {
         let doc = try! SwiftSoup.parse(contentTextView.html)
         
         //p tag hack
@@ -417,12 +322,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         SwiftEntryKit.dismiss()
     }
     
-    func unwindToCompose(tagName: String,tagID: String,tagColor: String) {
-        self.tagID = tagID
-        tagButton.setTitle(tagName, for: .normal)
-        tagButton.setTitleColor(UIColor(hexRGB: tagColor), for: .normal)
-    }
-    
     @objc func callIconKeyboard() {
         //contentTextView.resignFirstResponder()
         let attributes = EntryAttributes.shared.iconEntry()
@@ -433,50 +332,21 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func tagButtonPressed(_ sender: UIButton) {
-        let tagsVC = TagsTableViewController()
-        let attributes = EntryAttributes.shared.iconEntry()
-        tagsVC.composeVC = self
-        SwiftEntryKit.display(entry: tagsVC, using: attributes)
-    }
-    
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
-            if composeType == .reply {
-                contentTextView.snp.updateConstraints {
-                    (make) -> Void in
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
-                }
-            } else {
-                selectTagLabel.snp.updateConstraints {
-                    (make) -> Void in
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
-                }
-                tagButton.snp.updateConstraints {
-                    (make) -> Void in
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
-                }
+            contentTextView.snp.updateConstraints {
+                (make) -> Void in
+                make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
             }
         }
     }
     
     @objc func keyboardWillHide(notification: Notification) {
         // keyboard is dismissed/hidden from the screen
-        if composeType == .reply {
-            contentTextView.snp.updateConstraints {
-                (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin)
-            }
-        } else {
-            selectTagLabel.snp.updateConstraints {
-                (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin)
-            }
-            tagButton.snp.updateConstraints {
-                (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin)
-            }
+        contentTextView.snp.updateConstraints {
+            (make) -> Void in
+            make.bottom.equalTo(view.snp.bottomMargin)
         }
     }
 }

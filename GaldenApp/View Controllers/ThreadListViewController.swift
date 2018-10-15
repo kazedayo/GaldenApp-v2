@@ -217,9 +217,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     @objc func newThreadButtonPressed() {
-        let composeVC = ComposeViewController()
+        let composeVC = ThreadComposeViewController()
         let composeNavVC = UINavigationController(rootViewController: composeVC)
-        composeVC.composeType = .newThread
         composeVC.threadVC = self
         present(composeNavVC, animated: true, completion: nil)
     }

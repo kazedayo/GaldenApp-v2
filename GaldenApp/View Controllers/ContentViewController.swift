@@ -162,7 +162,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         let composeVC = ComposeViewController()
         let composeNav = UINavigationController(rootViewController: composeVC)
         composeVC.topicID = self.tID
-        composeVC.composeType = .reply
         composeVC.quoteID = parentID
         composeVC.contentVC = self
         present(composeNav, animated: true, completion: nil)
@@ -224,7 +223,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             let composeVC = ComposeViewController()
             let composeNav = UINavigationController(rootViewController: composeVC)
             composeVC.topicID = self.tID
-            composeVC.composeType = .reply
             composeVC.contentVC = self
             present(composeNav, animated: true, completion: nil)
         } else {

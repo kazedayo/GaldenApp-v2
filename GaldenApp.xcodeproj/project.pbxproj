@@ -34,6 +34,7 @@
 		42A1C8102140A3C000C0C511 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */; };
 		42B14966214FBD3800A9DEA3 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B14965214FBD3800A9DEA3 /* UserTableViewCell.swift */; };
 		42CDE188214F4FEE00793A8D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CDE187214F4FEE00793A8D /* LoginViewController.swift */; };
+		42CFEA6D21709F7200FA83B4 /* ThreadComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CFEA6C21709F7200FA83B4 /* ThreadComposeViewController.swift */; };
 		42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8931F7923E1002CC13F /* AppDelegate.swift */; };
 		42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89A1F7923E1002CC13F /* Assets.xcassets */; };
 		42E7F89E1F7923E1002CC13F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89C1F7923E1002CC13F /* LaunchScreen.storyboard */; };
@@ -83,6 +84,7 @@
 		42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		42B14965214FBD3800A9DEA3 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		42CDE187214F4FEE00793A8D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		42CFEA6C21709F7200FA83B4 /* ThreadComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadComposeViewController.swift; sourceTree = "<group>"; };
 		42E7F8901F7923E1002CC13F /* GaldenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaldenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8931F7923E1002CC13F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42E7F89A1F7923E1002CC13F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			children = (
 				424A47042073493E005795A6 /* SideMenuViewController.swift */,
 				424A46F72073493C005795A6 /* ComposeViewController.swift */,
+				42CFEA6C21709F7200FA83B4 /* ThreadComposeViewController.swift */,
 				427AD60921685E91004BE47C /* TagsTableViewController.swift */,
 				424A46FC2073493D005795A6 /* ContentViewController.swift */,
 				42F7943D21075BE100E53614 /* UserViewController.swift */,
@@ -495,6 +498,7 @@
 				424A47062073493E005795A6 /* PageSelectTableViewCell.swift in Sources */,
 				4297113A2146AA7C000EA809 /* API.swift in Sources */,
 				427AD60A21685E91004BE47C /* TagsTableViewController.swift in Sources */,
+				42CFEA6D21709F7200FA83B4 /* ThreadComposeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

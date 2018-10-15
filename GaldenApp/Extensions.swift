@@ -120,11 +120,6 @@ enum NavigationType {
     case reply
 }
 
-enum ComposeType {
-    case reply
-    case newThread
-}
-
 class EntryAttributes {
     static let shared = EntryAttributes()
     
