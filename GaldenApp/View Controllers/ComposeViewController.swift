@@ -196,120 +196,120 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         } else {
             try! doc.body()!.append("<br>")
         }
-        for i in 0 ..< div.size() {
-            try! div.get(i).tagName("p")
+        for el in div {
+            try! el.tagName("p")
         }
         
         //color parse
         let color = try! doc.select("font[color]")
-        for i in 0 ..< color.size() {
-            var hex = try! color.get(i).attr("color")
+        for el in color {
+            var hex = try! el.attr("color")
             hex = hex.replacingOccurrences(of: "#", with: "")
-            try! color.get(i).removeAttr("color")
-            try! color.get(i).attr("data-nodetype", "color")
-            try! color.get(i).attr("data-value", hex)
-            try! color.get(i).tagName("span")
+            try! el.removeAttr("color")
+            try! el.attr("data-nodetype", "color")
+            try! el.attr("data-value", hex)
+            try! el.tagName("span")
         }
         
         //b parse
         let b = try! doc.select("b")
-        for i in 0 ..< b.size() {
-            try! b.get(i).attr("data-nodetype", "b")
-            try! b.get(i).tagName("span")
+        for el in b {
+            try! el.attr("data-nodetype", "b")
+            try! el.tagName("span")
         }
         
         //i parse
         let it = try! doc.select("i")
-        for i in 0 ..< it.size() {
-            try! it.get(i).attr("data-nodetype", "i")
-            try! it.get(i).tagName("span")
+        for el in it {
+            try! el.attr("data-nodetype", "i")
+            try! el.tagName("span")
         }
         
         //u parse
         let u = try! doc.select("u")
-        for i in 0 ..< u.size() {
-            try! u.get(i).attr("data-nodetype", "u")
-            try! u.get(i).tagName("span")
+        for el in u {
+            try! el.attr("data-nodetype", "u")
+            try! el.tagName("span")
         }
         
         //s parse
         let s = try! doc.select("strike")
-        for i in 0 ..< s.size() {
-            try! s.get(i).attr("data-nodetype", "s")
-            try! s.get(i).tagName("span")
+        for el in s {
+            try! el.attr("data-nodetype", "s")
+            try! el.tagName("span")
         }
         
         //center parse
         let center = try! doc.select("p[style=text-align: center;]")
-        for i in 0 ..< center.size() {
-            try! center.get(i).removeAttr("style")
-            try! center.get(i).attr("data-nodetype", "center")
-            try! center.get(i).tagName("p")
+        for el in center {
+            try! el.removeAttr("style")
+            try! el.attr("data-nodetype", "center")
+            try! el.tagName("p")
         }
         
         //right parse
         let right = try! doc.select("p[style=text-align: right;]")
-        for i in 0 ..< right.size() {
-            try! center.get(i).removeAttr("style")
-            try! right.get(i).attr("data-nodetype", "right")
-            try! right.get(i).tagName("p")
+        for el in right {
+            try! el.removeAttr("style")
+            try! el.attr("data-nodetype", "right")
+            try! el.tagName("p")
         }
         
         //h1 parse
         let h1 = try! doc.select("h1")
-        for i in 0 ..< h1.size() {
-            try! h1.get(i).attr("data-nodetype", "h1")
-            try! h1.get(i).tagName("span")
+        for el in h1 {
+            try! el.attr("data-nodetype", "h1")
+            try! el.tagName("span")
         }
         
         //h2 parse
         let h2 = try! doc.select("h2")
-        for i in 0 ..< h2.size() {
-            try! h2.get(i).attr("data-nodetype", "h2")
-            try! h2.get(i).tagName("span")
+        for el in h2 {
+            try! el.attr("data-nodetype", "h2")
+            try! el.tagName("span")
         }
         
         //h3 parse
         let h3 = try! doc.select("h3")
-        for i in 0 ..< h3.size() {
-            try! h3.get(i).attr("data-nodetype", "h3")
-            try! h3.get(i).tagName("span")
+        for el in h3 {
+            try! el.attr("data-nodetype", "h3")
+            try! el.tagName("span")
         }
         
         //icon parse
         let icon = try! doc.select("img.icon")
-        for i in 0 ..< icon.size() {
-            try! icon.get(i).removeAttr("class")
-            try! icon.get(i).removeAttr("src")
-            try! icon.get(i).tagName("span")
+        for el in icon {
+            try! el.removeAttr("class")
+            try! el.removeAttr("src")
+            try! el.tagName("span")
         }
         
         //image parse
         let img = try! doc.select("img")
-        for i in 0 ..< img.size() {
-            let src = try! img.get(i).attr("src")
-            try! img.removeAttr("src")
-            try! img.removeAttr("alt")
-            try! img.attr("data-nodetype", "img")
-            try! img.attr("data-src", src)
+        for el in img {
+            let src = try! el.attr("src")
+            try! el.removeAttr("src")
+            try! el.removeAttr("alt")
+            try! el.attr("data-nodetype", "img")
+            try! el.attr("data-src", src)
             let url = URL(string: src)
             if let imageSource = CGImageSourceCreateWithURL(url! as CFURL, nil) {
                 if let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as Dictionary? {
                     let pixelWidth = imageProperties[kCGImagePropertyPixelWidth] as! Int
                     let pixelHeight = imageProperties[kCGImagePropertyPixelHeight] as! Int
-                    try! img.attr("data-sx", String(pixelWidth))
-                    try! img.attr("data-sy", String(pixelHeight))
+                    try! el.attr("data-sx", String(pixelWidth))
+                    try! el.attr("data-sy", String(pixelHeight))
                 }
             }
-            try! img.tagName("span")
+            try! el.tagName("span")
         }
         
         //url parse
         let url = try! doc.select("a")
-        for i in 0 ..< url.size() {
-            let href = try! url.get(i).attr("href")
-            try! url.get(i).wrap("<span data-nodetype=\"a\" data-href=\"\(href)\"></span>")
-            try! url.get(i).remove()
+        for el in url {
+            let href = try! el.attr("href")
+            try! el.wrap("<span data-nodetype=\"a\" data-href=\"\(href)\"></span>")
+            try! el.remove()
         }
         
         var parsedHtml = "<div id=\"pmc\"><p>\(try! doc.body()!.html())</div>"

@@ -11,6 +11,7 @@ import URLNavigator
 
 struct URLNavigationMap {
     static func initialize(navigator: NavigatorType) {
+        //url with page number
         navigator.register("https://hkgalden.org/forum/thread/<int:id>/<int:page>") {
             url, values, context in
             let contentVC = ContentViewController()
@@ -18,6 +19,15 @@ struct URLNavigationMap {
             guard let page = values["page"] as? Int else {return nil}
             contentVC.tID = id
             contentVC.pageNow = page
+            return contentVC
+        }
+        
+        //url without page number
+        navigator.register("https://hkgalden.org/forum/thread/<int:id>") {
+            url, values, context in
+            let contentVC = ContentViewController()
+            guard let id = values["id"] as? Int else {return nil}
+            contentVC.tID = id
             return contentVC
         }
     }

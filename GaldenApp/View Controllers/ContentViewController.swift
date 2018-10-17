@@ -157,18 +157,17 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         // Dispose of any resources that can be recreated.
     }
     
-    func quoteButtonPressed(index: String) {
-        let parentID = comments![Int(index)!].fragments.commentFields.id
+    func quoteButtonPressed(id: String) {
         let composeVC = ComposeViewController()
         let composeNav = UINavigationController(rootViewController: composeVC)
         composeVC.topicID = self.tID
-        composeVC.quoteID = parentID
+        composeVC.quoteID = id
         composeVC.contentVC = self
         present(composeNav, animated: true, completion: nil)
     }
     
-    func blockButtonPressed(index: String) {
-        let blockUserMutation = BlockUserMutation(id: comments![Int(index)!].fragments.commentFields.author.id)
+    func blockButtonPressed(id: String) {
+        let blockUserMutation = BlockUserMutation(id: id)
         apollo.perform(mutation: blockUserMutation) {
             [weak self] result,error in
             if result?.data?.blockUser == true {
@@ -351,38 +350,38 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             comment = comment.filter {!blockedUserIds.contains($0.fragments.commentFields.author.id)}
         }
         self.comments = comment
-        for i in 0 ..< comment.count {
+        for commentObj in comment {
             var avatarurl = ""
-            if comment[i].fragments.commentFields.author.avatar == nil {
+            if commentObj.fragments.commentFields.author.avatar == nil {
                 avatarurl = "https://i.imgur.com/2lya6uS.png"
             } else {
-                avatarurl = comment[i].fragments.commentFields.author.avatar!
+                avatarurl = commentObj.fragments.commentFields.author.avatar!
             }
             
             var genderColor = ""
-            if comment[i].fragments.commentFields.author.gender == UserGender.m {
+            if commentObj.fragments.commentFields.author.gender == UserGender.m {
                 genderColor = "#6495ed"
-            } else if comment[i].fragments.commentFields.author.gender == UserGender.f {
+            } else if commentObj.fragments.commentFields.author.gender == UserGender.f {
                 genderColor = "#ff6961"
             }
             
             var groupColor = "#aaaaaa"
             var groupName = "郊登仔"
-            if comment[i].fragments.commentFields.author.groups.isEmpty == false {
-                if comment[i].fragments.commentFields.author.groups[0].id == "DEVELOPER" {
+            if commentObj.fragments.commentFields.author.groups.isEmpty == false {
+                if commentObj.fragments.commentFields.author.groups[0].id == "DEVELOPER" {
                     groupColor = "#9e3e3f"
-                    groupName = comment[i].fragments.commentFields.author.groups[0].name
-                } else if comment[i].fragments.commentFields.author.groups[0].id == "ADMIN" {
+                    groupName = commentObj.fragments.commentFields.author.groups[0].name
+                } else if commentObj.fragments.commentFields.author.groups[0].id == "ADMIN" {
                     groupColor = "#4b6690"
-                    groupName = comment[i].fragments.commentFields.author.groups[0].name
+                    groupName = commentObj.fragments.commentFields.author.groups[0].name
                 }
             }
             
-            let date = (comment[i].fragments.commentFields.date.toISODate()! + 8.hours).toString(DateToStringStyles.dateTime(.short))
+            let date = (commentObj.fragments.commentFields.date.toISODate()! + 8.hours).toString(DateToStringStyles.dateTime(.short))
             
             //quote recursive
             var quoteHTML = ""
-            let rootParent = comment[i].parent
+            let rootParent = commentObj.parent
             let firstLayer = rootParent?.parent
             let secondLayer = firstLayer?.parent
             let thirdLayer = secondLayer?.parent
@@ -417,7 +416,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             doc = galdenParser(doc: doc)
             quoteHTML = try! doc.body()!.html()
             
-            var templateHTML = "<div class=\"comment\" id=\"\(comment[i].fragments.commentFields.floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(comment[i].fragments.commentFields.author.nickname)</td><td class=\"righttext\">\(date)</td></tr><tr><td class=\"lefttext\" style=\"color:\(groupColor)\">\(groupName)</td><td class=\"righttext\">#\(comment[i].fragments.commentFields.floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(quoteHTML)\(comment[i].fragments.commentFields.content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(i)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(i)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
+            var templateHTML = "<div class=\"comment\" id=\"\(commentObj.fragments.commentFields.floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(commentObj.fragments.commentFields.author.nickname)</td><td class=\"righttext\">\(date)</td></tr><tr><td class=\"lefttext\" style=\"color:\(groupColor)\">\(groupName)</td><td class=\"righttext\">#\(commentObj.fragments.commentFields.floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(quoteHTML)\(commentObj.fragments.commentFields.content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(commentObj.fragments.commentFields.id)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(commentObj.fragments.commentFields.author.id)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
             doc = try! SwiftSoup.parse(templateHTML)
             doc = galdenParser(doc: doc)
             templateHTML = try! doc.body()!.html()
@@ -443,99 +442,99 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         //color parse
         let color = try! doc.select("span[data-nodetype=color]")
-        for i in 0 ..< color.size() {
-            let colorHex = try! color.get(i).attr("data-value")
-            try! color.get(i).removeAttr("data-nodetype")
-            try! color.get(i).removeAttr("data-value")
-            try! color.get(i).attr("color", "#\(colorHex)")
-            try! color.get(i).tagName("font")
+        for el in color {
+            let colorHex = try! el.attr("data-value")
+            try! el.removeAttr("data-nodetype")
+            try! el.removeAttr("data-value")
+            try! el.attr("color", "#\(colorHex)")
+            try! el.tagName("font")
         }
         
         //url parse
         let a = try! doc.select("span[data-nodetype=a]")
-        for i in 0 ..< a.size() {
-            let url = try! a.get(i).attr("data-href")
-            try! a.get(i).removeAttr("data-nodetype")
-            try! a.get(i).removeAttr("data-href")
-            try! a.get(i).attr("href", url)
-            try! a.get(i).text(url)
-            try! a.get(i).tagName("a")
+        for el in a {
+            let url = try! el.attr("data-href")
+            try! el.removeAttr("data-nodetype")
+            try! el.removeAttr("data-href")
+            try! el.attr("href", url)
+            try! el.text(url)
+            try! el.tagName("a")
         }
         
         //b parse
         let b = try! doc.select("span[data-nodetype=b]")
-        for i in 0 ..< b.size() {
-            try! b.get(i).removeAttr("data-nodetype")
-            try! b.get(i).tagName("b")
+        for el in b {
+            try! el.removeAttr("data-nodetype")
+            try! el.tagName("b")
         }
         
         //i parse
         let it = try! doc.select("span[data-nodetype=i]")
-        for i in 0 ..< it.size() {
-            try! it.get(i).removeAttr("data-nodetype")
-            try! it.get(i).tagName("i")
+        for el in it {
+            try! el.removeAttr("data-nodetype")
+            try! el.tagName("i")
         }
         
         //u parse
         let u = try! doc.select("span[data-nodetype=u]")
-        for i in 0 ..< u.size() {
-            try! u.get(i).removeAttr("data-nodetype")
-            try! u.get(i).tagName("u")
+        for el in u {
+            try! el.removeAttr("data-nodetype")
+            try! el.tagName("u")
         }
         
         //s parse
         let s = try! doc.select("span[data-nodetype=s]")
-        for i in 0 ..< s.size() {
-            try! s.get(i).removeAttr("data-nodetype")
-            try! s.get(i).tagName("s")
+        for el in s {
+            try! el.removeAttr("data-nodetype")
+            try! el.tagName("s")
         }
         
         //center parse
         let center = try! doc.select("p[data-nodetype=center]")
-        for i in 0 ..< center.size() {
-            try! center.get(i).removeAttr("data-nodetype")
-            try! center.get(i).attr("align", "center")
-            try! center.get(i).tagName("div")
+        for el in center {
+            try! el.removeAttr("data-nodetype")
+            try! el.attr("align", "center")
+            try! el.tagName("div")
         }
         
         //right parse
         let right = try! doc.select("p[data-nodetype=right]")
-        for i in 0 ..< right.size() {
-            try! right.get(i).removeAttr("data-nodetype")
-            try! right.get(i).attr("align", "right")
-            try! right.get(i).tagName("div")
+        for el in right {
+            try! el.removeAttr("data-nodetype")
+            try! el.attr("align", "right")
+            try! el.tagName("div")
         }
         
         //h1 parse
         let h1 = try! doc.select("span[data-nodetype=h1]")
-        for i in 0 ..< h1.size() {
-            try! h1.get(i).removeAttr("data-nodetype")
-            try! h1.get(i).tagName("h1")
+        for el in h1 {
+            try! el.removeAttr("data-nodetype")
+            try! el.tagName("h1")
         }
         
         //h2 parse
         let h2 = try! doc.select("span[data-nodetype=h2]")
-        for i in 0 ..< h2.size() {
-            try! h2.get(i).removeAttr("data-nodetype")
-            try! h2.get(i).tagName("h2")
+        for el in h2 {
+            try! el.removeAttr("data-nodetype")
+            try! el.tagName("h2")
         }
         
         //h3 parse
         let h3 = try! doc.select("span[data-nodetype=h3]")
-        for i in 0 ..< h3.size() {
-            try! h3.get(i).removeAttr("data-nodetype")
-            try! h3.get(i).tagName("h3")
+        for el in h3 {
+            try! el.removeAttr("data-nodetype")
+            try! el.tagName("h3")
         }
         
         //icon parse
         let icon = try! doc.select("span[data-nodetype=smiley]")
-        for i in 0..<icon.size() {
-            let pack = try! icon.get(i).attr("data-pack-id")
-            let id = try! icon.get(i).attr("data-id")
-            let width = try! icon.get(i).attr("data-sx")
-            let height = try! icon.get(i).attr("data-sy")
-            try! icon.get(i).wrap("<img src=\"https://s.hkgalden.org/smilies/\(pack)/\(id).gif\" width=\"\(width)\" height=\"\(height)\">")
-            try! icon.get(i).remove()
+        for el in icon {
+            let pack = try! el.attr("data-pack-id")
+            let id = try! el.attr("data-id")
+            let width = try! el.attr("data-sx")
+            let height = try! el.attr("data-sy")
+            try! el.wrap("<img src=\"https://s.hkgalden.org/smilies/\(pack)/\(id).gif\" width=\"\(width)\" height=\"\(height)\">")
+            try! el.remove()
         }
         
         return doc
@@ -613,7 +612,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "quote" {
             if keychain.get("userKey") != nil {
-                self.quoteButtonPressed(index: message.body as! String)
+                self.quoteButtonPressed(id: message.body as! String)
             } else {
                 let alert = UIAlertController(title: nil, message: "請先登入", preferredStyle: .alert)
                 let ok = UIAlertAction(title: "OK", style: .cancel, handler: nil)
@@ -625,7 +624,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 let alert = UIAlertController.init(title: "封鎖會員", message: "你確定要封鎖此會員?", preferredStyle: .alert)
                 alert.addAction(UIAlertAction.init(title: "55", style: .destructive, handler: {
                     _ in
-                    self.blockButtonPressed(index: message.body as! String)
+                    self.blockButtonPressed(id: message.body as! String)
                 }))
                 alert.addAction(UIAlertAction.init(title: "不了", style: .cancel, handler: nil))
                 present(alert,animated: true)
