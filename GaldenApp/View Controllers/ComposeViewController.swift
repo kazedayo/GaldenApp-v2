@@ -170,6 +170,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             self.present(alert,animated: true,completion: nil)
         } else {
             let parsedHtml = galdenParse(input: contentTextView.contentHTML)
+            //print(contentTextView.contentHTML)
+            //print(parsedHtml)
             HUD.show(.progress)
             let replyThreadMutation = ReplyThreadMutation(threadId: topicID, parentId: quoteID, html: parsedHtml)
             apollo.perform(mutation: replyThreadMutation) {
@@ -189,13 +191,17 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     func galdenParse(input: String) -> String {
         let doc = try! SwiftSoup.parse(contentTextView.html)
         
+        //remove style for all el
+        let el = try! doc.getAllElements()
+        try! el.removeAttr("style")
+        
         //p tag hack
         let div = try! doc.select("div")
         if div.first() != nil {
             try! div.first()!.before("<br>")
-        } else {
-            try! doc.body()!.append("<br>")
+            try! div.first()!.after("<hr>")
         }
+        try! doc.body()!.append("<br>")
         for el in div {
             try! el.tagName("p")
         }
@@ -313,7 +319,19 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         }
         
         var parsedHtml = "<div id=\"pmc\"><p>\(try! doc.body()!.html())</div>"
+        parsedHtml = parsedHtml.replacingOccurrences(of: "<hr>", with: "<p>")
         parsedHtml = parsedHtml.replacingOccurrences(of: "<br>", with: "</p>")
+        
+        //remove empty p tag
+        let parsedDoc = try! SwiftSoup.parse(parsedHtml)
+        let p = try! parsedDoc.select("p")
+        for el in p {
+            if el.hasText() == false {
+                try! el.remove()
+            }
+        }
+        parsedHtml = try! parsedDoc.body()!.html()
+        
         return parsedHtml
     }
     

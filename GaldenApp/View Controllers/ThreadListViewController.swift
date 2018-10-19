@@ -24,6 +24,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     var selectedThread: Int?
     var selectedPage: Int?
     var selectedThreadTitle: String!
+    var eof = false
     
     let realm = try! Realm()
     let tableView = UITableView()
@@ -185,12 +186,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if (threads.count - indexPath.row) == 1 {
             self.pageNow += 1
-            let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-            spinner.startAnimating()
-            spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: tableView.bounds.width, height: CGFloat(44))
-            
-            self.tableView.tableFooterView = spinner
-            self.tableView.tableFooterView?.isHidden = false
             self.updateSequence(append: true, completion: {})
         }
     }
@@ -279,6 +274,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             [weak self] result, error in
             if (error == nil) {
                 guard let threads = result?.data?.threadsByChannel else { return }
+                if threads.isEmpty {
+                    self?.eof = true
+                    completion()
+                }
                 if append == true {
                     self?.threads.append(contentsOf: threads.map {$0.fragments.threadListDetails})
                 } else {
