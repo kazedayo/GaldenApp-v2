@@ -36,8 +36,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     let activityIndicator = UIActivityIndicatorView()
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-    lazy var replyButton = UIBarButtonItem(image: UIImage(named: "Reply"), style: .plain, target: self, action: #selector(replyButtonPressed))
-    lazy var shareButton = UIBarButtonItem(image: UIImage(named: "Share"), style: .plain, target: self, action: #selector(share))
+    lazy var replyButton = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(replyButtonPressed))
+    lazy var shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
     lazy var pageButton = UIBarButtonItem(title: "撈緊...", style: .plain, target: self, action: #selector(pageButtonPressed))
     lazy var prevButton = UIBarButtonItem(image: UIImage(named: "previous"), style: .plain, target: self, action: #selector(prevButtonPressed(_:)))
     lazy var nextButton = UIBarButtonItem(image: UIImage(named: "next"), style: .plain, target: self, action: #selector(nextButtonPressed(_:)))
@@ -535,6 +535,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             let height = try! el.attr("data-sy")
             try! el.wrap("<img src=\"https://s.hkgalden.org/smilies/\(pack)/\(id).gif\" width=\"\(width)\" height=\"\(height)\">")
             try! el.remove()
+        }
+        
+        //empty p fix
+        let p = try! doc.select("p")
+        for el in p {
+            if try! el.html().isEmpty == true {
+                try! el.tagName("br")
+            }
         }
         
         return doc

@@ -25,7 +25,7 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "設定"
+        navigationItem.title = "設定"
         
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.separatorColor = UIColor(white: 0.15, alpha: 1)

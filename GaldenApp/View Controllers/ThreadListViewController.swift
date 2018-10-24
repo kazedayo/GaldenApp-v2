@@ -30,8 +30,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     let tableView = UITableView()
     let sideMenuVC = SideMenuViewController()
     lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
-    lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"), style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
-    lazy var newThread = UIBarButtonItem(image: UIImage(named: "compose"), style: .plain, target: self, action: #selector(newThreadButtonPressed))
+    lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"),style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
+    lazy var newThread = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(newThreadButtonPressed))
     
     var reloadButton = UIButton()
     
@@ -87,6 +87,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             // Fallback on earlier versions
             tableView.addSubview(refreshControl)
         }
+        
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        spinner.startAnimating()
+        spinner.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 44)
+        self.tableView.tableFooterView = spinner;
         
         reloadButton.center = self.view.center
         reloadButton.setTitle("重新載入", for: .normal)
@@ -144,23 +149,24 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let date = dateMap.last!.toISODate()
         let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan)
         let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
+        let newReply: UILabel = {
+            let label = UILabel()
+            label.clipsToBounds = true
+            label.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+            label.layer.cornerRadius = 5
+            label.textColor = .white
+            label.font = UIFont.systemFont(ofSize: 10)
+            label.backgroundColor = .red
+            label.textAlignment = .center
+            return label
+        }()
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
         cell.accessoryView = nil
         if (readThreads != nil) {
-            DispatchQueue.main.async {
-                let newReplyCount = count-readThreads!.replyCount
-                if (newReplyCount > 0) {
-                    let newReply = UILabel()
-                    newReply.clipsToBounds = true
-                    newReply.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
-                    newReply.layer.cornerRadius = 5
-                    newReply.textColor = .white
-                    newReply.font = UIFont.systemFont(ofSize: 10)
-                    newReply.backgroundColor = .red
-                    newReply.textAlignment = .center
-                    newReply.text = String(count-readThreads!.replyCount)
-                    cell.accessoryView = newReply
-                }
+            let newReplyCount = count-readThreads!.replyCount
+            if (newReplyCount > 0) {
+                newReply.text = String(count-readThreads!.replyCount)
+                cell.accessoryView = newReply
             }
         }
         cell.threadTitleLabel.text = title
@@ -273,23 +279,23 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         apollo.fetch(query: getThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result, error in
             if (error == nil) {
-                guard let threads = result?.data?.threadsByChannel else { return }
-                if threads.isEmpty {
+                var threads = result?.data?.threadsByChannel.map {$0.fragments.threadListDetails}
+                if threads!.isEmpty {
                     self?.eof = true
                     completion()
                 }
-                if append == true {
-                    self?.threads.append(contentsOf: threads.map {$0.fragments.threadListDetails})
-                } else {
-                    self?.threads = threads.map {$0.fragments.threadListDetails}
-                }
                 if keychain.get("userKey") != nil {
                     let blockedUserIds = sessionUser?.blockedUserIds
-                    self?.threads = (self?.threads.filter {!(blockedUserIds?.contains($0.replies[0].author.id))!})!
+                    threads = (threads!.filter {!(blockedUserIds?.contains($0.replies[0].author.id))!})
                 }
                 //review no tomato
                 if keychain.get("userKey") == nil || sessionUser?.id == "19803184133832704" {
-                    self?.threads = (self?.threads.filter {$0.tags[0].fragments.tagDetails.id != "PVAy33AYm"})!
+                    threads = (threads!.filter {$0.tags[0].fragments.tagDetails.id != "PVAy33AYm"})
+                }
+                if append == true {
+                    self?.threads.append(contentsOf: threads!)
+                } else {
+                    self?.threads = threads!
                 }
                 self?.tableView.reloadData()
                 self?.reloadButton.isHidden = true

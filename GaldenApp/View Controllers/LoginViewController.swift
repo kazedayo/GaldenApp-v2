@@ -19,7 +19,7 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        self.title = "會員資料"
+        navigationItem.title = "會員資料"
         webView.navigationDelegate = self
         
         navigationItem.rightBarButtonItem = loginButton

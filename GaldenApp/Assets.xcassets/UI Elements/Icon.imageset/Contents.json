@@ -6,11 +6,12 @@
     },
     {
       "idiom" : "universal",
-      "filename" : "icons8-lol.png",
+      "filename" : "icons8-happy-48.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "icons8-happy-72.png",
       "scale" : "3x"
     }
   ],

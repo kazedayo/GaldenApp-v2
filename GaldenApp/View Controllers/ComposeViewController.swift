@@ -178,8 +178,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                 [weak self] result, error in
                 if error == nil {
                     HUD.flash(.success)
-                    self?.dismiss(animated: true, completion: nil)
-                    self?.contentVC?.unwindAfterReply()
+                    self?.dismiss(animated: true, completion: {
+                        self?.contentVC?.unwindAfterReply()
+                    })
                 } else {
                     HUD.flash(.error)
                     print(error!)
@@ -326,7 +327,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         let parsedDoc = try! SwiftSoup.parse(parsedHtml)
         let p = try! parsedDoc.select("p")
         for el in p {
-            if el.hasText() == false {
+            if try! el.html().isEmpty == true {
                 try! el.remove()
             }
         }
