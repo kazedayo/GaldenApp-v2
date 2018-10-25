@@ -20,6 +20,11 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         navigationItem.title = "會員資料"
+        if #available(iOS 11.0, *) {
+            navigationController?.navigationBar.prefersLargeTitles = true
+        } else {
+            // Fallback on earlier versions
+        }
         webView.navigationDelegate = self
         
         navigationItem.rightBarButtonItem = loginButton

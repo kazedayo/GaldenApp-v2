@@ -18,6 +18,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     let avatarView = UIImageView()
     let unameLabel = UILabel()
     let ugroupLabel = UILabel()
+    let headerView = UIView()
     let tableView = UITableView()
     let segmentControl = UISegmentedControl.init(items: ["起底","封鎖名單"])
     lazy var logoutButton = UIBarButtonItem(title: "登出", style: .done, target: self, action: #selector(logoutButtonPressed(_:)))
@@ -31,6 +32,11 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         navigationItem.title = "會員資料"
+        if #available(iOS 11.0, *) {
+            navigationController?.navigationBar.prefersLargeTitles = true
+        } else {
+            // Fallback on earlier versions
+        }
         navigationItem.rightBarButtonItem = logoutButton
         
         tableView.delegate = self
@@ -47,7 +53,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         segmentControl.tintColor = UIColor(hexRGB: "#568064")
         segmentControl.selectedSegmentIndex = 0
         segmentControl.addTarget(self, action: #selector(onChange(_:)), for: .valueChanged)
-        view.addSubview(segmentControl)
+        headerView.addSubview(segmentControl)
         
         //avatar
         if sessionUser?.avatar != nil {
@@ -79,20 +85,15 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = UIColor(white: 0.13, alpha: 1)
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshControl
-        } else {
-            // Fallback on earlier versions
-            tableView.addSubview(refreshControl)
-        }
+        tableView.refreshControl = refreshControl
         
-        view.addSubview(avatarView)
-        view.addSubview(unameLabel)
-        view.addSubview(ugroupLabel)
+        headerView.addSubview(avatarView)
+        headerView.addSubview(unameLabel)
+        headerView.addSubview(ugroupLabel)
         
         avatarView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin).offset(20)
+            make.top.equalToSuperview().offset(20)
             make.leading.equalTo(20)
             make.width.equalTo(50)
             make.height.equalTo(50)
@@ -100,7 +101,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         unameLabel.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin).offset(20)
+            make.top.equalToSuperview().offset(20)
             make.leading.equalTo(avatarView.snp.trailing).offset(10)
         }
         
@@ -113,12 +114,12 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         segmentControl.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(ugroupLabel.snp.bottom).offset(20)
-            make.centerX.equalToSuperview()
+            make.centerX.equalTo(headerView)
         }
         
         tableView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(segmentControl.snp.bottom).offset(20)
+            make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.bottom.equalTo(view.snp.bottomMargin)
@@ -139,6 +140,15 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isToolbarHidden = true
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        headerView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 150
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -268,7 +278,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             [weak self] result,error in
             if error == nil {
                 self?.userThreads = (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!
-                self?.tableView.reloadData()
+                self?.tableView.reloadSections(IndexSet(integer: 0), with: .none)
                 NetworkActivityIndicatorManager.networkOperationFinished()
                 completion()
             }
@@ -282,7 +292,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             [weak self] result,error in
             if error == nil {
                 self?.blockedUsers = (result?.data?.blockedUsers)!
-                self?.tableView.reloadData()
+                self?.tableView.reloadSections(IndexSet(integer: 0), with: .none)
                 NetworkActivityIndicatorManager.networkOperationFinished()
                 completion()
             }
@@ -304,7 +314,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     @objc func onChange(_ sender: UISegmentedControl) {
-        tableView.isHidden = true
         if segmentControl.selectedSegmentIndex == 0 {
             getUserThreads(completion: {
                 self.tableView.isHidden = false

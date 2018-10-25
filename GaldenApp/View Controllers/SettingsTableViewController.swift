@@ -26,6 +26,11 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "設定"
+        if #available(iOS 11.0, *) {
+            navigationController?.navigationBar.prefersLargeTitles = true
+        } else {
+            // Fallback on earlier versions
+        }
         
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.separatorColor = UIColor(white: 0.15, alpha: 1)

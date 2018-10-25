@@ -251,9 +251,11 @@ class Configurations {
             let controllers = [threadListViewController,loginViewController,settingsTableViewController]
             tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
         }
-        let tabbaritems = tabBarController.tabBar.items!
-        for item in tabbaritems {
-            item.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            let tabbaritems = tabBarController.tabBar.items!
+            for item in tabbaritems {
+                item.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0)
+            }
         }
         tabBarController.hero.isEnabled = true
         tabBarController.hero.modalAnimationType = .zoom

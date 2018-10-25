@@ -77,9 +77,13 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         navigationItem.leftBarButtonItem = sideMenuButton
         navigationItem.rightBarButtonItem = newThread
         navigationItem.title = "吹水臺"
+        if #available(iOS 11.0, *) {
+            navigationController?.navigationBar.prefersLargeTitles = true
+        } else {
+            // Fallback on earlier versions
+        }
         
         let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = UIColor(white: 0.13, alpha: 1)
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refreshControl
