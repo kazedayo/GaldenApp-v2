@@ -42,7 +42,7 @@ class ThreadComposeViewController: ComposeViewController {
         titleTextField.borderStyle = .none
         titleTextField.borderColor = .clear
         titleTextField.backgroundColor = .clear
-        titleTextField.attributedPlaceholder = NSAttributedString(string: "標題", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+        titleTextField.attributedPlaceholder = NSAttributedString(string: "標題", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         titleTextField.textColor = UIColor(hexRGB: "aaaaaa")
         if #available(iOS 11.0, *) {
             titleTextField.smartInsertDeleteType = .no
@@ -128,7 +128,7 @@ class ThreadComposeViewController: ComposeViewController {
     }
     
     override func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
             selectTagLabel.snp.updateConstraints {
                 (make) -> Void in

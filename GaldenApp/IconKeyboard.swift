@@ -31,7 +31,7 @@ class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
             
             let layout = VerticalBlueprintLayout()
             layout.itemsPerRow = 3
-            layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10)
+            layout.sectionInset = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
             layout.minimumLineSpacing = 10
             layout.minimumInteritemSpacing = 10
             layout.itemSize = CGSize(width: 100, height: 50)

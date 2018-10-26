@@ -77,7 +77,10 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
                 SwiftEntryKit.dismiss()
                 var controllers = (self?.tabBarController?.viewControllers)!
                 let userViewController = UserViewController()
-                userViewController.tabBarItem = UITabBarItem(title: "會員資料", image: UIImage(named: "user"), tag: 1)
+                userViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
+                if UIDevice.current.userInterfaceIdiom == .phone {
+                    userViewController.tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
+                }
                 let nav = UINavigationController(rootViewController: userViewController)
                 controllers[1] = nav
                 self?.tabBarController?.setViewControllers(controllers, animated: false)

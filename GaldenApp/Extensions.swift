@@ -126,7 +126,6 @@ class EntryAttributes {
     public func iconEntry() -> EKAttributes {
         var attributes = EKAttributes()
         attributes.position = .top
-        attributes.displayPriority = .normal
         let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
         let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.4)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
@@ -148,7 +147,6 @@ class EntryAttributes {
     public func centerEntry() -> EKAttributes {
         var attributes = EKAttributes()
         attributes.position = .center
-        attributes.displayPriority = .normal
         let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
         let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 500)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
@@ -170,7 +168,6 @@ class EntryAttributes {
     public func centerEntryZoom() -> EKAttributes {
         var attributes = EKAttributes()
         attributes.position = .center
-        attributes.displayPriority = .normal
         let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.75)
         let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 300)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
@@ -189,7 +186,6 @@ class EntryAttributes {
     public func bottomEntry() -> EKAttributes {
         var attributes = EKAttributes()
         attributes.position = .bottom
-        attributes.displayPriority = .normal
         let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
         let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 200)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
@@ -209,7 +205,6 @@ class EntryAttributes {
     public func loginEntry() -> EKAttributes {
         var attributes = EKAttributes()
         attributes.position = .center
-        attributes.displayPriority = .normal
         let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.8)
         let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.8)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
@@ -254,7 +249,7 @@ class Configurations {
         if UIDevice.current.userInterfaceIdiom == .phone {
             let tabbaritems = tabBarController.tabBar.items!
             for item in tabbaritems {
-                item.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0)
+                item.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
             }
         }
         tabBarController.hero.isEnabled = true

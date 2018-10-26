@@ -193,7 +193,7 @@ class SettingsTableViewController: UITableViewController {
     
     @objc func sourceButtonPressed(_ sender: UIButton) {
         if #available(iOS 10.0, *) {
-            UIApplication.shared.open(URL(string: "https://github.com/kazedayo/GaldenApp-v2")!, options: [:], completionHandler: nil)
+            UIApplication.shared.open(URL(string: "https://github.com/kazedayo/GaldenApp-v2")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             // Fallback on earlier versions
             UIApplication.shared.openURL(URL(string: "https://github.com/kazedayo/GaldenApp-v2")!)
@@ -241,4 +241,9 @@ class SettingsTableViewController: UITableViewController {
         }
     }
 
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

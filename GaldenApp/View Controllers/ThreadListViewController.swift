@@ -58,10 +58,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             automaticallyAdjustsScrollViewInsets = true
         }
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tableView.separatorInset = UIEdgeInsetsMake(0, 10, 0, 0)
+        tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 10, bottom: 0, right: 0)
         tableView.separatorColor = UIColor(white: 0.10, alpha: 1)
         tableView.estimatedRowHeight = 50
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
         tableView.addGestureRecognizer(longPress)
         view.addSubview(tableView)
@@ -92,7 +92,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             tableView.addSubview(refreshControl)
         }
         
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        let spinner = UIActivityIndicatorView(style: .white)
         spinner.startAnimating()
         spinner.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 44)
         self.tableView.tableFooterView = spinner;
@@ -201,7 +201,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     @objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
-        if sender.state == UIGestureRecognizerState.began {
+        if sender.state == UIGestureRecognizer.State.began {
             let touchPoint = sender.location(in: self.tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
                 self.selectedThread = threads[indexPath.row].id

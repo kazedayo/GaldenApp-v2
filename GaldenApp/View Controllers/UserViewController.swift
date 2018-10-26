@@ -42,12 +42,13 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tableView.separatorInset = UIEdgeInsetsMake(0, 10, 0, 0)
+        tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 10, bottom: 0, right: 0)
         tableView.separatorColor = UIColor(white: 0.10, alpha: 1)
         tableView.estimatedRowHeight = 50
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
         tableView.register(UserTableViewCell.classForCoder(), forCellReuseIdentifier: "UserTableViewCell")
+        tableView.scrollIndicatorInsets = UIEdgeInsets.init(top: 140, left: 0, bottom: 0, right: 0)
         view.addSubview(tableView)
         
         segmentControl.tintColor = UIColor(hexRGB: "#568064")
@@ -61,6 +62,8 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         } else {
             avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/2lya6uS.png")!)
         }
+        avatarView.clipsToBounds = true
+        avatarView.layer.cornerRadius = 25
         
         //user name
         unameLabel.text = sessionUser?.nickname
@@ -83,13 +86,25 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
         
         let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = UIColor(white: 0.13, alpha: 1)
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
         tableView.refreshControl = refreshControl
         
         headerView.addSubview(avatarView)
         headerView.addSubview(unameLabel)
         headerView.addSubview(ugroupLabel)
+        headerView.backgroundColor = .clear
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.insertSubview(blurView, at: 0)
+        
+        blurView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
         
         avatarView.snp.makeConstraints {
             (make) -> Void in
@@ -143,12 +158,11 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        headerView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 150
+        return 140
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

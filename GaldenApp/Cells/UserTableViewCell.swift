@@ -13,13 +13,15 @@ class UserTableViewCell: UITableViewCell {
     let avatarView = UIImageView()
     let unameLabel = UILabel()
     let ugroupLabel = UILabel()
+    let primaryStack = UIStackView()
+    let secondaryStack = UIStackView()
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let bgColorView = UIView()
         bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
@@ -28,36 +30,41 @@ class UserTableViewCell: UITableViewCell {
         unameLabel.adjustsFontForContentSizeCategory = true
         ugroupLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         ugroupLabel.adjustsFontForContentSizeCategory = true
-        contentView.addSubview(avatarView)
-        contentView.addSubview(unameLabel)
+        avatarView.layer.cornerRadius = 25
+        avatarView.clipsToBounds = true
         
         ugroupLabel.text = "郊登仔"
         ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
-        contentView.addSubview(ugroupLabel)
+        
+        primaryStack.axis = .vertical
+        primaryStack.alignment = .leading
+        primaryStack.distribution = .equalSpacing
+        primaryStack.spacing = 10
+        primaryStack.addArrangedSubview(unameLabel)
+        primaryStack.addArrangedSubview(ugroupLabel)
+        
+        secondaryStack.axis = .horizontal
+        secondaryStack.alignment = .center
+        secondaryStack.distribution = .fillProportionally
+        secondaryStack.spacing = 10
+        secondaryStack.addArrangedSubview(avatarView)
+        secondaryStack.addArrangedSubview(primaryStack)
+        contentView.addSubview(secondaryStack)
         
         avatarView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(contentView.snp.topMargin).offset(5)
-            make.leading.equalTo(10)
-            make.bottom.equalTo(contentView.snp.bottomMargin).offset(5)
-            make.width.equalTo(40)
-            make.height.equalTo(avatarView.snp.width).multipliedBy(1/1)
+            make.width.equalTo(50)
+            make.height.equalTo(50)
         }
         
-        unameLabel.snp.makeConstraints {
+        secondaryStack.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(contentView.snp.topMargin).offset(5)
-            make.leading.equalTo(avatarView.snp.trailing).offset(10)
-            make.trailing.equalTo(contentView.snp.trailing).offset(10)
+            make.top.equalTo(10)
+            make.leading.equalTo(15)
+            make.trailing.equalTo(-15)
+            make.bottom.equalTo(-10)
         }
         
-        ugroupLabel.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(unameLabel.snp.bottom).offset(10)
-            make.leading.equalTo(avatarView.snp.trailing).offset(10)
-            make.trailing.equalTo(contentView.snp.trailing).offset(10)
-            make.bottom.equalTo(contentView.snp.bottomMargin).offset(5)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {

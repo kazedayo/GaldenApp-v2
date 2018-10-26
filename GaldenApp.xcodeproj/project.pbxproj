@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		10DD8EBD7B249429F908AC92 /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EA76638B8D3A48664D2239 /* Pods_GaldenApp.framework */; };
+		0281C72FB03C4921E46CE0E7 /* Pods_GaldenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F8A6E6DA07965B7D51731CA /* Pods_GaldenAppTests.framework */; };
 		42029C68207A44610001E142 /* URLNavigationMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42029C67207A44610001E142 /* URLNavigationMap.swift */; };
 		42029C6A207CC5CC0001E142 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42029C69207CC5CC0001E142 /* StoreKit.framework */; };
 		42164C752157878800571E8D /* mutations.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 42164C742157878800571E8D /* mutations.graphql */; };
@@ -41,7 +41,7 @@
 		42E7F8A91F7923E2002CC13F /* GaldenAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */; };
 		42EA3C5C2161B08300EFFBDB /* eula.txt in Resources */ = {isa = PBXBuildFile; fileRef = 42EA3C5B2161B08300EFFBDB /* eula.txt */; };
 		42F7943E21075BE100E53614 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F7943D21075BE100E53614 /* UserViewController.swift */; };
-		E7BD5CD2BF305799B8371B0E /* Pods_GaldenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 138A2700E2D52E6ACF025148 /* Pods_GaldenAppTests.framework */; };
+		C5F398F014BC2F538BD7FAEF /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C97AA614C57398619B5604 /* Pods_GaldenApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,9 +55,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		05EA76638B8D3A48664D2239 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		138A2700E2D52E6ACF025148 /* Pods_GaldenAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		33716F1FC2CB81A6008404EE /* Pods-GaldenApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.release.xcconfig"; sourceTree = "<group>"; };
+		0E24E15F7D813996442F4965 /* Pods-GaldenAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.release.xcconfig"; path = "Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		2D3C1F71DEF2771252580C29 /* Pods-GaldenApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.debug.xcconfig"; path = "Target Support Files/Pods-GaldenApp/Pods-GaldenApp.debug.xcconfig"; sourceTree = "<group>"; };
+		39F3DD84E7E97DD233B6DCB7 /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		42029C67207A44610001E142 /* URLNavigationMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLNavigationMap.swift; sourceTree = "<group>"; };
 		42029C69207CC5CC0001E142 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		42164C742157878800571E8D /* mutations.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mutations.graphql; sourceTree = "<group>"; };
@@ -95,9 +95,9 @@
 		42E7F8AA1F7923E2002CC13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42EA3C5B2161B08300EFFBDB /* eula.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = eula.txt; sourceTree = "<group>"; };
 		42F7943D21075BE100E53614 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
-		718F70BCCE7D1EC1D9906F1F /* Pods-GaldenAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		BC94281C1A27FF1F279211B4 /* Pods-GaldenApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.debug.xcconfig"; sourceTree = "<group>"; };
-		FB34C26A5F0A51A8D8E5FC58 /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7F8A6E6DA07965B7D51731CA /* Pods_GaldenAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4C97AA614C57398619B5604 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F91BF837E4DAAF7C040D599B /* Pods-GaldenApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.release.xcconfig"; path = "Target Support Files/Pods-GaldenApp/Pods-GaldenApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +106,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42029C6A207CC5CC0001E142 /* StoreKit.framework in Frameworks */,
-				10DD8EBD7B249429F908AC92 /* Pods_GaldenApp.framework in Frameworks */,
+				C5F398F014BC2F538BD7FAEF /* Pods_GaldenApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,24 +114,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7BD5CD2BF305799B8371B0E /* Pods_GaldenAppTests.framework in Frameworks */,
+				0281C72FB03C4921E46CE0E7 /* Pods_GaldenAppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0E47DEF4A3706DCC9585338E /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				BC94281C1A27FF1F279211B4 /* Pods-GaldenApp.debug.xcconfig */,
-				33716F1FC2CB81A6008404EE /* Pods-GaldenApp.release.xcconfig */,
-				FB34C26A5F0A51A8D8E5FC58 /* Pods-GaldenAppTests.debug.xcconfig */,
-				718F70BCCE7D1EC1D9906F1F /* Pods-GaldenAppTests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		424A472120734965005795A6 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,7 +169,7 @@
 				42E7F8A71F7923E2002CC13F /* GaldenAppTests */,
 				42E7F8911F7923E1002CC13F /* Products */,
 				44717B75C39E1397AB701D29 /* Frameworks */,
-				0E47DEF4A3706DCC9585338E /* Pods */,
+				8C051998586BCA4A84F83D9C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -228,10 +217,22 @@
 			isa = PBXGroup;
 			children = (
 				42029C69207CC5CC0001E142 /* StoreKit.framework */,
-				05EA76638B8D3A48664D2239 /* Pods_GaldenApp.framework */,
-				138A2700E2D52E6ACF025148 /* Pods_GaldenAppTests.framework */,
+				A4C97AA614C57398619B5604 /* Pods_GaldenApp.framework */,
+				7F8A6E6DA07965B7D51731CA /* Pods_GaldenAppTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8C051998586BCA4A84F83D9C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2D3C1F71DEF2771252580C29 /* Pods-GaldenApp.debug.xcconfig */,
+				F91BF837E4DAAF7C040D599B /* Pods-GaldenApp.release.xcconfig */,
+				39F3DD84E7E97DD233B6DCB7 /* Pods-GaldenAppTests.debug.xcconfig */,
+				0E24E15F7D813996442F4965 /* Pods-GaldenAppTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -241,12 +242,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 42E7F8AD1F7923E2002CC13F /* Build configuration list for PBXNativeTarget "GaldenApp" */;
 			buildPhases = (
-				BBD12CBF416091D52C8213A5 /* [CP] Check Pods Manifest.lock */,
+				605FDEF159E9C61A58332B0A /* [CP] Check Pods Manifest.lock */,
 				4298ED1221461F390043FAD7 /* Generate Apollo GraphQL API */,
 				42E7F88C1F7923E1002CC13F /* Sources */,
 				42E7F88D1F7923E1002CC13F /* Frameworks */,
 				42E7F88E1F7923E1002CC13F /* Resources */,
-				66776F2BC9A9572B587B0D98 /* [CP] Embed Pods Frameworks */,
+				AB5382FBF67DA303B43A7FC9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -261,7 +262,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 42E7F8B01F7923E2002CC13F /* Build configuration list for PBXNativeTarget "GaldenAppTests" */;
 			buildPhases = (
-				8D701E37F22837BD1F9B6259 /* [CP] Check Pods Manifest.lock */,
+				A4EAC8C47F1406A61794A835 /* [CP] Check Pods Manifest.lock */,
 				42E7F8A01F7923E2002CC13F /* Sources */,
 				42E7F8A11F7923E2002CC13F /* Frameworks */,
 				42E7F8A21F7923E2002CC13F /* Resources */,
@@ -288,6 +289,7 @@
 				TargetAttributes = {
 					42E7F88F1F7923E1002CC13F = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -309,6 +311,7 @@
 					};
 					42E7F8A31F7923E2002CC13F = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 42E7F88F1F7923E1002CC13F;
 					};
@@ -371,10 +374,56 @@
 			shellPath = /bin/sh;
 			shellScript = "APOLLO_FRAMEWORK_PATH=\"$(eval find $FRAMEWORK_SEARCH_PATHS -name \"Apollo.framework\" -maxdepth 1)\"\n\nif [ -z \"$APOLLO_FRAMEWORK_PATH\" ]; then\necho \"error: Couldn't find Apollo.framework in FRAMEWORK_SEARCH_PATHS; make sure to add the framework to your project.\"\nexit 1\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}\"\n$APOLLO_FRAMEWORK_PATH/check-and-run-apollo-cli.sh codegen:generate --queries=\"$(find . -name '*.graphql')\" --schema=schema.json API.swift\n";
 		};
-		66776F2BC9A9572B587B0D98 /* [CP] Embed Pods Frameworks */ = {
+		605FDEF159E9C61A58332B0A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GaldenApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A4EAC8C47F1406A61794A835 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GaldenAppTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AB5382FBF67DA303B43A7FC9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh",
@@ -402,6 +451,8 @@
 				"${BUILT_PRODUCTS_DIR}/URLNavigator/URLNavigator.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Apollo.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Blueprints.framework",
@@ -429,42 +480,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8D701E37F22837BD1F9B6259 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-GaldenAppTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BBD12CBF416091D52C8213A5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-GaldenApp-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -649,7 +664,7 @@
 		};
 		42E7F8AE1F7923E2002CC13F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BC94281C1A27FF1F279211B4 /* Pods-GaldenApp.debug.xcconfig */;
+			baseConfigurationReference = 2D3C1F71DEF2771252580C29 /* Pods-GaldenApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -667,14 +682,14 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		42E7F8AF1F7923E2002CC13F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 33716F1FC2CB81A6008404EE /* Pods-GaldenApp.release.xcconfig */;
+			baseConfigurationReference = F91BF837E4DAAF7C040D599B /* Pods-GaldenApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -692,24 +707,26 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 		42E7F8B11F7923E2002CC13F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FB34C26A5F0A51A8D8E5FC58 /* Pods-GaldenAppTests.debug.xcconfig */;
+			baseConfigurationReference = 39F3DD84E7E97DD233B6DCB7 /* Pods-GaldenAppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R3W953ED69;
 				INFOPLIST_FILE = GaldenAppTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = hk.1080.GaldenAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GaldenApp.app/GaldenApp";
 			};
@@ -717,17 +734,19 @@
 		};
 		42E7F8B21F7923E2002CC13F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 718F70BCCE7D1EC1D9906F1F /* Pods-GaldenAppTests.release.xcconfig */;
+			baseConfigurationReference = 0E24E15F7D813996442F4965 /* Pods-GaldenAppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R3W953ED69;
 				INFOPLIST_FILE = GaldenAppTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = hk.1080.GaldenAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GaldenApp.app/GaldenApp";
 			};

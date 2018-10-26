@@ -36,9 +36,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
         
         // Do any additional setup after loading the view.
         navigationController?.isNavigationBarHidden = false
@@ -352,7 +352,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
             contentTextView.snp.updateConstraints {
                 (make) -> Void in

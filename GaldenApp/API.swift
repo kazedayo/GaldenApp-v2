@@ -2,7 +2,7 @@
 
 import Apollo
 
-public enum ReplySorting: RawRepresentable, Equatable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+public enum ReplySorting: RawRepresentable, Equatable, Hashable, Apollo.JSONDecodable, Apollo.JSONEncodable {
   public typealias RawValue = String
   case dateAsc
   case dateDesc
@@ -39,7 +39,7 @@ public enum ReplySorting: RawRepresentable, Equatable, Apollo.JSONDecodable, Apo
   }
 }
 
-public enum UserGender: RawRepresentable, Equatable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+public enum UserGender: RawRepresentable, Equatable, Hashable, Apollo.JSONDecodable, Apollo.JSONEncodable {
   public typealias RawValue = String
   case m
   case f
