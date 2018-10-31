@@ -225,6 +225,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let composeVC = ThreadComposeViewController()
         let composeNavVC = UINavigationController(rootViewController: composeVC)
         composeVC.threadVC = self
+        composeNavVC.modalPresentationStyle = .formSheet
         present(composeNavVC, animated: true, completion: nil)
     }
     
@@ -291,9 +292,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 if keychain.get("userKey") != nil {
                     let blockedUserIds = sessionUser?.blockedUserIds
                     threads = (threads!.filter {!(blockedUserIds?.contains($0.replies[0].author.id))!})
-                }
-                //review no tomato
-                if keychain.get("userKey") == nil || sessionUser?.id == "19803184133832704" {
+                } else {
+                    //review no tomato
                     threads = (threads!.filter {$0.tags[0].fragments.tagDetails.id != "PVAy33AYm"})
                 }
                 if append == true {

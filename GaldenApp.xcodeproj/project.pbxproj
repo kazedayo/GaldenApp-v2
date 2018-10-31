@@ -231,7 +231,6 @@
 				39F3DD84E7E97DD233B6DCB7 /* Pods-GaldenAppTests.debug.xcconfig */,
 				0E24E15F7D813996442F4965 /* Pods-GaldenAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

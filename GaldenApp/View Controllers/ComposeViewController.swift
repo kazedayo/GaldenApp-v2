@@ -31,6 +31,18 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         return toolbar
     }()
     
+    override var preferredContentSize: CGSize {
+        get {
+            if let fullSize = self.presentingViewController?.view.bounds.size {
+                return CGSize(width: fullSize.width * 0.75, height: fullSize.height * 0.75)
+            }
+            return super.preferredContentSize
+        }
+        set {
+            super.preferredContentSize = newValue
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
