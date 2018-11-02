@@ -126,7 +126,7 @@ class EntryAttributes {
     public func iconEntry() -> EKAttributes {
         var attributes = EKAttributes()
         attributes.position = .top
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.75)
         let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.4)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
         let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)

@@ -66,13 +66,13 @@ class ThreadComposeViewController: ComposeViewController {
             (make) -> Void in
             make.top.equalTo(contentTextView.snp.bottom).offset(10)
             make.leading.equalTo(view.snp.leadingMargin).offset(2)
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
         }
         tagButton.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(contentTextView.snp.bottom).offset(10)
             make.leading.equalTo(selectTagLabel.snp.trailing).offset(10)
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
         }
         contentTextView.snp.makeConstraints {
             (make) -> Void in

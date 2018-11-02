@@ -31,7 +31,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         return toolbar
     }()
     
-    override var preferredContentSize: CGSize {
+    /*override var preferredContentSize: CGSize {
         get {
             if let fullSize = self.presentingViewController?.view.bounds.size {
                 return CGSize(width: fullSize.width * 0.75, height: fullSize.height * 0.75)
@@ -41,7 +41,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         set {
             super.preferredContentSize = newValue
         }
-    }
+    }*/
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -228,7 +228,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             let composeNav = UINavigationController(rootViewController: composeVC)
             composeVC.topicID = self.tID
             composeVC.contentVC = self
-            composeNav.modalPresentationStyle = .formSheet
+            composeNav.modalPresentationStyle = .pageSheet
             present(composeNav, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(title: nil, message: "請先登入", preferredStyle: .alert)

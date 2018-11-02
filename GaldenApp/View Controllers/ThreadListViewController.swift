@@ -85,12 +85,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshControl
-        } else {
-            // Fallback on earlier versions
-            tableView.addSubview(refreshControl)
-        }
+        tableView.refreshControl = refreshControl
         
         let spinner = UIActivityIndicatorView(style: .white)
         spinner.startAnimating()
@@ -222,11 +217,18 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     @objc func newThreadButtonPressed() {
-        let composeVC = ThreadComposeViewController()
-        let composeNavVC = UINavigationController(rootViewController: composeVC)
-        composeVC.threadVC = self
-        composeNavVC.modalPresentationStyle = .formSheet
-        present(composeNavVC, animated: true, completion: nil)
+        if keychain.get("userKey") != nil {
+            let composeVC = ThreadComposeViewController()
+            let composeNavVC = UINavigationController(rootViewController: composeVC)
+            composeVC.threadVC = self
+            composeNavVC.modalPresentationStyle = .pageSheet
+            present(composeNavVC, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: nil, message: "請先登入", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alert.addAction(ok)
+            present(alert,animated: true,completion: nil)
+        }
     }
     
     // MARK: - Navigation
