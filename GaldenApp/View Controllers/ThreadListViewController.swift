@@ -221,7 +221,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             let composeVC = ThreadComposeViewController()
             let composeNavVC = UINavigationController(rootViewController: composeVC)
             composeVC.threadVC = self
-            composeNavVC.modalPresentationStyle = .pageSheet
+            composeNavVC.modalPresentationStyle = .formSheet
             present(composeNavVC, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(title: nil, message: "請先登入", preferredStyle: .alert)

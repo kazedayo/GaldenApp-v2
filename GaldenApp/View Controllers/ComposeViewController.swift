@@ -377,7 +377,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         // keyboard is dismissed/hidden from the screen
         contentTextView.snp.updateConstraints {
             (make) -> Void in
-            make.bottom.equalTo(view.snp.bottomMargin)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
         }
     }
 }

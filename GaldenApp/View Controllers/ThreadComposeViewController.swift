@@ -132,11 +132,11 @@ class ThreadComposeViewController: ComposeViewController {
             let keyboardHeight = keyboardSize.height
             selectTagLabel.snp.updateConstraints {
                 (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
+                make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.17))
             }
             tagButton.snp.updateConstraints {
                 (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
+                make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.17))
             }
         }
     }
@@ -144,11 +144,11 @@ class ThreadComposeViewController: ComposeViewController {
     override func keyboardWillHide(notification: Notification) {
         selectTagLabel.snp.updateConstraints {
             (make) -> Void in
-            make.bottom.equalTo(view.snp.bottomMargin)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
         }
         tagButton.snp.updateConstraints {
             (make) -> Void in
-            make.bottom.equalTo(view.snp.bottomMargin)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
         }
     }
     
