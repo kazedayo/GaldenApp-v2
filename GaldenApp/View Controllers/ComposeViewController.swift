@@ -64,7 +64,12 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         toolbar.options.insert(insertIcon, at: 0)
         
         contentTextView.webView.isOpaque = false
-        contentTextView.webView.backgroundColor = .clear
+        contentTextView.webView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        self.automaticallyAdjustsScrollViewInsets = false
+        contentTextView.webView.scrollView.clipsToBounds = true
+        if #available(iOS 11.0, *) {
+            contentTextView.webView.scrollView.contentInsetAdjustmentBehavior = .never
+        }
         contentTextView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         toolbar.editor = contentTextView
         toolbar.delegate = self

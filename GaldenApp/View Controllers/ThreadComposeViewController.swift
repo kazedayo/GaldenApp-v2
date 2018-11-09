@@ -37,11 +37,10 @@ class ThreadComposeViewController: ComposeViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         contentTextView.snp.removeConstraints()
-        
         titleTextField.delegate = self
         titleTextField.borderStyle = .none
         titleTextField.borderColor = .clear
-        titleTextField.backgroundColor = .clear
+        titleTextField.backgroundColor = UIColor(white:0.15, alpha:1)
         titleTextField.attributedPlaceholder = NSAttributedString(string: "標題", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         titleTextField.textColor = UIColor(hexRGB: "aaaaaa")
         if #available(iOS 11.0, *) {
@@ -132,11 +131,19 @@ class ThreadComposeViewController: ComposeViewController {
             let keyboardHeight = keyboardSize.height
             selectTagLabel.snp.updateConstraints {
                 (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.17))
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.17))
+                } else {
+                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
+                }
             }
             tagButton.snp.updateConstraints {
                 (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.17))
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.17))
+                } else {
+                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
+                }
             }
         }
     }
