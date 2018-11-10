@@ -147,6 +147,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     func colorPickerView(_ colorPickerView: ColorPickerView, didSelectItemAt indexPath: IndexPath) {
         // A color has been selected
         self.contentTextView.setTextColor(colorPickerView.colors[indexPath.item])
+        DispatchQueue.main.asyncAfter(deadline: 0.5, execute:  {
+            SwiftEntryKit.dismiss()
+        })
     }
     
     func colorPickerView(_ colorPickerView: ColorPickerView, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
