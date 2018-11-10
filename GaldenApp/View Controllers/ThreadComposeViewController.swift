@@ -113,9 +113,11 @@ class ThreadComposeViewController: ComposeViewController {
                 apollo.perform(mutation: createThreadMutation) {
                     [weak self] result, error in
                     if error == nil {
-                        HUD.flash(.success)
-                        self?.dismiss(animated: true, completion: {
-                            self?.threadVC?.unwindToThreadListAfterNewPost()
+                        DispatchQueue.main.asyncAfter(deadline: 1, execute: {
+                            HUD.flash(.success)
+                            self?.dismiss(animated: true, completion: {
+                                self?.threadVC?.unwindToThreadListAfterNewPost()
+                            })
                         })
                     } else {
                         HUD.flash(.error)
