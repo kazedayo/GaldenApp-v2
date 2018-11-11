@@ -47,7 +47,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             if error == nil {
                 let user = result?.data?.user
                 //avatar
-                if sessionUser?.avatar != nil {
+                if user?.avatar != nil {
                     self?.avatarView.kf.setImage(with: URL(string: (user?.avatar)!)!)
                 } else {
                     self?.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/2lya6uS.png")!)
