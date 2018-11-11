@@ -236,14 +236,14 @@ class Configurations {
         let tabBarController = UITabBarController()
         let threadListViewController = ThreadListViewController()
         let settingsTableViewController = SettingsTableViewController.init(style: .grouped)
-        let userViewController = UserViewController()
+        let sessionUserViewController = SessionUserViewController()
         let loginViewController = LoginViewController()
         threadListViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "posts"), tag: 0)
-        userViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
+        sessionUserViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
         settingsTableViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "settings"), tag: 2)
         loginViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
         if keychain.get("userKey") != nil {
-            let controllers = [threadListViewController,userViewController,settingsTableViewController]
+            let controllers = [threadListViewController,sessionUserViewController,settingsTableViewController]
             tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
         } else {
             let controllers = [threadListViewController,loginViewController,settingsTableViewController]

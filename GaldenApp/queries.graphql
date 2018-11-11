@@ -58,6 +58,19 @@ query GetSessionUser {
 	}
 }
 
+query GetUser($id: String!) {
+	user(id: $id) {
+		id
+		nickname
+		avatar
+		gender
+		groups{
+			id
+			name
+		}
+	}
+}
+
 query GetIconPacks {
 	installedPacks{
 		...IconPacks

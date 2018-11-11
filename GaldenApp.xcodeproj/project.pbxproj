@@ -41,6 +41,7 @@
 		42E7F8A91F7923E2002CC13F /* GaldenAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8A81F7923E2002CC13F /* GaldenAppTests.swift */; };
 		42EA3C5C2161B08300EFFBDB /* eula.txt in Resources */ = {isa = PBXBuildFile; fileRef = 42EA3C5B2161B08300EFFBDB /* eula.txt */; };
 		42F7943E21075BE100E53614 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F7943D21075BE100E53614 /* UserViewController.swift */; };
+		42FF68B52197D4F300F13777 /* SessionUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FF68B42197D4F300F13777 /* SessionUserViewController.swift */; };
 		C5F398F014BC2F538BD7FAEF /* Pods_GaldenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C97AA614C57398619B5604 /* Pods_GaldenApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -95,6 +96,7 @@
 		42E7F8AA1F7923E2002CC13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42EA3C5B2161B08300EFFBDB /* eula.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = eula.txt; sourceTree = "<group>"; };
 		42F7943D21075BE100E53614 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		42FF68B42197D4F300F13777 /* SessionUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionUserViewController.swift; sourceTree = "<group>"; };
 		7F8A6E6DA07965B7D51731CA /* Pods_GaldenAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4C97AA614C57398619B5604 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91BF837E4DAAF7C040D599B /* Pods-GaldenApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.release.xcconfig"; path = "Target Support Files/Pods-GaldenApp/Pods-GaldenApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				427AD60921685E91004BE47C /* TagsTableViewController.swift */,
 				424A46FC2073493D005795A6 /* ContentViewController.swift */,
 				42F7943D21075BE100E53614 /* UserViewController.swift */,
+				42FF68B42197D4F300F13777 /* SessionUserViewController.swift */,
 				42CDE187214F4FEE00793A8D /* LoginViewController.swift */,
 				424A47012073493E005795A6 /* LaunchViewController.swift */,
 				424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */,
@@ -498,6 +501,7 @@
 				424A471D2073493E005795A6 /* LaunchViewController.swift in Sources */,
 				424A47152073493E005795A6 /* IconKeyboard.swift in Sources */,
 				424A47182073493E005795A6 /* ContentViewController.swift in Sources */,
+				42FF68B52197D4F300F13777 /* SessionUserViewController.swift in Sources */,
 				42F7943E21075BE100E53614 /* UserViewController.swift in Sources */,
 				42CDE188214F4FEE00793A8D /* LoginViewController.swift in Sources */,
 				42964F212085CF12000FA349 /* NetworkActivityIndicatorManager.swift in Sources */,

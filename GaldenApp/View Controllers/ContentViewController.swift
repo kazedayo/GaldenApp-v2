@@ -113,12 +113,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        prevButton.isEnabled = false
-        nextButton.isEnabled = false
+        self.navigationController?.isToolbarHidden = false
         webView.configuration.userContentController.add(self, name: "quote")
         webView.configuration.userContentController.add(self, name: "block")
         webView.configuration.userContentController.add(self, name: "refresh")
         webView.configuration.userContentController.add(self, name: "imageView")
+        webView.configuration.userContentController.add(self, name: "user")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -128,6 +128,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "imageView")
+        self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "user")
         self.webView.evaluateJavaScript("$(\".showing\").last().attr(\"id\")", completionHandler: {
             result,error in
             if error == nil {
@@ -422,7 +423,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             doc = galdenParser(doc: doc)
             quoteHTML = try! doc.body()!.html()
             
-            var templateHTML = "<div class=\"comment\" id=\"\(commentObj.fragments.commentFields.floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(commentObj.fragments.commentFields.author.nickname)</td><td class=\"righttext\">\(date)</td></tr><tr><td class=\"lefttext\" style=\"color:\(groupColor)\">\(groupName)</td><td class=\"righttext\">#\(commentObj.fragments.commentFields.floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(quoteHTML)\(commentObj.fragments.commentFields.content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(commentObj.fragments.commentFields.id)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(commentObj.fragments.commentFields.author.id)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
+            var templateHTML = "<div class=\"comment\" id=\"\(commentObj.fragments.commentFields.floor)\"><div class=\"user\"><div class=\"usertable\" id=\"image\"><table style=\"width:100%\"><tbody><tr><td align=\"center\"><img class=\"avatar\" onclick=\"window.webkit.messageHandlers.user.postMessage('\(commentObj.fragments.commentFields.author.id)')\" src=\"\(avatarurl)\"></td></tr></tbody></table></div><div class=\"usertable\" id=\"text\"><table style=\"width:100%;font-size:12px;\"><tbody><tr><td class=\"lefttext\" style=\"color:\(genderColor);\">\(commentObj.fragments.commentFields.author.nickname)</td><td class=\"righttext\">\(date)</td></tr><tr><td class=\"lefttext\" style=\"color:\(groupColor)\">\(groupName)</td><td class=\"righttext\">#\(commentObj.fragments.commentFields.floor)</td></tr></tbody></table></div></div><div style=\"padding-left:10px;padding-right:10px;\">\(quoteHTML)\(commentObj.fragments.commentFields.content)</div><div style=\"height:30px;padding-top:20px;\"><div style=\"float:right;\"><table><tbody><tr><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.quote.postMessage('\(commentObj.fragments.commentFields.id)')\">引用</button></td><td><button class=\"button\" onclick=\"window.webkit.messageHandlers.block.postMessage('\(commentObj.fragments.commentFields.author.id)')\">封鎖/舉報</button></td></tr></tbody></table></div></div></div>"
             doc = try! SwiftSoup.parse(templateHTML)
             doc = galdenParser(doc: doc)
             templateHTML = try! doc.body()!.html()
@@ -658,6 +659,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             let browser = SKPhotoBrowser(photos: images)
             browser.initializePageIndex(0)
             present(browser,animated: true,completion: nil)
+        } else if message.name == "user" {
+            let uid = message.body as! String
+            let userVC = UserViewController()
+            userVC.uid = uid
+            navigationController?.pushViewController(userVC, animated: true)
         }
     }
 }

@@ -76,12 +76,12 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
                 sessionUser = result?.data?.sessionUser
                 SwiftEntryKit.dismiss()
                 var controllers = (self?.tabBarController?.viewControllers)!
-                let userViewController = UserViewController()
-                userViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
+                let sessionUserViewController = SessionUserViewController()
+                sessionUserViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
                 if UIDevice.current.userInterfaceIdiom == .phone {
-                    userViewController.tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
+                    sessionUserViewController.tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
                 }
-                let nav = UINavigationController(rootViewController: userViewController)
+                let nav = UINavigationController(rootViewController: sessionUserViewController)
                 controllers[1] = nav
                 self?.tabBarController?.setViewControllers(controllers, animated: false)
             }
