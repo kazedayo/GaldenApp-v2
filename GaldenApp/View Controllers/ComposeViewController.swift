@@ -197,7 +197,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             apollo.perform(mutation: replyThreadMutation) {
                 [weak self] result, error in
                 if error == nil {
-                    DispatchQueue.main.asyncAfter(deadline: 1, execute: {
+                    DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
                         HUD.flash(.success)
                         self?.dismiss(animated: true, completion: {
                             self?.contentVC?.unwindAfterReply()

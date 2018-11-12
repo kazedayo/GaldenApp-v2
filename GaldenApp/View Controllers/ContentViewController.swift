@@ -569,14 +569,18 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             case .reply:
                 webView.evaluateJavaScript("window.scrollTo(0,document.body.scrollHeight);", completionHandler: {(result, error) in
                     NetworkActivityIndicatorManager.networkOperationFinished()
-                    webView.isHidden = false
+                    DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                        webView.isHidden = false
+                    })
                     self.navType = .normal
                 })
             case .refresh:
                 webView.evaluateJavaScript("$(\"#\((self.scrollPosition!))\").get(0).scrollIntoView();", completionHandler: {
                     result,error in
                     NetworkActivityIndicatorManager.networkOperationFinished()
-                    webView.isHidden = false
+                    DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                        webView.isHidden = false
+                    })
                     self.navType = .normal
                 })
             case .normal:
@@ -586,7 +590,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     self.webView.evaluateJavaScript("$(\"#\((thisPost?.position)!)\").get(0).scrollIntoView();", completionHandler: {
                         result,error in
                         NetworkActivityIndicatorManager.networkOperationFinished()
-                        webView.isHidden = false
+                        DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                            webView.isHidden = false
+                        })
                     })
                 } else {
                     NetworkActivityIndicatorManager.networkOperationFinished()
