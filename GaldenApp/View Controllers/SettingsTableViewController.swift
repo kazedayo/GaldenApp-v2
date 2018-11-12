@@ -16,6 +16,7 @@ class SettingsTableViewController: UITableViewController {
     var sourceCell = UITableViewCell()
     var iapCell = UITableViewCell()
     var imageCell = UITableViewCell()
+    var price: String!
     
     let clearHistoryButton = UIButton()
     let sourceCodeButton = UIButton()
@@ -75,6 +76,18 @@ class SettingsTableViewController: UITableViewController {
         imageToggle.onTintColor = UIColor(hexRGB: "#568064")
         imageToggle.addTarget(self, action: #selector(imageToggleChanged(_:)), for: .valueChanged)
         imageCell.addSubview(imageToggle)
+        
+        SwiftyStoreKit.retrieveProductsInfo(["dollarDonation"]) { [weak self] result in
+            if let product = result.retrievedProducts.first {
+                self?.price = product.localizedPrice!
+            }
+            else if let invalidProductId = result.invalidProductIDs.first {
+                print("Invalid product identifier: \(invalidProductId)")
+            }
+            else {
+                print("Error: \(result.error)")
+            }
+        }
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -211,7 +224,7 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @objc func adIAPButtonPressed(_ sender: UIButton) {
-        let alert = UIAlertController(title: "捐獻箱", message: "支持廢青開發工作", preferredStyle: .alert)
+        let alert = UIAlertController(title: "捐獻箱(\(price!))", message: "支持廢青開發工作", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "畀錢!", style: .default, handler: {
             _ in
             NetworkActivityIndicatorManager.networkOperationStarted()
@@ -223,7 +236,7 @@ class SettingsTableViewController: UITableViewController {
                     success.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(success, animated: true, completion: nil)
                 case .error(let error):
-                    let failure = UIAlertController(title: "購買失敗:(", message: "debug info: \(error.code)", preferredStyle: .alert)
+                    let failure = UIAlertController(title: "購買失敗:(", message: "debug info: \(error.localizedDescription)", preferredStyle: .alert)
                     failure.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(failure, animated: true, completion: nil)
                 }
