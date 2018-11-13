@@ -17,11 +17,6 @@ class SettingsTableViewController: UITableViewController {
     var iapCell = UITableViewCell()
     var imageCell = UITableViewCell()
     var price: String!
-    
-    let clearHistoryButton = UIButton()
-    let sourceCodeButton = UIButton()
-    let adIAPButton = UIButton()
-    let imageLabel = UILabel()
     let imageToggle = UISwitch()
 
     override func viewDidLoad() {
@@ -35,38 +30,39 @@ class SettingsTableViewController: UITableViewController {
         
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.separatorColor = UIColor(white: 0.15, alpha: 1)
-        tableView.allowsSelection = false
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = UIColor(white: 0.25, alpha:1.0)
+        clearHistoryCell.selectedBackgroundView = bgColorView
+        sourceCell.selectedBackgroundView = bgColorView
+        iapCell.selectedBackgroundView = bgColorView
+        imageCell.selectedBackgroundView = UIView()
         clearHistoryCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         sourceCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         iapCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         imageCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         
-        clearHistoryButton.setTitleColor(.red, for: .normal)
-        clearHistoryButton.setTitle(" 清除歷史", for: .normal)
-        clearHistoryButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
-        clearHistoryButton.titleLabel?.adjustsFontForContentSizeCategory = true
-        clearHistoryButton.addTarget(self, action: #selector(clearButtonPressed(_:)), for: .touchUpInside)
-        clearHistoryCell.addSubview(clearHistoryButton)
+        clearHistoryCell.textLabel?.textColor = .red
+        clearHistoryCell.textLabel?.text = "清除歷史"
+        clearHistoryCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        clearHistoryCell.textLabel?.adjustsFontForContentSizeCategory = true
+        clearHistoryCell.accessoryType = .disclosureIndicator
         
-        sourceCodeButton.setTitle(" Source", for: .normal)
-        sourceCodeButton.tintColor = .white
-        sourceCodeButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
-        sourceCodeButton.titleLabel?.adjustsFontForContentSizeCategory = true
-        sourceCodeButton.addTarget(self, action: #selector(sourceButtonPressed(_:)), for: .touchUpInside)
-        sourceCell.addSubview(sourceCodeButton)
+        sourceCell.textLabel?.textColor = .white
+        sourceCell.textLabel?.text = "Source"
+        sourceCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        sourceCell.textLabel?.adjustsFontForContentSizeCategory = true
+        sourceCell.accessoryType = .disclosureIndicator
         
-        adIAPButton.setTitle(" 捐獻", for: .normal)
-        adIAPButton.tintColor = .white
-        adIAPButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
-        adIAPButton.titleLabel?.adjustsFontForContentSizeCategory = true
-        adIAPButton.addTarget(self, action: #selector(adIAPButtonPressed(_:)), for: .touchUpInside)
-        iapCell.addSubview(adIAPButton)
+        iapCell.textLabel?.textColor = .white
+        iapCell.textLabel?.text = "捐獻"
+        iapCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        iapCell.textLabel?.adjustsFontForContentSizeCategory = true
+        iapCell.accessoryType = .disclosureIndicator
         
-        imageLabel.text = "自動載入圖片"
-        imageLabel.textColor = .white
-        imageLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-        imageLabel.adjustsFontForContentSizeCategory = true
-        imageCell.addSubview(imageLabel)
+        imageCell.textLabel?.textColor = .white
+        imageCell.textLabel?.text = "自動載入圖片"
+        imageCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        imageCell.textLabel?.adjustsFontForContentSizeCategory = true
         
         if keychain.getBool("loadImage") == true {
             imageToggle.isOn = true
@@ -75,7 +71,7 @@ class SettingsTableViewController: UITableViewController {
         }
         imageToggle.onTintColor = UIColor(hexRGB: "#568064")
         imageToggle.addTarget(self, action: #selector(imageToggleChanged(_:)), for: .valueChanged)
-        imageCell.addSubview(imageToggle)
+        imageCell.accessoryView = imageToggle
         
         SwiftyStoreKit.retrieveProductsInfo(["dollarDonation"]) { [weak self] result in
             if let product = result.retrievedProducts.first {
@@ -94,43 +90,8 @@ class SettingsTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
-        clearHistoryButton.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(10)
-            make.leading.equalTo(10)
-            make.bottom.equalTo(-10)
-        }
-        
-        sourceCodeButton.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(10)
-            make.leading.equalTo(10)
-            make.bottom.equalTo(-10)
-        }
-        
-        adIAPButton.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(10)
-            make.leading.equalTo(10)
-            make.bottom.equalTo(-10)
-        }
-        
-        imageLabel.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(10)
-            make.leading.equalTo(10)
-            make.bottom.equalTo(-10)
-        }
-        
-        imageToggle.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(10)
-            make.trailing.equalTo(-10)
-            make.bottom.equalTo(-10)
-        }
     }
-
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -158,6 +119,14 @@ class SettingsTableViewController: UITableViewController {
         return "一般設定"
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0: clearHistory(completion: {tableView.deselectRow(at: indexPath, animated: true)})
+        case 1: gotoSource(completion: {tableView.deselectRow(at: indexPath, animated: true)})
+        case 2: purchaseIAP(completion: {tableView.deselectRow(at: indexPath, animated: true)})
+        default: print("no action")
+        }
+    }
 
     /*
     // Override to support conditional editing of the table view.
@@ -204,16 +173,17 @@ class SettingsTableViewController: UITableViewController {
     }
     */
     
-    @objc func sourceButtonPressed(_ sender: UIButton) {
+    func gotoSource(completion: ()->Void) {
         if #available(iOS 10.0, *) {
             UIApplication.shared.open(URL(string: "https://github.com/kazedayo/GaldenApp-v2")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             // Fallback on earlier versions
             UIApplication.shared.openURL(URL(string: "https://github.com/kazedayo/GaldenApp-v2")!)
         }
+        completion()
     }
     
-    @objc func clearButtonPressed(_ sender: UIButton) {
+    func clearHistory(completion: ()->Void) {
         let realm = try! Realm()
         try! realm.write {
             realm.deleteAll()
@@ -221,9 +191,10 @@ class SettingsTableViewController: UITableViewController {
         let alert = UIAlertController.init(title: "搞掂", message: "已清除回帶記錄", preferredStyle: .alert)
         alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
         present(alert,animated: true,completion: nil)
+        completion()
     }
     
-    @objc func adIAPButtonPressed(_ sender: UIButton) {
+    func purchaseIAP(completion: ()->Void) {
         let alert = UIAlertController(title: "捐獻箱(\(price!))", message: "支持廢青開發工作", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "畀錢!", style: .default, handler: {
             _ in
@@ -244,6 +215,7 @@ class SettingsTableViewController: UITableViewController {
         }))
         alert.addAction(UIAlertAction(title: "不了", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
+        completion()
     }
     
     @objc func imageToggleChanged(_ sender: UISwitch) {

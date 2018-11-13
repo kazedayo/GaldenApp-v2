@@ -22,7 +22,7 @@ class PageSelectTableViewCell: UITableViewCell {
         backgroundColor = .clear
         pageNo.textColor = .lightGray
         pageNo.textAlignment = .center
-        pageNo.font = UIFont.preferredFont(forTextStyle: .headline)
+        pageNo.font = UIFont.preferredFont(forTextStyle: .subheadline)
         pageNo.adjustsFontForContentSizeCategory = true
         contentView.addSubview(pageNo)
         

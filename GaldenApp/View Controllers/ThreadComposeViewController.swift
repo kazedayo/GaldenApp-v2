@@ -19,7 +19,7 @@ class ThreadComposeViewController: ComposeViewController {
     lazy var selectTagLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(hexRGB: "aaaaaa")
-        label.font = UIFont.preferredFont(forTextStyle: .headline)
+        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
         label.adjustsFontForContentSizeCategory = true
         label.text = "標籤: "
         return label
@@ -27,7 +27,7 @@ class ThreadComposeViewController: ComposeViewController {
     lazy var tagButton: UIButton = {
         let button = UIButton()
         button.tintColor = UIColor(hexRGB: "#568064")
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.setTitle("選擇...", for: .normal)
         button.addTarget(self, action: #selector(tagButtonPressed(_:)), for: .touchUpInside)
