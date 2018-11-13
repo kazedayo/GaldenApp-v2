@@ -516,21 +516,24 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         let h1 = try! doc.select("span[data-nodetype=h1]")
         for el in h1 {
             try! el.removeAttr("data-nodetype")
-            try! el.tagName("h1")
+            try! el.tagName("font")
+            try! el.addClass("h1")
         }
         
         //h2 parse
         let h2 = try! doc.select("span[data-nodetype=h2]")
         for el in h2 {
             try! el.removeAttr("data-nodetype")
-            try! el.tagName("h2")
+            try! el.tagName("font")
+            try! el.addClass("h2")
         }
         
         //h3 parse
         let h3 = try! doc.select("span[data-nodetype=h3]")
         for el in h3 {
             try! el.removeAttr("data-nodetype")
-            try! el.tagName("h3")
+            try! el.tagName("font")
+            try! el.addClass("h3")
         }
         
         //icon parse
@@ -544,7 +547,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             try! el.remove()
         }
         
-        //empty p fix
+        //empty p to br
         let p = try! doc.select("p")
         for el in p {
             if try! el.html().isEmpty == true {

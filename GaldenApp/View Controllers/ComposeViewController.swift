@@ -214,10 +214,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     func galdenParse(input: String) -> String {
         let doc = try! SwiftSoup.parse(contentTextView.html)
         
-        //remove style for all el
-        let el = try! doc.getAllElements()
-        try! el.removeAttr("style")
-        
         //p tag hack
         let div = try! doc.select("div")
         if div.first() != nil {
@@ -238,6 +234,20 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             try! el.attr("data-nodetype", "color")
             try! el.attr("data-value", hex)
             try! el.tagName("span")
+        }
+        
+        //color highlight parse
+        let highlight = try! doc.select("span[style]")
+        for el in highlight {
+            var color = try! el.attr("style")
+            color = color.replacingOccurrences(of: "color: ", with: "")
+            color = color.replacingOccurrences(of: ";", with: "")
+            let colorUI = UIColor(rgbString: color)
+            var colorHex = rgbToHex(color: colorUI!)
+            colorHex = colorHex.replacingOccurrences(of: "#", with: "")
+            try! el.removeAttr("style")
+            try! el.attr("data-nodetype", "color")
+            try! el.attr("data-value", colorHex)
         }
         
         //b parse
@@ -353,6 +363,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                 try! el.remove()
             }
         }
+        
+        //remove style for all el
+        let el = try! doc.getAllElements()
+        try! el.removeAttr("style")
+        
         parsedHtml = try! parsedDoc.body()!.html()
         
         return parsedHtml
@@ -389,5 +404,17 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             (make) -> Void in
             make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
         }
+    }
+    
+    func rgbToHex(color: UIColor) -> String {
+        
+        var r:CGFloat = 0
+        var g:CGFloat = 0
+        var b:CGFloat = 0
+        var a:CGFloat = 0
+        color.getRed(&r, green: &g, blue: &b, alpha: &a)
+        
+        let rgb:Int = (Int)(r*255)<<16 | (Int)(g*255)<<8 | (Int)(b*255)<<0
+        return String(format: "#%06x", rgb)
     }
 }

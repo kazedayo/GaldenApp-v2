@@ -169,7 +169,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             }
         }
         cell.threadTitleLabel.text = title
-        cell.detailLabel.text = "\(nickName[0]) // 回覆: \(count) // 最後回覆: \(relativeDate!)"
+        cell.detailLabel.text = "\(nickName[0]) // \(count)回覆 // \(relativeDate!)"
         let tags = self.threads[indexPath.row].tags.map {$0.fragments.tagDetails}
         cell.tagLabel.text = "#\(tags[0].name)"
         cell.tagLabel.textColor = UIColor(hexRGB: tags[0].color)

@@ -24,7 +24,7 @@ class ChannelListTableViewCell: UITableViewCell {
         
         channelTitle.textColor = .white
         channelTitle.textAlignment = .center
-        channelTitle.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        channelTitle.font = UIFont.preferredFont(forTextStyle: .headline)
         channelTitle.adjustsFontForContentSizeCategory = true
         contentView.addSubview(channelTitle)
         

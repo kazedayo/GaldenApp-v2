@@ -26,9 +26,9 @@ class UserTableViewCell: UITableViewCell {
         let bgColorView = UIView()
         bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
         selectedBackgroundView = bgColorView
-        unameLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        unameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         unameLabel.adjustsFontForContentSizeCategory = true
-        ugroupLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        ugroupLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         ugroupLabel.adjustsFontForContentSizeCategory = true
         avatarView.layer.cornerRadius = 25
         avatarView.clipsToBounds = true

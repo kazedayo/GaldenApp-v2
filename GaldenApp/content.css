@@ -5,7 +5,7 @@ html {
 body {
 	color: #aaaaaa;
     background: #262626;
-    font: -apple-system-subheadline;
+    font: -apple-system-body;
     overflow-wrap: break-word;
     word-wrap: break-word;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -26,7 +26,7 @@ a {
     background-color: transparent;
     color: #aaaaaa;
     border: 1px solid #aaaaaa;
-    font: -apple-system-caption1;
+    font: -apple-system-subheadline;
 }
 
 blockquote {
@@ -42,7 +42,7 @@ blockquote {
 
 .righttext {
 	text-align: right;
-    font: -apple-system-caption1;
+    font: -apple-system-subheadline;
 }
 
 .avatar {
@@ -57,13 +57,13 @@ div#image.usertable {
 
 .lefttext {
     text-align: left;
-    font: -apple-system-caption1;
+    font: -apple-system-subheadline;
 }
 
 div#text.usertable {
     float:left;
     width: 85%;
-	font: -apple-system-caption1;
+	font: -apple-system-subheadline;
 }
 
 .refresh {
@@ -92,4 +92,20 @@ div#text.usertable {
     border-top: 1px dashed #454545;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+h1, h2, h3 {
+    display: inline-block;
+}
+
+.h1 {
+    font: -apple-system-title0;
+}
+
+.h2 {
+    font: -apple-system-title1;
+}
+
+.h3 {
+    font: -apple-system-title2;
 }
