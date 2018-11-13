@@ -26,7 +26,7 @@ a {
     background-color: transparent;
     color: #aaaaaa;
     border: 1px solid #aaaaaa;
-    font: -apple-system-subheadline;
+    font: -apple-system-caption1;
 }
 
 blockquote {
@@ -42,7 +42,7 @@ blockquote {
 
 .righttext {
 	text-align: right;
-    font: -apple-system-subheadline;
+    font: -apple-system-caption1;
 }
 
 .avatar {
@@ -57,13 +57,13 @@ div#image.usertable {
 
 .lefttext {
     text-align: left;
-    font: -apple-system-subheadline;
+    font: -apple-system-caption1;
 }
 
 div#text.usertable {
     float:left;
     width: 85%;
-	font: -apple-system-subheadline;
+	font: -apple-system-caption1;
 }
 
 .refresh {

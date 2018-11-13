@@ -67,8 +67,8 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 
                 //user group
                 self?.ugroupLabel.text = "郊登仔"
-                self?.unameLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-                self?.unameLabel.adjustsFontForContentSizeCategory = true
+                self?.ugroupLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+                self?.ugroupLabel.adjustsFontForContentSizeCategory = true
                 self?.ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
                 if user?.groups.isEmpty == false {
                    self?.ugroupLabel.text = sessionUser?.groups[0].name
@@ -115,12 +115,14 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             (make) -> Void in
             make.top.equalToSuperview().offset(20)
             make.leading.equalTo(avatarView.snp.trailing).offset(10)
+            make.trailing.equalToSuperview().offset(-10)
         }
         
         ugroupLabel.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(unameLabel.snp.bottom).offset(10)
             make.leading.equalTo(avatarView.snp.trailing).offset(10)
+            make.trailing.equalToSuperview().offset(-10)
         }
         
         tableView.snp.makeConstraints {

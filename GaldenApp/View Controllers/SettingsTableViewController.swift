@@ -43,28 +43,28 @@ class SettingsTableViewController: UITableViewController {
         
         clearHistoryButton.setTitleColor(.red, for: .normal)
         clearHistoryButton.setTitle(" 清除歷史", for: .normal)
-        clearHistoryButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        clearHistoryButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
         clearHistoryButton.titleLabel?.adjustsFontForContentSizeCategory = true
         clearHistoryButton.addTarget(self, action: #selector(clearButtonPressed(_:)), for: .touchUpInside)
         clearHistoryCell.addSubview(clearHistoryButton)
         
         sourceCodeButton.setTitle(" Source", for: .normal)
         sourceCodeButton.tintColor = .white
-        sourceCodeButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        sourceCodeButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
         sourceCodeButton.titleLabel?.adjustsFontForContentSizeCategory = true
         sourceCodeButton.addTarget(self, action: #selector(sourceButtonPressed(_:)), for: .touchUpInside)
         sourceCell.addSubview(sourceCodeButton)
         
         adIAPButton.setTitle(" 捐獻", for: .normal)
         adIAPButton.tintColor = .white
-        adIAPButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        adIAPButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
         adIAPButton.titleLabel?.adjustsFontForContentSizeCategory = true
         adIAPButton.addTarget(self, action: #selector(adIAPButtonPressed(_:)), for: .touchUpInside)
         iapCell.addSubview(adIAPButton)
         
         imageLabel.text = "自動載入圖片"
         imageLabel.textColor = .white
-        imageLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        imageLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         imageLabel.adjustsFontForContentSizeCategory = true
         imageCell.addSubview(imageLabel)
         
