@@ -154,7 +154,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             label.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
             label.layer.cornerRadius = 5
             label.textColor = .white
-            label.font = UIFont.systemFont(ofSize: 10)
+            label.font = UIFont.preferredFont(forTextStyle: .caption1)
+            label.adjustsFontForContentSizeCategory = true
             label.backgroundColor = .red
             label.textAlignment = .center
             return label

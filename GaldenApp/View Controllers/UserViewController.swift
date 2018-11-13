@@ -57,6 +57,8 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 
                 //user name
                 self?.unameLabel.text = user?.nickname
+                self?.unameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+                self?.unameLabel.adjustsFontForContentSizeCategory = true
                 if user?.gender == UserGender.m {
                     self?.unameLabel.textColor = UIColor(hexRGB: "6495ed")
                 } else if user?.gender == UserGender.f {
@@ -65,6 +67,8 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 
                 //user group
                 self?.ugroupLabel.text = "郊登仔"
+                self?.unameLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+                self?.unameLabel.adjustsFontForContentSizeCategory = true
                 self?.ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
                 if user?.groups.isEmpty == false {
                    self?.ugroupLabel.text = sessionUser?.groups[0].name
