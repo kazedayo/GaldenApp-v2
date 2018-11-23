@@ -11,7 +11,7 @@ import Kingfisher
 import Apollo
 import SwiftEntryKit
 
-class LaunchViewController: UIViewController {
+class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
     
     let logo = UIImageView()
     let text = UILabel()
@@ -81,13 +81,31 @@ class LaunchViewController: UIViewController {
                         sessionUser = result?.data?.sessionUser
                     }
                     let tabBarController = Configurations.shared.configureUI()
-                    self?.present(tabBarController, animated: true, completion: nil)
+                    let navVC = UINavigationController(rootViewController: tabBarController)
+                    let splitViewController = UISplitViewController()
+                    let dummyVC = UIViewController()
+                    dummyVC.view.backgroundColor = UIColor(white:0.1,alpha:1)
+                    splitViewController.delegate = self
+                    splitViewController.viewControllers = [navVC,dummyVC]
+                    splitViewController.preferredDisplayMode = .allVisible
+                    splitViewController.hero.isEnabled = true
+                    splitViewController.hero.modalAnimationType = .zoom
+                    self?.present(splitViewController, animated: true, completion: nil)
                 }
             }
         } else {
             DispatchQueue.main.async {
                 let tabBarController = Configurations.shared.configureUI()
-                self.present(tabBarController, animated: true, completion: nil)
+                let navVC = UINavigationController(rootViewController: tabBarController)
+                let splitViewController = UISplitViewController()
+                let dummyVC = UIViewController()
+                dummyVC.view.backgroundColor = UIColor(white:0.15,alpha:1)
+                splitViewController.delegate = self
+                splitViewController.viewControllers = [navVC,dummyVC]
+                splitViewController.preferredDisplayMode = .allVisible
+                splitViewController.hero.isEnabled = true
+                splitViewController.hero.modalAnimationType = .zoom
+                self.present(splitViewController, animated: true, completion: nil)
             }
         }
         // Do any additional setup after loading the view.
@@ -108,4 +126,9 @@ class LaunchViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+        return true
+    }
+    
 }

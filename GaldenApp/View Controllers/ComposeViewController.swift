@@ -331,8 +331,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             try! el.removeAttr("alt")
             try! el.attr("data-nodetype", "img")
             try! el.attr("data-src", src)
-            let url = URL(string: src)
-            if let imageSource = CGImageSourceCreateWithURL(url! as CFURL, nil) {
+            let url = URL(string: src)!
+            if let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) {
                 if let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as Dictionary? {
                     let pixelWidth = imageProperties[kCGImagePropertyPixelWidth] as! Int
                     let pixelHeight = imageProperties[kCGImagePropertyPixelHeight] as! Int

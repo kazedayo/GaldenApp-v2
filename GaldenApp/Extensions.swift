@@ -264,19 +264,15 @@ class Configurations {
         loginViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
         if keychain.get("userKey") != nil {
             let controllers = [threadListViewController,sessionUserViewController,settingsTableViewController]
-            tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
+            tabBarController.viewControllers = controllers
         } else {
             let controllers = [threadListViewController,loginViewController,settingsTableViewController]
-            tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
+            tabBarController.viewControllers = controllers
         }
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            let tabbaritems = tabBarController.tabBar.items!
-            for item in tabbaritems {
-                item.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
-            }
+        let tabbaritems = tabBarController.tabBar.items!
+        for item in tabbaritems {
+            item.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
         }
-        tabBarController.hero.isEnabled = true
-        tabBarController.hero.modalAnimationType = .zoom
         return tabBarController
     }
     

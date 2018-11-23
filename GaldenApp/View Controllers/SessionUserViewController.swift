@@ -15,18 +15,17 @@ class SessionUserViewController: UserViewController {
     let segmentControl = UISegmentedControl.init(items: ["起底","封鎖名單"])
     lazy var logoutButton = UIBarButtonItem(title: "登出", style: .done, target: self, action: #selector(logoutButtonPressed(_:)))
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tabBarController?.navigationItem.title = "會員資料"
+        tabBarController?.navigationItem.leftBarButtonItem = nil
+        tabBarController?.navigationItem.rightBarButtonItem = logoutButton
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        navigationItem.title = "會員資料"
-        
-        if #available(iOS 11.0, *) {
-            navigationController?.navigationBar.prefersLargeTitles = true
-        } else {
-            // Fallback on earlier versions
-        }
-        navigationItem.rightBarButtonItem = logoutButton
         
         tableView.register(UserTableViewCell.classForCoder(), forCellReuseIdentifier: "UserTableViewCell")
         
@@ -109,12 +108,13 @@ class SessionUserViewController: UserViewController {
         if segmentControl.selectedSegmentIndex == 0 {
             DispatchQueue.main.async {
                 let contentVC = ContentViewController()
+                let contentNav = UINavigationController(rootViewController: contentVC)
                 let selectedThread = self.userThreads[indexPath.row].id
                 contentVC.tID = selectedThread
                 contentVC.title = self.userThreads[indexPath.row].title
                 contentVC.sender = "cell"
-                contentVC.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(contentVC, animated: true)
+                //contentVC.hidesBottomBarWhenPushed = true
+                self.splitViewController?.showDetailViewController(contentNav, sender: self)
             }
         } else if segmentControl.selectedSegmentIndex == 1 {
             let alert = UIAlertController(title: "解除封鎖", message: "你確定要解除封鎖此會員?", preferredStyle: .alert)
@@ -162,8 +162,7 @@ class SessionUserViewController: UserViewController {
         let loginViewController = LoginViewController()
         loginViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
         loginViewController.tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
-        let nav = UINavigationController(rootViewController: loginViewController)
-        controllers![1] = nav
+        controllers![1] = loginViewController
         tabBarController?.setViewControllers(controllers, animated: false)
     }
 

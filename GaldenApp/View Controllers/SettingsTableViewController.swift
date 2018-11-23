@@ -18,15 +18,16 @@ class SettingsTableViewController: UITableViewController {
     var imageCell = UITableViewCell()
     var price: String!
     let imageToggle = UISwitch()
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tabBarController?.navigationItem.title = "設定"
+        tabBarController?.navigationItem.leftBarButtonItem = nil
+        tabBarController?.navigationItem.rightBarButtonItem = nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "設定"
-        if #available(iOS 11.0, *) {
-            navigationController?.navigationBar.prefersLargeTitles = true
-        } else {
-            // Fallback on earlier versions
-        }
         
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.separatorColor = UIColor(white: 0.15, alpha: 1)

@@ -41,7 +41,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let menuLeftNavigationController = UISideMenuNavigationController(rootViewController: sideMenuVC)
         sideMenuVC.mainVC = self
         SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
-        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view, forMenu: .left)
+        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.view, forMenu: .left)
         SideMenuManager.default.menuPushStyle = .subMenu
         SideMenuManager.default.menuWidth = 150
         SideMenuManager.default.menuFadeStatusBar = false
@@ -74,15 +74,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             make.bottom.equalToSuperview()
         }
         
-        navigationItem.leftBarButtonItem = sideMenuButton
-        navigationItem.rightBarButtonItem = newThread
-        navigationItem.title = "吹水臺"
-        if #available(iOS 11.0, *) {
-            navigationController?.navigationBar.prefersLargeTitles = true
-        } else {
-            // Fallback on earlier versions
-        }
-        
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
         tableView.refreshControl = refreshControl
@@ -110,6 +101,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        tabBarController?.navigationItem.leftBarButtonItem = sideMenuButton
+        tabBarController?.navigationItem.rightBarButtonItem = newThread
+        tabBarController?.navigationItem.title = "吹水臺"
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)
@@ -180,12 +174,14 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DispatchQueue.main.async {
             let contentVC = ContentViewController()
+            let contentNav = UINavigationController(rootViewController: contentVC)
             let selectedThread = self.threads[indexPath.row].id
             contentVC.tID = selectedThread
             contentVC.title = self.threads[indexPath.row].title
             contentVC.sender = "cell"
-            contentVC.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(contentVC, animated: true)
+            //contentVC.hidesBottomBarWhenPushed = true
+            self.splitViewController?.showDetailViewController(contentNav, sender: self)
+            //self.navigationController?.pushViewController(contentVC, animated: true)
         }
     }
     
@@ -269,11 +265,13 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         self.selectedPage = pageSelected
         DispatchQueue.main.async {
             let contentVC = ContentViewController()
+            let contentNav = UINavigationController(rootViewController: contentVC)
             contentVC.tID = self.selectedThread
             contentVC.title = self.selectedThreadTitle
             contentVC.pageNow = self.selectedPage!
-            contentVC.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(contentVC, animated: true)
+            //contentVC.hidesBottomBarWhenPushed = true
+            //self.navigationController?.pushViewController(contentVC, animated: true)
+            self.splitViewController?.showDetailViewController(contentNav, sender: self)
         }
     }
     
@@ -288,7 +286,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             [weak self] result, error in
             if (error == nil) {
                 var threads = result?.data?.threadsByChannel.map {$0.fragments.threadListDetails}
-                if threads!.isEmpty {
+                if threads?.isEmpty ?? true {
                     self?.eof = true
                     completion()
                 }
@@ -314,4 +312,5 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             completion()
         }
     }
+    
 }

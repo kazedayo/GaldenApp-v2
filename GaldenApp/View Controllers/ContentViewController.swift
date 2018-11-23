@@ -64,15 +64,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
         view.addSubview(webView)
         
+        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+        navigationItem.leftItemsSupplementBackButton = true
         navigationController?.delegate = self
         navigationController?.isToolbarHidden = false
         navigationController?.toolbar.barStyle = .black
         navigationController?.toolbar.tintColor = .white
-        if #available(iOS 11.0, *) {
-            navigationItem.largeTitleDisplayMode = .never
-        } else {
-            // Fallback on earlier versions
-        }
+        
         prevButton.isEnabled = false
         nextButton.isEnabled = false
         replyButton.isEnabled = false
@@ -338,10 +336,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 
                 contentHTML = self?.constructComments(thread: thread)
                 if (self?.pageNow==Int(totalPage)) {
-                    contentHTML!.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
+                    contentHTML?.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
-                let threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML!)<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+                let threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
                 
                 self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
             }

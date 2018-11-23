@@ -15,19 +15,17 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
     
     lazy var loginButton = UIBarButtonItem(title: "登入", style: .done, target: self, action: #selector(loginButtonPressed(_:)))
     let webView = WKWebView()
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tabBarController?.navigationItem.title = "會員資料"
+        tabBarController?.navigationItem.rightBarButtonItem = loginButton
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        navigationItem.title = "會員資料"
-        if #available(iOS 11.0, *) {
-            navigationController?.navigationBar.prefersLargeTitles = true
-        } else {
-            // Fallback on earlier versions
-        }
         webView.navigationDelegate = self
-        
-        navigationItem.rightBarButtonItem = loginButton
         
         let label = UILabel()
         label.text = "未登入，請先登入"
@@ -81,8 +79,7 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     sessionUserViewController.tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
                 }
-                let nav = UINavigationController(rootViewController: sessionUserViewController)
-                controllers[1] = nav
+                controllers[1] = sessionUserViewController
                 self?.tabBarController?.setViewControllers(controllers, animated: false)
             }
         }
