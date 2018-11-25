@@ -83,14 +83,18 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
                     let tabBarController = Configurations.shared.configureUI()
                     let navVC = UINavigationController(rootViewController: tabBarController)
                     let splitViewController = UISplitViewController()
-                    let dummyVC = UIViewController()
+                    let dummyVC = UINavigationController()
                     dummyVC.view.backgroundColor = UIColor(white:0.1,alpha:1)
                     splitViewController.delegate = self
+                    splitViewController.view.backgroundColor = .darkGray
                     splitViewController.viewControllers = [navVC,dummyVC]
                     splitViewController.preferredDisplayMode = .allVisible
                     splitViewController.hero.isEnabled = true
                     splitViewController.hero.modalAnimationType = .zoom
-                    self?.present(splitViewController, animated: true, completion: nil)
+                    self?.present(splitViewController, animated: true, completion: {
+                        //hacky fix
+                        splitViewController.view.subviews.first?.removeFromSuperview()
+                    })
                 }
             }
         } else {

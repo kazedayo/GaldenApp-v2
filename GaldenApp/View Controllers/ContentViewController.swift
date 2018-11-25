@@ -17,7 +17,7 @@ import SwiftSoup
 import SwiftDate
 import SafariServices
 
-class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler {
+class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,UIScrollViewDelegate {
     
     //MARK: Properties
     
@@ -62,6 +62,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             // Fallback on earlier versions
             automaticallyAdjustsScrollViewInsets = true
         }
+        webView.scrollView.delegate = self
         view.addSubview(webView)
         
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -164,6 +165,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func quoteButtonPressed(id: String) {
         let composeVC = ComposeViewController()
         let composeNav = UINavigationController(rootViewController: composeVC)
+        composeNav.modalPresentationStyle = .formSheet
         composeVC.topicID = self.tID
         composeVC.quoteID = id
         composeVC.contentVC = self
@@ -339,7 +341,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     contentHTML?.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
-                let threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+                let threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
                 
                 self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
             }
@@ -671,6 +673,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             let userVC = UserViewController()
             userVC.uid = uid
             navigationController?.pushViewController(userVC, animated: true)
+        }
+    }
+    
+    //scroll hack
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (scrollView.contentOffset.x > 0 || scrollView.contentOffset.x < 0){
+            scrollView.contentOffset = CGPoint(x: 0, y: scrollView.contentOffset.y)
         }
     }
 }

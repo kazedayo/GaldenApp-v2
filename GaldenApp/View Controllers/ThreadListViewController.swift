@@ -159,8 +159,11 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         if (readThreads != nil) {
             let newReplyCount = count-readThreads!.replyCount
             if (newReplyCount > 0) {
-                newReply.text = String(count-readThreads!.replyCount)
-                cell.accessoryView = newReply
+                let selectedCell = tableView.indexPathForSelectedRow
+                if indexPath != selectedCell {
+                    newReply.text = String(count-readThreads!.replyCount)
+                    cell.accessoryView = newReply
+                }
             }
         }
         cell.threadTitleLabel.text = title
@@ -173,6 +176,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DispatchQueue.main.async {
+            let cell = tableView.cellForRow(at: indexPath)
+            cell?.accessoryView = nil
+            cell?.setNeedsLayout()
             let contentVC = ContentViewController()
             let contentNav = UINavigationController(rootViewController: contentVC)
             let selectedThread = self.threads[indexPath.row].id
