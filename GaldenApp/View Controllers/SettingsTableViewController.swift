@@ -43,7 +43,7 @@ class SettingsTableViewController: UITableViewController {
         imageCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
         
         clearHistoryCell.textLabel?.textColor = .red
-        clearHistoryCell.textLabel?.text = "清除歷史"
+        clearHistoryCell.textLabel?.text = "重設閲讀位置記錄"
         clearHistoryCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         clearHistoryCell.textLabel?.adjustsFontForContentSizeCategory = true
         clearHistoryCell.accessoryType = .disclosureIndicator
@@ -189,7 +189,7 @@ class SettingsTableViewController: UITableViewController {
         try! realm.write {
             realm.deleteAll()
         }
-        let alert = UIAlertController.init(title: "搞掂", message: "已清除回帶記錄", preferredStyle: .alert)
+        let alert = UIAlertController.init(title: "搞掂", message: "已重設閲讀位置記錄", preferredStyle: .alert)
         alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
         present(alert,animated: true,completion: nil)
         completion()

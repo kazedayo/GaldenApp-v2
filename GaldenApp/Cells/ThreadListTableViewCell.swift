@@ -15,6 +15,7 @@ class ThreadListTableViewCell: UITableViewCell {
     let threadTitleLabel = UILabel()
     let detailLabel = UILabel()
     let tagLabel = UILabel()
+    let newReplyLabel = UILabel()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,11 +42,14 @@ class ThreadListTableViewCell: UITableViewCell {
         detailLabel.adjustsFontForContentSizeCategory = true
         contentView.addSubview(detailLabel)
         
-        tagLabel.clipsToBounds = true
-        tagLabel.layer.cornerRadius = 3
         tagLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         tagLabel.adjustsFontForContentSizeCategory = true
         contentView.addSubview(tagLabel)
+        
+        newReplyLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
+        newReplyLabel.textColor = .red
+        newReplyLabel.adjustsFontForContentSizeCategory = true
+        contentView.addSubview(newReplyLabel)
         
         threadTitleLabel.snp.makeConstraints {
             (make) -> Void in
@@ -64,7 +68,14 @@ class ThreadListTableViewCell: UITableViewCell {
         tagLabel.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(threadTitleLabel.snp.bottom).offset(10)
-            make.leading.equalTo(detailLabel.snp.trailing).offset(10)
+            make.trailing.equalTo(contentView).offset(-10)
+            make.bottom.equalTo(contentView).offset(-10)
+        }
+        
+        newReplyLabel.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(threadTitleLabel.snp.bottom).offset(10)
+            make.trailing.equalTo(tagLabel.snp.leading).offset(-10)
             make.bottom.equalTo(contentView).offset(-10)
         }
         

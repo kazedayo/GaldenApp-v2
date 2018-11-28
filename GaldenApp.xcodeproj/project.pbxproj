@@ -56,7 +56,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08EB3217BE505F10CB6A4F36 /* Pods-GaldenApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.debug.xcconfig"; sourceTree = "<group>"; };
 		0E24E15F7D813996442F4965 /* Pods-GaldenAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.release.xcconfig"; path = "Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		2666603A4EF49811C593784D /* Pods-GaldenAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D3C1F71DEF2771252580C29 /* Pods-GaldenApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.debug.xcconfig"; path = "Target Support Files/Pods-GaldenApp/Pods-GaldenApp.debug.xcconfig"; sourceTree = "<group>"; };
 		39F3DD84E7E97DD233B6DCB7 /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		42029C67207A44610001E142 /* URLNavigationMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLNavigationMap.swift; sourceTree = "<group>"; };
@@ -97,8 +99,10 @@
 		42EA3C5B2161B08300EFFBDB /* eula.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = eula.txt; sourceTree = "<group>"; };
 		42F7943D21075BE100E53614 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		42FF68B42197D4F300F13777 /* SessionUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionUserViewController.swift; sourceTree = "<group>"; };
+		6B80BD4EBBA350365F75B2B4 /* Pods-GaldenApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp.release.xcconfig"; sourceTree = "<group>"; };
 		7F8A6E6DA07965B7D51731CA /* Pods_GaldenAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4C97AA614C57398619B5604 /* Pods_GaldenApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaldenApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF4355EBF8254B697333A909 /* Pods-GaldenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaldenAppTests/Pods-GaldenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F91BF837E4DAAF7C040D599B /* Pods-GaldenApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaldenApp.release.xcconfig"; path = "Target Support Files/Pods-GaldenApp/Pods-GaldenApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -233,6 +237,10 @@
 				F91BF837E4DAAF7C040D599B /* Pods-GaldenApp.release.xcconfig */,
 				39F3DD84E7E97DD233B6DCB7 /* Pods-GaldenAppTests.debug.xcconfig */,
 				0E24E15F7D813996442F4965 /* Pods-GaldenAppTests.release.xcconfig */,
+				08EB3217BE505F10CB6A4F36 /* Pods-GaldenApp.debug.xcconfig */,
+				6B80BD4EBBA350365F75B2B4 /* Pods-GaldenApp.release.xcconfig */,
+				BF4355EBF8254B697333A909 /* Pods-GaldenAppTests.debug.xcconfig */,
+				2666603A4EF49811C593784D /* Pods-GaldenAppTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -428,7 +436,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Apollo/Apollo.framework",
 				"${BUILT_PRODUCTS_DIR}/Blueprints/Blueprints.framework",
 				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
@@ -481,7 +489,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

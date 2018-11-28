@@ -135,39 +135,25 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Configure the cell...
-        let title = self.threads[indexPath.row].title
+        var title = self.threads[indexPath.row].title
         let nickName = self.threads[indexPath.row].replies.map {$0.authorNickname}
         let count = self.threads[indexPath.row].totalReplies
         let dateMap = self.threads[indexPath.row].replies.map {$0.date}
         let date = dateMap.last!.toISODate()
         let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan)
         let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
-        let newReply: UILabel = {
-            let label = UILabel()
-            label.clipsToBounds = true
-            label.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
-            label.layer.cornerRadius = 5
-            label.textColor = .white
-            label.font = UIFont.preferredFont(forTextStyle: .caption1)
-            label.adjustsFontForContentSizeCategory = true
-            label.backgroundColor = .red
-            label.textAlignment = .center
-            return label
-        }()
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
-        cell.accessoryView = nil
+        cell.threadTitleLabel.text = title
+        cell.detailLabel.text = "\(nickName[0]) // \(count)回覆 // \(relativeDate!)"
         if (readThreads != nil) {
             let newReplyCount = count-readThreads!.replyCount
             if (newReplyCount > 0) {
                 let selectedCell = tableView.indexPathForSelectedRow
                 if indexPath != selectedCell {
-                    newReply.text = String(count-readThreads!.replyCount)
-                    cell.accessoryView = newReply
+                    cell.newReplyLabel.text = "\(count-readThreads!.replyCount)"
                 }
             }
         }
-        cell.threadTitleLabel.text = title
-        cell.detailLabel.text = "\(nickName[0]) // \(count)回覆 // \(relativeDate!)"
         let tags = self.threads[indexPath.row].tags.map {$0.fragments.tagDetails}
         cell.tagLabel.text = "#\(tags[0].name)"
         cell.tagLabel.textColor = UIColor(hexRGB: tags[0].color)
