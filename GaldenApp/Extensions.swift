@@ -171,7 +171,7 @@ class EntryAttributes {
         var attributes = EKAttributes()
         attributes.position = .center
         let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 500)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
         let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
         let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
@@ -192,7 +192,7 @@ class EntryAttributes {
         var attributes = EKAttributes()
         attributes.position = .center
         let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.75)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 300)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.5)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
         attributes.displayDuration = .infinity
         attributes.screenInteraction = .dismiss
@@ -210,7 +210,7 @@ class EntryAttributes {
         var attributes = EKAttributes()
         attributes.position = .bottom
         let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 200)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.3)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
         attributes.positionConstraints.verticalOffset = 20
         attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
@@ -224,29 +224,6 @@ class EntryAttributes {
         attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
         return attributes
     }
-    
-    public func loginEntry() -> EKAttributes {
-        var attributes = EKAttributes()
-        attributes.position = .center
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.8)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.8)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
-        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
-        attributes.positionConstraints.keyboardRelation = keyboardRelation
-        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-        attributes.displayDuration = .infinity
-        attributes.screenInteraction = .dismiss
-        attributes.entryInteraction = .forward
-        attributes.screenBackground = .visualEffect(style: .dark)
-        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-        attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25))
-        attributes.exitAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.5, duration: 0.25))
-        return attributes
-    }
-    
 }
 
 class Configurations {

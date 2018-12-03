@@ -53,11 +53,15 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
     
     @objc func loginButtonPressed(_ sender: UIButton) {
         //print("entry displayed")
-        let attributes = EntryAttributes.shared.loginEntry()
         let url = URL(string: "https://hkgalden.org/oauth/v1/authorize?client_id=15897154848030720.apis.hkgalden.org")
         let request = URLRequest(url: url!)
         webView.load(request)
-        SwiftEntryKit.display(entry: webView, using: attributes)
+        let modalVC = UIViewController()
+        let modalNav = UINavigationController(rootViewController: modalVC)
+        modalVC.view = webView
+        modalNav.modalPresentationStyle = .formSheet
+        modalVC.navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: #selector(dismissVC))
+        present(modalNav, animated: true, completion: nil)
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -72,18 +76,20 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
             apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
                 [weak self] result,error in
                 sessionUser = result?.data?.sessionUser
-                SwiftEntryKit.dismiss()
+                self?.dismiss(animated: true, completion: nil)
                 var controllers = (self?.tabBarController?.viewControllers)!
                 let sessionUserViewController = SessionUserViewController()
                 sessionUserViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
-                if UIDevice.current.userInterfaceIdiom == .phone {
-                    sessionUserViewController.tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
-                }
+                sessionUserViewController.tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
                 controllers[1] = sessionUserViewController
                 self?.tabBarController?.setViewControllers(controllers, animated: false)
             }
         }
         decisionHandler(.allow)
+    }
+    
+    @objc func dismissVC() {
+        dismiss(animated: true, completion: nil)
     }
 
 }

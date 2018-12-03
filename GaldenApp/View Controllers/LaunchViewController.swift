@@ -50,20 +50,55 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
             make.centerY.equalToSuperview().offset(100)
         }
         
-        if keychain.get("firstLaunch") == nil {
-            let eulatTextView = UITextView()
-            eulatTextView.isEditable = false
-            eulatTextView.clipsToBounds = true
-            eulatTextView.backgroundColor = .clear
-            eulatTextView.textColor = UIColor(hexRGB: "aaaaaa")
-            eulatTextView.font = UIFont.preferredFont(forTextStyle: .subheadline)
-            eulatTextView.adjustsFontForContentSizeCategory = true
-            eulatTextView.text = try! String(contentsOfFile: Bundle.main.path(forResource: "eula", ofType: "txt")!)
-            keychain.set(false, forKey: "firstLaunch")
-            let attributes = EntryAttributes.shared.loginEntry()
-            SwiftEntryKit.display(entry: eulatTextView, using: attributes)
-        }
-        
+        DispatchQueue.main.asyncAfter(deadline: 1, execute: {
+            if keychain.get("firstLaunch") == nil {
+                let eulatTextView = UITextView()
+                eulatTextView.isEditable = false
+                eulatTextView.clipsToBounds = true
+                eulatTextView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+                eulatTextView.textColor = UIColor(hexRGB: "aaaaaa")
+                eulatTextView.font = UIFont.preferredFont(forTextStyle: .body)
+                eulatTextView.adjustsFontForContentSizeCategory = true
+                eulatTextView.text = try! String(contentsOfFile: Bundle.main.path(forResource: "eula", ofType: "txt")!)
+                let modalVC = UIViewController()
+                let modalNav = UINavigationController(rootViewController: modalVC)
+                modalVC.view = eulatTextView
+                modalNav.modalPresentationStyle = .formSheet
+                modalVC.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "同意並繼續", style: .done, target: self, action: #selector(self.dismissVC))
+                self.present(modalNav, animated: true, completion: nil)
+            } else {
+                self.initViews()
+            }
+        })
+        // Do any additional setup after loading the view.
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+    }
+    */
+    
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+        return true
+    }
+    
+    @objc func dismissVC() {
+        keychain.set(false, forKey: "firstLaunch")
+        dismiss(animated: true, completion: {self.initViews()})
+    }
+    
+    func initViews() {
         if keychain.get("userKey") != nil {
             let getSessionUserQuery = GetSessionUserQuery()
             apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
@@ -112,27 +147,6 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
                 self.present(splitViewController, animated: true, completion: nil)
             }
         }
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
-        return true
     }
     
 }

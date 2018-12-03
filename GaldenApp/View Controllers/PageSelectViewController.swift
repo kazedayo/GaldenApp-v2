@@ -46,16 +46,16 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         
         titleLabel.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(10)
+            make.top.equalTo(20)
             make.leading.equalTo(15)
             make.trailing.equalTo(-15)
         }
         
         tableView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.bottom.equalTo(view.snp.bottom)
-            make.height.equalTo(200)
+            //make.height.equalTo(200)
             make.width.lessThanOrEqualTo(500)
             make.leadingMargin.greaterThanOrEqualTo(15)
             make.trailingMargin.greaterThanOrEqualTo(-15)

@@ -17,7 +17,7 @@ import Apollo
 class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UIPopoverPresentationControllerDelegate {
     
     //MARK: Properties
-    var threads: [ThreadListDetails] = []
+    var threads: [Thread] = []
     var channelId: String = "bw"
     var pageNow: Int = 1
     var pageCount: Double?
@@ -60,7 +60,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 10, bottom: 0, right: 0)
         tableView.separatorColor = UIColor(white: 0.10, alpha: 1)
-        tableView.estimatedRowHeight = 50
+        //tableView.estimatedRowHeight = 60
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
         tableView.addGestureRecognizer(longPress)
@@ -76,12 +76,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
+        refreshControl.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.refreshControl = refreshControl
-        
-        let spinner = UIActivityIndicatorView(style: .white)
-        spinner.startAnimating()
-        spinner.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 44)
-        self.tableView.tableFooterView = spinner;
         
         reloadButton.center = self.view.center
         reloadButton.setTitle("重新載入", for: .normal)
@@ -107,7 +103,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)
-            tableView.reloadRows(at: [indexPath!], with: .fade)
         }
     }
     
@@ -135,50 +130,32 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Configure the cell...
-        var title = self.threads[indexPath.row].title
-        let nickName = self.threads[indexPath.row].replies.map {$0.authorNickname}
-        let count = self.threads[indexPath.row].totalReplies
-        let dateMap = self.threads[indexPath.row].replies.map {$0.date}
-        let date = dateMap.last!.toISODate()
-        let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan)
-        let readThreads = realm.object(ofType: History.self, forPrimaryKey: self.threads[indexPath.row].id)
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
-        cell.threadTitleLabel.text = title
-        cell.detailLabel.text = "\(nickName[0]) // \(count)回覆 // \(relativeDate!)"
-        if (readThreads != nil) {
-            let newReplyCount = count-readThreads!.replyCount
-            if (newReplyCount > 0) {
-                let selectedCell = tableView.indexPathForSelectedRow
-                if indexPath != selectedCell {
-                    cell.newReplyLabel.text = "\(count-readThreads!.replyCount)"
-                }
-            }
-        }
-        let tags = self.threads[indexPath.row].tags.map {$0.fragments.tagDetails}
-        cell.tagLabel.text = "#\(tags[0].name)"
-        cell.tagLabel.textColor = UIColor(hexRGB: tags[0].color)
+        cell.threadTitleLabel.text = threads[indexPath.row].title
+        cell.detailLabel.text = "\(threads[indexPath.row].nickName) // \(threads[indexPath.row].count)回覆 // \(threads[indexPath.row].date)"
+        cell.newReplyLabel.text = threads[indexPath.row].newReplyCount
+        cell.tagLabel.text = "#\(threads[indexPath.row].tagName)"
+        cell.tagLabel.textColor = UIColor(hexRGB: threads[indexPath.row].tagColor)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DispatchQueue.main.async {
-            let cell = tableView.cellForRow(at: indexPath)
-            cell?.accessoryView = nil
-            cell?.setNeedsLayout()
+            let cell = tableView.cellForRow(at: indexPath) as! ThreadListTableViewCell
+            cell.newReplyLabel.text = ""
+            cell.setNeedsLayout()
             let contentVC = ContentViewController()
             let contentNav = UINavigationController(rootViewController: contentVC)
             let selectedThread = self.threads[indexPath.row].id
             contentVC.tID = selectedThread
             contentVC.title = self.threads[indexPath.row].title
             contentVC.sender = "cell"
-            //contentVC.hidesBottomBarWhenPushed = true
             self.splitViewController?.showDetailViewController(contentNav, sender: self)
-            //self.navigationController?.pushViewController(contentVC, animated: true)
         }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if (threads.count - indexPath.row) == 1 {
+        if (threads.count - indexPath.row) == 5 {
             self.pageNow += 1
             self.updateSequence(append: true, completion: {})
         }
@@ -190,7 +167,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
                 self.selectedThread = threads[indexPath.row].id
                 self.selectedThreadTitle = threads[indexPath.row].title
-                self.pageCount = ceil((Double(threads[indexPath.row].totalReplies))/50)
+                self.pageCount = ceil((Double(threads[indexPath.row].count))/50)
                 let pageVC = PageSelectViewController()
                 pageVC.pageCount = self.pageCount!
                 pageVC.titleText = self.selectedThreadTitle
@@ -289,10 +266,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                     //review no tomato
                     threads = (threads!.filter {$0.tags[0].fragments.tagDetails.id != "PVAy33AYm"})
                 }
-                if append == true {
-                    self?.threads.append(contentsOf: threads!)
-                } else {
-                    self?.threads = threads!
+                //convert to thread object
+                for thread in threads! {
+                    self?.threads.append(Thread.init(id: thread.id,title: thread.title, nick: thread.replies.map {$0.authorNickname}.first!, count: thread.totalReplies, date: thread.replies.map {$0.date}.last!, tag: thread.tags.map {$0.fragments.tagDetails}.first!.name, tagC: thread.tags.map {$0.fragments.tagDetails}.first!.color))
                 }
                 self?.tableView.reloadData()
                 self?.reloadButton.isHidden = true
