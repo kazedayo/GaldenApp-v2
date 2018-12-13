@@ -55,6 +55,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView = WKWebView(frame: self.view.bounds, configuration: config)
         webView.isOpaque = false
         webView.backgroundColor = .clear
+        //user agent spoof for icon
+        webView.customUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"
         webView.navigationDelegate = self
         if #available(iOS 11.0, *) {
             webView.scrollView.contentInsetAdjustmentBehavior = .automatic
