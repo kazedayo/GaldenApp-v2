@@ -267,6 +267,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                     threads = (threads!.filter {$0.tags[0].fragments.tagDetails.id != "PVAy33AYm"})
                 }
                 //convert to thread object
+                if append == false {
+                    self?.threads = []
+                }
                 for thread in threads! {
                     self?.threads.append(Thread.init(id: thread.id,title: thread.title, nick: thread.replies.map {$0.authorNickname}.first!, count: thread.totalReplies, date: thread.replies.map {$0.date}.last!, tag: thread.tags.map {$0.fragments.tagDetails}.first!.name, tagC: thread.tags.map {$0.fragments.tagDetails}.first!.color))
                 }

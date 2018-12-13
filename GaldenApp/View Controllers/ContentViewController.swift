@@ -341,7 +341,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     contentHTML?.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
-                let threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://cdn.rawgit.com/kazedayo/js_for_GaldenApp/87d964a5/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+                let threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://rawcdn.githack.com/kazedayo/js_for_GaldenApp/5954e3b3859ebd54e3bfa1be38d2d856f36d6b87/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
                 
                 self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
             }
@@ -442,7 +442,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 try! img.get(i).remove()
             } else {
                 let imgURL = try! img.get(i).attr("data-src")
-                try! img.get(i).wrap("<img onclick=\"redrawImg($(this),'\(imgURL)');\" src=\"https://m.hkgalden.com/img/image.png\">")
+                try! img.get(i).wrap("<img onclick=\"redrawImg($(this),'\(imgURL)');\" src=\"https://i.imgur.com/n06vC2w.png\">")
                 try! img.get(i).remove()
             }
         }
