@@ -32,6 +32,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"),style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
     lazy var newThread = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(newThreadButtonPressed))
+    lazy var nextPageButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
+    lazy var spinner = UIActivityIndicatorView(style: .white)
     
     var reloadButton = UIButton()
     
@@ -78,6 +80,14 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
         refreshControl.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.refreshControl = refreshControl
+        
+        //footer for next page
+        spinner.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 50)
+        nextPageButton.setTitle("下一頁", for: .normal)
+        nextPageButton.setTitleColor(.darkGray, for: .normal)
+        nextPageButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
+        nextPageButton.addTarget(self, action: #selector(nextPage), for: .touchUpInside)
+        tableView.tableFooterView = nextPageButton
         
         reloadButton.center = self.view.center
         reloadButton.setTitle("重新載入", for: .normal)
@@ -154,11 +164,13 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if (threads.count - indexPath.row) == 5 {
-            self.pageNow += 1
-            self.updateSequence(append: true, completion: {})
-        }
+    @objc func nextPage() {
+        spinner.startAnimating()
+        self.tableView.tableFooterView = spinner;
+        self.pageNow += 1
+        self.updateSequence(append: true, completion: {
+            self.tableView.tableFooterView = self.nextPageButton
+        })
     }
     
     @objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
