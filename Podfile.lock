@@ -2,30 +2,30 @@ PODS:
   - Apollo (0.9.4):
     - Apollo/Core (= 0.9.4)
   - Apollo/Core (0.9.4)
-  - Blueprints (0.8.3)
+  - Blueprints (0.8.6)
   - Hero (1.4.0)
   - IGColorPicker (0.4.2):
     - M13Checkbox (~> 3.2.0)
   - IQKeyboardManagerSwift (6.2.0)
   - KeychainSwift (13.0.0)
-  - Kingfisher (4.10.1)
+  - Kingfisher (5.0.1)
   - M13Checkbox (3.2.2)
   - MarqueeLabel (3.2.0):
     - MarqueeLabel/ObjC (= 3.2.0)
   - MarqueeLabel/ObjC (3.2.0)
   - PKHUD (5.2.0)
   - QuickLayout (2.1.1)
-  - Realm (3.12.0):
-    - Realm/Headers (= 3.12.0)
-  - Realm/Headers (3.12.0)
-  - RealmSwift (3.12.0):
-    - Realm (= 3.12.0)
+  - Realm (3.13.0):
+    - Realm/Headers (= 3.13.0)
+  - Realm/Headers (3.13.0)
+  - RealmSwift (3.13.0):
+    - Realm (= 3.13.0)
   - RichEditorView (5.0.0)
   - SideMenu (5.0.3)
   - SKPhotoBrowser (6.0.0)
   - SnapKit (4.2.0)
   - SwiftDate (5.0.13)
-  - SwiftEntryKit (0.8.4):
+  - SwiftEntryKit (0.8.6):
     - QuickLayout (= 2.1.1)
   - SwiftSoup (1.7.4)
   - SwiftyStoreKit (0.14.1)
@@ -79,24 +79,24 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Apollo: 450856adbdebcdf28c3c671f81732ac3f9944065
-  Blueprints: da16684d7116d948844dc5430d316ffa80323783
+  Blueprints: 6e7e60ba7cf8573fe98616728a72a643bf169d77
   Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
   IGColorPicker: c6d43aa386a9fdc8f958f3bd4e5ab85905242c8a
   IQKeyboardManagerSwift: b07ccf9d8cafe993dcd6cb794eb4ba34611a0c4e
   KeychainSwift: 23d6c16cbc33f20fafa30c3d783241b4b87d998c
-  Kingfisher: c148cd7b47ebde9989f6bc7c27dcaa79d81279a0
+  Kingfisher: 4f771421b9208185217550528a06fd48756cb7c2
   M13Checkbox: a8c2491cfbbca10797925fd0b9154a782bf40d89
   MarqueeLabel: 440a502b91a9179bd98f9fff00ba1150650a1c0e
   PKHUD: dd5357ac65f26115c35c4a68e9b328053326c5fe
   QuickLayout: 9af2b7fd89a6552828f51a5aba28d1bcdb8b340c
-  Realm: cdaef23c4ddb36ab1ddffed23f5a7f3332fc5585
-  RealmSwift: 5576324033f0aa5ef1e0a839a3da2281dff47a7f
+  Realm: 5edd2ee65406aef591a4f9895de5a3440e51b3d8
+  RealmSwift: be5ebc7930e37cd3376b41cec7f21984528aaa16
   RichEditorView: 1bbb07b87ca2d479ac29a6877014b38b8df233ef
   SideMenu: 1dcaabce84538c53325c287f7fe62999379a641c
   SKPhotoBrowser: 76eb862685761707b5745fde7762757966565e07
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SwiftDate: f4aea5fa9dee812485f34041121a4cbde01b0dee
-  SwiftEntryKit: f0dd54bb0fb9f234738cd15a32365265cb975be8
+  SwiftEntryKit: cb0e8d6b61552e374813a304a29b7ba51ea53128
   SwiftSoup: 92f5b348c131aed8af04f4326db1579ab19fa08c
   SwiftyStoreKit: a5cdece4327f3943eb72fa81aebe3aa6684b5eab
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209

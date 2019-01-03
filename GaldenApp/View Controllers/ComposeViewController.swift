@@ -225,6 +225,20 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             try! el.tagName("p")
         }
         
+        //color highlight parse
+        let highlight = try! doc.select("span[style]")
+        for el in highlight {
+            var color = try! el.attr("style")
+            color = color.replacingOccurrences(of: "color: ", with: "")
+            color = color.replacingOccurrences(of: ";", with: "")
+            let colorUI = UIColor(rgbString: color)
+            var colorHex = rgbToHex(color: colorUI ?? UIColor.white)
+            colorHex = colorHex.replacingOccurrences(of: "#", with: "")
+            try! el.removeAttr("style")
+            try! el.attr("data-nodetype", "color")
+            try! el.attr("data-value", colorHex)
+        }
+        
         //color parse
         let color = try! doc.select("font[color]")
         for el in color {
@@ -234,20 +248,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             try! el.attr("data-nodetype", "color")
             try! el.attr("data-value", hex)
             try! el.tagName("span")
-        }
-        
-        //color highlight parse
-        let highlight = try! doc.select("span[style]")
-        for el in highlight {
-            var color = try! el.attr("style")
-            color = color.replacingOccurrences(of: "color: ", with: "")
-            color = color.replacingOccurrences(of: ";", with: "")
-            let colorUI = UIColor(rgbString: color)
-            var colorHex = rgbToHex(color: colorUI!)
-            colorHex = colorHex.replacingOccurrences(of: "#", with: "")
-            try! el.removeAttr("style")
-            try! el.attr("data-nodetype", "color")
-            try! el.attr("data-value", colorHex)
         }
         
         //b parse
