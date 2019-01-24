@@ -26,8 +26,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     let contentTextView = RichEditorView()
     lazy var toolbar: RichEditorToolbar = {
-        let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44))
-        toolbar.options = [RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.clear,RichEditorDefaultOption.textColor,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
+        let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 55))
+        toolbar.options = [RichEditorDefaultOption.clear,RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.textColor,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignLeft,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
         return toolbar
     }()
     
@@ -190,8 +190,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             self.present(alert,animated: true,completion: nil)
         } else {
             let parsedHtml = galdenParse(input: contentTextView.contentHTML)
-            //print(contentTextView.contentHTML)
-            //print(parsedHtml)
+            print(contentTextView.contentHTML)
+            print()
+            print(parsedHtml)
             HUD.show(.progress)
             let replyThreadMutation = ReplyThreadMutation(threadId: topicID, parentId: quoteID, html: parsedHtml)
             apollo.perform(mutation: replyThreadMutation) {
@@ -217,10 +218,12 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         //p tag hack
         let div = try! doc.select("div")
         if div.first() != nil {
-            try! div.first()!.before("<br>")
-            try! div.first()!.after("<hr>")
+            try! div.first()!.before("<hr>")
+            //try! div.first()!.after("<hr>")
         }
-        try! doc.body()!.append("<br>")
+        //try! div.first()!.before("<hr>")
+        //try! div.first()!.after("<hr>")
+        //try! doc.body()!.append("<br>")
         for el in div {
             try! el.tagName("p")
         }
@@ -232,7 +235,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             color = color.replacingOccurrences(of: "color: ", with: "")
             color = color.replacingOccurrences(of: ";", with: "")
             let colorUI = UIColor(rgbString: color)
-            var colorHex = rgbToHex(color: colorUI ?? UIColor.white)
+            var colorHex = rgbToHex(color: colorUI!)
             colorHex = colorHex.replacingOccurrences(of: "#", with: "")
             try! el.removeAttr("style")
             try! el.attr("data-nodetype", "color")
@@ -278,20 +281,35 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             try! el.tagName("span")
         }
         
+        //left parse
+        let left = try! doc.select("[style=text-align: left;]")
+        for el in left {
+            try! el.removeAttr("style")
+            if el.tagName() != "p" {
+                try! el.wrap("<p></p>")
+            }
+        }
+        
         //center parse
-        let center = try! doc.select("p[style=text-align: center;]")
+        let center = try! doc.select("[style=text-align: center;]")
         for el in center {
             try! el.removeAttr("style")
-            try! el.attr("data-nodetype", "center")
-            try! el.tagName("p")
+            if el.tagName() == "p" {
+                try! el.attr("data-nodetype", "center")
+            } else {
+                try! el.wrap("<p data-nodetype=\"center\"></p>")
+            }
         }
         
         //right parse
-        let right = try! doc.select("p[style=text-align: right;]")
+        let right = try! doc.select("[style=text-align: right;]")
         for el in right {
             try! el.removeAttr("style")
-            try! el.attr("data-nodetype", "right")
-            try! el.tagName("p")
+            if el.tagName() == "p" {
+                try! el.attr("data-nodetype", "right")
+            } else {
+               try! el.wrap("<p data-nodetype=\"right\"></p>")
+            }
         }
         
         //h1 parse
@@ -352,23 +370,19 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         }
         
         var parsedHtml = "<div id=\"pmc\"><p>\(try! doc.body()!.html())</div>"
-        parsedHtml = parsedHtml.replacingOccurrences(of: "<hr>", with: "<p>")
-        parsedHtml = parsedHtml.replacingOccurrences(of: "<br>", with: "</p>")
+        //parsedHtml = parsedHtml.replacingOccurrences(of: "<br>", with: "")
+        parsedHtml = parsedHtml.replacingOccurrences(of: "<hr>", with: "</p>")
         
         //remove empty p tag
-        let parsedDoc = try! SwiftSoup.parse(parsedHtml)
-        let p = try! parsedDoc.select("p")
-        for el in p {
-            if try! el.html().isEmpty == true {
-                try! el.remove()
-            }
-        }
+        //let parsedDoc = try! SwiftSoup.parse(parsedHtml)
+        //let p = try! parsedDoc.select("p")
+        //try! p.last()?.remove()
         
         //remove style for all el
-        let el = try! doc.getAllElements()
-        try! el.removeAttr("style")
+        //let el = try! doc.getAllElements()
+        //try! el.removeAttr("style")
         
-        parsedHtml = try! parsedDoc.body()!.html()
+        //parsedHtml = try! parsedDoc.body()!.html()
         
         return parsedHtml
     }

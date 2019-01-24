@@ -233,9 +233,12 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     func unwindToThreadList(channel: ChannelDetails) {
         self.channelId = channel.id
         self.pageNow = 1
-        self.navigationItem.title = channel.name
+        tabBarController?.navigationItem.title = channel.name
         self.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
-        self.updateSequence(append: false, completion: {})
+        self.tableView.isHidden = true
+        self.updateSequence(append: false, completion: {
+            self.tableView.isHidden = false
+        })
     }
     
     func unwindToThreadListAfterNewPost() {

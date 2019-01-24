@@ -156,8 +156,8 @@
 				424A47012073493E005795A6 /* LaunchViewController.swift */,
 				424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */,
 				424A46F42073493C005795A6 /* PageSelectViewController.swift */,
-				424A47022073493E005795A6 /* ThreadListViewController.swift */,
 				42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */,
+				424A47022073493E005795A6 /* ThreadListViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";

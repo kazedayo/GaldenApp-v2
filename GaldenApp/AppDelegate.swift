@@ -14,6 +14,7 @@ import URLNavigator
 import SwiftyStoreKit
 import RealmSwift
 import Apollo
+import RichEditorView
 
 let navigator = Navigator()
 let keychain = KeychainSwift()
@@ -53,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         URLNavigationMap.initialize(navigator: navigator)
         
         IQKeyboardManager.shared.enable = true
-        IQKeyboardManager.shared.enableAutoToolbar = true
+        IQKeyboardManager.shared.enableAutoToolbar = false
         
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
             for purchase in purchases {
@@ -82,6 +83,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UITabBar.appearance().barStyle = .black
         UITabBar.appearance().tintColor = UIColor(hexRGB: "#568064")
+        
+        //UITextView.appearance().keyboardAppearance = .dark
+        //UITextField.appearance().keyboardAppearance = .dark
         
         let root = LaunchViewController()
         window?.rootViewController = root

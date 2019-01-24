@@ -100,7 +100,6 @@ class ThreadComposeViewController: ComposeViewController {
             self.present(alert,animated: true,completion: nil)
         } else {
             let parsedHtml = galdenParse(input: contentTextView.contentHTML)
-            HUD.show(.progress)
             if tagID == nil {
                 let alert = UIAlertController.init(title: "注意", message: "請選擇標籤", preferredStyle: .alert)
                 alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
@@ -109,6 +108,8 @@ class ThreadComposeViewController: ComposeViewController {
                 }))
                 self.present(alert,animated: true,completion: nil)
             } else {
+                //print(parsedHtml)
+                HUD.show(.progress)
                 let createThreadMutation = CreateThreadMutation(title: titleTextField.text!, tags: [tagID!], html: parsedHtml)
                 apollo.perform(mutation: createThreadMutation) {
                     [weak self] result, error in
