@@ -389,7 +389,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     func keyWasTapped(character: String) {
         contentTextView.insertComponent(character)
-        SwiftEntryKit.dismiss()
     }
     
     @objc func callIconKeyboard() {
