@@ -146,7 +146,7 @@ class EntryAttributes {
     public func iconEntry() -> EKAttributes {
         var attributes = EKAttributes()
         attributes.position = .center
-        var widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
+        var widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.95)
         if UIDevice.current.userInterfaceIdiom == .pad {
             widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.7)
         }
