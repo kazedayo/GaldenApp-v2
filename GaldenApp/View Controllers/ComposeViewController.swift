@@ -21,6 +21,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     var topicID: Int!
     var quoteID: String?
     var contentVC: ContentViewController?
+    var keyboardHeight: CGFloat = 0
     
     let iconKeyboard = IconKeyboard()
     
@@ -393,7 +394,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     @objc func callIconKeyboard() {
         //contentTextView.resignFirstResponder()
-        let attributes = EntryAttributes.shared.iconEntry()
+        var attributes = EntryAttributes.shared.iconEntry()
+        attributes.positionConstraints.verticalOffset = keyboardHeight-50
         SwiftEntryKit.display(entry: iconKeyboard, using: attributes)
     }
     
@@ -403,7 +405,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight = keyboardSize.height
+            keyboardHeight = keyboardSize.height
             contentTextView.snp.updateConstraints {
                 (make) -> Void in
                 make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)

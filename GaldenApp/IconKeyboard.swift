@@ -31,7 +31,11 @@ class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
             
             let layout = HorizontalBlueprintLayout()
             layout.itemsPerColumn = 1
-            layout.itemsPerRow = 3.5
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                layout.itemsPerRow = 5.5
+            } else {
+                layout.itemsPerRow = 3.5
+            }
             layout.sectionInset = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
             layout.minimumLineSpacing = 10
             layout.minimumInteritemSpacing = 10

@@ -131,7 +131,7 @@ class ThreadComposeViewController: ComposeViewController {
     
     override func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight = keyboardSize.height
+            keyboardHeight = keyboardSize.height
             selectTagLabel.snp.updateConstraints {
                 (make) -> Void in
                 if UIDevice.current.userInterfaceIdiom == .pad {
