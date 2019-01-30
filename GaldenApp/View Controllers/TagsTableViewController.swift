@@ -77,7 +77,7 @@ class TagsTableViewController: UITableViewController {
         let tagID = channels[indexPath.section].tags[indexPath.row].fragments.tagDetails.id
         let tagColor = channels[indexPath.section].tags[indexPath.row].fragments.tagDetails.color
         composeVC.unwindToCompose(tagName: tagName, tagID: tagID, tagColor: tagColor)
-        SwiftEntryKit.dismiss()
+        self.dismiss(animated: true, completion: nil)
     }
     
     /*

@@ -10,7 +10,7 @@ import UIKit
 import PKHUD
 import SwiftEntryKit
 
-class ThreadComposeViewController: ComposeViewController {
+class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationControllerDelegate {
     
     var tagID: String?
     var threadVC: ThreadListViewController?
@@ -170,9 +170,18 @@ class ThreadComposeViewController: ComposeViewController {
     
     @objc func tagButtonPressed(_ sender: UIButton) {
         let tagsVC = TagsTableViewController()
-        let attributes = EntryAttributes.shared.iconEntry()
         tagsVC.composeVC = self
-        SwiftEntryKit.display(entry: tagsVC, using: attributes)
+        tagsVC.modalPresentationStyle = .popover
+        tagsVC.popoverPresentationController?.delegate = self
+        tagsVC.popoverPresentationController?.sourceView = tagButton
+        tagsVC.popoverPresentationController?.sourceRect = CGRect.zero
+        tagsVC.popoverPresentationController?.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        tagsVC.preferredContentSize = CGSize(width: 200, height: 200)
+        self.present(tagsVC, animated: true, completion: nil)
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
     }
     
     /*
