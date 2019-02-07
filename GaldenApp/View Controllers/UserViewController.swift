@@ -20,12 +20,16 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     let ugroupLabel = UILabel()
     let headerView = UIView()
     let tableView = UITableView()
+    let activityIndicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         navigationItem.title = "起底"
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
         
+        tableView.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
@@ -94,6 +98,12 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.translatesAutoresizingMaskIntoConstraints = false
         headerView.insertSubview(blurView, at: 0)
+        
+        activityIndicator.snp.makeConstraints {
+            (make) -> Void in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
         
         blurView.snp.makeConstraints {
             (make) -> Void in
@@ -208,10 +218,43 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
             if error == nil {
-                self?.userThreads = (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!
-                self?.tableView.reloadSections(IndexSet(integer: 0), with: .none)
-                NetworkActivityIndicatorManager.networkOperationFinished()
-                completion()
+                self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
+                let getUserThreadsQuery = GetUserThreadsQuery(id:(self?.uid)!,page:2)
+                NetworkActivityIndicatorManager.networkOperationStarted()
+                apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
+                    [weak self] result,error in
+                    if error == nil {
+                        self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
+                        let getUserThreadsQuery = GetUserThreadsQuery(id:(self?.uid)!,page:3)
+                        NetworkActivityIndicatorManager.networkOperationStarted()
+                        apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
+                            [weak self] result,error in
+                            if error == nil {
+                                self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
+                                let getUserThreadsQuery = GetUserThreadsQuery(id:(self?.uid)!,page:4)
+                                NetworkActivityIndicatorManager.networkOperationStarted()
+                                apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
+                                    [weak self] result,error in
+                                    if error == nil {
+                                        self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
+                                        let getUserThreadsQuery = GetUserThreadsQuery(id:(self?.uid)!,page:5)
+                                        NetworkActivityIndicatorManager.networkOperationStarted()
+                                        apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
+                                            [weak self] result,error in
+                                            if error == nil {
+                                                self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
+                                                self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+                                                NetworkActivityIndicatorManager.networkOperationFinished()
+                                                self?.tableView.isHidden = false
+                                                completion()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
