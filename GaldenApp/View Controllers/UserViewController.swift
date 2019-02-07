@@ -237,18 +237,10 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                                     [weak self] result,error in
                                     if error == nil {
                                         self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
-                                        let getUserThreadsQuery = GetUserThreadsQuery(id:(self?.uid)!,page:5)
-                                        NetworkActivityIndicatorManager.networkOperationStarted()
-                                        apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
-                                            [weak self] result,error in
-                                            if error == nil {
-                                                self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
-                                                self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-                                                NetworkActivityIndicatorManager.networkOperationFinished()
-                                                self?.tableView.isHidden = false
-                                                completion()
-                                            }
-                                        }
+                                        self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+                                        NetworkActivityIndicatorManager.networkOperationFinished()
+                                        self?.tableView.isHidden = false
+                                        completion()
                                     }
                                 }
                             }
