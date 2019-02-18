@@ -141,7 +141,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottomMargin)
+            make.bottom.equalTo(view.snp.bottom)
         }
         
         // Do any additional setup after loading the view.

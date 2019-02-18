@@ -120,6 +120,10 @@ class SettingsTableViewController: UITableViewController {
         return "一般設定"
     }
     
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return "版本號: \(Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String)(\(Bundle.main.infoDictionary!["CFBundleVersion"] as! String))"
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0: clearHistory(completion: {tableView.deselectRow(at: indexPath, animated: true)})
