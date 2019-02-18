@@ -215,7 +215,9 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func getUserThreads(completion: @escaping ()->Void) {
         let getUserThreadsQuery = GetUserThreadsQuery(id:uid,page:pageCount)
-        NetworkActivityIndicatorManager.networkOperationStarted()
+        if (pageCount==1){
+            NetworkActivityIndicatorManager.networkOperationStarted()
+        }
         apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
             if error == nil {
