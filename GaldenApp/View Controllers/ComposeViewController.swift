@@ -409,7 +409,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             keyboardHeight = keyboardSize.height
             contentTextView.snp.updateConstraints {
                 (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18))
+                } else {
+                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
+                }
             }
         }
     }

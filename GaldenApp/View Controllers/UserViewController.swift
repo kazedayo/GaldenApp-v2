@@ -14,6 +14,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     var userThreads: [ThreadListDetails] = []
     var uid: String!
+    var pageCount = 1
     
     let avatarView = UIImageView()
     let unameLabel = UILabel()
@@ -213,40 +214,23 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     */
     
     func getUserThreads(completion: @escaping ()->Void) {
-        let getUserThreadsQuery = GetUserThreadsQuery(id:uid,page:1)
+        let getUserThreadsQuery = GetUserThreadsQuery(id:uid,page:pageCount)
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
             if error == nil {
-                self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
-                let getUserThreadsQuery = GetUserThreadsQuery(id:(self?.uid)!,page:2)
-                NetworkActivityIndicatorManager.networkOperationStarted()
-                apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
-                    [weak self] result,error in
-                    if error == nil {
-                        self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
-                        let getUserThreadsQuery = GetUserThreadsQuery(id:(self?.uid)!,page:3)
-                        NetworkActivityIndicatorManager.networkOperationStarted()
-                        apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
-                            [weak self] result,error in
-                            if error == nil {
-                                self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
-                                let getUserThreadsQuery = GetUserThreadsQuery(id:(self?.uid)!,page:4)
-                                NetworkActivityIndicatorManager.networkOperationStarted()
-                                apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
-                                    [weak self] result,error in
-                                    if error == nil {
-                                        self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
-                                        self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-                                        NetworkActivityIndicatorManager.networkOperationFinished()
-                                        self?.tableView.isHidden = false
-                                        completion()
-                                    }
-                                }
-                            }
-                        }
-                    }
+                if (self?.pageCount==6){
+                    self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
+                    self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+                    NetworkActivityIndicatorManager.networkOperationFinished()
+                    self?.tableView.isHidden = false
+                    completion()
+                } else {
+                    self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
+                    self?.pageCount+=1
+                    self?.getUserThreads(completion: {})
                 }
+                
             }
         }
     }

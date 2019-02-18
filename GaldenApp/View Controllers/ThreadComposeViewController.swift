@@ -135,7 +135,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             selectTagLabel.snp.updateConstraints {
                 (make) -> Void in
                 if UIDevice.current.userInterfaceIdiom == .pad {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.17))
+                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18))
                 } else {
                     make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
                 }
@@ -143,7 +143,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             tagButton.snp.updateConstraints {
                 (make) -> Void in
                 if UIDevice.current.userInterfaceIdiom == .pad {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.17))
+                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18))
                 } else {
                     make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
                 }

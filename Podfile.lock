@@ -1,34 +1,34 @@
 PODS:
-  - Apollo (0.9.4):
-    - Apollo/Core (= 0.9.4)
-  - Apollo/Core (0.9.4)
-  - Blueprints (0.8.6)
+  - Apollo (0.9.5):
+    - Apollo/Core (= 0.9.5)
+  - Apollo/Core (0.9.5)
+  - Blueprints (0.10.0)
   - Hero (1.4.0)
   - IGColorPicker (0.4.2):
     - M13Checkbox (~> 3.2.0)
   - IQKeyboardManagerSwift (6.2.0)
   - KeychainSwift (13.0.0)
-  - Kingfisher (5.0.1)
+  - Kingfisher (5.1.1)
   - M13Checkbox (3.2.2)
   - MarqueeLabel (3.2.0):
     - MarqueeLabel/ObjC (= 3.2.0)
   - MarqueeLabel/ObjC (3.2.0)
-  - PKHUD (5.2.0)
+  - PKHUD (5.2.1)
   - QuickLayout (2.1.1)
-  - Realm (3.13.0):
-    - Realm/Headers (= 3.13.0)
-  - Realm/Headers (3.13.0)
-  - RealmSwift (3.13.0):
-    - Realm (= 3.13.0)
+  - Realm (3.13.1):
+    - Realm/Headers (= 3.13.1)
+  - Realm/Headers (3.13.1)
+  - RealmSwift (3.13.1):
+    - Realm (= 3.13.1)
   - RichEditorView (5.0.0)
   - SideMenu (5.0.3)
   - SKPhotoBrowser (6.0.0)
   - SnapKit (4.2.0)
-  - SwiftDate (5.0.13)
-  - SwiftEntryKit (0.8.6):
+  - SwiftDate (5.1.0)
+  - SwiftEntryKit (0.8.8):
     - QuickLayout (= 2.1.1)
   - SwiftSoup (1.7.4)
-  - SwiftyStoreKit (0.14.1)
+  - SwiftyStoreKit (0.14.2)
   - URLNavigator (2.1.0)
 
 DEPENDENCIES:
@@ -78,27 +78,27 @@ SPEC REPOS:
     - URLNavigator
 
 SPEC CHECKSUMS:
-  Apollo: 450856adbdebcdf28c3c671f81732ac3f9944065
-  Blueprints: 6e7e60ba7cf8573fe98616728a72a643bf169d77
+  Apollo: 19caf3246d292bbb69ecad1bd098661f78222aba
+  Blueprints: 64fdc6123b103f3be60b4a4bd5942eda6159aa9a
   Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
   IGColorPicker: c6d43aa386a9fdc8f958f3bd4e5ab85905242c8a
   IQKeyboardManagerSwift: b07ccf9d8cafe993dcd6cb794eb4ba34611a0c4e
   KeychainSwift: 23d6c16cbc33f20fafa30c3d783241b4b87d998c
-  Kingfisher: 4f771421b9208185217550528a06fd48756cb7c2
+  Kingfisher: 2558186963e5be42d98c5b110ccb3130148b77e4
   M13Checkbox: a8c2491cfbbca10797925fd0b9154a782bf40d89
   MarqueeLabel: 440a502b91a9179bd98f9fff00ba1150650a1c0e
-  PKHUD: dd5357ac65f26115c35c4a68e9b328053326c5fe
+  PKHUD: 4e6162c4c39ac367c6934e9855c6b4762ee16256
   QuickLayout: 9af2b7fd89a6552828f51a5aba28d1bcdb8b340c
-  Realm: 5edd2ee65406aef591a4f9895de5a3440e51b3d8
-  RealmSwift: be5ebc7930e37cd3376b41cec7f21984528aaa16
+  Realm: 50071da38fe079e0735e47c9f2eae738c68c5996
+  RealmSwift: 8a1e6a02b7a08cd17a31e3115143fb69fe5f3fb9
   RichEditorView: 1bbb07b87ca2d479ac29a6877014b38b8df233ef
   SideMenu: 1dcaabce84538c53325c287f7fe62999379a641c
   SKPhotoBrowser: 76eb862685761707b5745fde7762757966565e07
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
-  SwiftDate: f4aea5fa9dee812485f34041121a4cbde01b0dee
-  SwiftEntryKit: cb0e8d6b61552e374813a304a29b7ba51ea53128
+  SwiftDate: 6329e58969a2de31cea7f1ee1143b247693196e7
+  SwiftEntryKit: c50f25a14772713ded1591c852d1c1dc74c95b9e
   SwiftSoup: 92f5b348c131aed8af04f4326db1579ab19fa08c
-  SwiftyStoreKit: a5cdece4327f3943eb72fa81aebe3aa6684b5eab
+  SwiftyStoreKit: cc399645796b094022fb650c148a0aed25995873
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209
 
 PODFILE CHECKSUM: 761f970b8331c708e4381ccb325da18c71ec4bd8
