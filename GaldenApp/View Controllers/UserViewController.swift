@@ -221,16 +221,16 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
             if error == nil {
+                self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
                 if (self?.pageCount==6){
-                    self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
                     self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
                     NetworkActivityIndicatorManager.networkOperationFinished()
                     self?.tableView.isHidden = false
                     completion()
                 } else {
-                    self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
                     self?.pageCount+=1
-                    self?.getUserThreads(completion: {})
+                    print("fetched once")
+                    self?.getUserThreads(completion: completion)
                 }
                 
             }
@@ -239,6 +239,8 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     @objc func refresh(refreshControl: UIRefreshControl) {
         DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
+            self.pageCount=1
+            self.userThreads.removeAll()
             self.getUserThreads(completion: {
                 refreshControl.endRefreshing()
             })

@@ -39,6 +39,7 @@ DEPENDENCIES:
   - IQKeyboardManagerSwift
   - KeychainSwift
   - Kingfisher
+  - M13Checkbox
   - MarqueeLabel
   - PKHUD
   - RealmSwift
@@ -101,6 +102,6 @@ SPEC CHECKSUMS:
   SwiftyStoreKit: cc399645796b094022fb650c148a0aed25995873
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209
 
-PODFILE CHECKSUM: 761f970b8331c708e4381ccb325da18c71ec4bd8
+PODFILE CHECKSUM: da08b28d441b99934ad574a95a311f6e284c2a43
 
 COCOAPODS: 1.5.3

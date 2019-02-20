@@ -195,6 +195,8 @@ class SessionUserViewController: UserViewController {
     @objc override func refresh(refreshControl: UIRefreshControl) {
         DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
             if self.segmentControl.selectedSegmentIndex == 0 {
+                self.pageCount=1
+                self.userThreads.removeAll()
                 self.getUserThreads(completion: {
                     refreshControl.endRefreshing()
                 })
