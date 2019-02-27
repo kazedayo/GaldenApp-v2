@@ -173,6 +173,7 @@ class SessionUserViewController: UserViewController {
             [weak self] result,error in
             if error == nil {
                 self?.blockedUsers = (result?.data?.blockedUsers)!
+                sessionUser?.blockedUserIds = (result?.data?.blockedUsers.map {$0.id})!
                 self?.tableView.reloadSections(IndexSet(integer: 0), with: .none)
                 NetworkActivityIndicatorManager.networkOperationFinished()
                 completion()

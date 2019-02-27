@@ -16,6 +16,7 @@ import SwiftEntryKit
 import SwiftSoup
 import SwiftDate
 import SafariServices
+import Foundation
 
 class ContentViewController: UIViewController,UIPopoverPresentationControllerDelegate,UINavigationControllerDelegate,WKNavigationDelegate,WKScriptMessageHandler,UIScrollViewDelegate {
     
@@ -321,6 +322,12 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         webView.isHidden = true
         activityIndicator.isHidden = false
         NetworkActivityIndicatorManager.networkOperationStarted()
+        //if reply is next page
+        if (navType==NavigationType.reply){
+            if (totalReplies!%50==0){
+                pageNow+=1
+            }
+        }
         let getThreadContentQuery = GetThreadContentQuery(id: tID, sorting: .dateAsc, page: pageNow)
         apollo.fetch(query: getThreadContentQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in

@@ -32,14 +32,13 @@ PODS:
   - URLNavigator (2.1.0)
 
 DEPENDENCIES:
-  - Apollo
+  - Apollo (from `https://github.com/apollographql/apollo-ios.git`, branch `master`)
   - Blueprints
   - Hero
   - IGColorPicker
   - IQKeyboardManagerSwift
   - KeychainSwift
-  - Kingfisher
-  - M13Checkbox
+  - Kingfisher (from `https://github.com/onevcat/Kingfisher.git`, branch `swift5.0`)
   - MarqueeLabel
   - PKHUD
   - RealmSwift
@@ -55,13 +54,11 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - Apollo
     - Blueprints
     - Hero
     - IGColorPicker
     - IQKeyboardManagerSwift
     - KeychainSwift
-    - Kingfisher
     - M13Checkbox
     - MarqueeLabel
     - PKHUD
@@ -77,6 +74,22 @@ SPEC REPOS:
     - SwiftSoup
     - SwiftyStoreKit
     - URLNavigator
+
+EXTERNAL SOURCES:
+  Apollo:
+    :branch: master
+    :git: https://github.com/apollographql/apollo-ios.git
+  Kingfisher:
+    :branch: swift5.0
+    :git: https://github.com/onevcat/Kingfisher.git
+
+CHECKOUT OPTIONS:
+  Apollo:
+    :commit: 46b167e0fe4e8834641a01c71b14cd18ad73bbd3
+    :git: https://github.com/apollographql/apollo-ios.git
+  Kingfisher:
+    :commit: aa317cbe8b445233745e0070cebe9fbd3dc2c506
+    :git: https://github.com/onevcat/Kingfisher.git
 
 SPEC CHECKSUMS:
   Apollo: 19caf3246d292bbb69ecad1bd098661f78222aba
@@ -102,6 +115,6 @@ SPEC CHECKSUMS:
   SwiftyStoreKit: cc399645796b094022fb650c148a0aed25995873
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209
 
-PODFILE CHECKSUM: da08b28d441b99934ad574a95a311f6e284c2a43
+PODFILE CHECKSUM: 88bdc9b581253f39146eeb28a474ddbe2aff3f95
 
 COCOAPODS: 1.5.3
