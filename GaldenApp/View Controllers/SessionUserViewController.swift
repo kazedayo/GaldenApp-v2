@@ -199,18 +199,16 @@ class SessionUserViewController: UserViewController {
     }
     
     @objc func refresh(refreshControl: UIRefreshControl) {
-        DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
-            if self.segmentControl.selectedSegmentIndex == 0 {
-                self.pageCount=1
-                self.getUserThreads(completion: {
-                    refreshControl.endRefreshing()
-                })
-            } else if self.segmentControl.selectedSegmentIndex == 1 {
-                self.getBlockedUsers(completion: {
-                    refreshControl.endRefreshing()
-                })
-            }
-        })
+        if segmentControl.selectedSegmentIndex == 0 {
+            pageCount=1
+            getUserThreads(completion: {
+                refreshControl.endRefreshing()
+            })
+        } else if segmentControl.selectedSegmentIndex == 1 {
+            getBlockedUsers(completion: {
+                refreshControl.endRefreshing()
+            })
+        }
     }
     
 }
