@@ -87,10 +87,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             }
         }
         
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
-        tableView.refreshControl = refreshControl
-        
         headerView.addSubview(avatarView)
         headerView.addSubview(unameLabel)
         headerView.addSubview(ugroupLabel)
@@ -216,6 +212,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func getUserThreads(completion: @escaping ()->Void) {
         let getUserThreadsQuery = GetUserThreadsQuery(id:uid,page:pageCount)
         if (pageCount==1){
+            self.userThreads.removeAll()
             NetworkActivityIndicatorManager.networkOperationStarted()
         }
         apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
@@ -229,22 +226,10 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     completion()
                 } else {
                     self?.pageCount+=1
-                    print("fetched once")
                     self?.getUserThreads(completion: completion)
                 }
                 
             }
         }
     }
-    
-    @objc func refresh(refreshControl: UIRefreshControl) {
-        DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
-            self.pageCount=1
-            self.userThreads.removeAll()
-            self.getUserThreads(completion: {
-                refreshControl.endRefreshing()
-            })
-        })
-    }
-    
 }

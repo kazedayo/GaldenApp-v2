@@ -237,11 +237,13 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             color = color.replacingOccurrences(of: "color: ", with: "")
             color = color.replacingOccurrences(of: ";", with: "")
             let colorUI = UIColor(rgbString: color)
-            var colorHex = rgbToHex(color: colorUI!)
-            colorHex = colorHex.replacingOccurrences(of: "#", with: "")
-            try! el.removeAttr("style")
-            try! el.attr("data-nodetype", "color")
-            try! el.attr("data-value", colorHex)
+            if colorUI != nil {
+                var colorHex = rgbToHex(color: colorUI!)
+                colorHex = colorHex.replacingOccurrences(of: "#", with: "")
+                try! el.removeAttr("style")
+                try! el.attr("data-nodetype", "color")
+                try! el.attr("data-value", colorHex)
+            }
         }
         
         //color parse

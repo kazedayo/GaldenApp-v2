@@ -13,6 +13,7 @@ class SessionUserViewController: UserViewController {
     
     var blockedUsers: [GetBlockedUsersQuery.Data.BlockedUser] = []
     let segmentControl = UISegmentedControl.init(items: ["起底","封鎖名單"])
+    let refreshControl = UIRefreshControl()
     lazy var logoutButton = UIBarButtonItem(title: "登出", style: .done, target: self, action: #selector(logoutButtonPressed(_:)))
 
     override func viewDidAppear(_ animated: Bool) {
@@ -28,6 +29,10 @@ class SessionUserViewController: UserViewController {
         // Do any additional setup after loading the view.
         
         tableView.register(UserTableViewCell.classForCoder(), forCellReuseIdentifier: "UserTableViewCell")
+        
+        //refreshcontrol
+        refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
+        tableView.refreshControl = refreshControl
         
         segmentControl.tintColor = UIColor(hexRGB: "#568064")
         segmentControl.selectedSegmentIndex = 0
@@ -193,11 +198,10 @@ class SessionUserViewController: UserViewController {
         }
     }
     
-    @objc override func refresh(refreshControl: UIRefreshControl) {
+    @objc func refresh(refreshControl: UIRefreshControl) {
         DispatchQueue.main.asyncAfter(deadline: 0.3, execute: {
             if self.segmentControl.selectedSegmentIndex == 0 {
                 self.pageCount=1
-                self.userThreads.removeAll()
                 self.getUserThreads(completion: {
                     refreshControl.endRefreshing()
                 })
