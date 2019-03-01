@@ -84,12 +84,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                         self?.ugroupLabel.textColor = UIColor(hexRGB: "4b6690")
                     }
                 }
-                self?.getUserThreads(completion: {
-                    self?.userThreads = self!.threadsArray
-                    self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-                    NetworkActivityIndicatorManager.networkOperationFinished()
-                    self?.tableView.isHidden = false
-                })
+                self?.getUserThreads(completion: {})
             }
         }
         
@@ -224,6 +219,11 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             if error == nil {
                 self?.threadsArray.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
                 if (self?.pageCount==6){
+                    self?.userThreads = self!.threadsArray
+                    //self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+                    self?.tableView.reloadData()
+                    NetworkActivityIndicatorManager.networkOperationFinished()
+                    self?.tableView.isHidden = false
                     completion()
                 } else {
                     self?.pageCount+=1

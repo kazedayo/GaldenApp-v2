@@ -179,7 +179,8 @@ class SessionUserViewController: UserViewController {
             if error == nil {
                 self?.blockedUsers = (result?.data?.blockedUsers)!
                 sessionUser?.blockedUserIds = (result?.data?.blockedUsers.map {$0.id})!
-                self?.tableView.reloadSections(IndexSet(integer: 0), with: .none)
+                //self?.tableView.reloadSections(IndexSet(integer: 0), with: .none)
+                self?.tableView.reloadData()
                 NetworkActivityIndicatorManager.networkOperationFinished()
                 completion()
             }
@@ -202,8 +203,6 @@ class SessionUserViewController: UserViewController {
         if segmentControl.selectedSegmentIndex == 0 {
             pageCount=1
             getUserThreads(completion: {
-                self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-                NetworkActivityIndicatorManager.networkOperationFinished()
                 refreshControl.endRefreshing()
             })
         } else if segmentControl.selectedSegmentIndex == 1 {
