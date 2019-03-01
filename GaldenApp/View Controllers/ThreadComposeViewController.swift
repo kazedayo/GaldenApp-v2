@@ -98,32 +98,29 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
                 self.contentTextView.becomeFirstResponder()
             }))
             self.present(alert,animated: true,completion: nil)
+        } else if tagID == nil {
+            let alert = UIAlertController.init(title: "注意", message: "請選擇標籤", preferredStyle: .alert)
+            alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
+                action in
+                self.contentTextView.becomeFirstResponder()
+            }))
+            self.present(alert,animated: true,completion: nil)
         } else {
+            HUD.show(.progress)
             let parsedHtml = galdenParse(input: contentTextView.contentHTML)
-            if tagID == nil {
-                let alert = UIAlertController.init(title: "注意", message: "請選擇標籤", preferredStyle: .alert)
-                alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
-                    action in
-                    self.contentTextView.becomeFirstResponder()
-                }))
-                self.present(alert,animated: true,completion: nil)
-            } else {
-                //print(parsedHtml)
-                HUD.show(.progress)
-                let createThreadMutation = CreateThreadMutation(title: titleTextField.text!, tags: [tagID!], html: parsedHtml)
-                apollo.perform(mutation: createThreadMutation) {
-                    [weak self] result, error in
-                    if error == nil {
-                        DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
-                            HUD.flash(.success)
-                            self?.dismiss(animated: true, completion: {
-                                self?.threadVC?.unwindToThreadListAfterNewPost()
-                            })
+            let createThreadMutation = CreateThreadMutation(title: titleTextField.text!, tags: [tagID!], html: parsedHtml)
+            apollo.perform(mutation: createThreadMutation) {
+                [weak self] result, error in
+                if error == nil {
+                    DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                        HUD.flash(.success)
+                        self?.dismiss(animated: true, completion: {
+                            self?.threadVC?.unwindToThreadListAfterNewPost()
                         })
-                    } else {
-                        HUD.flash(.error)
-                        print(error!)
-                    }
+                    })
+                } else {
+                    HUD.flash(.error)
+                    print(error!)
                 }
             }
         }

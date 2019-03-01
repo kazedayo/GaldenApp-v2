@@ -12,6 +12,7 @@ import SwiftDate
 
 class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
+    var threadsArray: [ThreadListDetails] = []
     var userThreads: [ThreadListDetails] = []
     var uid: String!
     var pageCount = 1
@@ -83,7 +84,12 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                         self?.ugroupLabel.textColor = UIColor(hexRGB: "4b6690")
                     }
                 }
-                self?.getUserThreads(completion: {})
+                self?.getUserThreads(completion: {
+                    self?.userThreads = self!.threadsArray
+                    self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+                    NetworkActivityIndicatorManager.networkOperationFinished()
+                    self?.tableView.isHidden = false
+                })
             }
         }
         
@@ -210,23 +216,19 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func getUserThreads(completion: @escaping ()->Void) {
         let getUserThreadsQuery = GetUserThreadsQuery(id:uid,page:pageCount)
         if (pageCount==1){
-            self.userThreads.removeAll()
+            self.threadsArray.removeAll()
             NetworkActivityIndicatorManager.networkOperationStarted()
         }
         apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
             [weak self] result,error in
             if error == nil {
-                self?.userThreads.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
+                self?.threadsArray.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
                 if (self?.pageCount==6){
-                    self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-                    NetworkActivityIndicatorManager.networkOperationFinished()
-                    self?.tableView.isHidden = false
                     completion()
                 } else {
                     self?.pageCount+=1
                     self?.getUserThreads(completion: completion)
                 }
-                
             }
         }
     }

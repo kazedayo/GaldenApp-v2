@@ -191,11 +191,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             }))
             self.present(alert,animated: true,completion: nil)
         } else {
-            let parsedHtml = galdenParse(input: contentTextView.contentHTML)
-            print(contentTextView.contentHTML)
-            print()
-            print(parsedHtml)
             HUD.show(.progress)
+            let parsedHtml = galdenParse(input: contentTextView.contentHTML)
             let replyThreadMutation = ReplyThreadMutation(threadId: topicID, parentId: quoteID, html: parsedHtml)
             apollo.perform(mutation: replyThreadMutation) {
                 [weak self] result, error in

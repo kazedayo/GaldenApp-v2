@@ -202,6 +202,8 @@ class SessionUserViewController: UserViewController {
         if segmentControl.selectedSegmentIndex == 0 {
             pageCount=1
             getUserThreads(completion: {
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+                NetworkActivityIndicatorManager.networkOperationFinished()
                 refreshControl.endRefreshing()
             })
         } else if segmentControl.selectedSegmentIndex == 1 {
