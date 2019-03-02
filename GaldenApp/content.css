@@ -95,6 +95,11 @@ div#text.usertable {
     padding-bottom: 10px;
 }
 
+.quoteName {
+    font: -apple-system-footnote;
+    color: #505050
+}
+
 h1, h2, h3 {
     display: inline-block;
 }

@@ -397,35 +397,39 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             
             //quote recursive
             var quoteHTML = ""
-            let rootParent = commentObj.parent
+            var rootParent = commentObj.parent
             let firstLayer = rootParent?.parent
             let secondLayer = firstLayer?.parent
             let thirdLayer = secondLayer?.parent
             
             //construct quote chain
             var doc = try! SwiftSoup.parse(quoteHTML)
+            //root
             if (rootParent?.fragments.commentFields.content != nil && blockedUserIds.contains((rootParent?.fragments.commentFields.author.id)!) == false) {
-                try! doc.body()!.prepend("<blockquote>\(rootParent!.fragments.commentFields.content)</blockquote>")
+                try! doc.body()!.prepend("<blockquote><p class='quoteName'>\(rootParent!.fragments.commentFields.authorNickname) 說:</p>\(rootParent!.fragments.commentFields.content)</blockquote>")
             }
+            //first
             if (firstLayer?.fragments.commentFields.content != nil && blockedUserIds.contains((firstLayer?.fragments.commentFields.author.id)!) == false) {
                 if try! doc.select("blockquote").last() == nil {
-                    try! doc.body()!.prepend("<blockquote>\(firstLayer!.fragments.commentFields.content)</blockquote>")
+                    try! doc.body()!.prepend("<blockquote><p class='quoteName'>\(firstLayer!.fragments.commentFields.authorNickname) 說:</p>\(firstLayer!.fragments.commentFields.content)</blockquote>")
                 } else {
-                    try! doc.select("blockquote").last()!.prepend("<blockquote>\(firstLayer!.fragments.commentFields.content)</blockquote>")
+                    try! doc.select("blockquote").last()!.prepend("<blockquote><p class='quoteName'>\(firstLayer!.fragments.commentFields.authorNickname) 說:</p>\(firstLayer!.fragments.commentFields.content)</blockquote>")
                 }
             }
+            //second
             if (secondLayer?.fragments.commentFields.content != nil && blockedUserIds.contains((secondLayer?.fragments.commentFields.author.id)!) == false) {
                 if try! doc.select("blockquote").last() == nil {
-                    try! doc.body()!.prepend("<blockquote>\(secondLayer!.fragments.commentFields.content)</blockquote>")
+                    try! doc.body()!.prepend("<blockquote><p class='quoteName'>\(secondLayer!.fragments.commentFields.authorNickname) 說:</p>\(secondLayer!.fragments.commentFields.content)</blockquote>")
                 } else {
-                    try! doc.select("blockquote").last()!.prepend("<blockquote>\(secondLayer!.fragments.commentFields.content)</blockquote>")
+                    try! doc.select("blockquote").last()!.prepend("<blockquote><p class='quoteName'>\(secondLayer!.fragments.commentFields.authorNickname) 說:</p>\(secondLayer!.fragments.commentFields.content)</blockquote>")
                 }
             }
+            //third
             if (thirdLayer?.fragments.commentFields.content != nil && blockedUserIds.contains((thirdLayer?.fragments.commentFields.author.id)!) == false) {
                 if try! doc.select("blockquote").last() == nil {
-                    try! doc.body()!.prepend("<blockquote>\(thirdLayer!.fragments.commentFields.content)</blockquote>")
+                    try! doc.body()!.prepend("<blockquote><p class='quoteName'>\(thirdLayer!.fragments.commentFields.authorNickname) 說:</p>\(thirdLayer!.fragments.commentFields.content)</blockquote>")
                 } else {
-                    try! doc.select("blockquote").last()!.prepend("<blockquote>\(thirdLayer!.fragments.commentFields.content)</blockquote>")
+                    try! doc.select("blockquote").last()!.prepend("<blockquote><p class='quoteName'>\(thirdLayer!.fragments.commentFields.authorNickname) 說:</p>\(thirdLayer!.fragments.commentFields.content)</blockquote>")
                 }
             }
                 
