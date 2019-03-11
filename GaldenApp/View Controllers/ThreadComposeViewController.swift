@@ -149,13 +149,15 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
     }
     
     override func keyboardWillHide(notification: Notification) {
-        selectTagLabel.snp.updateConstraints {
-            (make) -> Void in
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
-        }
-        tagButton.snp.updateConstraints {
-            (make) -> Void in
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            selectTagLabel.snp.updateConstraints {
+                (make) -> Void in
+                make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
+            }
+            tagButton.snp.updateConstraints {
+                (make) -> Void in
+                make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
+            }
         }
     }
     

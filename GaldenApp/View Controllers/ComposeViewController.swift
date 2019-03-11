@@ -110,47 +110,30 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             textfield in
             textfield.placeholder = "url"
         }
-        let ok = UIAlertAction(title: "OK", style: .default, handler: {
+        let link = UIAlertAction(title: "插入鏈結", style: .default, handler: {
             _ in
             let textfield = alert.textFields?.first
             toolbar.editor?.insertComponent("<a href=\"\((textfield?.text)!)\">\((textfield?.text)!)</a>")
         })
+        let image = UIAlertAction(title: "插入圖片", style: .default, handler: {
+            _ in
+            let textfield = alert.textFields?.first
+            toolbar.editor?.insertImage((textfield?.text)!, alt: "")
+        })
         let cancel = UIAlertAction(title: "不了", style: .cancel, handler: nil)
-        alert.addAction(ok)
+        alert.addAction(link)
+        alert.addAction(image)
         alert.addAction(cancel)
         present(alert,animated: true,completion: nil)
     }
     
     func richEditorToolbarInsertImage(_ toolbar: RichEditorToolbar) {
-        let actionsheet = UIAlertController(title:"噏圖(powered by na.cx)",message:"你想...",preferredStyle:.alert)
-        actionsheet.addAction(UIAlertAction(title:"揀相",style:.default,handler: {
-            _ in
-            let imagePicker = UIImagePickerController()
-            imagePicker.navigationBar.tintColor = .lightGray
-            imagePicker.navigationBar.barStyle = .black
-            imagePicker.delegate = self
-            imagePicker.sourceType = .photoLibrary
-            self.present(imagePicker,animated: true,completion: nil)
-        }))
-        actionsheet.addAction(UIAlertAction(title:"貼link",style:.default,handler: {
-            _ in
-            let alert = UIAlertController(title: nil, message: "圖片網址", preferredStyle: .alert)
-            alert.addTextField {
-                textfield in
-                textfield.placeholder = "url"
-            }
-            let ok = UIAlertAction(title: "OK", style: .default, handler: {
-                _ in
-                let textfield = alert.textFields?.first
-                toolbar.editor?.insertImage((textfield?.text)!, alt: "")
-            })
-            let cancel = UIAlertAction(title: "不了", style: .cancel, handler: nil)
-            alert.addAction(ok)
-            alert.addAction(cancel)
-            self.present(alert,animated: true,completion: nil)
-        }))
-        actionsheet.addAction(UIAlertAction(title:"冇嘢啦",style:.cancel,handler:nil))
-        present(actionsheet,animated: true,completion: nil)
+        let imagePicker = UIImagePickerController()
+        imagePicker.navigationBar.tintColor = .lightGray
+        imagePicker.navigationBar.barStyle = .black
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        self.present(imagePicker,animated: true,completion: nil)
     }
     
     func richEditorToolbarChangeTextColor(_ toolbar: RichEditorToolbar) {
@@ -436,9 +419,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     @objc func keyboardWillHide(notification: Notification) {
         // keyboard is dismissed/hidden from the screen
-        contentTextView.snp.updateConstraints {
-            (make) -> Void in
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            contentTextView.snp.updateConstraints {
+                (make) -> Void in
+                make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
+            }
         }
     }
     
@@ -495,8 +480,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             let imageURL = info[UIImagePickerController.InfoKey.imageURL] as! URL
             imageUpload(imageURL: imageURL, completion: {
                 url in
-                self.dismiss(animated: true, completion: nil)
-                self.toolbar.editor?.insertImage(url, alt: "")
+                self.dismiss(animated: true, completion: {
+                    self.toolbar.editor?.insertImage(url, alt: "")
+                })
             })
         } else {
             //obtaining saving path
@@ -514,8 +500,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             try! pickedImage!.jpegData(compressionQuality: 1.0)?.write(to: imagePath!)
             imageUpload(imageURL: imagePath!, completion: {
                 url in
-                self.dismiss(animated: true, completion: nil)
-                self.toolbar.editor?.insertImage(url, alt: "")
+                self.dismiss(animated: true, completion: {
+                    self.toolbar.editor?.insertImage(url, alt: "")
+                })
             })
         }
     }
