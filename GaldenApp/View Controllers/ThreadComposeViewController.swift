@@ -75,7 +75,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         }
         contentTextView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(titleTextField.snp.bottom).offset(10)
+            make.top.equalTo(titleTextField.snp.bottom).offset(15)
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
         }
