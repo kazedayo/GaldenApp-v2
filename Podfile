@@ -25,6 +25,8 @@ target 'GaldenApp' do
   pod 'SwiftDate'
   pod 'RichEditorView'
   pod 'IGColorPicker'
+  pod 'Alamofire'
+  pod 'SwiftyJSON'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

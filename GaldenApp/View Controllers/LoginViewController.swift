@@ -19,6 +19,7 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tabBarController?.navigationItem.title = "會員資料"
+        tabBarController?.navigationItem.leftBarButtonItem = nil
         tabBarController?.navigationItem.rightBarButtonItem = loginButton
     }
 

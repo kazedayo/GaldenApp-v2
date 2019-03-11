@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (4.8.1)
   - Apollo (0.9.5):
     - Apollo/Core (= 0.9.5)
   - Apollo/Core (0.9.5)
@@ -28,10 +29,12 @@ PODS:
   - SwiftEntryKit (0.8.8):
     - QuickLayout (= 2.1.1)
   - SwiftSoup (1.7.4)
+  - SwiftyJSON (4.2.0)
   - SwiftyStoreKit (0.14.2)
   - URLNavigator (2.1.0)
 
 DEPENDENCIES:
+  - Alamofire
   - Apollo (from `https://github.com/apollographql/apollo-ios.git`, branch `master`)
   - Blueprints
   - Hero
@@ -49,11 +52,13 @@ DEPENDENCIES:
   - SwiftDate
   - SwiftEntryKit
   - SwiftSoup
+  - SwiftyJSON
   - SwiftyStoreKit
   - URLNavigator
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Alamofire
     - Blueprints
     - Hero
     - IGColorPicker
@@ -72,6 +77,7 @@ SPEC REPOS:
     - SwiftDate
     - SwiftEntryKit
     - SwiftSoup
+    - SwiftyJSON
     - SwiftyStoreKit
     - URLNavigator
 
@@ -92,6 +98,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/onevcat/Kingfisher.git
 
 SPEC CHECKSUMS:
+  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   Apollo: 19caf3246d292bbb69ecad1bd098661f78222aba
   Blueprints: 64fdc6123b103f3be60b4a4bd5942eda6159aa9a
   Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
@@ -112,9 +119,10 @@ SPEC CHECKSUMS:
   SwiftDate: 6329e58969a2de31cea7f1ee1143b247693196e7
   SwiftEntryKit: c50f25a14772713ded1591c852d1c1dc74c95b9e
   SwiftSoup: 92f5b348c131aed8af04f4326db1579ab19fa08c
+  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   SwiftyStoreKit: cc399645796b094022fb650c148a0aed25995873
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209
 
-PODFILE CHECKSUM: 88bdc9b581253f39146eeb28a474ddbe2aff3f95
+PODFILE CHECKSUM: 35a9b21221ed55b0368e66f59745f94ff8eded7c
 
 COCOAPODS: 1.5.3

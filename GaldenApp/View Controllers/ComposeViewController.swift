@@ -14,8 +14,10 @@ import RichEditorView
 import SwiftSoup
 import ImageIO
 import IGColorPicker
+import Alamofire
+import SwiftyJSON
 
-class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,RichEditorToolbarDelegate,ColorPickerViewDelegate,ColorPickerViewDelegateFlowLayout {
+class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,RichEditorToolbarDelegate,ColorPickerViewDelegate,ColorPickerViewDelegateFlowLayout,UIImagePickerControllerDelegate {
     
     //MARK: Properties
     var topicID: Int!
@@ -120,20 +122,35 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }
     
     func richEditorToolbarInsertImage(_ toolbar: RichEditorToolbar) {
-        let alert = UIAlertController(title: nil, message: "圖片網址", preferredStyle: .alert)
-        alert.addTextField {
-            textfield in
-            textfield.placeholder = "url"
-        }
-        let ok = UIAlertAction(title: "OK", style: .default, handler: {
+        let actionsheet = UIAlertController(title:"噏圖(powered by na.cx)",message:"你想...",preferredStyle:.alert)
+        actionsheet.addAction(UIAlertAction(title:"揀相",style:.default,handler: {
             _ in
-            let textfield = alert.textFields?.first
-            toolbar.editor?.insertImage((textfield?.text)!, alt: "")
-        })
-        let cancel = UIAlertAction(title: "不了", style: .cancel, handler: nil)
-        alert.addAction(ok)
-        alert.addAction(cancel)
-        present(alert,animated: true,completion: nil)
+            let imagePicker = UIImagePickerController()
+            imagePicker.navigationBar.tintColor = .lightGray
+            imagePicker.navigationBar.barStyle = .black
+            imagePicker.delegate = self
+            imagePicker.sourceType = .photoLibrary
+            self.present(imagePicker,animated: true,completion: nil)
+        }))
+        actionsheet.addAction(UIAlertAction(title:"貼link",style:.default,handler: {
+            _ in
+            let alert = UIAlertController(title: nil, message: "圖片網址", preferredStyle: .alert)
+            alert.addTextField {
+                textfield in
+                textfield.placeholder = "url"
+            }
+            let ok = UIAlertAction(title: "OK", style: .default, handler: {
+                _ in
+                let textfield = alert.textFields?.first
+                toolbar.editor?.insertImage((textfield?.text)!, alt: "")
+            })
+            let cancel = UIAlertAction(title: "不了", style: .cancel, handler: nil)
+            alert.addAction(ok)
+            alert.addAction(cancel)
+            self.present(alert,animated: true,completion: nil)
+        }))
+        actionsheet.addAction(UIAlertAction(title:"冇嘢啦",style:.cancel,handler:nil))
+        present(actionsheet,animated: true,completion: nil)
     }
     
     func richEditorToolbarChangeTextColor(_ toolbar: RichEditorToolbar) {
@@ -435,5 +452,71 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         
         let rgb:Int = (Int)(r*255)<<16 | (Int)(g*255)<<8 | (Int)(b*255)<<0
         return String(format: "#%06x", rgb)
+    }
+    
+    //image upload function
+    func imageUpload(imageURL: URL,completion: @escaping (_ url: String)->Void) {
+        HUD.show(.progress)
+        Alamofire.upload(multipartFormData: {
+            multipartFormData in
+            multipartFormData.append(imageURL, withName: "image")
+        }, to: "https://api.na.cx/upload", encodingCompletion: {
+            encodingResult in
+            switch encodingResult {
+            case .success(let upload,_,_):
+                upload.responseJSON {
+                    response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                        let url = json["url"].stringValue
+                        HUD.flash(.success)
+                        completion(url)
+                    case .failure(let error):
+                        print(error)
+                        HUD.flash(.error)
+                        completion("")
+                    }
+                }
+            case .failure(let error):
+                HUD.flash(.error)
+                print(error)
+            }
+        })
+    }
+    
+    //MARK: ImagePickerDelegate
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if #available(iOS 11.0, *) {
+            let imageURL = info[UIImagePickerController.InfoKey.imageURL] as! URL
+            imageUpload(imageURL: imageURL, completion: {
+                url in
+                self.dismiss(animated: true, completion: nil)
+                self.toolbar.editor?.insertImage(url, alt: "")
+            })
+        } else {
+            //obtaining saving path
+            let fileManager = FileManager.default
+            let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+            let imagePath = documentsPath?.appendingPathComponent("image.jpg")
+            
+            // extract image from the picker and save it
+            var pickedImage: UIImage?
+            if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+                pickedImage = editedImage
+            } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+                pickedImage = originalImage
+            }
+            try! pickedImage!.jpegData(compressionQuality: 1.0)?.write(to: imagePath!)
+            imageUpload(imageURL: imagePath!, completion: {
+                url in
+                self.dismiss(animated: true, completion: nil)
+                self.toolbar.editor?.insertImage(url, alt: "")
+            })
+        }
     }
 }
