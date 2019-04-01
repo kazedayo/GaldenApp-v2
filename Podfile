@@ -13,7 +13,7 @@ target 'GaldenApp' do
   pod 'PKHUD'
   pod 'RealmSwift'
   pod 'SnapKit'
-  pod 'Kingfisher', :git => 'https://github.com/onevcat/Kingfisher.git', :branch => 'swift5.0'
+  pod 'Kingfisher'
   pod 'Blueprints'
   pod 'URLNavigator'
   pod 'SwiftyStoreKit'

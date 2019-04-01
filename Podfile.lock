@@ -3,17 +3,17 @@ PODS:
   - Apollo (0.9.5):
     - Apollo/Core (= 0.9.5)
   - Apollo/Core (0.9.5)
-  - Blueprints (0.10.0)
+  - Blueprints (0.10.1)
   - Hero (1.4.0)
   - IGColorPicker (0.4.2):
     - M13Checkbox (~> 3.2.0)
   - IQKeyboardManagerSwift (6.2.0)
   - KeychainSwift (13.0.0)
-  - Kingfisher (5.1.1)
+  - Kingfisher (5.3.0)
   - M13Checkbox (3.2.2)
-  - MarqueeLabel (3.2.0):
-    - MarqueeLabel/ObjC (= 3.2.0)
-  - MarqueeLabel/ObjC (3.2.0)
+  - MarqueeLabel (3.2.1):
+    - MarqueeLabel/ObjC (= 3.2.1)
+  - MarqueeLabel/ObjC (3.2.1)
   - PKHUD (5.2.1)
   - QuickLayout (2.1.1)
   - Realm (3.13.1):
@@ -26,7 +26,7 @@ PODS:
   - SKPhotoBrowser (6.0.0)
   - SnapKit (4.2.0)
   - SwiftDate (5.1.0)
-  - SwiftEntryKit (0.8.8):
+  - SwiftEntryKit (0.8.9):
     - QuickLayout (= 2.1.1)
   - SwiftSoup (1.7.4)
   - SwiftyJSON (4.2.0)
@@ -41,7 +41,7 @@ DEPENDENCIES:
   - IGColorPicker
   - IQKeyboardManagerSwift
   - KeychainSwift
-  - Kingfisher (from `https://github.com/onevcat/Kingfisher.git`, branch `swift5.0`)
+  - Kingfisher
   - MarqueeLabel
   - PKHUD
   - RealmSwift
@@ -64,6 +64,7 @@ SPEC REPOS:
     - IGColorPicker
     - IQKeyboardManagerSwift
     - KeychainSwift
+    - Kingfisher
     - M13Checkbox
     - MarqueeLabel
     - PKHUD
@@ -85,29 +86,23 @@ EXTERNAL SOURCES:
   Apollo:
     :branch: master
     :git: https://github.com/apollographql/apollo-ios.git
-  Kingfisher:
-    :branch: swift5.0
-    :git: https://github.com/onevcat/Kingfisher.git
 
 CHECKOUT OPTIONS:
   Apollo:
-    :commit: 46b167e0fe4e8834641a01c71b14cd18ad73bbd3
+    :commit: 80ac363a74efb08a6d962ee10c6bc52bd9cc923c
     :git: https://github.com/apollographql/apollo-ios.git
-  Kingfisher:
-    :commit: aa317cbe8b445233745e0070cebe9fbd3dc2c506
-    :git: https://github.com/onevcat/Kingfisher.git
 
 SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   Apollo: 19caf3246d292bbb69ecad1bd098661f78222aba
-  Blueprints: 64fdc6123b103f3be60b4a4bd5942eda6159aa9a
+  Blueprints: a4279e672ff11cf837240602b330299c2dc0cf40
   Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
   IGColorPicker: c6d43aa386a9fdc8f958f3bd4e5ab85905242c8a
   IQKeyboardManagerSwift: b07ccf9d8cafe993dcd6cb794eb4ba34611a0c4e
   KeychainSwift: 23d6c16cbc33f20fafa30c3d783241b4b87d998c
-  Kingfisher: 2558186963e5be42d98c5b110ccb3130148b77e4
+  Kingfisher: 4692c783ffb99e9e2e40a6eb3e518c3b96c6fa8c
   M13Checkbox: a8c2491cfbbca10797925fd0b9154a782bf40d89
-  MarqueeLabel: 440a502b91a9179bd98f9fff00ba1150650a1c0e
+  MarqueeLabel: 2daf039bf916937c8a4c9adfc13577cc5e51b4ce
   PKHUD: 4e6162c4c39ac367c6934e9855c6b4762ee16256
   QuickLayout: 9af2b7fd89a6552828f51a5aba28d1bcdb8b340c
   Realm: 50071da38fe079e0735e47c9f2eae738c68c5996
@@ -117,12 +112,12 @@ SPEC CHECKSUMS:
   SKPhotoBrowser: 76eb862685761707b5745fde7762757966565e07
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SwiftDate: 6329e58969a2de31cea7f1ee1143b247693196e7
-  SwiftEntryKit: c50f25a14772713ded1591c852d1c1dc74c95b9e
+  SwiftEntryKit: 53409114a9216f93991b88e3817260bed0148811
   SwiftSoup: 92f5b348c131aed8af04f4326db1579ab19fa08c
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   SwiftyStoreKit: cc399645796b094022fb650c148a0aed25995873
   URLNavigator: e8cea3835b3456d7876eb728831e742273c8d209
 
-PODFILE CHECKSUM: 35a9b21221ed55b0368e66f59745f94ff8eded7c
+PODFILE CHECKSUM: 4a0b9159938f3cf9c9c0fe6b9e84bdf8fe70d013
 
 COCOAPODS: 1.5.3
