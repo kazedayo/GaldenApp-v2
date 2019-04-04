@@ -335,11 +335,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                 var contentHTML: String?
                 guard let thread = result?.data?.thread else { return }
                 let totalPage = ceil(Double(thread.totalReplies)/50.0)
+                //print(thread.totalReplies)
+                //print(totalPage)
                 self?.pageCount = totalPage
                 self?.totalReplies = thread.totalReplies
                 
                 DispatchQueue.main.async {
-                    self?.titleLabel.text = thread.title
+                    let titleTrim = thread.title.trimmingCharacters(in: .whitespacesAndNewlines)
+                    self?.titleLabel.text = titleTrim
                     self?.navigationItem.titleView = self?.titleLabel
                     self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
                     self?.buttonLogic()
@@ -578,7 +581,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         replyButton.isEnabled = true
         pageButton.isEnabled = true
         shareButton.isEnabled = true
-        webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
+        //webView.evaluateJavaScript("document.body.style.webkitTouchCallout='none';")
         webView.evaluateJavaScript("new Blazy();", completionHandler: {
             result,error in
             switch self.navType {

@@ -64,7 +64,7 @@ class SessionUserViewController: UserViewController {
         var cellToReturn: UITableViewCell!
         if segmentControl.selectedSegmentIndex == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
-            let title = self.userThreads[indexPath.row].title
+            let title = self.userThreads[indexPath.row].title.trimmingCharacters(in: .whitespacesAndNewlines)
             let count = self.userThreads[indexPath.row].totalReplies
             let dateMap = self.userThreads[indexPath.row].replies.map {$0.date}
             let date = dateMap.last!.toISODate()

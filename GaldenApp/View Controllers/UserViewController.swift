@@ -172,7 +172,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
-        let title = userThreads[indexPath.row].title
+        let title = userThreads[indexPath.row].title.trimmingCharacters(in: .whitespacesAndNewlines)
         let count = userThreads[indexPath.row].totalReplies
         let dateMap = userThreads[indexPath.row].replies.map {$0.date}
         let date = dateMap.last!.toISODate()
