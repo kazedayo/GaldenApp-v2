@@ -31,6 +31,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 55))
         toolbar.options = [RichEditorDefaultOption.clear,RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.textColor,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignLeft,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
+        toolbar.barTintColor = UIColor(white: 0.08, alpha: 1)
         return toolbar
     }()
     
@@ -92,12 +93,14 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
+        UIBarButtonItem.appearance().tintColor = UIColor.white
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         self.view.endEditing(true)
+        UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#568064")
     }
     
     func richEditorDidLoad(_ editor: RichEditorView) {
