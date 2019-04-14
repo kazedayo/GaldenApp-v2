@@ -36,6 +36,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     private var webView: WKWebView!
     
     let activityIndicator = UIActivityIndicatorView()
+    let composeVC = ComposeViewController()
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var replyButton = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(replyButtonPressed))
     lazy var shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
@@ -50,6 +51,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
         
+        composeVC.view.layoutSubviews()
         let config = WKWebViewConfiguration()
         config.preferences.javaScriptEnabled = true
         config.processPool = WKProcessPool()
@@ -166,7 +168,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func quoteButtonPressed(id: String) {
-        let composeVC = ComposeViewController()
         let composeNav = UINavigationController(rootViewController: composeVC)
         composeNav.modalPresentationStyle = .formSheet
         composeVC.topicID = self.tID
@@ -228,7 +229,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     @objc func replyButtonPressed() {
         if keychain.get("userKey") != nil {
-            let composeVC = ComposeViewController()
             let composeNav = UINavigationController(rootViewController: composeVC)
             composeVC.topicID = self.tID
             composeVC.contentVC = self

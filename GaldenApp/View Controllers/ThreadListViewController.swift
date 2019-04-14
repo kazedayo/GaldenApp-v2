@@ -19,6 +19,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     //MARK: Properties
     var threads: [Thread] = []
     var channelId: String = "bw"
+    var channelName = "吹水臺"
     var pageNow: Int = 1
     var pageCount: Double?
     var selectedThread: Int?
@@ -29,6 +30,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     let realm = try! Realm()
     let tableView = UITableView()
     let sideMenuVC = SideMenuViewController()
+    let composeVC = ThreadComposeViewController()
     lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"),style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
     lazy var newThread = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(newThreadButtonPressed))
@@ -40,6 +42,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        composeVC.view.layoutSubviews()
         let menuLeftNavigationController = UISideMenuNavigationController(rootViewController: sideMenuVC)
         sideMenuVC.mainVC = self
         SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
@@ -109,7 +112,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         super.viewDidAppear(animated)
         tabBarController?.navigationItem.leftBarButtonItem = sideMenuButton
         tabBarController?.navigationItem.rightBarButtonItem = newThread
-        tabBarController?.navigationItem.title = "吹水臺"
+        tabBarController?.navigationItem.title = channelName
         let indexPath = tableView.indexPathForSelectedRow
         if indexPath != nil {
             tableView.deselectRow(at: indexPath!, animated: true)
@@ -196,7 +199,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @objc func newThreadButtonPressed() {
         if keychain.get("userKey") != nil {
-            let composeVC = ThreadComposeViewController()
             let composeNavVC = UINavigationController(rootViewController: composeVC)
             composeVC.threadVC = self
             composeNavVC.modalPresentationStyle = .formSheet
@@ -233,7 +235,8 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     func unwindToThreadList(channel: ChannelDetails) {
         self.channelId = channel.id
         self.pageNow = 1
-        tabBarController?.navigationItem.title = channel.name
+        self.channelName = channel.name
+        tabBarController?.navigationItem.title = channelName
         self.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
         self.tableView.isHidden = true
         self.updateSequence(append: false, completion: {
