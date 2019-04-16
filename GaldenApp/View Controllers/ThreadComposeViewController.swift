@@ -16,20 +16,12 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
     var threadVC: ThreadListViewController?
     
     let titleTextField = UITextField()
-    lazy var selectTagLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor(hexRGB: "aaaaaa")
-        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        label.adjustsFontForContentSizeCategory = true
-        label.text = "標籤: "
-        return label
-    }()
     lazy var tagButton: UIButton = {
         let button = UIButton()
-        button.tintColor = UIColor(hexRGB: "#568064")
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.setTitle("選擇...", for: .normal)
+        button.setTitle("選擇標籤...", for: .normal)
+        button.setTitleColor(UIColor(hexRGB: "aaaaaa"), for: .normal)
         button.addTarget(self, action: #selector(tagButtonPressed(_:)), for: .touchUpInside)
         return button
     }()
@@ -53,7 +45,6 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         
         self.title = "發表主題"
         view.addSubview(titleTextField)
-        view.addSubview(selectTagLabel)
         view.addSubview(tagButton)
         titleTextField.snp.makeConstraints {
             (make) -> Void in
@@ -61,23 +52,17 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
         }
-        selectTagLabel.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(contentTextView.snp.bottom).offset(10)
-            make.leading.equalTo(view.snp.leadingMargin).offset(2)
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
-        }
         tagButton.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(contentTextView.snp.bottom).offset(10)
-            make.leading.equalTo(selectTagLabel.snp.trailing).offset(10)
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
-        }
-        contentTextView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(titleTextField.snp.bottom).offset(15)
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
+        }
+        contentTextView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(tagButton.snp.bottom).offset(15)
+            make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
         }
         // Do any additional setup after loading the view.
     }
@@ -115,11 +100,13 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             apollo.perform(mutation: createThreadMutation) {
                 [weak self] result, error in
                 if error == nil {
-                    DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
-                        HUD.flash(.success)
-                        self?.dismiss(animated: true, completion: {
-                            self?.threadVC?.unwindToThreadListAfterNewPost()
-                        })
+                    HUD.flash(.success)
+                    self?.dismiss(animated: true, completion: {
+                        self?.contentTextView.html = ""
+                        self?.titleTextField.text = ""
+                        self?.tagButton.setTitleColor(UIColor(hexRGB: "aaaaaa"), for: .normal)
+                        self?.tagButton.setTitle("選擇標籤...", for: .normal)
+                        self?.threadVC?.unwindToThreadListAfterNewPost()
                     })
                 } else {
                     HUD.flash(.error)
@@ -129,7 +116,16 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         }
     }
     
-    override func keyboardWillShow(notification: NSNotification) {
+    @objc override func cancelButtonPressed(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: {
+            self.contentTextView.html = ""
+            self.titleTextField.text = ""
+            self.tagButton.setTitleColor(UIColor(hexRGB: "aaaaaa"), for: .normal)
+            self.tagButton.setTitle("選擇標籤...", for: .normal)
+        })
+    }
+    
+    /*override func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
             selectTagLabel.snp.updateConstraints {
@@ -162,7 +158,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
                 make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
             }
         }
-    }
+    }*/
     
     func unwindToCompose(tagName: String,tagID: String,tagColor: String) {
         self.tagID = tagID
@@ -176,7 +172,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         tagsVC.modalPresentationStyle = .popover
         tagsVC.popoverPresentationController?.delegate = self
         tagsVC.popoverPresentationController?.sourceView = tagButton
-        tagsVC.popoverPresentationController?.sourceRect = CGRect.zero
+        tagsVC.popoverPresentationController?.sourceRect = tagButton.bounds
         tagsVC.popoverPresentationController?.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tagsVC.preferredContentSize = CGSize(width: 200, height: 200)
         self.present(tagsVC, animated: true, completion: nil)

@@ -98,6 +98,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
         UIBarButtonItem.appearance().tintColor = UIColor.white
+        navigationItem.leftBarButtonItem?.tintColor = UIColor(hexRGB: "#568064")
+        navigationItem.rightBarButtonItem?.tintColor = UIColor(hexRGB: "#568064")
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -213,11 +216,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             apollo.perform(mutation: replyThreadMutation) {
                 [weak self] result, error in
                 if error == nil {
-                    DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
-                        HUD.flash(.success)
-                        self?.dismiss(animated: true, completion: {
-                            self?.contentVC?.unwindAfterReply()
-                        })
+                    HUD.flash(.success)
+                    self?.dismiss(animated: true, completion: {
+                        self?.contentTextView.html = ""
+                        self?.contentVC?.unwindAfterReply()
                     })
                 } else {
                     HUD.flash(.error)
@@ -416,7 +418,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }
     
     @objc func cancelButtonPressed(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: {
+            self.contentTextView.html = ""
+        })
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -488,9 +492,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     //MARK: ImagePickerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
-        self.contentTextView.resignFirstResponder()
-        self.contentTextView.becomeFirstResponder()
+        dismiss(animated: true, completion: {
+            self.contentTextView.resignFirstResponder()
+            self.contentTextView.becomeFirstResponder()
+        })
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {

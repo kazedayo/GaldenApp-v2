@@ -84,7 +84,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBar.appearance().barStyle = .black
         UITabBar.appearance().tintColor = UIColor(hexRGB: "#568064")
         
-        UITextView.appearance().keyboardAppearance = .dark
         UITextField.appearance().keyboardAppearance = .dark
         
         let root = LaunchViewController()
