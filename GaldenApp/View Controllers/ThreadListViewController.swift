@@ -146,7 +146,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
         cell.threadTitleLabel.text = threads[indexPath.row].title
         cell.detailLabel.text = "\(threads[indexPath.row].nickName) // \(threads[indexPath.row].count)回覆 // \(threads[indexPath.row].date)"
-        cell.newReplyLabel.text = threads[indexPath.row].newReplyCount
         cell.tagLabel.text = "#\(threads[indexPath.row].tagName)"
         cell.tagLabel.textColor = UIColor(hexRGB: threads[indexPath.row].tagColor)
         return cell
@@ -155,7 +154,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DispatchQueue.main.async {
             let cell = tableView.cellForRow(at: indexPath) as! ThreadListTableViewCell
-            cell.newReplyLabel.text = ""
             cell.setNeedsLayout()
             let contentVC = ContentViewController()
             let contentNav = UINavigationController(rootViewController: contentVC)

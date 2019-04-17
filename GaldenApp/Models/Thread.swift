@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftDate
-import RealmSwift
 
 struct Thread {
     let id: Int
@@ -18,7 +17,6 @@ struct Thread {
     let date: String
     let tagName: String
     let tagColor: String
-    var newReplyCount: String
     
     init(id: Int,title: String,nick: String,count: Int,date: String, tag: String, tagC: String) {
         self.id = id
@@ -28,14 +26,5 @@ struct Thread {
         self.date = (date.toISODate()?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan))!
         self.tagName = tag
         self.tagColor = tagC
-        self.newReplyCount = ""
-        let realm = try! Realm()
-        let readThreads = realm.object(ofType: History.self, forPrimaryKey: id)
-        if (readThreads != nil) {
-            let newReply = count-readThreads!.replyCount
-            if newReply > 0 {
-                newReplyCount = String(newReply)
-            }
-        }
     }
 }
