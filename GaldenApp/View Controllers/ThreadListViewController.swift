@@ -185,7 +185,15 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 pageVC.pageCount = self.pageCount!
                 pageVC.titleText = self.selectedThreadTitle
                 pageVC.mainVC = self
-                SwiftEntryKit.display(entry: pageVC, using: EntryAttributes.shared.centerEntryZoom())
+                pageVC.modalPresentationStyle = .popover
+                pageVC.popoverPresentationController?.delegate = self
+                let cell = tableView.cellForRow(at: indexPath) as! ThreadListTableViewCell
+                pageVC.popoverPresentationController?.sourceView = cell.tagLabel
+                pageVC.popoverPresentationController?.sourceRect = cell.tagLabel.bounds
+                pageVC.popoverPresentationController?.backgroundColor = UIColor(white: 0.15, alpha: 0.5)
+                pageVC.popoverPresentationController?.permittedArrowDirections = .right
+                pageVC.preferredContentSize = CGSize(width: 200, height: 200)
+                self.present(pageVC,animated: true,completion: nil)
             }
         }
     }
@@ -225,6 +233,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }*/
     
+    //MARK: popover delegate
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }

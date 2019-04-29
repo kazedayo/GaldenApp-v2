@@ -39,8 +39,7 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
-        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tableView.layer.cornerRadius = 10
+        tableView.backgroundColor = .clear
         tableView.register(PageSelectTableViewCell.self, forCellReuseIdentifier: "PageSelectTableViewCell")
         view.addSubview(tableView)
         

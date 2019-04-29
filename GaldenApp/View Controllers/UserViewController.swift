@@ -218,7 +218,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             [weak self] result,error in
             if error == nil {
                 self?.threadsArray.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
-                if (self?.pageCount==6){
+                if (self?.pageCount==2){
                     self?.userThreads = self!.threadsArray
                     //self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
                     self?.tableView.reloadData()

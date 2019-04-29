@@ -214,17 +214,17 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     @objc func pageButtonPressed() {
         let pageVC = PagePopoverTableViewController()
-        //pageVC.modalPresentationStyle = .popover
-        //pageVC.popoverPresentationController?.delegate = self
-        //pageVC.popoverPresentationController?.barButtonItem = pageButton
-        //pageVC.preferredContentSize = CGSize(width: 150, height: 200)
-        //pageVC.popoverPresentationController?.backgroundColor = UIColor(hexRGB: "#262626")!
+        pageVC.modalPresentationStyle = .popover
+        pageVC.popoverPresentationController?.delegate = self
+        pageVC.popoverPresentationController?.barButtonItem = pageButton
+        pageVC.preferredContentSize = CGSize(width: 150, height: 200)
+        pageVC.popoverPresentationController?.backgroundColor = UIColor(white: 0.15, alpha: 0.5)
         pageVC.threadID = self.tID
         pageVC.pageCount = Int(self.pageCount)
         pageVC.pageSelected = self.pageNow
         pageVC.mainVC = self
-        //present(pageVC, animated: true, completion: nil)
-        SwiftEntryKit.display(entry: pageVC, using: EntryAttributes.shared.bottomEntry())
+        present(pageVC, animated: true, completion: nil)
+        //SwiftEntryKit.display(entry: pageVC, using: EntryAttributes.shared.bottomEntry())
     }
     
     @objc func replyButtonPressed() {
