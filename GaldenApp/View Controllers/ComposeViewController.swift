@@ -28,7 +28,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     let iconKeyboard = IconKeyboard()
     
     let contentTextView = RichEditorView()
-    let dummyTextField = UITextField()
     lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 55))
         toolbar.options = [RichEditorDefaultOption.clear,RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.textColor,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignLeft,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
@@ -71,14 +70,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             contentTextView.webView.scrollView.contentInsetAdjustmentBehavior = .never
         }
         contentTextView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        UIKeyboard.setStyle(.dark, on: contentTextView.webView)
         toolbar.editor = contentTextView
         toolbar.delegate = self
         contentTextView.delegate = self
-        dummyTextField.delegate = self
         
         view.addSubview(contentTextView)
-        view.addSubview(dummyTextField)
         
         self.title = "回覆"
         
@@ -93,7 +89,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //dummyTextField.becomeFirstResponder()
         contentTextView.becomeFirstResponder()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -103,11 +98,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         navigationItem.leftBarButtonItem?.tintColor = UIColor(hexRGB: "#568064")
         navigationItem.rightBarButtonItem?.tintColor = UIColor(hexRGB: "#568064")
 
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
