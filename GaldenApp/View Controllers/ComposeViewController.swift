@@ -71,6 +71,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             contentTextView.webView.scrollView.contentInsetAdjustmentBehavior = .never
         }
         contentTextView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        UIKeyboard.setStyle(.dark, on: contentTextView.webView)
         toolbar.editor = contentTextView
         toolbar.delegate = self
         contentTextView.delegate = self
@@ -92,7 +93,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dummyTextField.becomeFirstResponder()
+        //dummyTextField.becomeFirstResponder()
+        contentTextView.becomeFirstResponder()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
@@ -105,7 +107,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        contentTextView.becomeFirstResponder()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

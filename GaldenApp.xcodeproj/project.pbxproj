@@ -35,6 +35,7 @@
 		42B14966214FBD3800A9DEA3 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B14965214FBD3800A9DEA3 /* UserTableViewCell.swift */; };
 		42CDE188214F4FEE00793A8D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CDE187214F4FEE00793A8D /* LoginViewController.swift */; };
 		42CFEA6D21709F7200FA83B4 /* ThreadComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CFEA6C21709F7200FA83B4 /* ThreadComposeViewController.swift */; };
+		42E2A2342277F4070008272D /* UIKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E2A2332277F4070008272D /* UIKeyboard.m */; };
 		42E7F8941F7923E1002CC13F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E7F8931F7923E1002CC13F /* AppDelegate.swift */; };
 		42E7F89B1F7923E1002CC13F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89A1F7923E1002CC13F /* Assets.xcassets */; };
 		42E7F89E1F7923E1002CC13F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E7F89C1F7923E1002CC13F /* LaunchScreen.storyboard */; };
@@ -89,6 +90,9 @@
 		42B14965214FBD3800A9DEA3 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		42CDE187214F4FEE00793A8D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		42CFEA6C21709F7200FA83B4 /* ThreadComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadComposeViewController.swift; sourceTree = "<group>"; };
+		42E2A2312277F3CB0008272D /* UIKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIKeyboard.h; sourceTree = "<group>"; };
+		42E2A2322277F4070008272D /* GaldenApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GaldenApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		42E2A2332277F4070008272D /* UIKeyboard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKeyboard.m; sourceTree = "<group>"; };
 		42E7F8901F7923E1002CC13F /* GaldenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaldenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E7F8931F7923E1002CC13F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42E7F89A1F7923E1002CC13F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -195,6 +199,9 @@
 		42E7F8921F7923E1002CC13F /* GaldenApp */ = {
 			isa = PBXGroup;
 			children = (
+				42E2A2312277F3CB0008272D /* UIKeyboard.h */,
+				42E2A2332277F4070008272D /* UIKeyboard.m */,
+				42E2A2322277F4070008272D /* GaldenApp-Bridging-Header.h */,
 				424B61CA1FC06EFA000D71F0 /* content.css */,
 				424A472220734987005795A6 /* View Controllers */,
 				424A472120734965005795A6 /* Cells */,
@@ -512,6 +519,7 @@
 				42B14966214FBD3800A9DEA3 /* UserTableViewCell.swift in Sources */,
 				424A47192073493E005795A6 /* Extensions.swift in Sources */,
 				424A470C2073493E005795A6 /* ThreadListTableViewCell.swift in Sources */,
+				42E2A2342277F4070008272D /* UIKeyboard.m in Sources */,
 				424A470F2073493E005795A6 /* PagePopoverTableViewController.swift in Sources */,
 				424A471D2073493E005795A6 /* LaunchViewController.swift in Sources */,
 				424A47152073493E005795A6 /* IconKeyboard.swift in Sources */,
@@ -701,9 +709,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OBJC_BRIDGING_HEADER = "GaldenApp/GaldenApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -730,9 +739,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OBJC_BRIDGING_HEADER = "GaldenApp/GaldenApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
