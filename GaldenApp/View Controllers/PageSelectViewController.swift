@@ -94,8 +94,9 @@ class PageSelectViewController: UIViewController,UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         pageSelected = (indexPath.row + 1)
-        SwiftEntryKit.dismiss()
-        mainVC?.unwindAfterPageSelect(pageSelected: pageSelected)
+        self.dismiss(animated: true, completion: {
+            self.mainVC?.unwindAfterPageSelect(pageSelected: self.pageSelected)
+        })
     }
     
     /*

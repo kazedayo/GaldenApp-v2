@@ -73,8 +73,9 @@ class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UIT
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         pageSelected = indexPath.row + 1
-        SwiftEntryKit.dismiss()
-        mainVC?.unwindToContent(pageSelected: pageSelected!)
+        self.dismiss(animated: true, completion: {
+            self.mainVC?.unwindToContent(pageSelected: self.pageSelected!)
+        })
     }
     
     /*
