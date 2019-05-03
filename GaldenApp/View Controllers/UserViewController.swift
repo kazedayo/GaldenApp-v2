@@ -22,14 +22,11 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     let ugroupLabel = UILabel()
     let headerView = UIView()
     let tableView = UITableView()
-    let activityIndicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         navigationItem.title = "起底"
-        activityIndicator.startAnimating()
-        view.addSubview(activityIndicator)
         
         tableView.isHidden = true
         tableView.delegate = self
@@ -97,12 +94,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         blurView.translatesAutoresizingMaskIntoConstraints = false
         headerView.insertSubview(blurView, at: 0)
         
-        activityIndicator.snp.makeConstraints {
-            (make) -> Void in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-        
         blurView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalToSuperview()
@@ -138,7 +129,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom)
+            make.bottom.equalToSuperview()
         }
         
         // Do any additional setup after loading the view.

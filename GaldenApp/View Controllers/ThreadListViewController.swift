@@ -81,7 +81,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
-        refreshControl.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        //refreshControl.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.refreshControl = refreshControl
         
         //footer for next page
