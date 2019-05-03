@@ -161,8 +161,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             contentVC.tID = selectedThread
             contentVC.title = self.threads[indexPath.row].title
             contentVC.sender = "cell"
-            self.navigationController?.pushViewController(contentVC, animated: true)
-            //self.splitViewController?.showDetailViewController(contentNav, sender: self)
+            self.splitViewController?.showDetailViewController(contentNav, sender: self)
         }
     }
     
@@ -264,9 +263,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             contentVC.tID = self.selectedThread
             contentVC.title = self.selectedThreadTitle
             contentVC.pageNow = self.selectedPage!
-            contentVC.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(contentVC, animated: true)
-            //self.splitViewController?.showDetailViewController(contentNav, sender: self)
+            //contentVC.hidesBottomBarWhenPushed = true
+            //self.navigationController?.pushViewController(contentVC, animated: true)
+            self.splitViewController?.showDetailViewController(contentNav, sender: self)
         }
     }
     

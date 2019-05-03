@@ -76,9 +76,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         navigationController?.isToolbarHidden = false
         navigationController?.toolbar.barStyle = .black
         navigationController?.toolbar.tintColor = .white
-        if #available(iOS 11.0, *) {
-            navigationItem.largeTitleDisplayMode = .never
-        }
         
         prevButton.isEnabled = false
         nextButton.isEnabled = false
