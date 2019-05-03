@@ -118,9 +118,8 @@ class SessionUserViewController: UserViewController {
                 contentVC.tID = selectedThread
                 contentVC.title = self.userThreads[indexPath.row].title
                 contentVC.sender = "cell"
-                contentVC.hidesBottomBarWhenPushed = true
-                //self.splitViewController?.showDetailViewController(contentNav, sender: self)
-                self.navigationController?.pushViewController(contentVC, animated: true)
+                //contentVC.hidesBottomBarWhenPushed = true
+                self.splitViewController?.showDetailViewController(contentNav, sender: self)
             }
         } else if segmentControl.selectedSegmentIndex == 1 {
             let alert = UIAlertController(title: "解除封鎖", message: "你確定要解除封鎖此會員?", preferredStyle: .alert)
