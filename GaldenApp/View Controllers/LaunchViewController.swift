@@ -115,42 +115,45 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
                     } else {
                         sessionUser = result?.data?.sessionUser
                     }
-                    self?.initUI()
+                    let tabBarController = Configurations.shared.configureUI()
+                    let navVC = UINavigationController(rootViewController: tabBarController)
+                    if #available(iOS 11.0, *) {
+                        navVC.navigationBar.prefersLargeTitles = true
+                    }
+                    /*let splitViewController = UISplitViewController()
+                    let dummyVC = UINavigationController()
+                    dummyVC.view.backgroundColor = UIColor(white:0.1,alpha:1)
+                    splitViewController.delegate = self
+                    splitViewController.view.backgroundColor = .darkGray
+                    splitViewController.viewControllers = [navVC,dummyVC]
+                    splitViewController.preferredDisplayMode = .allVisible
+                    splitViewController.hero.isEnabled = true
+                    splitViewController.hero.modalAnimationType = .zoom
+                    self?.present(splitViewController, animated: true, completion: {
+                        //hacky fix
+                        splitViewController.view.subviews.first?.removeFromSuperview()
+                    })*/
+                    self?.present(navVC,animated: true,completion: nil)
                 }
             }
         } else {
-            initUI()
+            DispatchQueue.main.async {
+                let tabBarController = Configurations.shared.configureUI()
+                let navVC = UINavigationController(rootViewController: tabBarController)
+                if #available(iOS 11.0, *) {
+                    navVC.navigationBar.prefersLargeTitles = true
+                }
+                /*let splitViewController = UISplitViewController()
+                let dummyVC = UIViewController()
+                dummyVC.view.backgroundColor = UIColor(white:0.15,alpha:1)
+                splitViewController.delegate = self
+                splitViewController.viewControllers = [navVC,dummyVC]
+                splitViewController.preferredDisplayMode = .allVisible
+                splitViewController.hero.isEnabled = true
+                splitViewController.hero.modalAnimationType = .zoom*/
+                self.present(navVC, animated: true, completion: nil)
+            }
         }
-    }
-    
-    func initUI() {
-        let tabBarController = Configurations.shared.configureUI()
-        let navVC = UINavigationController(rootViewController: tabBarController)
-        if #available(iOS 11.0, *) {
-            navVC.navigationBar.prefersLargeTitles = true
-        }
-        navVC.hero.isEnabled = true
-        navVC.hero.modalAnimationType = .zoom
-        present(navVC,animated: true,completion: nil)
-        /*if (UIDevice.current.userInterfaceIdiom == .phone) {
-            navVC.hero.isEnabled = true
-            navVC.hero.modalAnimationType = .zoom
-            present(navVC,animated: true,completion: nil)
-        } else if (UIDevice.current.userInterfaceIdiom == .pad) {
-             let splitViewController = UISplitViewController()
-             let dummyVC = UINavigationController()
-             dummyVC.view.backgroundColor = UIColor(white:0.1,alpha:1)
-             splitViewController.delegate = self
-             splitViewController.view.backgroundColor = .darkGray
-             splitViewController.viewControllers = [navVC,dummyVC]
-             splitViewController.preferredDisplayMode = .allVisible
-             splitViewController.hero.isEnabled = true
-             splitViewController.hero.modalAnimationType = .zoom
-             present(splitViewController, animated: true, completion: {
-             //hacky fix
-             splitViewController.view.subviews.first?.removeFromSuperview()
-             })
-        }*/
     }
     
 }
