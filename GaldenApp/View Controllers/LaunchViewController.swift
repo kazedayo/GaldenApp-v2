@@ -14,7 +14,6 @@ import SwiftEntryKit
 class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
     
     let logo = UIImageView()
-    let text = UILabel()
     
     /*override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
         if presentedViewController != nil {
@@ -30,24 +29,14 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
         logo.image = UIImage(named: "LaunchScreen")
+        logo.tintColor = .darkGray
         view.addSubview(logo)
-        
-        text.textColor = .lightGray
-        text.font = UIFont.systemFont(ofSize: 17)
-        text.text = "by 1080@galden"
-        view.addSubview(text)
         
         logo.snp.makeConstraints {
             (make) -> Void in
             make.center.equalToSuperview()
             make.width.equalTo(128)
             make.height.equalTo(128)
-        }
-        
-        text.snp.makeConstraints {
-            (make) -> Void in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(100)
         }
         
         DispatchQueue.main.asyncAfter(deadline: 1, execute: {
@@ -115,38 +104,49 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
                     } else {
                         sessionUser = result?.data?.sessionUser
                     }
-                    let tabBarController = Configurations.shared.configureUI()
-                    let navVC = UINavigationController(rootViewController: tabBarController)
-                    let splitViewController = UISplitViewController()
-                    let dummyVC = UINavigationController()
-                    dummyVC.view.backgroundColor = UIColor(white:0.1,alpha:1)
-                    splitViewController.delegate = self
-                    splitViewController.view.backgroundColor = .darkGray
-                    splitViewController.viewControllers = [navVC,dummyVC]
-                    splitViewController.preferredDisplayMode = .allVisible
-                    splitViewController.hero.isEnabled = true
-                    splitViewController.hero.modalAnimationType = .zoom
-                    self?.present(splitViewController, animated: true, completion: {
-                        //hacky fix
-                        splitViewController.view.subviews.first?.removeFromSuperview()
-                    })
+                    self?.initControllers()
                 }
             }
         } else {
-            DispatchQueue.main.async {
-                let tabBarController = Configurations.shared.configureUI()
-                let navVC = UINavigationController(rootViewController: tabBarController)
-                let splitViewController = UISplitViewController()
-                let dummyVC = UIViewController()
-                dummyVC.view.backgroundColor = UIColor(white:0.15,alpha:1)
-                splitViewController.delegate = self
-                splitViewController.viewControllers = [navVC,dummyVC]
-                splitViewController.preferredDisplayMode = .allVisible
-                splitViewController.hero.isEnabled = true
-                splitViewController.hero.modalAnimationType = .zoom
-                self.present(splitViewController, animated: true, completion: nil)
-            }
+            initControllers()
         }
+    }
+    
+    func initControllers() {
+        let tabBarController = UITabBarController()
+        let threadListViewController = ThreadListViewController()
+        let settingsTableViewController = SettingsTableViewController.init(style: .grouped)
+        let sessionUserViewController = SessionUserViewController()
+        let loginViewController = LoginViewController()
+        threadListViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "posts"), tag: 0)
+        sessionUserViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
+        settingsTableViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "settings"), tag: 2)
+        loginViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
+        if keychain.get("userKey") != nil {
+            let controllers = [threadListViewController,sessionUserViewController,settingsTableViewController]
+            tabBarController.viewControllers = controllers
+        } else {
+            let controllers = [threadListViewController,loginViewController,settingsTableViewController]
+            tabBarController.viewControllers = controllers
+        }
+        let tabbaritems = tabBarController.tabBar.items!
+        for item in tabbaritems {
+            item.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
+        }
+        let navVC = UINavigationController(rootViewController: tabBarController)
+        let splitViewController = UISplitViewController()
+        let dummyVC = UINavigationController()
+        dummyVC.view.backgroundColor = UIColor(white:0.1,alpha:1)
+        splitViewController.delegate = self
+        splitViewController.view.backgroundColor = .darkGray
+        splitViewController.viewControllers = [navVC,dummyVC]
+        splitViewController.preferredDisplayMode = .allVisible
+        splitViewController.hero.isEnabled = true
+        splitViewController.hero.modalAnimationType = .zoom
+        present(splitViewController, animated: true, completion: {
+            //hacky fix
+            splitViewController.view.subviews.first?.removeFromSuperview()
+        })
     }
     
 }

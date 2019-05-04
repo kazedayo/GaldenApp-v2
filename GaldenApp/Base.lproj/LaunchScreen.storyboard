@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.13.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.9"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,27 +18,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="cZN-qq-AlL">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="RUo-S1-Uff">
                                 <rect key="frame" x="123.5" y="269.5" width="128" height="128"/>
-                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="128" id="DHO-66-hjl"/>
-                                    <constraint firstAttribute="height" constant="128" id="mm3-gZ-aI9"/>
+                                    <constraint firstAttribute="width" constant="128" id="6cj-x7-bRO"/>
+                                    <constraint firstAttribute="height" constant="128" id="VPZ-bM-hyR"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="by 1080@galden" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rhV-NJ-qan">
-                                <rect key="frame" x="123" y="423.5" width="129" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="rhV-NJ-qan" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="100" id="5jn-Px-nMs"/>
-                            <constraint firstItem="cZN-qq-AlL" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="gSA-VJ-odU"/>
-                            <constraint firstItem="rhV-NJ-qan" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="iPz-UU-NFA"/>
-                            <constraint firstItem="cZN-qq-AlL" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="zAq-GT-5yt"/>
+                            <constraint firstItem="RUo-S1-Uff" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="H08-P6-02I"/>
+                            <constraint firstItem="RUo-S1-Uff" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="sC4-p6-Cj7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -49,6 +41,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchScreen" width="1500" height="1500"/>
+        <image name="LaunchScreen" width="750" height="750"/>
     </resources>
 </document>

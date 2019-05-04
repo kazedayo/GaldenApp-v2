@@ -12,7 +12,7 @@ target 'GaldenApp' do
   pod 'MarqueeLabel'
   pod 'PKHUD'
   pod 'RealmSwift'
-  pod 'SnapKit'
+  pod 'SnapKit', '~> 4.2.0'
   pod 'Kingfisher'
   pod 'Blueprints'
   pod 'URLNavigator'

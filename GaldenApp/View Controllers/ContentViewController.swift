@@ -88,7 +88,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         titleLabel.textColor = .white
         titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
         titleLabel.animationDelay = 1
-        titleLabel.marqueeType = .MLLeftRight
+        titleLabel.type = .leftRight
         titleLabel.fadeLength = 5
         titleLabel.frame = CGRect.init(x: 0, y: 0, width: 44, height: 44)
         titleLabel.textAlignment = .center

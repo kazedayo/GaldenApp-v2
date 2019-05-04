@@ -229,30 +229,6 @@ class EntryAttributes {
 class Configurations {
     static let shared = Configurations()
     
-    func configureUI() -> UITabBarController {
-        let tabBarController = UITabBarController()
-        let threadListViewController = ThreadListViewController()
-        let settingsTableViewController = SettingsTableViewController.init(style: .grouped)
-        let sessionUserViewController = SessionUserViewController()
-        let loginViewController = LoginViewController()
-        threadListViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "posts"), tag: 0)
-        sessionUserViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
-        settingsTableViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "settings"), tag: 2)
-        loginViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
-        if keychain.get("userKey") != nil {
-            let controllers = [threadListViewController,sessionUserViewController,settingsTableViewController]
-            tabBarController.viewControllers = controllers
-        } else {
-            let controllers = [threadListViewController,loginViewController,settingsTableViewController]
-            tabBarController.viewControllers = controllers
-        }
-        let tabbaritems = tabBarController.tabBar.items!
-        for item in tabbaritems {
-            item.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
-        }
-        return tabBarController
-    }
-    
     func configureApollo() -> ApolloClient {
         let configuration = URLSessionConfiguration.default
         // Add additional headers as needed
