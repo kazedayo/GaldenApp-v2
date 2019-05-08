@@ -46,6 +46,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
         activityIndicator.startAnimating()
@@ -61,21 +62,24 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         //user agent spoof for icon
         webView.customUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"
         webView.navigationDelegate = self
-        if #available(iOS 11.0, *) {
-            webView.scrollView.contentInsetAdjustmentBehavior = .automatic
-        } else {
-            // Fallback on earlier versions
-            automaticallyAdjustsScrollViewInsets = true
-        }
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
         webView.scrollView.delegate = self
         view.addSubview(webView)
         
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
         navigationItem.leftItemsSupplementBackButton = true
+        navigationItem.largeTitleDisplayMode = .never
+        navigationController?.navigationBar.barTintColor = UIColor(white: 0.15,alpha: 1)
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.delegate = self
         navigationController?.isToolbarHidden = false
-        navigationController?.toolbar.barStyle = .black
-        navigationController?.toolbar.tintColor = .white
+        //navigationController?.toolbar.barStyle = .black
+        navigationController?.toolbar.barTintColor = UIColor(white: 0.15, alpha: 1)
+        navigationController?.toolbar.isTranslucent = false
+        navigationController?.toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .bottom, barMetrics: .default)
+        navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .bottom)
         
         prevButton.isEnabled = false
         nextButton.isEnabled = false
@@ -101,8 +105,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         webView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.top)
-            make.bottom.equalTo(view.snp.bottom)
+            make.top.equalTo(view.snp.topMargin)
+            make.bottom.equalTo(view.snp.bottomMargin)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
@@ -170,6 +174,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func quoteButtonPressed(id: String) {
         let composeNav = UINavigationController(rootViewController: composeVC)
         composeNav.modalPresentationStyle = .formSheet
+        composeNav.navigationBar.barTintColor = UIColor(white: 0.15,alpha: 1)
+        composeNav.navigationBar.isTranslucent = false
+        composeNav.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        composeNav.navigationBar.shadowImage = UIImage()
+        composeVC.title = "引用回覆"
         composeVC.topicID = self.tID
         composeVC.quoteID = id
         composeVC.contentVC = self
@@ -230,9 +239,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     @objc func replyButtonPressed() {
         if keychain.get("userKey") != nil {
             let composeNav = UINavigationController(rootViewController: composeVC)
+            composeVC.title = "回覆"
             composeVC.topicID = self.tID
+            composeVC.quoteID = nil
             composeVC.contentVC = self
             composeNav.modalPresentationStyle = .formSheet
+            composeNav.navigationBar.barTintColor = UIColor(white: 0.15,alpha: 1)
+            composeNav.navigationBar.isTranslucent = false
+            composeNav.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            composeNav.navigationBar.shadowImage = UIImage()
             present(composeNav, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(title: nil, message: "請先登入", preferredStyle: .alert)

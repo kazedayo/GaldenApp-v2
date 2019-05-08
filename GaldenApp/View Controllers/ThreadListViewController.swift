@@ -31,7 +31,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     let tableView = UITableView()
     let sideMenuVC = SideMenuViewController()
     let composeVC = ThreadComposeViewController()
-    lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
+    //lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"),style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
     lazy var newThread = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(newThreadButtonPressed))
     lazy var nextPageButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
@@ -41,7 +41,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         composeVC.view.layoutSubviews()
         let menuLeftNavigationController = UISideMenuNavigationController(rootViewController: sideMenuVC)
         sideMenuVC.mainVC = self
@@ -56,19 +55,14 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isHidden = true
-        if #available(iOS 11.0, *) {
-            tableView.contentInsetAdjustmentBehavior = .automatic
-        } else {
-            // Fallback on earlier versions
-            automaticallyAdjustsScrollViewInsets = true
-        }
+        tableView.contentInsetAdjustmentBehavior = .automatic
         tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 10, bottom: 0, right: 0)
         tableView.separatorColor = UIColor(white: 0.10, alpha: 1)
         //tableView.estimatedRowHeight = 60
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
-        tableView.addGestureRecognizer(longPress)
+        //tableView.addGestureRecognizer(longPress)
         view.addSubview(tableView)
         
         tableView.snp.makeConstraints {
@@ -81,7 +75,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
-        refreshControl.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        //refreshControl.backgroundColor = UIColor(white: 0.15, alpha: 1)
         tableView.refreshControl = refreshControl
         
         //footer for next page
@@ -159,7 +153,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             let contentNav = UINavigationController(rootViewController: contentVC)
             let selectedThread = self.threads[indexPath.row].id
             contentVC.tID = selectedThread
-            contentVC.title = self.threads[indexPath.row].title
+            //contentVC.title = self.threads[indexPath.row].title
             contentVC.sender = "cell"
             self.splitViewController?.showDetailViewController(contentNav, sender: self)
         }
@@ -174,7 +168,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         })
     }
     
-    @objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
+    /*@objc func jumpToPage(_ sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.began {
             let touchPoint = sender.location(in: self.tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
@@ -196,7 +190,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                 self.present(pageVC,animated: true,completion: nil)
             }
         }
-    }
+    }*/
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
         sideMenuVC.mainVC = self
@@ -206,6 +200,10 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func newThreadButtonPressed() {
         if keychain.get("userKey") != nil {
             let composeNavVC = UINavigationController(rootViewController: composeVC)
+            composeNavVC.navigationBar.barTintColor = UIColor(white: 0.15,alpha: 1)
+            composeNavVC.navigationBar.isTranslucent = false
+            composeNavVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            composeNavVC.navigationBar.shadowImage = UIImage()
             composeVC.threadVC = self
             composeNavVC.modalPresentationStyle = .formSheet
             present(composeNavVC, animated: true, completion: nil)
@@ -261,7 +259,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
             let contentVC = ContentViewController()
             let contentNav = UINavigationController(rootViewController: contentVC)
             contentVC.tID = self.selectedThread
-            contentVC.title = self.selectedThreadTitle
+            //contentVC.title = self.selectedThreadTitle
             contentVC.pageNow = self.selectedPage!
             //contentVC.hidesBottomBarWhenPushed = true
             //self.navigationController?.pushViewController(contentVC, animated: true)

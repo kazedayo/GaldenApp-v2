@@ -28,8 +28,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.15, alpha: 1)
         navigationItem.title = "起底"
-        activityIndicator.startAnimating()
-        view.addSubview(activityIndicator)
         
         tableView.isHidden = true
         tableView.delegate = self
@@ -41,6 +39,9 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
         view.addSubview(tableView)
+        
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
         
         if uid == nil {
             uid = sessionUser?.id
@@ -84,31 +85,21 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                         self?.ugroupLabel.textColor = UIColor(hexRGB: "4b6690")
                     }
                 }
-                self?.getUserThreads(completion: {})
+                self?.getUserThreads(completion: {
+                    self?.activityIndicator.removeFromSuperview()
+                })
             }
         }
         
         headerView.addSubview(avatarView)
         headerView.addSubview(unameLabel)
         headerView.addSubview(ugroupLabel)
-        headerView.backgroundColor = .clear
-        let blurEffect = UIBlurEffect(style: .dark)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.translatesAutoresizingMaskIntoConstraints = false
-        headerView.insertSubview(blurView, at: 0)
+        headerView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         
         activityIndicator.snp.makeConstraints {
             (make) -> Void in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
-        }
-        
-        blurView.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
         }
         
         avatarView.snp.makeConstraints {
