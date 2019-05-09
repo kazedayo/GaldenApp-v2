@@ -14,7 +14,7 @@ import SwiftEntryKit
 class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
     
     let logo = UIImageView()
-    
+    private var shadowImageView: UIImageView?
     /*override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
         if presentedViewController != nil {
             // Unsure why WKWebView calls this controller - instead of it's own parent controller
@@ -114,10 +114,6 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
     
     func initControllers() {
         let tabBarController = UITabBarController()
-        tabBarController.tabBar.barTintColor = UIColor(white: 0.15, alpha: 1)
-        tabBarController.tabBar.isTranslucent = false
-        tabBarController.tabBar.backgroundImage = UIImage()
-        tabBarController.tabBar.shadowImage = UIImage()
         tabBarController.extendedLayoutIncludesOpaqueBars = true
         let threadListViewController = ThreadListViewController()
         let settingsTableViewController = SettingsTableViewController.init(style: .grouped)
@@ -139,16 +135,11 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
             item.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
         }
         let navVC = UINavigationController(rootViewController: tabBarController)
-        navVC.navigationBar.barTintColor = UIColor(white: 0.15,alpha: 1)
-        navVC.navigationBar.isTranslucent = false
-        //navVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navVC.navigationBar.shadowImage = UIImage()
         navVC.navigationBar.prefersLargeTitles = true
         let splitViewController = UISplitViewController()
         let dummyVC = UINavigationController()
         dummyVC.view.backgroundColor = UIColor(white:0.1,alpha:1)
         dummyVC.navigationBar.barTintColor = UIColor(white: 0.1,alpha: 1)
-        dummyVC.navigationBar.isTranslucent = false
         dummyVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
         dummyVC.navigationBar.shadowImage = UIImage()
         dummyVC.navigationItem.largeTitleDisplayMode = .never

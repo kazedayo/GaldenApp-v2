@@ -200,10 +200,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func newThreadButtonPressed() {
         if keychain.get("userKey") != nil {
             let composeNavVC = UINavigationController(rootViewController: composeVC)
-            composeNavVC.navigationBar.barTintColor = UIColor(white: 0.15,alpha: 1)
-            composeNavVC.navigationBar.isTranslucent = false
-            composeNavVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            composeNavVC.navigationBar.shadowImage = UIImage()
             composeVC.threadVC = self
             composeNavVC.modalPresentationStyle = .formSheet
             present(composeNavVC, animated: true, completion: nil)

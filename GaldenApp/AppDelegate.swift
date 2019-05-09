@@ -79,10 +79,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UINavigationBar.appearance().barStyle = .black
         UINavigationBar.appearance().tintColor = UIColor(hexRGB: "#568064")
+        UINavigationBar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().isTranslucent = false
         UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#568064")
         
         UITabBar.appearance().barStyle = .black
+        UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().tintColor = UIColor(hexRGB: "#568064")
+        UITabBar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
+        UITabBar.appearance().shadowImage = UIImage()
+        UITabBar.appearance().backgroundImage = UIImage()
+        
+        UIToolbar.appearance().barStyle = .black
+        UIToolbar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
+        UIToolbar.appearance().isTranslucent = false
+        UIToolbar.appearance().setShadowImage(UIImage(), forToolbarPosition: .any)
         
         UITextField.appearance().keyboardAppearance = .dark
         

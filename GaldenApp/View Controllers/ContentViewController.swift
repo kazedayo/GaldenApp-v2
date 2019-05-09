@@ -69,17 +69,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
         navigationItem.leftItemsSupplementBackButton = true
         navigationItem.largeTitleDisplayMode = .never
-        navigationController?.navigationBar.barTintColor = UIColor(white: 0.15,alpha: 1)
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.delegate = self
         navigationController?.isToolbarHidden = false
-        //navigationController?.toolbar.barStyle = .black
-        navigationController?.toolbar.barTintColor = UIColor(white: 0.15, alpha: 1)
-        navigationController?.toolbar.isTranslucent = false
-        navigationController?.toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .bottom, barMetrics: .default)
-        navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .bottom)
         
         prevButton.isEnabled = false
         nextButton.isEnabled = false
@@ -174,10 +165,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func quoteButtonPressed(id: String) {
         let composeNav = UINavigationController(rootViewController: composeVC)
         composeNav.modalPresentationStyle = .formSheet
-        composeNav.navigationBar.barTintColor = UIColor(white: 0.15,alpha: 1)
-        composeNav.navigationBar.isTranslucent = false
-        composeNav.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        composeNav.navigationBar.shadowImage = UIImage()
         composeVC.title = "引用回覆"
         composeVC.topicID = self.tID
         composeVC.quoteID = id
@@ -244,10 +231,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             composeVC.quoteID = nil
             composeVC.contentVC = self
             composeNav.modalPresentationStyle = .formSheet
-            composeNav.navigationBar.barTintColor = UIColor(white: 0.15,alpha: 1)
-            composeNav.navigationBar.isTranslucent = false
-            composeNav.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            composeNav.navigationBar.shadowImage = UIImage()
             present(composeNav, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(title: nil, message: "請先登入", preferredStyle: .alert)
