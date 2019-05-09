@@ -77,7 +77,8 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChannelListTableViewCell") as! ChannelListTableViewCell
         let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor(white: 0.25, alpha: 1)
+        let bgColor = self.channels[indexPath.row].tags[0].fragments.tagDetails.color
+        bgColorView.backgroundColor = UIColor(hexRGB: bgColor)
         cell.selectedBackgroundView = bgColorView
         let text = self.channels[indexPath.row].name
         cell.channelTitle.text = text

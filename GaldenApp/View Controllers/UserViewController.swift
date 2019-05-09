@@ -67,9 +67,9 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 self?.unameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
                 self?.unameLabel.adjustsFontForContentSizeCategory = true
                 if user?.gender == UserGender.m {
-                    self?.unameLabel.textColor = UIColor(hexRGB: "6495ed")
+                    self?.unameLabel.textColor = UIColor(hexRGB: "22c1fe")
                 } else if user?.gender == UserGender.f {
-                    self?.unameLabel.textColor = UIColor(hexRGB: "ff6961")
+                    self?.unameLabel.textColor = UIColor(hexRGB: "ff7aab")
                 }
                 
                 //user group
@@ -80,9 +80,9 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 if user?.groups.isEmpty == false {
                    self?.ugroupLabel.text = sessionUser?.groups[0].name
                     if user?.groups[0].id == "DEVELOPER" {
-                        self?.ugroupLabel.textColor = UIColor(hexRGB: "9e3e3f")
+                        self?.ugroupLabel.textColor = UIColor(hexRGB: "e0561d")
                     } else if user?.groups[0].id == "ADMIN" {
-                        self?.ugroupLabel.textColor = UIColor(hexRGB: "4b6690")
+                        self?.ugroupLabel.textColor = UIColor(hexRGB: "7435a0")
                     }
                 }
                 self?.getUserThreads(completion: {

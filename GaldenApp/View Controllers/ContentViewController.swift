@@ -96,7 +96,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         webView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin)
+            make.top.equalTo(view.snp.topMargin).offset(44)
             make.bottom.equalTo(view.snp.bottomMargin)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -386,10 +386,10 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             var groupName = "郊登仔"
             if commentObj.fragments.commentFields.author.groups.isEmpty == false {
                 if commentObj.fragments.commentFields.author.groups[0].id == "DEVELOPER" {
-                    groupColor = "#9e3e3f"
+                    groupColor = "#e0561d"
                     groupName = commentObj.fragments.commentFields.author.groups[0].name
                 } else if commentObj.fragments.commentFields.author.groups[0].id == "ADMIN" {
-                    groupColor = "#4b6690"
+                    groupColor = "#7435a0"
                     groupName = commentObj.fragments.commentFields.author.groups[0].name
                 }
             }
