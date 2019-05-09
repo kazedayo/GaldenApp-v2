@@ -70,7 +70,7 @@ class SettingsTableViewController: UITableViewController {
         } else {
             imageToggle.isOn = false
         }
-        imageToggle.onTintColor = UIColor(hexRGB: "#568064")
+        imageToggle.onTintColor = UIColor(hexRGB: "#45c17c")
         imageToggle.addTarget(self, action: #selector(imageToggleChanged(_:)), for: .valueChanged)
         imageCell.accessoryView = imageToggle
         

@@ -34,7 +34,7 @@ class SessionUserViewController: UserViewController {
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
         tableView.refreshControl = refreshControl
         
-        segmentControl.tintColor = UIColor(hexRGB: "#568064")
+        segmentControl.tintColor = UIColor(hexRGB: "#45c17c")
         segmentControl.selectedSegmentIndex = 0
         segmentControl.addTarget(self, action: #selector(onChange(_:)), for: .valueChanged)
         headerView.addSubview(segmentControl)
@@ -92,9 +92,9 @@ class SessionUserViewController: UserViewController {
             }
             cell.unameLabel.text = nickname
             if gender == UserGender.m {
-                cell.unameLabel.textColor = UIColor(hexRGB: "6495ed")
+                cell.unameLabel.textColor = UIColor(hexRGB: "22c1fe")
             } else if gender == UserGender.f {
-                cell.unameLabel.textColor = UIColor(hexRGB: "ff6961")
+                cell.unameLabel.textColor = UIColor(hexRGB: "ff7aab")
             }
             if groups.isEmpty == false {
                 cell.ugroupLabel.text = groups[0].name

@@ -377,9 +377,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             
             var genderColor = ""
             if commentObj.fragments.commentFields.author.gender == UserGender.m {
-                genderColor = "#6495ed"
+                genderColor = "#22c1fe"
             } else if commentObj.fragments.commentFields.author.gender == UserGender.f {
-                genderColor = "#ff6961"
+                genderColor = "#ff7aab"
             }
             
             var groupColor = "#aaaaaa"

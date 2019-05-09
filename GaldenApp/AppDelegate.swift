@@ -78,15 +78,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.isStatusBarHidden = false
         
         UINavigationBar.appearance().barStyle = .black
-        UINavigationBar.appearance().tintColor = UIColor(hexRGB: "#568064")
+        UINavigationBar.appearance().tintColor = UIColor(hexRGB: "#45c17c")
         UINavigationBar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().isTranslucent = false
-        UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#568064")
+        UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#45c17c")
         
         UITabBar.appearance().barStyle = .black
         UITabBar.appearance().isTranslucent = false
-        UITabBar.appearance().tintColor = UIColor(hexRGB: "#568064")
+        UITabBar.appearance().tintColor = UIColor(hexRGB: "#45c17c")
         UITabBar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
         UITabBar.appearance().shadowImage = UIImage()
         UITabBar.appearance().backgroundImage = UIImage()

@@ -95,8 +95,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
         UIBarButtonItem.appearance().tintColor = UIColor.white
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(hexRGB: "#568064")
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(hexRGB: "#568064")
+        navigationItem.leftBarButtonItem?.tintColor = UIColor(hexRGB: "#45c17c")
+        navigationItem.rightBarButtonItem?.tintColor = UIColor(hexRGB: "#45c17c")
 
     }
     
@@ -104,7 +104,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         self.view.endEditing(true)
-        UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#568064")
+        UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#45c17c")
     }
     
     func richEditorDidLoad(_ editor: RichEditorView) {
