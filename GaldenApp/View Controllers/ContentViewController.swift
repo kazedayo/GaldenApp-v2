@@ -71,6 +71,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         navigationItem.largeTitleDisplayMode = .never
         navigationController?.delegate = self
         navigationController?.isToolbarHidden = false
+        navigationController?.navigationBar.isTranslucent = false
         
         prevButton.isEnabled = false
         nextButton.isEnabled = false
@@ -96,7 +97,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         webView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin).offset(44)
+            make.top.equalTo(view.snp.topMargin)
             make.bottom.equalTo(view.snp.bottomMargin)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()

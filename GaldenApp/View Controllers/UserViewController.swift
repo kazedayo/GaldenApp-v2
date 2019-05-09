@@ -126,7 +126,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         tableView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalToSuperview()
+            make.top.equalTo(view.snp.top)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.bottom.equalTo(view.snp.bottom)
