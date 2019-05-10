@@ -262,6 +262,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func unwindToContent(pageSelected: Int) {
         self.pageNow = pageSelected
         self.pageButton.title = "第\(self.pageNow)頁"
+        self.prevButton.isEnabled = false
+        self.nextButton.isEnabled = false
         self.updateSequence()
     }
     
@@ -634,7 +636,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     UIApplication.shared.openURL(url!)
                 }*/
                 let sfVC = SFSafariViewController(url: url!)
-                sfVC.preferredControlTintColor = UIColor(hexRGB: "#568064")
+                sfVC.preferredControlTintColor = UIColor(hexRGB: "#45c17c")
                 sfVC.preferredBarTintColor = .black
                 present(sfVC, animated: true, completion: nil)
                 decisionHandler(.cancel)
