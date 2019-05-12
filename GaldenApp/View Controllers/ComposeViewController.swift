@@ -31,7 +31,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 55))
         toolbar.options = [RichEditorDefaultOption.clear,RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.textColor,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignLeft,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
-        toolbar.barTintColor = UIColor(white: 0.08, alpha: 1)
         return toolbar
     }()
     
@@ -139,8 +138,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     func richEditorToolbarInsertImage(_ toolbar: RichEditorToolbar) {
         let imagePicker = UIImagePickerController()
-        imagePicker.navigationBar.tintColor = .lightGray
-        imagePicker.navigationBar.barStyle = .black
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
         self.present(imagePicker,animated: true,completion: nil)
