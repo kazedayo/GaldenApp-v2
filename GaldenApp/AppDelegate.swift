@@ -9,7 +9,6 @@
 import UIKit
 import KeychainSwift
 import PKHUD
-import IQKeyboardManagerSwift
 import URLNavigator
 import SwiftyStoreKit
 import RealmSwift
@@ -52,9 +51,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Realm.Configuration.defaultConfiguration = config
         
         URLNavigationMap.initialize(navigator: navigator)
-        
-        IQKeyboardManager.shared.enable = true
-        IQKeyboardManager.shared.enableAutoToolbar = false
         
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
             for purchase in purchases {

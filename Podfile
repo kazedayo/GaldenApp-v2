@@ -6,7 +6,6 @@ target 'GaldenApp' do
   use_frameworks!
 
   # Pods for GaldenApp
-  pod 'IQKeyboardManagerSwift'
   pod 'KeychainSwift'
   pod 'Hero'
   pod 'MarqueeLabel'
@@ -25,7 +24,6 @@ target 'GaldenApp' do
   pod 'SwiftSoup'
   pod 'SwiftDate'
   pod 'RichEditorView'
-  pod 'IGColorPicker'
   pod 'Alamofire'
   pod 'SwiftyJSON'
 

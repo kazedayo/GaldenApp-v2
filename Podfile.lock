@@ -5,12 +5,8 @@ PODS:
   - Apollo/Core (0.10.1)
   - Blueprints (0.11.1)
   - Hero (1.4.0)
-  - IGColorPicker (0.4.2):
-    - M13Checkbox (~> 3.2.0)
-  - IQKeyboardManagerSwift (6.3.0)
   - KeychainSwift (16.0.1)
   - Kingfisher (5.5.0)
-  - M13Checkbox (3.2.2)
   - MarqueeLabel (4.0.0)
   - PKHUD (5.2.1)
   - QuickLayout (3.0.0)
@@ -36,8 +32,6 @@ DEPENDENCIES:
   - Apollo (from `https://github.com/apollographql/apollo-ios.git`, branch `master`)
   - Blueprints
   - Hero
-  - IGColorPicker
-  - IQKeyboardManagerSwift
   - KeychainSwift
   - Kingfisher
   - MarqueeLabel
@@ -60,11 +54,8 @@ SPEC REPOS:
     - Alamofire
     - Blueprints
     - Hero
-    - IGColorPicker
-    - IQKeyboardManagerSwift
     - KeychainSwift
     - Kingfisher
-    - M13Checkbox
     - MarqueeLabel
     - PKHUD
     - QuickLayout
@@ -110,11 +101,8 @@ SPEC CHECKSUMS:
   Apollo: 7ac6972214be6af0fa54ba8ec14973df23a0a7ef
   Blueprints: 97e61f353b7836e6183b7ded19ed44d90a13b82e
   Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
-  IGColorPicker: c6d43aa386a9fdc8f958f3bd4e5ab85905242c8a
-  IQKeyboardManagerSwift: a8228c257614af98743b4cd8584637025f36358f
   KeychainSwift: 4209611373ca4a098e09b1e547eebd87c544dcc4
   Kingfisher: 6fe5e67a90fd335e49b0f5c075ff55ac5ebedd94
-  M13Checkbox: a8c2491cfbbca10797925fd0b9154a782bf40d89
   MarqueeLabel: b55b26e690b6ad41faedd95cbf5eae6f1d1735b4
   PKHUD: 4e6162c4c39ac367c6934e9855c6b4762ee16256
   QuickLayout: 07b45a72b10083fee3f095990cfed1c1e7b27f0a
@@ -131,6 +119,6 @@ SPEC CHECKSUMS:
   SwiftyStoreKit: 033d06b6f87955405d3f844a18a7687c2438592a
   URLNavigator: 0bffc3efdeb2d97f7b5eec7ac82d290f4a099431
 
-PODFILE CHECKSUM: 5ef679739a2de1020e19d0c06c8e4685ac401b65
+PODFILE CHECKSUM: 9b38646fffde92daba4d4e6b86482c638797ce86
 
 COCOAPODS: 1.7.1

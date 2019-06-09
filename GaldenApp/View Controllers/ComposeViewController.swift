@@ -8,16 +8,14 @@
 
 import UIKit
 import PKHUD
-import IQKeyboardManagerSwift
 import SwiftEntryKit
 import RichEditorView
 import SwiftSoup
 import ImageIO
-import IGColorPicker
 import Alamofire
 import SwiftyJSON
 
-class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,ColorPickerViewDelegate,ColorPickerViewDelegateFlowLayout,UIImagePickerControllerDelegate {
+class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,UIImagePickerControllerDelegate {
     
     //MARK: Properties
     var topicID: Int!
@@ -171,34 +169,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
         self.present(imagePicker,animated: true,completion: nil)
-    }
-    
-    func richEditorToolbarChangeTextColor(_ toolbar: RichEditorToolbar) {
-        let colorPicker = ColorPickerView()
-        colorPicker.delegate = self
-        colorPicker.layoutDelegate = self
-        colorPicker.colors = [UIColor(hexRGB: "ffffff"),UIColor(hexRGB: "f44f44"),UIColor(hexRGB: "ff8f00"),UIColor(hexRGB: "eecc28"),UIColor(hexRGB: "f6ef1b"),UIColor(hexRGB: "c1e823"),UIColor(hexRGB: "85e41d"),UIColor(hexRGB: "64b31c"),UIColor(hexRGB: "0ad849"),UIColor(hexRGB: "0ee6b4"),UIColor(hexRGB: "22b4e0"),UIColor(hexRGB: "208ce8"),UIColor(hexRGB: "4c5aff"),UIColor(hexRGB: "8858fd"),UIColor(hexRGB: "bb7ef2"),UIColor(hexRGB: "d800ff"),UIColor(hexRGB: "ff50b0"),UIColor(hexRGB: "ffc7c7"),UIColor(hexRGB: "808080"),UIColor(hexRGB: "000000")] as! [UIColor]
-        var attributes = EntryAttributes.shared.iconEntry()
-        attributes.positionConstraints.verticalOffset = keyboardHeight-50
-        SwiftEntryKit.display(entry: colorPicker, using: attributes)
-    }
-    
-    func colorPickerView(_ colorPickerView: ColorPickerView, didSelectItemAt indexPath: IndexPath) {
-        // A color has been selected
-        self.contentTextView.setTextColor(colorPickerView.colors[indexPath.item])
-        DispatchQueue.main.asyncAfter(deadline: 0.5, execute:  {
-            SwiftEntryKit.dismiss()
-        })
-    }
-    
-    func colorPickerView(_ colorPickerView: ColorPickerView, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        // Space between cells
-        return 10
-    }
-    
-    func colorPickerView(_ colorPickerView: ColorPickerView, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        // Space between rows
-        return 10
     }
     
     override func didReceiveMemoryWarning() {
