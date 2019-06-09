@@ -17,7 +17,7 @@ import IGColorPicker
 import Alamofire
 import SwiftyJSON
 
-class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,RichEditorToolbarDelegate,ColorPickerViewDelegate,ColorPickerViewDelegateFlowLayout,UIImagePickerControllerDelegate {
+class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,ColorPickerViewDelegate,ColorPickerViewDelegateFlowLayout,UIImagePickerControllerDelegate {
     
     //MARK: Properties
     var topicID: Int!
@@ -28,10 +28,27 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     let iconKeyboard = IconKeyboard()
     
     let contentTextView = RichEditorView()
-    lazy var toolbar: RichEditorToolbar = {
-        let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 55))
-        toolbar.options = [RichEditorDefaultOption.clear,RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.textColor,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignLeft,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
-        return toolbar
+    let stackView = UIStackView()
+    lazy var imageButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "camera.on.rectangle"), for: .normal)
+        button.tintColor = .label
+        button.addTarget(self, action: #selector(imageButtonPressed(_:)), for: .touchUpInside)
+        return button
+    }()
+    lazy var linkButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "link"), for: .normal)
+        button.tintColor = .label
+        button.addTarget(self, action: #selector(linkButtonPressed(_:)), for: .touchUpInside)
+        return button
+    }()
+    lazy var iconButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "smiley"), for: .normal)
+        button.tintColor = .label
+        button.addTarget(self, action: #selector(callIconKeyboard), for: .touchUpInside)
+        return button
     }()
     
     /*override var preferredContentSize: CGSize {
@@ -62,11 +79,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed(_:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "發表", style: .done, target: self, action: #selector(submitButtonPressed(_:)))
         iconKeyboard.keyboardDelegate = self
-        let insertIcon = RichEditorOptionItem(image: UIImage(named: "Icon"), title: "Icon") { toolbar in
-            self.callIconKeyboard()
-            return
-        }
-        toolbar.options.insert(insertIcon, at: 0)
         
         contentTextView.webView.isOpaque = false
         contentTextView.webView.backgroundColor = .systemBackground
@@ -76,20 +88,32 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         if #available(iOS 11.0, *) {
             contentTextView.webView.scrollView.contentInsetAdjustmentBehavior = .never
         }
-        toolbar.editor = contentTextView
-        toolbar.delegate = self
         contentTextView.delegate = self
         
         view.addSubview(contentTextView)
+        
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.spacing = 10
+        stackView.addArrangedSubview(imageButton)
+        stackView.addArrangedSubview(linkButton)
+        stackView.addArrangedSubview(iconButton)
+        view.addSubview(stackView)
         
         self.title = "回覆"
         
         contentTextView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(view.snp.topMargin).offset(10)
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
+        }
+        
+        stackView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(contentTextView.snp.bottomMargin).offset(15)
+            make.bottom.equalTo(view.snp.bottom).offset(-10)
+            make.leading.equalTo(view.snp.leadingMargin)
         }
     }
     
@@ -117,11 +141,10 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     func richEditorDidLoad(_ editor: RichEditorView) {
         editor.placeholder = "內容"
         //editor.setEditorBackgroundColor(.secondarySystemBackground)
-        editor.setEditorFontColor(.systemGray)
-        editor.inputAccessoryView = toolbar
+        editor.setEditorFontColor(.label)
     }
     
-    func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar) {
+    @objc func linkButtonPressed(_ button: UIButton) {
         let alert = UIAlertController(title: nil, message: "鏈結網址", preferredStyle: .alert)
         alert.addTextField {
             textfield in
@@ -130,12 +153,12 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         let link = UIAlertAction(title: "插入鏈結", style: .default, handler: {
             _ in
             let textfield = alert.textFields?.first
-            toolbar.editor?.insertComponent("<a href=\"\((textfield?.text)!)\">\((textfield?.text)!)</a>")
+            self.contentTextView.insertComponent("<a href=\"\((textfield?.text)!)\">\((textfield?.text)!)</a>")
         })
         let image = UIAlertAction(title: "插入圖片", style: .default, handler: {
             _ in
             let textfield = alert.textFields?.first
-            toolbar.editor?.insertImage((textfield?.text)!, alt: "")
+            self.contentTextView.insertImage((textfield?.text)!, alt: "")
         })
         let cancel = UIAlertAction(title: "不了", style: .cancel, handler: nil)
         alert.addAction(link)
@@ -144,7 +167,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         present(alert,animated: true,completion: nil)
     }
     
-    func richEditorToolbarInsertImage(_ toolbar: RichEditorToolbar) {
+    @objc func imageButtonPressed(_ button: UIButton) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
@@ -408,9 +431,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }
     
     @objc func callIconKeyboard() {
-        //contentTextView.resignFirstResponder()
+        contentTextView.resignFirstResponder()
         var attributes = EntryAttributes.shared.iconEntry()
-        attributes.positionConstraints.verticalOffset = keyboardHeight-50
+        //attributes.positionConstraints.verticalOffset = keyboardHeight-50
         SwiftEntryKit.display(entry: iconKeyboard, using: attributes)
     }
     
@@ -423,12 +446,12 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
-            contentTextView.snp.updateConstraints {
+            stackView.snp.updateConstraints {
                 (make) -> Void in
                 if UIDevice.current.userInterfaceIdiom == .pad {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18))
+                    make.bottom.equalTo(view.snp.bottom).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18)-10)
                 } else {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
+                    make.bottom.equalTo(view.snp.bottom).offset(-keyboardHeight-10)
                 }
             }
         }
@@ -436,11 +459,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     @objc func keyboardWillHide(notification: Notification) {
         // keyboard is dismissed/hidden from the screen
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            contentTextView.snp.updateConstraints {
-                (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
-            }
+        stackView.snp.updateConstraints {
+            (make) -> Void in
+            make.bottom.equalTo(view.snp.bottom).offset(-10)
         }
     }
     
@@ -501,7 +522,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             imageUpload(imageURL: imageURL, completion: {
                 url in
                 self.dismiss(animated: true, completion: {
-                    self.toolbar.editor?.insertImage(url, alt: "")
+                    self.contentTextView.insertImage(url, alt: "")
                     self.contentTextView.resignFirstResponder()
                     self.contentTextView.becomeFirstResponder()
                 })
@@ -523,7 +544,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             imageUpload(imageURL: imagePath!, completion: {
                 url in
                 self.dismiss(animated: true, completion: {
-                    self.toolbar.editor?.insertImage(url, alt: "")
+                    self.contentTextView.insertImage(url, alt: "")
                     self.contentTextView.resignFirstResponder()
                     self.contentTextView.becomeFirstResponder()
                 })

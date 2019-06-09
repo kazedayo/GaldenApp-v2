@@ -62,7 +62,13 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             make.top.equalTo(tagButton.snp.bottom).offset(15)
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
+        }
+        
+        stackView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(contentTextView.snp.bottomMargin).offset(15)
+            make.bottom.equalTo(view.snp.bottom).offset(-10)
+            make.leading.equalTo(view.snp.leadingMargin)
         }
         // Do any additional setup after loading the view.
     }

@@ -29,12 +29,11 @@ class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
             [weak self] result,error in
             self?.iconPack = result?.data?.installedPacks.map {$0.fragments.iconPacks}
             
-            let layout = HorizontalBlueprintLayout()
-            layout.itemsPerColumn = 1
+            let layout = VerticalBlueprintLayout()
             if UIDevice.current.userInterfaceIdiom == .pad {
-                layout.itemsPerRow = 5.5
+                layout.itemsPerRow = 6
             } else {
-                layout.itemsPerRow = 3.5
+                layout.itemsPerRow = 4
             }
             layout.sectionInset = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
             layout.minimumLineSpacing = 10
