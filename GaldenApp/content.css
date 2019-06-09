@@ -1,8 +1,8 @@
 :root {
     color-scheme: light dark;
     --button-color: #666666;
-    --quote-color: #dddddd;
-    --border-color: #cccccc;
+    --quote-color: #bbbbbb;
+    --border-color: #bbbbbb;
 }
 @media (prefers-color-scheme: dark) {
     :root {

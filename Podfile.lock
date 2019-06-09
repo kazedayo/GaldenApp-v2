@@ -19,7 +19,7 @@ PODS:
   - SideMenu (5.0.3)
   - SKPhotoBrowser (6.1.0)
   - SnapKit (4.2.0)
-  - SwiftDate (6.0.3)
+  - SwiftDate (5.1.0)
   - SwiftEntryKit (1.0.1):
     - QuickLayout (= 3.0.0)
   - SwiftSoup (2.0.0)
@@ -42,7 +42,7 @@ DEPENDENCIES:
   - SideMenu
   - SKPhotoBrowser
   - SnapKit (~> 4.2.0)
-  - SwiftDate
+  - SwiftDate (~> 5.1.0)
   - SwiftEntryKit
   - SwiftSoup
   - SwiftyJSON
@@ -112,13 +112,13 @@ SPEC CHECKSUMS:
   SideMenu: 1dcaabce84538c53325c287f7fe62999379a641c
   SKPhotoBrowser: 343de95d89dc7913763c5dda243cc6e606e4a168
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
-  SwiftDate: 8d4f14bf1ef68e95094511504856547bf9e3e1a6
+  SwiftDate: 6329e58969a2de31cea7f1ee1143b247693196e7
   SwiftEntryKit: 3f55c0b8e676afe24a3703237bcac68372891c56
   SwiftSoup: 4fe21f65cdbfa3a40559047016b7962b88d29279
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   SwiftyStoreKit: 033d06b6f87955405d3f844a18a7687c2438592a
   URLNavigator: 0bffc3efdeb2d97f7b5eec7ac82d290f4a099431
 
-PODFILE CHECKSUM: 9b38646fffde92daba4d4e6b86482c638797ce86
+PODFILE CHECKSUM: ff23f8d6ad3fb8653c58b36fbb57c23bae11a34d
 
 COCOAPODS: 1.7.1

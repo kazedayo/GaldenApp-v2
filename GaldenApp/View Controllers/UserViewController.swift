@@ -178,7 +178,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let count = userThreads[indexPath.row].totalReplies
         let dateMap = userThreads[indexPath.row].replies.map {$0.date}
         let date = dateMap.last!.toISODate()
-        let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan)
+        let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.english)
         cell.backgroundColor = .systemBackground
         cell.threadTitleLabel.text = title
         cell.threadTitleLabel.textColor = .label

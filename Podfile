@@ -22,7 +22,7 @@ target 'GaldenApp' do
   pod 'SwiftEntryKit'
   pod 'Apollo', git: 'https://github.com/apollographql/apollo-ios.git', branch: 'master'
   pod 'SwiftSoup'
-  pod 'SwiftDate'
+  pod 'SwiftDate', '~> 5.1.0'
   pod 'RichEditorView'
   pod 'Alamofire'
   pod 'SwiftyJSON'
