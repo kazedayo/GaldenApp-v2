@@ -41,7 +41,8 @@ class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
             //layout.itemSize = CGSize(width: 100, height: 50)
             
             self?.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-            self?.collectionView.backgroundColor = .clear
+            self?.collectionView.layer.cornerRadius = 10
+            self?.collectionView.backgroundColor = .secondarySystemBackground
             self?.collectionView.clipsToBounds = true
             self?.collectionView.delegate = self
             self?.collectionView.dataSource = self

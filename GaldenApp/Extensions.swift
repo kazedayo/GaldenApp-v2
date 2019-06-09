@@ -146,7 +146,7 @@ class EntryAttributes {
     public func iconEntry() -> EKAttributes {
         var attributes = EKAttributes()
         attributes.position = .bottom
-        var widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.95)
+        var widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
         if UIDevice.current.userInterfaceIdiom == .pad {
             widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.7)
         }
@@ -156,7 +156,7 @@ class EntryAttributes {
         attributes.displayDuration = .infinity
         attributes.screenInteraction = .dismiss
         attributes.entryInteraction = .forward
-        attributes.entryBackground = .color(color: .secondarySystemBackground)
+        attributes.entryBackground = .clear
         attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
         attributes.roundCorners = .all(radius: 10)
         attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.25, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
