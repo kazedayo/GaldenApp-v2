@@ -49,7 +49,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            contentTextView.setTextColor(.label)
+            contentTextView.setEditorFontColor(.label)
         }
     }
     
