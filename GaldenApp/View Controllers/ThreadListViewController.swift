@@ -32,15 +32,26 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     let sideMenuVC = SideMenuViewController()
     let composeVC = ThreadComposeViewController()
     //lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
-    lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"),style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
-    lazy var newThread = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(newThreadButtonPressed))
+    lazy var sideMenuButton = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
+    lazy var newThread = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"),style: .plain, target: self, action: #selector(newThreadButtonPressed))
     lazy var nextPageButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
-    lazy var spinner = UIActivityIndicatorView(style: .white)
-    
-    var reloadButton = UIButton()
+    lazy var spinner = UIActivityIndicatorView(style: .large)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.isHidden = true
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorColor = .separator
+        //tableView.estimatedRowHeight = 60
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
+        //tableView.addGestureRecognizer(longPress)
+        view.addSubview(tableView)
+        
         composeVC.view.layoutSubviews()
         let menuLeftNavigationController = UISideMenuNavigationController(rootViewController: sideMenuVC)
         sideMenuVC.mainVC = self
@@ -49,29 +60,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         SideMenuManager.default.menuPushStyle = .subMenu
         SideMenuManager.default.menuWidth = 150
         SideMenuManager.default.menuFadeStatusBar = false
-        
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.isHidden = true
-        tableView.contentInsetAdjustmentBehavior = .automatic
-        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 10, bottom: 0, right: 0)
-        tableView.separatorColor = UIColor(white: 0.10, alpha: 1)
-        //tableView.estimatedRowHeight = 60
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
-        //tableView.addGestureRecognizer(longPress)
-        view.addSubview(tableView)
-        
-        tableView.snp.makeConstraints {
-            (make) -> Void in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
@@ -86,10 +74,14 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         nextPageButton.addTarget(self, action: #selector(nextPage), for: .touchUpInside)
         tableView.tableFooterView = nextPageButton
         
-        reloadButton.center = self.view.center
-        reloadButton.setTitle("重新載入", for: .normal)
-        reloadButton.isHidden = true
-        reloadButton.addTarget(self, action: #selector(reloadButtonPressed(_:)), for: .touchUpInside)
+        tableView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
         updateSequence(append: false, completion: {})
     }
     
@@ -263,10 +255,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    @objc func reloadButtonPressed(_ sender: UIButton) {
-        self.updateSequence(append: false, completion: {})
-    }
-    
     private func updateSequence(append: Bool, completion: @escaping ()->Void) {
         let getThreadsQuery = GetThreadsQuery(id: channelId, page: pageNow)
         NetworkActivityIndicatorManager.networkOperationStarted()
@@ -294,10 +282,9 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
                     self?.threads.append(Thread.init(id: thread.id,title: titleTrim, nick: thread.replies.map {$0.authorNickname}.first!, count: thread.totalReplies, date: thread.replies.map {$0.date}.last!, tag: thread.tags.map {$0.fragments.tagDetails}.first!.name, tagC: thread.tags.map {$0.fragments.tagDetails}.first!.color))
                 }
                 self?.tableView.reloadData()
-                self?.reloadButton.isHidden = true
                 self?.tableView.isHidden = false
             } else {
-                self?.reloadButton.isHidden = false
+                self?.tableView.isHidden = false
             }
             NetworkActivityIndicatorManager.networkOperationFinished()
             completion()

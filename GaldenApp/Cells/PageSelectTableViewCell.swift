@@ -20,7 +20,7 @@ class PageSelectTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
-        pageNo.textColor = .lightGray
+        pageNo.textColor = .label
         pageNo.textAlignment = .center
         pageNo.font = UIFont.preferredFont(forTextStyle: .subheadline)
         pageNo.adjustsFontForContentSizeCategory = true

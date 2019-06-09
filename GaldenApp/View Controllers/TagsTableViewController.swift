@@ -18,7 +18,7 @@ class TagsTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.backgroundColor = .clear
         tableView.clipsToBounds = true
-        tableView.separatorColor = UIColor(white: 0.1, alpha: 1)
+        tableView.separatorColor = .separator
         tableView.register(TagsTableViewCell.self, forCellReuseIdentifier: "TagsTableViewCell")
         let getChannelListQuery = GetChannelListQuery()
         apollo.fetch(query: getChannelListQuery) {

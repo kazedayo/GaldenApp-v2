@@ -11,7 +11,8 @@ target 'GaldenApp' do
   pod 'Hero'
   pod 'MarqueeLabel'
   pod 'PKHUD'
-  pod 'RealmSwift'
+  pod 'Realm', git: 'https://github.com/realm/realm-cocoa.git', branch: 'tg/xcode-11-b1', submodules: true
+  pod 'RealmSwift', git: 'https://github.com/realm/realm-cocoa.git', branch: 'tg/xcode-11-b1', submodules: true
   pod 'SnapKit', '~> 4.2.0'
   pod 'Kingfisher'
   pod 'Blueprints'
@@ -20,7 +21,7 @@ target 'GaldenApp' do
   pod 'SKPhotoBrowser'
   pod 'SideMenu'
   pod 'SwiftEntryKit'
-  pod 'Apollo', :git => 'https://github.com/apollographql/apollo-ios.git', :branch => 'master'
+  pod 'Apollo', git: 'https://github.com/apollographql/apollo-ios.git', branch: 'master'
   pod 'SwiftSoup'
   pod 'SwiftDate'
   pod 'RichEditorView'

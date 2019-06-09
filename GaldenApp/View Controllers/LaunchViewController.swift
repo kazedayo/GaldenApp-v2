@@ -26,10 +26,10 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .secondarySystemBackground
         
         logo.image = UIImage(named: "LaunchScreen")
-        logo.tintColor = .darkGray
+        logo.tintColor = .systemFill
         view.addSubview(logo)
         
         logo.snp.makeConstraints {
@@ -44,8 +44,8 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
                 let eulatTextView = UITextView()
                 eulatTextView.isEditable = false
                 eulatTextView.clipsToBounds = true
-                eulatTextView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-                eulatTextView.textColor = UIColor(hexRGB: "aaaaaa")
+                eulatTextView.backgroundColor = .systemBackground
+                eulatTextView.textColor = .systemGray
                 eulatTextView.font = UIFont.preferredFont(forTextStyle: .body)
                 eulatTextView.adjustsFontForContentSizeCategory = true
                 eulatTextView.text = try! String(contentsOfFile: Bundle.main.path(forResource: "eula", ofType: "txt")!)
@@ -114,7 +114,6 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
     
     func initControllers() {
         let tabBarController = UITabBarController()
-        tabBarController.extendedLayoutIncludesOpaqueBars = true
         let threadListViewController = ThreadListViewController()
         let settingsTableViewController = SettingsTableViewController.init(style: .grouped)
         let sessionUserViewController = SessionUserViewController()
@@ -130,28 +129,23 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
             let controllers = [threadListViewController,loginViewController,settingsTableViewController]
             tabBarController.viewControllers = controllers
         }
-        let tabbaritems = tabBarController.tabBar.items!
-        for item in tabbaritems {
-            item.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
-        }
         let navVC = UINavigationController(rootViewController: tabBarController)
         navVC.navigationBar.prefersLargeTitles = true
         let splitViewController = UISplitViewController()
         let dummyVC = UINavigationController()
-        dummyVC.view.backgroundColor = UIColor(white:0.1,alpha:1)
-        dummyVC.navigationBar.barTintColor = UIColor(white: 0.1,alpha: 1)
-        dummyVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        dummyVC.navigationBar.shadowImage = UIImage()
+        dummyVC.view.backgroundColor = .systemBackground
+        dummyVC.navigationBar.barTintColor = .systemGreen
         dummyVC.navigationItem.largeTitleDisplayMode = .never
         splitViewController.delegate = self
-        splitViewController.view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        splitViewController.view.backgroundColor = .systemBackground
         splitViewController.viewControllers = [navVC,dummyVC]
         splitViewController.preferredDisplayMode = .allVisible
         splitViewController.hero.isEnabled = true
         splitViewController.hero.modalAnimationType = .zoom
+        splitViewController.modalPresentationStyle = .fullScreen
         present(splitViewController, animated: true, completion: {
             //hacky fix
-            splitViewController.view.subviews.first?.removeFromSuperview()
+            //splitViewController.view.subviews.first?.removeFromSuperview()
         })
     }
     

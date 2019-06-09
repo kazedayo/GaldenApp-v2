@@ -25,12 +25,12 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .systemBackground
         webView.navigationDelegate = self
         
         let label = UILabel()
         label.text = "未登入，請先登入"
-        label.textColor = .lightGray
+        label.textColor = .systemGray
         view.addSubview(label)
         
         label.snp.makeConstraints {
@@ -81,7 +81,6 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
                 var controllers = (self?.tabBarController?.viewControllers)!
                 let sessionUserViewController = SessionUserViewController()
                 sessionUserViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
-                sessionUserViewController.tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
                 controllers[1] = sessionUserViewController
                 self?.tabBarController?.setViewControllers(controllers, animated: false)
             }

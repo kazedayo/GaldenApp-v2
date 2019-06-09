@@ -41,13 +41,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     lazy var replyButton = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(replyButtonPressed))
     lazy var shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
     lazy var pageButton = UIBarButtonItem(title: "撈緊...", style: .plain, target: self, action: #selector(pageButtonPressed))
-    lazy var prevButton = UIBarButtonItem(image: UIImage(named: "previous"), style: .plain, target: self, action: #selector(prevButtonPressed(_:)))
-    lazy var nextButton = UIBarButtonItem(image: UIImage(named: "next"), style: .plain, target: self, action: #selector(nextButtonPressed(_:)))
+    lazy var prevButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(prevButtonPressed(_:)))
+    lazy var nextButton = UIBarButtonItem(image: UIImage(systemName: "chevron.right"), style: .plain, target: self, action: #selector(nextButtonPressed(_:)))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.largeTitleDisplayMode = .never
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .systemBackground
         
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
@@ -62,7 +62,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         //user agent spoof for icon
         webView.customUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"
         webView.navigationDelegate = self
-        webView.scrollView.contentInsetAdjustmentBehavior = .never
+        webView.scrollView.contentInsetAdjustmentBehavior = .automatic
         webView.scrollView.delegate = self
         view.addSubview(webView)
         
@@ -71,17 +71,16 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         navigationItem.largeTitleDisplayMode = .never
         navigationController?.delegate = self
         navigationController?.isToolbarHidden = false
-        navigationController?.navigationBar.isTranslucent = false
         
         prevButton.isEnabled = false
         nextButton.isEnabled = false
         replyButton.isEnabled = false
         pageButton.isEnabled = false
-        pageButton.tintColor = .white
+        pageButton.tintColor = .label
         shareButton.isEnabled = false
         toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,shareButton,flexibleSpace,nextButton]
         
-        titleLabel.textColor = .white
+        titleLabel.textColor = .label
         titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
         titleLabel.animationDelay = 1
         titleLabel.type = .leftRight
@@ -97,8 +96,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         webView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin)
-            make.bottom.equalTo(view.snp.bottomMargin)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
@@ -215,7 +214,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         pageVC.popoverPresentationController?.delegate = self
         pageVC.popoverPresentationController?.barButtonItem = pageButton
         pageVC.preferredContentSize = CGSize(width: 150, height: 200)
-        pageVC.popoverPresentationController?.backgroundColor = UIColor(white: 0.15, alpha: 0.5)
+        pageVC.popoverPresentationController?.backgroundColor = .systemFill
         pageVC.threadID = self.tID
         pageVC.pageCount = Int(self.pageCount)
         pageVC.pageSelected = self.pageNow
@@ -636,8 +635,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     UIApplication.shared.openURL(url!)
                 }*/
                 let sfVC = SFSafariViewController(url: url!)
-                sfVC.preferredControlTintColor = UIColor(hexRGB: "#45c17c")
-                sfVC.preferredBarTintColor = .black
+                sfVC.preferredControlTintColor = .systemGreen
                 present(sfVC, animated: true, completion: nil)
                 decisionHandler(.cancel)
             }

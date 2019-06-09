@@ -74,29 +74,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PKHUD.sharedHUD.dimsBackground = false
         PKHUD.sharedHUD.userInteractionOnUnderlyingViewsEnabled = false
         
-        UIApplication.shared.statusBarStyle = .lightContent
-        UIApplication.shared.isStatusBarHidden = false
+        UINavigationBar.appearance().tintColor = .systemGreen
+        UIBarButtonItem.appearance().tintColor = .systemGreen
         
-        UINavigationBar.appearance().barStyle = .black
-        UINavigationBar.appearance().tintColor = UIColor(hexRGB: "#45c17c")
-        UINavigationBar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().isTranslucent = false
-        UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#45c17c")
-        
-        UITabBar.appearance().barStyle = .black
-        UITabBar.appearance().isTranslucent = false
-        UITabBar.appearance().tintColor = UIColor(hexRGB: "#45c17c")
-        UITabBar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
-        UITabBar.appearance().shadowImage = UIImage()
-        UITabBar.appearance().backgroundImage = UIImage()
-        
-        UIToolbar.appearance().barStyle = .black
-        UIToolbar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
-        UIToolbar.appearance().isTranslucent = false
-        UIToolbar.appearance().setShadowImage(UIImage(), forToolbarPosition: .any)
-        
-        UITextField.appearance().keyboardAppearance = .dark
+        UITabBar.appearance().tintColor = .systemGreen
         
         let root = LaunchViewController()
         window?.rootViewController = root

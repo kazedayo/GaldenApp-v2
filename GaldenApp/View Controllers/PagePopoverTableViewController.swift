@@ -29,7 +29,8 @@ class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UIT
         tableView.delegate = self
         tableView.dataSource = self
         tableView.layer.cornerRadius = 10
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .separator
         tableView.register(PageSelectTableViewCell.self, forCellReuseIdentifier: "PageSelectTableViewCell")
         tableView.tableFooterView = UIView()
         view.addSubview(tableView)
@@ -62,10 +63,6 @@ class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UIT
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PageSelectTableViewCell") as! PageSelectTableViewCell
-        
-        let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
-        cell.selectedBackgroundView = bgColorView
         
         cell.pageNo.text = "第\(indexPath.row+1)頁"
         return cell

@@ -22,7 +22,7 @@ class ChannelListTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
         
-        channelTitle.textColor = .white
+        channelTitle.textColor = .label
         channelTitle.textAlignment = .center
         channelTitle.font = UIFont.preferredFont(forTextStyle: .subheadline)
         channelTitle.adjustsFontForContentSizeCategory = true

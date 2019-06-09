@@ -21,7 +21,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.setTitle("選擇標籤...", for: .normal)
-        button.setTitleColor(UIColor(hexRGB: "aaaaaa"), for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.addTarget(self, action: #selector(tagButtonPressed(_:)), for: .touchUpInside)
         return button
     }()
@@ -32,9 +32,9 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         titleTextField.delegate = self
         titleTextField.borderStyle = .none
         titleTextField.borderColor = .clear
-        titleTextField.backgroundColor = UIColor(white:0.15, alpha:1)
-        titleTextField.attributedPlaceholder = NSAttributedString(string: "標題", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-        titleTextField.textColor = UIColor(hexRGB: "aaaaaa")
+        titleTextField.backgroundColor = .systemBackground
+        titleTextField.attributedPlaceholder = NSAttributedString(string: "標題", attributes: [NSAttributedString.Key.foregroundColor : UIColor.secondaryLabel])
+        titleTextField.textColor = .label
         if #available(iOS 11.0, *) {
             titleTextField.smartInsertDeleteType = .no
             titleTextField.smartQuotesType = .no
@@ -104,7 +104,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
                     self?.dismiss(animated: true, completion: {
                         self?.contentTextView.html = ""
                         self?.titleTextField.text = ""
-                        self?.tagButton.setTitleColor(UIColor(hexRGB: "aaaaaa"), for: .normal)
+                        self?.tagButton.setTitleColor(.label, for: .normal)
                         self?.tagButton.setTitle("選擇標籤...", for: .normal)
                         self?.threadVC?.unwindToThreadListAfterNewPost()
                     })
@@ -120,7 +120,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         dismiss(animated: true, completion: {
             self.contentTextView.html = ""
             self.titleTextField.text = ""
-            self.tagButton.setTitleColor(UIColor(hexRGB: "aaaaaa"), for: .normal)
+            self.tagButton.setTitleColor(.label, for: .normal)
             self.tagButton.setTitle("選擇標籤...", for: .normal)
         })
     }
@@ -173,7 +173,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         tagsVC.popoverPresentationController?.delegate = self
         tagsVC.popoverPresentationController?.sourceView = tagButton
         tagsVC.popoverPresentationController?.sourceRect = tagButton.bounds
-        tagsVC.popoverPresentationController?.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        tagsVC.popoverPresentationController?.backgroundColor = .systemFill
         tagsVC.preferredContentSize = CGSize(width: 200, height: 200)
         self.present(tagsVC, animated: true, completion: nil)
     }

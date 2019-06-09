@@ -23,9 +23,7 @@ class UserTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
-        selectedBackgroundView = bgColorView
+        backgroundColor = .systemBackground
         unameLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         unameLabel.adjustsFontForContentSizeCategory = true
         ugroupLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
@@ -34,7 +32,7 @@ class UserTableViewCell: UITableViewCell {
         avatarView.clipsToBounds = true
         
         ugroupLabel.text = "郊登仔"
-        ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
+        ugroupLabel.textColor = .secondaryLabel
         
         primaryStack.axis = .vertical
         primaryStack.alignment = .leading

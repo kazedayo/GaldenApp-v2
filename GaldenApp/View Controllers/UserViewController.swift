@@ -26,15 +26,14 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .systemBackground
         navigationItem.title = "起底"
         
         tableView.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 10, bottom: 0, right: 0)
-        tableView.separatorColor = UIColor(white: 0.10, alpha: 1)
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorColor = .separator
         tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
@@ -90,16 +89,28 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 })
             }
         }
-        
+        let blur = UIBlurEffect(style: .systemMaterial)
+        let blurView = UIVisualEffectView()
+        blurView.effect = blur
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.addSubview(blurView)
         headerView.addSubview(avatarView)
         headerView.addSubview(unameLabel)
         headerView.addSubview(ugroupLabel)
-        headerView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        headerView.backgroundColor = .clear
         
         activityIndicator.snp.makeConstraints {
             (make) -> Void in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
+        }
+        
+        blurView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
         }
         
         avatarView.snp.makeConstraints {
@@ -126,10 +137,10 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         tableView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.top)
+            make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom)
+            make.bottom.equalToSuperview()
         }
         
         // Do any additional setup after loading the view.
@@ -168,11 +179,11 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let dateMap = userThreads[indexPath.row].replies.map {$0.date}
         let date = dateMap.last!.toISODate()
         let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan)
-        cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        cell.backgroundColor = .systemBackground
         cell.threadTitleLabel.text = title
-        cell.threadTitleLabel.textColor = .lightGray
+        cell.threadTitleLabel.textColor = .label
         cell.detailLabel.text = "你的回覆: \(count) // 最後一次回覆: \(relativeDate!)"
-        cell.detailLabel.textColor = .darkGray
+        cell.detailLabel.textColor = .secondaryLabel
         let tags = userThreads[indexPath.row].tags.map {$0.fragments.tagDetails}
         cell.tagLabel.text = "#\(tags[0].name)"
         cell.tagLabel.textColor = UIColor(hexRGB: tags[0].color)

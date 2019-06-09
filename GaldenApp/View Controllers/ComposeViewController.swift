@@ -46,9 +46,16 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         }
     }*/
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            contentTextView.setTextColor(.label)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .systemBackground
         
         // Do any additional setup after loading the view.
         navigationController?.isNavigationBarHidden = false
@@ -62,13 +69,13 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         toolbar.options.insert(insertIcon, at: 0)
         
         contentTextView.webView.isOpaque = false
-        contentTextView.webView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        contentTextView.webView.backgroundColor = .systemBackground
+        contentTextView.backgroundColor = .systemBackground
         self.automaticallyAdjustsScrollViewInsets = false
         contentTextView.webView.scrollView.clipsToBounds = true
         if #available(iOS 11.0, *) {
             contentTextView.webView.scrollView.contentInsetAdjustmentBehavior = .never
         }
-        contentTextView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         toolbar.editor = contentTextView
         toolbar.delegate = self
         contentTextView.delegate = self
@@ -93,9 +100,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
-        UIBarButtonItem.appearance().tintColor = UIColor.white
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(hexRGB: "#45c17c")
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(hexRGB: "#45c17c")
+        UIBarButtonItem.appearance().tintColor = .label
+        navigationItem.leftBarButtonItem?.tintColor = .systemGreen
+        navigationItem.rightBarButtonItem?.tintColor = .systemGreen
 
     }
     
@@ -103,13 +110,14 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         self.view.endEditing(true)
-        UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#45c17c")
+        self.contentTextView.resignFirstResponder()
+        UIBarButtonItem.appearance().tintColor = .systemGreen
     }
     
     func richEditorDidLoad(_ editor: RichEditorView) {
         editor.placeholder = "內容"
-        editor.setEditorBackgroundColor(UIColor(white: 0.15, alpha: 1))
-        editor.setEditorFontColor(UIColor(hexRGB: "aaaaaa")!)
+        //editor.setEditorBackgroundColor(.secondarySystemBackground)
+        editor.setEditorFontColor(.systemGray)
         editor.inputAccessoryView = toolbar
     }
     

@@ -29,38 +29,33 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tableView.separatorColor = UIColor(white: 0.15, alpha: 1)
-        let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor(white: 0.25, alpha:1.0)
-        clearHistoryCell.selectedBackgroundView = bgColorView
-        sourceCell.selectedBackgroundView = bgColorView
-        iapCell.selectedBackgroundView = bgColorView
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorColor = .separator
         imageCell.selectedBackgroundView = UIView()
-        clearHistoryCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
-        sourceCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
-        iapCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
-        imageCell.backgroundColor = UIColor(white: 0.2, alpha: 1)
+        clearHistoryCell.backgroundColor = .systemGroupedBackground
+        sourceCell.backgroundColor = .systemGroupedBackground
+        iapCell.backgroundColor = .systemGroupedBackground
+        imageCell.backgroundColor = .systemGroupedBackground
         
-        clearHistoryCell.textLabel?.textColor = .red
+        clearHistoryCell.textLabel?.textColor = .systemRed
         clearHistoryCell.textLabel?.text = "重設閲讀位置記錄"
         clearHistoryCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         clearHistoryCell.textLabel?.adjustsFontForContentSizeCategory = true
         clearHistoryCell.accessoryType = .disclosureIndicator
         
-        sourceCell.textLabel?.textColor = .white
+        sourceCell.textLabel?.textColor = .label
         sourceCell.textLabel?.text = "Source"
         sourceCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         sourceCell.textLabel?.adjustsFontForContentSizeCategory = true
         sourceCell.accessoryType = .disclosureIndicator
         
-        iapCell.textLabel?.textColor = .white
+        iapCell.textLabel?.textColor = .label
         iapCell.textLabel?.text = "捐獻"
         iapCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         iapCell.textLabel?.adjustsFontForContentSizeCategory = true
         iapCell.accessoryType = .disclosureIndicator
         
-        imageCell.textLabel?.textColor = .white
+        imageCell.textLabel?.textColor = .label
         imageCell.textLabel?.text = "自動載入圖片"
         imageCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         imageCell.textLabel?.adjustsFontForContentSizeCategory = true
@@ -70,7 +65,7 @@ class SettingsTableViewController: UITableViewController {
         } else {
             imageToggle.isOn = false
         }
-        imageToggle.onTintColor = UIColor(hexRGB: "#45c17c")
+        imageToggle.onTintColor = .systemGreen
         imageToggle.addTarget(self, action: #selector(imageToggleChanged(_:)), for: .valueChanged)
         imageCell.accessoryView = imageToggle
         

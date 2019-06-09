@@ -30,7 +30,7 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         
         navigationController?.isNavigationBarHidden = true
         
-        view.backgroundColor = UIColor(white: 0.10, alpha: 1)
+        view.backgroundColor = .secondarySystemBackground
         
         tableView.backgroundColor = .clear
         tableView.delegate = self
@@ -87,7 +87,7 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! ChannelListTableViewCell
-        cell.channelTitle.textColor = .white
+        cell.channelTitle.textColor = .label
         mainVC?.unwindToThreadList(channel: self.channels[indexPath.row])
         dismiss(animated: true, completion: nil)
     }
