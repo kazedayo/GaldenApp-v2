@@ -83,7 +83,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         contentTextView.webView.isOpaque = false
         contentTextView.webView.backgroundColor = .systemBackground
         contentTextView.backgroundColor = .systemBackground
-        self.automaticallyAdjustsScrollViewInsets = false
         contentTextView.webView.scrollView.clipsToBounds = true
         if #available(iOS 11.0, *) {
             contentTextView.webView.scrollView.contentInsetAdjustmentBehavior = .never
@@ -225,7 +224,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             let alert = UIAlertController.init(title: "注意", message: "內容不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
                 action in
-                self.contentTextView.resignFirstResponder()
+                //self.contentTextView.resignFirstResponder()
                 self.contentTextView.becomeFirstResponder()
             }))
             self.present(alert,animated: true,completion: nil)
@@ -432,7 +431,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     @objc func callIconKeyboard() {
         contentTextView.resignFirstResponder()
-        var attributes = EntryAttributes.shared.iconEntry()
+        let attributes = EntryAttributes.shared.iconEntry()
         //attributes.positionConstraints.verticalOffset = keyboardHeight-50
         SwiftEntryKit.display(entry: iconKeyboard, using: attributes)
     }
@@ -511,7 +510,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     //MARK: ImagePickerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: {
-            self.contentTextView.resignFirstResponder()
+            //self.contentTextView.resignFirstResponder()
             self.contentTextView.becomeFirstResponder()
         })
     }
@@ -523,7 +522,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                 url in
                 self.dismiss(animated: true, completion: {
                     self.contentTextView.insertImage(url, alt: "")
-                    self.contentTextView.resignFirstResponder()
+                    //self.contentTextView.resignFirstResponder()
                     self.contentTextView.becomeFirstResponder()
                 })
             })
@@ -545,7 +544,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                 url in
                 self.dismiss(animated: true, completion: {
                     self.contentTextView.insertImage(url, alt: "")
-                    self.contentTextView.resignFirstResponder()
+                    //self.contentTextView.resignFirstResponder()
                     self.contentTextView.becomeFirstResponder()
                 })
             })
