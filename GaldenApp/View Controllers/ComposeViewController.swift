@@ -428,9 +428,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     @objc func keyboardWillHide(notification: Notification) {
         // keyboard is dismissed/hidden from the screen
-        stackView.snp.updateConstraints {
-            (make) -> Void in
-            make.bottom.equalTo(view.snp.bottom).offset(-10)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            stackView.snp.updateConstraints {
+                (make) -> Void in
+                make.bottom.equalTo(view.snp.bottom).offset(-10)
+            }
         }
     }
     

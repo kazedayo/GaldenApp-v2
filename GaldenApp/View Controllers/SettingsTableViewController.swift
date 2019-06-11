@@ -32,10 +32,10 @@ class SettingsTableViewController: UITableViewController {
         tableView.backgroundColor = .systemBackground
         tableView.separatorColor = .separator
         imageCell.selectedBackgroundView = UIView()
-        clearHistoryCell.backgroundColor = .systemGroupedBackground
-        sourceCell.backgroundColor = .systemGroupedBackground
-        iapCell.backgroundColor = .systemGroupedBackground
-        imageCell.backgroundColor = .systemGroupedBackground
+        clearHistoryCell.backgroundColor = .secondarySystemBackground
+        sourceCell.backgroundColor = .secondarySystemBackground
+        iapCell.backgroundColor = .secondarySystemBackground
+        imageCell.backgroundColor = .secondarySystemBackground
         
         clearHistoryCell.textLabel?.textColor = .systemRed
         clearHistoryCell.textLabel?.text = "重設閲讀位置記錄"

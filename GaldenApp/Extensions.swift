@@ -150,8 +150,9 @@ class EntryAttributes {
         if UIDevice.current.userInterfaceIdiom == .pad {
             widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.7)
         }
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.4)
+        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.37)
         attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
+        attributes.positionConstraints.verticalOffset = 10
         attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
         attributes.displayDuration = .infinity
         attributes.screenInteraction = .dismiss
