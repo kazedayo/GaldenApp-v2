@@ -48,7 +48,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         view.addSubview(tagButton)
         titleTextField.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin).offset(10)
+            make.top.equalTo(view.snp.topMargin).offset(15)
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
         }
@@ -67,7 +67,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         stackView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(contentTextView.snp.bottomMargin).offset(15)
-            make.bottom.equalTo(view.snp.bottom).offset(-10)
+            make.bottom.equalTo(view.snp.bottom).offset(-15)
             make.leading.equalTo(view.snp.leadingMargin)
         }
         // Do any additional setup after loading the view.

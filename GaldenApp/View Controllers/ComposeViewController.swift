@@ -14,6 +14,7 @@ import SwiftSoup
 import ImageIO
 import Alamofire
 import SwiftyJSON
+import Typist
 
 class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,UIImagePickerControllerDelegate {
     
@@ -21,12 +22,12 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     var topicID: Int!
     var quoteID: String?
     var contentVC: ContentViewController?
-    var keyboardHeight: CGFloat = 0
     
     let iconKeyboard = IconKeyboard()
     
     let contentTextView = RichEditorView()
     let stackView = UIStackView()
+    let keyboard = Typist()
     lazy var imageButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "camera.on.rectangle"), for: .normal)
@@ -91,7 +92,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         
         stackView.axis = .horizontal
         stackView.alignment = .leading
-        stackView.spacing = 10
+        stackView.spacing = 15
         stackView.addArrangedSubview(imageButton)
         stackView.addArrangedSubview(linkButton)
         stackView.addArrangedSubview(iconButton)
@@ -101,7 +102,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         
         contentTextView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin).offset(10)
+            make.top.equalTo(view.snp.topMargin).offset(15)
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
         }
@@ -109,18 +110,15 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         stackView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(contentTextView.snp.bottomMargin).offset(15)
-            make.bottom.equalTo(view.snp.bottom).offset(-10)
+            make.bottom.equalTo(view.snp.bottom).offset(-15)
             make.leading.equalTo(view.snp.leadingMargin)
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureKeyboard()
         contentTextView.becomeFirstResponder()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
-                                               name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
-                                               name: UIResponder.keyboardWillHideNotification, object: nil)
         UIBarButtonItem.appearance().tintColor = .label
         navigationItem.leftBarButtonItem?.tintColor = .systemGreen
         navigationItem.rightBarButtonItem?.tintColor = .systemGreen
@@ -129,7 +127,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
+        keyboard.clear()
         self.view.endEditing(true)
         self.contentTextView.resignFirstResponder()
         UIBarButtonItem.appearance().tintColor = .systemGreen
@@ -403,6 +401,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         contentTextView.resignFirstResponder()
         let attributes = EntryAttributes.shared.iconEntry()
         //attributes.positionConstraints.verticalOffset = keyboardHeight-50
+        
         SwiftEntryKit.display(entry: iconKeyboard, using: attributes)
     }
     
@@ -412,28 +411,35 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         })
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            keyboardHeight = keyboardSize.height
-            stackView.snp.updateConstraints {
-                (make) -> Void in
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    make.bottom.equalTo(view.snp.bottom).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18)-10)
-                } else {
-                    make.bottom.equalTo(view.snp.bottom).offset(-keyboardHeight-10)
+    func configureKeyboard() {
+        keyboard
+            .on(event: .willShow) { (options) in
+                self.stackView.snp.updateConstraints {
+                    (make) -> Void in
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        make.bottom.equalTo(self.view.snp.bottom).offset(-options.endFrame.height + (UIScreen.main.bounds.height*0.18)-15)
+                    } else {
+                        make.bottom.equalTo(self.view.snp.bottom).offset(-options.endFrame.height-15)
+                    }
                 }
             }
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: Notification) {
-        // keyboard is dismissed/hidden from the screen
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            stackView.snp.updateConstraints {
-                (make) -> Void in
-                make.bottom.equalTo(view.snp.bottom).offset(-10)
+            .on(event: .willChangeFrame) { (options) in
+                self.stackView.snp.updateConstraints {
+                    (make) -> Void in
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        make.bottom.equalTo(self.view.snp.bottom).offset(-options.endFrame.height + (UIScreen.main.bounds.height*0.18)-15)
+                    } else {
+                        make.bottom.equalTo(self.view.snp.bottom).offset(-options.endFrame.height-15)
+                    }
+                }
             }
-        }
+            .on(event: .willHide) { (options) in
+                self.stackView.snp.updateConstraints {
+                    (make) -> Void in
+                    make.bottom.equalTo(self.view.snp.bottom).offset(-15)
+                }
+            }
+            .start()
     }
     
     func rgbToHex(color: UIColor) -> String {

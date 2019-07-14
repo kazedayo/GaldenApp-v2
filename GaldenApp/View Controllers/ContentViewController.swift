@@ -57,10 +57,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         config.preferences.javaScriptEnabled = true
         config.processPool = WKProcessPool()
         webView = WKWebView(frame: self.view.bounds, configuration: config)
-        webView.isOpaque = false
-        webView.backgroundColor = .clear
+        webView.backgroundColor = .systemBackground
         //user agent spoof for icon
-        webView.customUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"
+        //webView.customUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"
         webView.navigationDelegate = self
         webView.scrollView.contentInsetAdjustmentBehavior = .automatic
         webView.scrollView.delegate = self
@@ -353,7 +352,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     contentHTML?.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
                 }
                 
-                let threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://rawcdn.githack.com/kazedayo/js_for_GaldenApp/5954e3b3859ebd54e3bfa1be38d2d856f36d6b87/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+                let threadHTML = "<html lang=\"zh-Hant\"><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://rawcdn.githack.com/kazedayo/js_for_GaldenApp/5954e3b3859ebd54e3bfa1be38d2d856f36d6b87/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
                 
                 self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
             }
@@ -615,7 +614,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     })
                 } else {
                     NetworkActivityIndicatorManager.networkOperationFinished()
-                    webView.isHidden = false
+                    DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                        webView.isHidden = false
+                    })
                 }
             }
         })

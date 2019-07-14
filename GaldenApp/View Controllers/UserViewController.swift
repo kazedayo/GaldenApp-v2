@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import SwiftDate
 
-class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class UserViewController: UITableViewController {
     
     var threadsArray: [ThreadListDetails] = []
     var userThreads: [ThreadListDetails] = []
@@ -21,7 +21,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     let unameLabel = UILabel()
     let ugroupLabel = UILabel()
     let headerView = UIView()
-    let tableView = UITableView()
     let activityIndicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
@@ -29,7 +28,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         view.backgroundColor = .systemBackground
         navigationItem.title = "起底"
         
-        tableView.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .systemBackground
@@ -37,7 +35,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
-        view.addSubview(tableView)
         
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
@@ -135,14 +132,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.trailing.equalToSuperview().offset(-10)
         }
         
-        tableView.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
         // Do any additional setup after loading the view.
     }
     
@@ -160,19 +149,19 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.navigationController?.isToolbarHidden = true
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return headerView
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 90
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userThreads.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
         let title = userThreads[indexPath.row].title.trimmingCharacters(in: .whitespacesAndNewlines)
         let count = userThreads[indexPath.row].totalReplies
@@ -190,7 +179,7 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let contentVC = ContentViewController()
         let selectedThread = userThreads[indexPath.row].id
         contentVC.tID = selectedThread
@@ -225,7 +214,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     //self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
                     self?.tableView.reloadData()
                     NetworkActivityIndicatorManager.networkOperationFinished()
-                    self?.tableView.isHidden = false
                     completion()
                 } else {
                     self?.pageCount+=1

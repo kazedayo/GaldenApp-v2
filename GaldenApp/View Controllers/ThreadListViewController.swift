@@ -14,7 +14,7 @@ import SwiftEntryKit
 import SwiftDate
 import Apollo
 
-class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UIPopoverPresentationControllerDelegate {
+class ThreadListViewController: UITableViewController,UIPopoverPresentationControllerDelegate {
     
     //MARK: Properties
     var threads: [Thread] = []
@@ -28,7 +28,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     var eof = false
     
     let realm = try! Realm()
-    let tableView = UITableView()
     let sideMenuVC = SideMenuViewController()
     let composeVC = ThreadComposeViewController()
     //lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
@@ -50,7 +49,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
         //tableView.addGestureRecognizer(longPress)
-        view.addSubview(tableView)
         
         composeVC.view.layoutSubviews()
         let menuLeftNavigationController = UISideMenuNavigationController(rootViewController: sideMenuVC)
@@ -73,14 +71,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         nextPageButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
         nextPageButton.addTarget(self, action: #selector(nextPage), for: .touchUpInside)
         tableView.tableFooterView = nextPageButton
-        
-        tableView.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
         
         updateSequence(append: false, completion: {})
     }
@@ -117,17 +107,17 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
 
     // MARK: - Table view data source
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return threads.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Configure the cell...
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
         cell.threadTitleLabel.text = threads[indexPath.row].title
@@ -137,7 +127,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DispatchQueue.main.async {
             let cell = tableView.cellForRow(at: indexPath) as! ThreadListTableViewCell
             cell.setNeedsLayout()

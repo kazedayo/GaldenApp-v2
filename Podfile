@@ -26,6 +26,7 @@ target 'GaldenApp' do
   pod 'RichEditorView'
   pod 'Alamofire'
   pod 'SwiftyJSON'
+  pod 'Typist'
 
   target 'GaldenAppTests' do
     inherit! :search_paths

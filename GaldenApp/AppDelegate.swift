@@ -75,6 +75,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UITabBar.appearance().tintColor = .systemGreen
         
+        UserDefaults.standard.set(["zh_HK"], forKey: "AppleLanguages")
+        UserDefaults.standard.synchronize()
+        
         let root = LaunchViewController()
         window?.rootViewController = root
         

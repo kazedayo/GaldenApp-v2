@@ -135,7 +135,6 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
         let dummyVC = UINavigationController()
         dummyVC.view.backgroundColor = .systemBackground
         dummyVC.navigationBar.barTintColor = .systemGreen
-        dummyVC.navigationItem.largeTitleDisplayMode = .never
         splitViewController.delegate = self
         splitViewController.view.backgroundColor = .systemBackground
         splitViewController.viewControllers = [navVC,dummyVC]
