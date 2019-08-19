@@ -69,14 +69,12 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
         let urlStr = navigationAction.request.url?.absoluteString
         if (urlStr?.contains("http://localhost/callback"))! {
             let userKey = urlStr!.replacingOccurrences(of: "http://localhost/callback?token=", with: "")
-            //print(userKey)
             keychain.set(userKey, forKey: "userKey")
-            //reconfigure apollo
-            apollo = Configurations.shared.configureApollo()
             let getSessionUserQuery = GetSessionUserQuery()
             apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
-                [weak self] result,error in
-                sessionUser = result?.data?.sessionUser
+                [weak self] result in
+                guard let data = try? result.get().data else { return }
+                sessionUser = data.sessionUser
                 self?.dismiss(animated: true, completion: nil)
                 var controllers = (self?.tabBarController?.viewControllers)!
                 let sessionUserViewController = SessionUserViewController()

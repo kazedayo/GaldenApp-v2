@@ -104,8 +104,9 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             let parsedHtml = galdenParse(input: contentTextView.contentHTML)
             let createThreadMutation = CreateThreadMutation(title: titleTextField.text!, tags: [tagID!], html: parsedHtml)
             apollo.perform(mutation: createThreadMutation) {
-                [weak self] result, error in
-                if error == nil {
+                [weak self] result in
+                switch result {
+                case .success(_):
                     HUD.flash(.success)
                     self?.dismiss(animated: true, completion: {
                         self?.contentTextView.html = ""
@@ -114,9 +115,9 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
                         self?.tagButton.setTitle("選擇標籤...", for: .normal)
                         self?.threadVC?.unwindToThreadListAfterNewPost()
                     })
-                } else {
+                case .failure(let error):
                     HUD.flash(.error)
-                    print(error!)
+                    print(error)
                 }
             }
         }

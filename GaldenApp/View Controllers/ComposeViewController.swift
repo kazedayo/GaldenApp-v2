@@ -22,6 +22,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     var topicID: Int!
     var quoteID: String?
     var contentVC: ContentViewController?
+    var iconKeyboardShowing = false
     
     let iconKeyboard = IconKeyboard()
     
@@ -201,16 +202,17 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             let parsedHtml = galdenParse(input: contentTextView.contentHTML)
             let replyThreadMutation = ReplyThreadMutation(threadId: topicID, parentId: quoteID, html: parsedHtml)
             apollo.perform(mutation: replyThreadMutation) {
-                [weak self] result, error in
-                if error == nil {
+                [weak self] result in
+                switch result {
+                case .success(_):
                     HUD.flash(.success)
                     self?.dismiss(animated: true, completion: {
                         self?.contentTextView.html = ""
                         self?.contentVC?.unwindAfterReply()
                     })
-                } else {
+                case .failure(let error):
                     HUD.flash(.error)
-                    print(error!)
+                    print(error)
                 }
             }
         }
@@ -398,11 +400,23 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }
     
     @objc func callIconKeyboard() {
-        contentTextView.resignFirstResponder()
-        let attributes = EntryAttributes.shared.iconEntry()
-        //attributes.positionConstraints.verticalOffset = keyboardHeight-50
-        
-        SwiftEntryKit.display(entry: iconKeyboard, using: attributes)
+        if iconKeyboardShowing == false {
+            view.endEditing(true)
+            //contentTextView.resignFirstResponder()
+            view.addSubview(iconKeyboard)
+            iconKeyboard.snp.makeConstraints {
+                (make) -> Void in
+                make.top.equalTo(stackView.snp.bottom).offset(20)
+                make.bottom.equalTo(view.snp.bottom).offset(-20)
+                make.leading.equalTo(view.snp.leadingMargin).offset(0)
+                make.trailing.equalTo(view.snp.trailingMargin).offset(0)
+            }
+            iconKeyboardShowing = true
+        } else {
+            iconKeyboard.removeFromSuperview()
+            iconKeyboardShowing = false
+            contentTextView.becomeFirstResponder()
+        }
     }
     
     @objc func cancelButtonPressed(_ sender: UIBarButtonItem) {
@@ -433,12 +447,12 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                     }
                 }
             }
-            .on(event: .willHide) { (options) in
+            /*.on(event: .willHide) { (options) in
                 self.stackView.snp.updateConstraints {
                     (make) -> Void in
                     make.bottom.equalTo(self.view.snp.bottom).offset(-15)
                 }
-            }
+            }*/
             .start()
     }
     
@@ -488,7 +502,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     //MARK: ImagePickerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: {
-            //self.contentTextView.resignFirstResponder()
             self.contentTextView.becomeFirstResponder()
         })
     }
@@ -500,7 +513,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                 url in
                 self.dismiss(animated: true, completion: {
                     self.contentTextView.insertImage(url, alt: "")
-                    //self.contentTextView.resignFirstResponder()
                     self.contentTextView.becomeFirstResponder()
                 })
             })

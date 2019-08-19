@@ -143,8 +143,10 @@ enum NavigationType {
 class EntryAttributes {
     static let shared = EntryAttributes()
     
-    public func iconEntry() -> EKAttributes {
+    public func bottomEntry() -> EKAttributes {
         var attributes = EKAttributes()
+        attributes.entryBackground = .color(color: .standardBackground)
+        attributes.screenBackground = .visualEffect(style: .prominent)
         attributes.position = .bottom
         var widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -166,16 +168,33 @@ class EntryAttributes {
     }
 }
 
-class Configurations {
-    static let shared = Configurations()
+class HKGAPI {
+  static let shared = HKGAPI()
+  
+  // Configure the network transport to use the singleton as the delegate.
+  private lazy var networkTransport = HTTPNetworkTransport(
+    url: URL(string: "https://hkgalden.org/_")!,
+    delegate: self
+  )
     
-    func configureApollo() -> ApolloClient {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["Authorization": "Bearer \(keychain.get("userKey") ?? "")"] // Replace `<token>`
-        
-        let url = URL(string: "https://hkgalden.org/_")!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+  // Use the configured network transport in your client.
+  private(set) lazy var client = ApolloClient(networkTransport: self.networkTransport)
+}
+
+// MARK: - Pre-flight delegate
+
+extension HKGAPI: HTTPNetworkTransportPreflightDelegate {
+
+  func networkTransport(_ networkTransport: HTTPNetworkTransport,
+                          shouldSend request: URLRequest) -> Bool {
+    // If there's an authenticated user, send the request. If not, don't.
+    return true
+  }
+  
+  func networkTransport(_ networkTransport: HTTPNetworkTransport,
+                        willSend request: inout URLRequest) {
+    if (keychain.get("userKey") != nil) {
+        request.addValue("Bearer \(keychain.get("userKey")!)", forHTTPHeaderField: "Authorization")
     }
+  }
 }

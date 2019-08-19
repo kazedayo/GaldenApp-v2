@@ -174,12 +174,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func blockButtonPressed(id: String) {
         let blockUserMutation = BlockUserMutation(id: id)
         apollo.perform(mutation: blockUserMutation) {
-            [weak self] result,error in
-            if result?.data?.blockUser == true {
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            if data.blockUser == true {
                 let getSessionUserQuery = GetSessionUserQuery()
                 apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
-                    [weak self] result, error in
-                    sessionUser = result?.data?.sessionUser
+                    [weak self] result in
+                    guard let data = try? result.get().data else { return }
+                    sessionUser = data.sessionUser
                     let alert = UIAlertController(title: "成功", message: "你已封鎖此會員", preferredStyle: .alert)
                     let action = UIAlertAction(title: "OK", style: .cancel, handler: {
                         action in
@@ -213,7 +215,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         pageVC.popoverPresentationController?.delegate = self
         pageVC.popoverPresentationController?.barButtonItem = pageButton
         pageVC.preferredContentSize = CGSize(width: 150, height: 200)
-        pageVC.popoverPresentationController?.backgroundColor = .systemFill
+        pageVC.popoverPresentationController?.backgroundColor = .secondarySystemBackground
         pageVC.threadID = self.tID
         pageVC.pageCount = Int(self.pageCount)
         pageVC.pageSelected = self.pageNow
@@ -329,33 +331,32 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
         let getThreadContentQuery = GetThreadContentQuery(id: tID, sorting: .dateAsc, page: pageNow)
         apollo.fetch(query: getThreadContentQuery,cachePolicy: .fetchIgnoringCacheData) {
-            [weak self] result,error in
-            if error == nil {
-                var contentHTML: String?
-                guard let thread = result?.data?.thread else { return }
-                let totalPage = ceil(Double(thread.totalReplies)/50.0)
-                //print(thread.totalReplies)
-                //print(totalPage)
-                self?.pageCount = totalPage
-                self?.totalReplies = thread.totalReplies
-                
-                DispatchQueue.main.async {
-                    let titleTrim = thread.title.trimmingCharacters(in: .whitespacesAndNewlines)
-                    self?.titleLabel.text = titleTrim
-                    self?.navigationItem.titleView = self?.titleLabel
-                    self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
-                    self?.buttonLogic()
-                }
-                
-                contentHTML = self?.constructComments(thread: thread)
-                if (self?.pageNow==Int(totalPage)) {
-                    contentHTML?.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
-                }
-                
-                let threadHTML = "<html lang=\"zh-Hant\"><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://rawcdn.githack.com/kazedayo/js_for_GaldenApp/5954e3b3859ebd54e3bfa1be38d2d856f36d6b87/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
-                
-                self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            var contentHTML: String?
+            guard let thread = data.thread else { return }
+            let totalPage = ceil(Double(thread.totalReplies)/50.0)
+            //print(thread.totalReplies)
+            //print(totalPage)
+            self?.pageCount = totalPage
+            self?.totalReplies = thread.totalReplies
+            
+            DispatchQueue.main.async {
+                let titleTrim = thread.title.trimmingCharacters(in: .whitespacesAndNewlines)
+                self?.titleLabel.text = titleTrim
+                self?.navigationItem.titleView = self?.titleLabel
+                self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
+                self?.buttonLogic()
             }
+            
+            contentHTML = self?.constructComments(thread: thread)
+            if (self?.pageNow==Int(totalPage)) {
+                contentHTML?.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
+            }
+            
+            let threadHTML = "<html lang=\"zh-Hant\"><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://rawcdn.githack.com/kazedayo/js_for_GaldenApp/5954e3b3859ebd54e3bfa1be38d2d856f36d6b87/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+            
+            self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
         }
     }
     
@@ -625,7 +626,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if navigationAction.navigationType == .linkActivated {
             if (navigationAction.request.url?.absoluteString.contains("hkgalden.org"))! {
-                navigator.pushURL(navigationAction.request.url!)
+                navigationController?.pushViewController(navigator.viewController(for: navigationAction.request.url!)!, animated: true)
                 decisionHandler(.cancel)
             } else {
                 let url = navigationAction.request.url

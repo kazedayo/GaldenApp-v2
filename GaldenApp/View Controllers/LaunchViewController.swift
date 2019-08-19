@@ -91,21 +91,18 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
         if keychain.get("userKey") != nil {
             let getSessionUserQuery = GetSessionUserQuery()
             apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
-                [weak self] result,error in
-                if error == nil {
-                    if result?.data?.sessionUser == nil {
-                        keychain.delete("userKey")
-                        //reconfigure apollo
-                        apollo = Configurations.shared.configureApollo()
-                        let alert = UIAlertController(title: "Session Expired", message: "請重新登入　", preferredStyle: .alert)
-                        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-                        alert.addAction(action)
-                        self?.present(alert, animated: true, completion: nil)
-                    } else {
-                        sessionUser = result?.data?.sessionUser
-                    }
-                    self?.initControllers()
+                [weak self] result in
+                guard let data = try? result.get().data else { return }
+                if data.sessionUser == nil {
+                    keychain.delete("userKey")
+                    let alert = UIAlertController(title: "Session Expired", message: "請重新登入　", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                    alert.addAction(action)
+                    self?.present(alert, animated: true, completion: nil)
+                } else {
+                    sessionUser = data.sessionUser
                 }
+                self?.initControllers()
             }
         } else {
             initControllers()

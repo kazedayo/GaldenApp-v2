@@ -123,8 +123,9 @@ class SessionUserViewController: UserViewController {
                 action in
                 let unblockUserMutation = UnblockUserMutation(id: self.blockedUsers[indexPath.row].id)
                 apollo.perform(mutation: unblockUserMutation) {
-                    [weak self] result,error in
-                    if result?.data?.unblockUser == true {
+                    [weak self] result in
+                    guard let data = try? result.get().data else { return }
+                    if data.unblockUser == true {
                         let success = UIAlertController(title: "成功", message: "你已解除此會員封鎖", preferredStyle: .alert)
                         let ok = UIAlertAction(title: "OK", style: .cancel, handler: {
                             action in
@@ -171,15 +172,14 @@ class SessionUserViewController: UserViewController {
         let getBlockedUsersQuery = GetBlockedUsersQuery()
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query: getBlockedUsersQuery,cachePolicy: .fetchIgnoringCacheData) {
-            [weak self] result,error in
-            if error == nil {
-                self?.blockedUsers = (result?.data?.blockedUsers)!
-                sessionUser?.blockedUserIds = (result?.data?.blockedUsers.map {$0.id})!
-                //self?.tableView.reloadSections(IndexSet(integer: 0), with: .none)
-                self?.tableView.reloadData()
-                NetworkActivityIndicatorManager.networkOperationFinished()
-                completion()
-            }
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            self?.blockedUsers = data.blockedUsers
+            sessionUser?.blockedUserIds = data.blockedUsers.map {$0.id}
+            //self?.tableView.reloadSections(IndexSet(integer: 0), with: .none)
+            self?.tableView.reloadData()
+            NetworkActivityIndicatorManager.networkOperationFinished()
+            completion()
         }
     }
     

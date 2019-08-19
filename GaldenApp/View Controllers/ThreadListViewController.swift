@@ -51,13 +51,15 @@ class ThreadListViewController: UITableViewController,UIPopoverPresentationContr
         //tableView.addGestureRecognizer(longPress)
         
         composeVC.view.layoutSubviews()
-        let menuLeftNavigationController = UISideMenuNavigationController(rootViewController: sideMenuVC)
+        sideMenuVC.view.layoutSubviews()
+        let menuLeftNavigationController = SideMenuNavigationController(rootViewController: sideMenuVC)
         sideMenuVC.mainVC = self
-        SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
-        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.view, forMenu: .left)
-        SideMenuManager.default.menuPushStyle = .subMenu
-        SideMenuManager.default.menuWidth = 150
-        SideMenuManager.default.menuFadeStatusBar = false
+        SideMenuManager.default.leftMenuNavigationController = menuLeftNavigationController
+        SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.view)
+        menuLeftNavigationController.pushStyle = .subMenu
+        menuLeftNavigationController.menuWidth = 150
+        menuLeftNavigationController.statusBarEndAlpha = 0
+        menuLeftNavigationController.navigationBar.isHidden = true
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
@@ -176,7 +178,7 @@ class ThreadListViewController: UITableViewController,UIPopoverPresentationContr
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
         sideMenuVC.mainVC = self
-        present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
+        present(SideMenuManager.default.leftMenuNavigationController!, animated: true, completion: nil)
     }
     
     @objc func newThreadButtonPressed() {
@@ -249,33 +251,30 @@ class ThreadListViewController: UITableViewController,UIPopoverPresentationContr
         let getThreadsQuery = GetThreadsQuery(id: channelId, page: pageNow)
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query: getThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
-            [weak self] result, error in
-            if (error == nil) {
-                var threads = result?.data?.threadsByChannel.map {$0.fragments.threadListDetails}
-                if threads?.isEmpty ?? true {
-                    self?.eof = true
-                    completion()
-                }
-                if keychain.get("userKey") != nil {
-                    let blockedUserIds = sessionUser?.blockedUserIds
-                    threads = (threads!.filter {!(blockedUserIds?.contains($0.replies[0].author.id))!})
-                } else {
-                    //review no tomato
-                    threads = (threads!.filter {$0.tags[0].fragments.tagDetails.id != "PVAy33AYm"})
-                }
-                //convert to thread object
-                if append == false {
-                    self?.threads = []
-                }
-                for thread in threads! {
-                    let titleTrim = thread.title.trimmingCharacters(in: .whitespacesAndNewlines)
-                    self?.threads.append(Thread.init(id: thread.id,title: titleTrim, nick: thread.replies.map {$0.authorNickname}.first!, count: thread.totalReplies, date: thread.replies.map {$0.date}.last!, tag: thread.tags.map {$0.fragments.tagDetails}.first!.name, tagC: thread.tags.map {$0.fragments.tagDetails}.first!.color))
-                }
-                self?.tableView.reloadData()
-                self?.tableView.isHidden = false
-            } else {
-                self?.tableView.isHidden = false
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            var threads = data.threadsByChannel.map {$0.fragments.threadListDetails}
+            if threads.isEmpty {
+                self?.eof = true
+                completion()
             }
+            if keychain.get("userKey") != nil {
+                let blockedUserIds = sessionUser?.blockedUserIds
+                threads = (threads.filter {!(blockedUserIds?.contains($0.replies[0].author.id))!})
+            } else {
+                //review no tomato
+                threads = (threads.filter {$0.tags[0].fragments.tagDetails.id != "PVAy33AYm"})
+            }
+            //convert to thread object
+            if append == false {
+                self?.threads = []
+            }
+            for thread in threads {
+                let titleTrim = thread.title.trimmingCharacters(in: .whitespacesAndNewlines)
+                self?.threads.append(Thread.init(id: thread.id,title: titleTrim, nick: thread.replies.map {$0.authorNickname}.first!, count: thread.totalReplies, date: thread.replies.map {$0.date}.last!, tag: thread.tags.map {$0.fragments.tagDetails}.first!.name, tagC: thread.tags.map {$0.fragments.tagDetails}.first!.color))
+            }
+            self?.tableView.reloadData()
+            self?.tableView.isHidden = false
             NetworkActivityIndicatorManager.networkOperationFinished()
             completion()
         }

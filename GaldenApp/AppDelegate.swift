@@ -17,7 +17,7 @@ import RichEditorView
 
 let navigator = Navigator()
 let keychain = KeychainSwift()
-var apollo: ApolloClient = Configurations.shared.configureApollo()
+var apollo: ApolloClient = HKGAPI.shared.client
 var sessionUser: GetSessionUserQuery.Data.SessionUser? = nil
 
 @UIApplicationMain

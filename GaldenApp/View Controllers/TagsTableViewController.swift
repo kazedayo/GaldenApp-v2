@@ -22,8 +22,9 @@ class TagsTableViewController: UITableViewController {
         tableView.register(TagsTableViewCell.self, forCellReuseIdentifier: "TagsTableViewCell")
         let getChannelListQuery = GetChannelListQuery()
         apollo.fetch(query: getChannelListQuery) {
-            [weak self] result,error in
-            self?.channels = (result?.data?.channels.map {$0.fragments.channelDetails})!
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            self?.channels = data.channels.map {$0.fragments.channelDetails}
             self?.tableView.reloadData()
         }
         // Uncomment the following line to preserve selection between presentations

@@ -2,7 +2,7 @@
 
 import Apollo
 
-public enum ReplySorting: RawRepresentable, Equatable, Hashable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+public enum ReplySorting: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
   public typealias RawValue = String
   case dateAsc
   case dateDesc
@@ -37,9 +37,17 @@ public enum ReplySorting: RawRepresentable, Equatable, Hashable, Apollo.JSONDeco
       default: return false
     }
   }
+
+  public static var allCases: [ReplySorting] {
+    return [
+      .dateAsc,
+      .dateDesc,
+      .ratingTop,
+    ]
+  }
 }
 
-public enum UserGender: RawRepresentable, Equatable, Hashable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+public enum UserGender: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
   public typealias RawValue = String
   case m
   case f
@@ -70,11 +78,277 @@ public enum UserGender: RawRepresentable, Equatable, Hashable, Apollo.JSONDecoda
       default: return false
     }
   }
+
+  public static var allCases: [UserGender] {
+    return [
+      .m,
+      .f,
+    ]
+  }
+}
+
+public final class BlockUserMutation: GraphQLMutation {
+  /// mutation BlockUser($id: String!) {
+  ///   blockUser(id: $id)
+  /// }
+  public let operationDefinition =
+    "mutation BlockUser($id: String!) { blockUser(id: $id) }"
+
+  public let operationName = "BlockUser"
+
+  public var id: String
+
+  public init(id: String) {
+    self.id = id
+  }
+
+  public var variables: GraphQLMap? {
+    return ["id": id]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Mutation"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("blockUser", arguments: ["id": GraphQLVariable("id")], type: .nonNull(.scalar(Bool.self))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(blockUser: Bool) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "blockUser": blockUser])
+    }
+
+    public var blockUser: Bool {
+      get {
+        return resultMap["blockUser"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "blockUser")
+      }
+    }
+  }
+}
+
+public final class UnblockUserMutation: GraphQLMutation {
+  /// mutation UnblockUser($id: String!) {
+  ///   unblockUser(id: $id)
+  /// }
+  public let operationDefinition =
+    "mutation UnblockUser($id: String!) { unblockUser(id: $id) }"
+
+  public let operationName = "UnblockUser"
+
+  public var id: String
+
+  public init(id: String) {
+    self.id = id
+  }
+
+  public var variables: GraphQLMap? {
+    return ["id": id]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Mutation"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("unblockUser", arguments: ["id": GraphQLVariable("id")], type: .nonNull(.scalar(Bool.self))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(unblockUser: Bool) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "unblockUser": unblockUser])
+    }
+
+    public var unblockUser: Bool {
+      get {
+        return resultMap["unblockUser"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "unblockUser")
+      }
+    }
+  }
+}
+
+public final class ReplyThreadMutation: GraphQLMutation {
+  /// mutation ReplyThread($threadId: Int!, $parentId: String, $html: String!) {
+  ///   replyThread(threadId: $threadId, parentId: $parentId, html: $html) {
+  ///     __typename
+  ///     ...CommentsRecursive
+  ///   }
+  /// }
+  public let operationDefinition =
+    "mutation ReplyThread($threadId: Int!, $parentId: String, $html: String!) { replyThread(threadId: $threadId, parentId: $parentId, html: $html) { __typename ...CommentsRecursive } }"
+
+  public let operationName = "ReplyThread"
+
+  public var queryDocument: String { return operationDefinition.appending(CommentsRecursive.fragmentDefinition).appending(CommentFields.fragmentDefinition) }
+
+  public var threadId: Int
+  public var parentId: String?
+  public var html: String
+
+  public init(threadId: Int, parentId: String? = nil, html: String) {
+    self.threadId = threadId
+    self.parentId = parentId
+    self.html = html
+  }
+
+  public var variables: GraphQLMap? {
+    return ["threadId": threadId, "parentId": parentId, "html": html]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Mutation"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("replyThread", arguments: ["threadId": GraphQLVariable("threadId"), "parentId": GraphQLVariable("parentId"), "html": GraphQLVariable("html")], type: .nonNull(.object(ReplyThread.selections))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(replyThread: ReplyThread) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "replyThread": replyThread.resultMap])
+    }
+
+    public var replyThread: ReplyThread {
+      get {
+        return ReplyThread(unsafeResultMap: resultMap["replyThread"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "replyThread")
+      }
+    }
+
+    public struct ReplyThread: GraphQLSelectionSet {
+      public static let possibleTypes = ["Reply"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLFragmentSpread(CommentsRecursive.self),
+      ]
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var commentsRecursive: CommentsRecursive {
+          get {
+            return CommentsRecursive(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class CreateThreadMutation: GraphQLMutation {
+  /// mutation CreateThread($title: String!, $tags: [String!]!, $html: String!) {
+  ///   createThread(title: $title, tags: $tags, html: $html)
+  /// }
+  public let operationDefinition =
+    "mutation CreateThread($title: String!, $tags: [String!]!, $html: String!) { createThread(title: $title, tags: $tags, html: $html) }"
+
+  public let operationName = "CreateThread"
+
+  public var title: String
+  public var tags: [String]
+  public var html: String
+
+  public init(title: String, tags: [String], html: String) {
+    self.title = title
+    self.tags = tags
+    self.html = html
+  }
+
+  public var variables: GraphQLMap? {
+    return ["title": title, "tags": tags, "html": html]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Mutation"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("createThread", arguments: ["title": GraphQLVariable("title"), "tags": GraphQLVariable("tags"), "html": GraphQLVariable("html")], type: .nonNull(.scalar(Int.self))),
+    ]
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(createThread: Int) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "createThread": createThread])
+    }
+
+    public var createThread: Int {
+      get {
+        return resultMap["createThread"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "createThread")
+      }
+    }
+  }
 }
 
 public final class GetChannelListQuery: GraphQLQuery {
+  /// query GetChannelList {
+  ///   channels {
+  ///     __typename
+  ///     ...ChannelDetails
+  ///   }
+  /// }
   public let operationDefinition =
-    "query GetChannelList {\n  channels {\n    __typename\n    ...ChannelDetails\n  }\n}"
+    "query GetChannelList { channels { __typename ...ChannelDetails } }"
+
+  public let operationName = "GetChannelList"
 
   public var queryDocument: String { return operationDefinition.appending(ChannelDetails.fragmentDefinition).appending(TagDetails.fragmentDefinition) }
 
@@ -160,8 +434,16 @@ public final class GetChannelListQuery: GraphQLQuery {
 }
 
 public final class GetThreadsQuery: GraphQLQuery {
+  /// query GetThreads($id: String!, $page: Int!) {
+  ///   threadsByChannel(channelId: $id, page: $page) {
+  ///     __typename
+  ///     ...ThreadListDetails
+  ///   }
+  /// }
   public let operationDefinition =
-    "query GetThreads($id: String!, $page: Int!) {\n  threadsByChannel(channelId: $id, page: $page) {\n    __typename\n    ...ThreadListDetails\n  }\n}"
+    "query GetThreads($id: String!, $page: Int!) { threadsByChannel(channelId: $id, page: $page) { __typename ...ThreadListDetails } }"
+
+  public let operationName = "GetThreads"
 
   public var queryDocument: String { return operationDefinition.appending(ThreadListDetails.fragmentDefinition).appending(TagDetails.fragmentDefinition) }
 
@@ -256,8 +538,16 @@ public final class GetThreadsQuery: GraphQLQuery {
 }
 
 public final class GetUserThreadsQuery: GraphQLQuery {
+  /// query GetUserThreads($id: String!, $page: Int!) {
+  ///   threadsByUser(userId: $id, page: $page) {
+  ///     __typename
+  ///     ...ThreadListDetails
+  ///   }
+  /// }
   public let operationDefinition =
-    "query GetUserThreads($id: String!, $page: Int!) {\n  threadsByUser(userId: $id, page: $page) {\n    __typename\n    ...ThreadListDetails\n  }\n}"
+    "query GetUserThreads($id: String!, $page: Int!) { threadsByUser(userId: $id, page: $page) { __typename ...ThreadListDetails } }"
+
+  public let operationName = "GetUserThreads"
 
   public var queryDocument: String { return operationDefinition.appending(ThreadListDetails.fragmentDefinition).appending(TagDetails.fragmentDefinition) }
 
@@ -352,8 +642,27 @@ public final class GetUserThreadsQuery: GraphQLQuery {
 }
 
 public final class GetThreadContentQuery: GraphQLQuery {
+  /// query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {
+  ///   thread(id: $id, sorting: $sorting, page: $page) {
+  ///     __typename
+  ///     id
+  ///     title
+  ///     totalReplies
+  ///     replies {
+  ///       __typename
+  ///       ...CommentsRecursive
+  ///     }
+  ///     tags {
+  ///       __typename
+  ///       name
+  ///       color
+  ///     }
+  ///   }
+  /// }
   public let operationDefinition =
-    "query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {\n  thread(id: $id, sorting: $sorting, page: $page) {\n    __typename\n    id\n    title\n    totalReplies\n    replies {\n      __typename\n      ...CommentsRecursive\n    }\n    tags {\n      __typename\n      name\n      color\n    }\n  }\n}"
+    "query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) { thread(id: $id, sorting: $sorting, page: $page) { __typename id title totalReplies replies { __typename ...CommentsRecursive } tags { __typename name color } } }"
+
+  public let operationName = "GetThreadContent"
 
   public var queryDocument: String { return operationDefinition.appending(CommentsRecursive.fragmentDefinition).appending(CommentFields.fragmentDefinition) }
 
@@ -574,8 +883,24 @@ public final class GetThreadContentQuery: GraphQLQuery {
 }
 
 public final class GetBlockedUsersQuery: GraphQLQuery {
+  /// query GetBlockedUsers {
+  ///   blockedUsers {
+  ///     __typename
+  ///     id
+  ///     nickname
+  ///     avatar
+  ///     gender
+  ///     groups {
+  ///       __typename
+  ///       id
+  ///       name
+  ///     }
+  ///   }
+  /// }
   public let operationDefinition =
-    "query GetBlockedUsers {\n  blockedUsers {\n    __typename\n    id\n    nickname\n    avatar\n    gender\n    groups {\n      __typename\n      id\n      name\n    }\n  }\n}"
+    "query GetBlockedUsers { blockedUsers { __typename id nickname avatar gender groups { __typename id name } } }"
+
+  public let operationName = "GetBlockedUsers"
 
   public init() {
   }
@@ -733,8 +1058,25 @@ public final class GetBlockedUsersQuery: GraphQLQuery {
 }
 
 public final class GetSessionUserQuery: GraphQLQuery {
+  /// query GetSessionUser {
+  ///   sessionUser {
+  ///     __typename
+  ///     id
+  ///     nickname
+  ///     avatar
+  ///     gender
+  ///     groups {
+  ///       __typename
+  ///       id
+  ///       name
+  ///     }
+  ///     blockedUserIds
+  ///   }
+  /// }
   public let operationDefinition =
-    "query GetSessionUser {\n  sessionUser {\n    __typename\n    id\n    nickname\n    avatar\n    gender\n    groups {\n      __typename\n      id\n      name\n    }\n    blockedUserIds\n  }\n}"
+    "query GetSessionUser { sessionUser { __typename id nickname avatar gender groups { __typename id name } blockedUserIds } }"
+
+  public let operationName = "GetSessionUser"
 
   public init() {
   }
@@ -902,8 +1244,24 @@ public final class GetSessionUserQuery: GraphQLQuery {
 }
 
 public final class GetUserQuery: GraphQLQuery {
+  /// query GetUser($id: String!) {
+  ///   user(id: $id) {
+  ///     __typename
+  ///     id
+  ///     nickname
+  ///     avatar
+  ///     gender
+  ///     groups {
+  ///       __typename
+  ///       id
+  ///       name
+  ///     }
+  ///   }
+  /// }
   public let operationDefinition =
-    "query GetUser($id: String!) {\n  user(id: $id) {\n    __typename\n    id\n    nickname\n    avatar\n    gender\n    groups {\n      __typename\n      id\n      name\n    }\n  }\n}"
+    "query GetUser($id: String!) { user(id: $id) { __typename id nickname avatar gender groups { __typename id name } } }"
+
+  public let operationName = "GetUser"
 
   public var id: String
 
@@ -1068,8 +1426,16 @@ public final class GetUserQuery: GraphQLQuery {
 }
 
 public final class GetIconPacksQuery: GraphQLQuery {
+  /// query GetIconPacks {
+  ///   installedPacks {
+  ///     __typename
+  ///     ...IconPacks
+  ///   }
+  /// }
   public let operationDefinition =
-    "query GetIconPacks {\n  installedPacks {\n    __typename\n    ...IconPacks\n  }\n}"
+    "query GetIconPacks { installedPacks { __typename ...IconPacks } }"
+
+  public let operationName = "GetIconPacks"
 
   public var queryDocument: String { return operationDefinition.appending(IconPacks.fragmentDefinition) }
 
@@ -1154,237 +1520,21 @@ public final class GetIconPacksQuery: GraphQLQuery {
   }
 }
 
-public final class BlockUserMutation: GraphQLMutation {
-  public let operationDefinition =
-    "mutation BlockUser($id: String!) {\n  blockUser(id: $id)\n}"
-
-  public var id: String
-
-  public init(id: String) {
-    self.id = id
-  }
-
-  public var variables: GraphQLMap? {
-    return ["id": id]
-  }
-
-  public struct Data: GraphQLSelectionSet {
-    public static let possibleTypes = ["Mutation"]
-
-    public static let selections: [GraphQLSelection] = [
-      GraphQLField("blockUser", arguments: ["id": GraphQLVariable("id")], type: .nonNull(.scalar(Bool.self))),
-    ]
-
-    public private(set) var resultMap: ResultMap
-
-    public init(unsafeResultMap: ResultMap) {
-      self.resultMap = unsafeResultMap
-    }
-
-    public init(blockUser: Bool) {
-      self.init(unsafeResultMap: ["__typename": "Mutation", "blockUser": blockUser])
-    }
-
-    public var blockUser: Bool {
-      get {
-        return resultMap["blockUser"]! as! Bool
-      }
-      set {
-        resultMap.updateValue(newValue, forKey: "blockUser")
-      }
-    }
-  }
-}
-
-public final class UnblockUserMutation: GraphQLMutation {
-  public let operationDefinition =
-    "mutation UnblockUser($id: String!) {\n  unblockUser(id: $id)\n}"
-
-  public var id: String
-
-  public init(id: String) {
-    self.id = id
-  }
-
-  public var variables: GraphQLMap? {
-    return ["id": id]
-  }
-
-  public struct Data: GraphQLSelectionSet {
-    public static let possibleTypes = ["Mutation"]
-
-    public static let selections: [GraphQLSelection] = [
-      GraphQLField("unblockUser", arguments: ["id": GraphQLVariable("id")], type: .nonNull(.scalar(Bool.self))),
-    ]
-
-    public private(set) var resultMap: ResultMap
-
-    public init(unsafeResultMap: ResultMap) {
-      self.resultMap = unsafeResultMap
-    }
-
-    public init(unblockUser: Bool) {
-      self.init(unsafeResultMap: ["__typename": "Mutation", "unblockUser": unblockUser])
-    }
-
-    public var unblockUser: Bool {
-      get {
-        return resultMap["unblockUser"]! as! Bool
-      }
-      set {
-        resultMap.updateValue(newValue, forKey: "unblockUser")
-      }
-    }
-  }
-}
-
-public final class ReplyThreadMutation: GraphQLMutation {
-  public let operationDefinition =
-    "mutation ReplyThread($threadId: Int!, $parentId: String, $html: String!) {\n  replyThread(threadId: $threadId, parentId: $parentId, html: $html) {\n    __typename\n    ...CommentsRecursive\n  }\n}"
-
-  public var queryDocument: String { return operationDefinition.appending(CommentsRecursive.fragmentDefinition).appending(CommentFields.fragmentDefinition) }
-
-  public var threadId: Int
-  public var parentId: String?
-  public var html: String
-
-  public init(threadId: Int, parentId: String? = nil, html: String) {
-    self.threadId = threadId
-    self.parentId = parentId
-    self.html = html
-  }
-
-  public var variables: GraphQLMap? {
-    return ["threadId": threadId, "parentId": parentId, "html": html]
-  }
-
-  public struct Data: GraphQLSelectionSet {
-    public static let possibleTypes = ["Mutation"]
-
-    public static let selections: [GraphQLSelection] = [
-      GraphQLField("replyThread", arguments: ["threadId": GraphQLVariable("threadId"), "parentId": GraphQLVariable("parentId"), "html": GraphQLVariable("html")], type: .nonNull(.object(ReplyThread.selections))),
-    ]
-
-    public private(set) var resultMap: ResultMap
-
-    public init(unsafeResultMap: ResultMap) {
-      self.resultMap = unsafeResultMap
-    }
-
-    public init(replyThread: ReplyThread) {
-      self.init(unsafeResultMap: ["__typename": "Mutation", "replyThread": replyThread.resultMap])
-    }
-
-    public var replyThread: ReplyThread {
-      get {
-        return ReplyThread(unsafeResultMap: resultMap["replyThread"]! as! ResultMap)
-      }
-      set {
-        resultMap.updateValue(newValue.resultMap, forKey: "replyThread")
-      }
-    }
-
-    public struct ReplyThread: GraphQLSelectionSet {
-      public static let possibleTypes = ["Reply"]
-
-      public static let selections: [GraphQLSelection] = [
-        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLFragmentSpread(CommentsRecursive.self),
-      ]
-
-      public private(set) var resultMap: ResultMap
-
-      public init(unsafeResultMap: ResultMap) {
-        self.resultMap = unsafeResultMap
-      }
-
-      public var __typename: String {
-        get {
-          return resultMap["__typename"]! as! String
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "__typename")
-        }
-      }
-
-      public var fragments: Fragments {
-        get {
-          return Fragments(unsafeResultMap: resultMap)
-        }
-        set {
-          resultMap += newValue.resultMap
-        }
-      }
-
-      public struct Fragments {
-        public private(set) var resultMap: ResultMap
-
-        public init(unsafeResultMap: ResultMap) {
-          self.resultMap = unsafeResultMap
-        }
-
-        public var commentsRecursive: CommentsRecursive {
-          get {
-            return CommentsRecursive(unsafeResultMap: resultMap)
-          }
-          set {
-            resultMap += newValue.resultMap
-          }
-        }
-      }
-    }
-  }
-}
-
-public final class CreateThreadMutation: GraphQLMutation {
-  public let operationDefinition =
-    "mutation CreateThread($title: String!, $tags: [String!]!, $html: String!) {\n  createThread(title: $title, tags: $tags, html: $html)\n}"
-
-  public var title: String
-  public var tags: [String]
-  public var html: String
-
-  public init(title: String, tags: [String], html: String) {
-    self.title = title
-    self.tags = tags
-    self.html = html
-  }
-
-  public var variables: GraphQLMap? {
-    return ["title": title, "tags": tags, "html": html]
-  }
-
-  public struct Data: GraphQLSelectionSet {
-    public static let possibleTypes = ["Mutation"]
-
-    public static let selections: [GraphQLSelection] = [
-      GraphQLField("createThread", arguments: ["title": GraphQLVariable("title"), "tags": GraphQLVariable("tags"), "html": GraphQLVariable("html")], type: .nonNull(.scalar(Int.self))),
-    ]
-
-    public private(set) var resultMap: ResultMap
-
-    public init(unsafeResultMap: ResultMap) {
-      self.resultMap = unsafeResultMap
-    }
-
-    public init(createThread: Int) {
-      self.init(unsafeResultMap: ["__typename": "Mutation", "createThread": createThread])
-    }
-
-    public var createThread: Int {
-      get {
-        return resultMap["createThread"]! as! Int
-      }
-      set {
-        resultMap.updateValue(newValue, forKey: "createThread")
-      }
-    }
-  }
-}
-
 public struct IconPacks: GraphQLFragment {
+  /// fragment IconPacks on SmileyPack {
+  ///   __typename
+  ///   id
+  ///   title
+  ///   smilies {
+  ///     __typename
+  ///     id
+  ///     alt
+  ///     width
+  ///     height
+  ///   }
+  /// }
   public static let fragmentDefinition =
-    "fragment IconPacks on SmileyPack {\n  __typename\n  id\n  title\n  smilies {\n    __typename\n    id\n    alt\n    width\n    height\n  }\n}"
+    "fragment IconPacks on SmileyPack { __typename id title smilies { __typename id alt width height } }"
 
   public static let possibleTypes = ["SmileyPack"]
 
@@ -1510,8 +1660,17 @@ public struct IconPacks: GraphQLFragment {
 }
 
 public struct ChannelDetails: GraphQLFragment {
+  /// fragment ChannelDetails on Channel {
+  ///   __typename
+  ///   id
+  ///   name
+  ///   tags {
+  ///     __typename
+  ///     ...TagDetails
+  ///   }
+  /// }
   public static let fragmentDefinition =
-    "fragment ChannelDetails on Channel {\n  __typename\n  id\n  name\n  tags {\n    __typename\n    ...TagDetails\n  }\n}"
+    "fragment ChannelDetails on Channel { __typename id name tags { __typename ...TagDetails } }"
 
   public static let possibleTypes = ["Channel"]
 
@@ -1624,8 +1783,14 @@ public struct ChannelDetails: GraphQLFragment {
 }
 
 public struct TagDetails: GraphQLFragment {
+  /// fragment TagDetails on Tag {
+  ///   __typename
+  ///   id
+  ///   name
+  ///   color
+  /// }
   public static let fragmentDefinition =
-    "fragment TagDetails on Tag {\n  __typename\n  id\n  name\n  color\n}"
+    "fragment TagDetails on Tag { __typename id name color }"
 
   public static let possibleTypes = ["Tag"]
 
@@ -1684,8 +1849,27 @@ public struct TagDetails: GraphQLFragment {
 }
 
 public struct ThreadListDetails: GraphQLFragment {
+  /// fragment ThreadListDetails on Thread {
+  ///   __typename
+  ///   id
+  ///   title
+  ///   replies {
+  ///     __typename
+  ///     author {
+  ///       __typename
+  ///       id
+  ///     }
+  ///     authorNickname
+  ///     date
+  ///   }
+  ///   totalReplies
+  ///   tags {
+  ///     __typename
+  ///     ...TagDetails
+  ///   }
+  /// }
   public static let fragmentDefinition =
-    "fragment ThreadListDetails on Thread {\n  __typename\n  id\n  title\n  replies {\n    __typename\n    author {\n      __typename\n      id\n    }\n    authorNickname\n    date\n  }\n  totalReplies\n  tags {\n    __typename\n    ...TagDetails\n  }\n}"
+    "fragment ThreadListDetails on Thread { __typename id title replies { __typename author { __typename id } authorNickname date } totalReplies tags { __typename ...TagDetails } }"
 
   public static let possibleTypes = ["Thread"]
 
@@ -1912,8 +2096,28 @@ public struct ThreadListDetails: GraphQLFragment {
 }
 
 public struct CommentsRecursive: GraphQLFragment {
+  /// fragment CommentsRecursive on Reply {
+  ///   __typename
+  ///   ...CommentFields
+  ///   parent {
+  ///     __typename
+  ///     ...CommentFields
+  ///     parent {
+  ///       __typename
+  ///       ...CommentFields
+  ///       parent {
+  ///         __typename
+  ///         ...CommentFields
+  ///         parent {
+  ///           __typename
+  ///           ...CommentFields
+  ///         }
+  ///       }
+  ///     }
+  ///   }
+  /// }
   public static let fragmentDefinition =
-    "fragment CommentsRecursive on Reply {\n  __typename\n  ...CommentFields\n  parent {\n    __typename\n    ...CommentFields\n    parent {\n      __typename\n      ...CommentFields\n      parent {\n        __typename\n        ...CommentFields\n        parent {\n          __typename\n          ...CommentFields\n        }\n      }\n    }\n  }\n}"
+    "fragment CommentsRecursive on Reply { __typename ...CommentFields parent { __typename ...CommentFields parent { __typename ...CommentFields parent { __typename ...CommentFields parent { __typename ...CommentFields } } } } }"
 
   public static let possibleTypes = ["Reply"]
 
@@ -2205,8 +2409,29 @@ public struct CommentsRecursive: GraphQLFragment {
 }
 
 public struct CommentFields: GraphQLFragment {
+  /// fragment CommentFields on Reply {
+  ///   __typename
+  ///   id
+  ///   floor
+  ///   author {
+  ///     __typename
+  ///     id
+  ///     avatar
+  ///     nickname
+  ///     gender
+  ///     groups {
+  ///       __typename
+  ///       id
+  ///       name
+  ///     }
+  ///   }
+  ///   authorNickname
+  ///   parentId
+  ///   content
+  ///   date
+  /// }
   public static let fragmentDefinition =
-    "fragment CommentFields on Reply {\n  __typename\n  id\n  floor\n  author {\n    __typename\n    id\n    avatar\n    nickname\n    gender\n    groups {\n      __typename\n      id\n      name\n    }\n  }\n  authorNickname\n  parentId\n  content\n  date\n}"
+    "fragment CommentFields on Reply { __typename id floor author { __typename id avatar nickname gender groups { __typename id name } } authorNickname parentId content date }"
 
   public static let possibleTypes = ["Reply"]
 

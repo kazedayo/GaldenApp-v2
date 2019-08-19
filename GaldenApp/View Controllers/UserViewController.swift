@@ -45,48 +45,47 @@ class UserViewController: UITableViewController {
         let getUserQuery = GetUserQuery(id: uid)
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query: getUserQuery) {
-            [weak self] result, error in
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
             NetworkActivityIndicatorManager.networkOperationFinished()
-            if error == nil {
-                let user = result?.data?.user
-                //avatar
-                if user?.avatar != nil {
-                    self?.avatarView.kf.setImage(with: URL(string: (user?.avatar)!)!)
-                } else {
-                    self?.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/2lya6uS.png")!)
-                }
-                self?.avatarView.clipsToBounds = true
-                self?.avatarView.layer.cornerRadius = 25
-                
-                //user name
-                self?.unameLabel.text = user?.nickname
-                self?.unameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-                self?.unameLabel.adjustsFontForContentSizeCategory = true
-                if user?.gender == UserGender.m {
-                    self?.unameLabel.textColor = UIColor(hexRGB: "22c1fe")
-                } else if user?.gender == UserGender.f {
-                    self?.unameLabel.textColor = UIColor(hexRGB: "ff7aab")
-                }
-                
-                //user group
-                self?.ugroupLabel.text = "郊登仔"
-                self?.ugroupLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-                self?.ugroupLabel.adjustsFontForContentSizeCategory = true
-                self?.ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
-                if user?.groups.isEmpty == false {
-                   self?.ugroupLabel.text = sessionUser?.groups[0].name
-                    if user?.groups[0].id == "DEVELOPER" {
-                        self?.ugroupLabel.textColor = UIColor(hexRGB: "e0561d")
-                    } else if user?.groups[0].id == "ADMIN" {
-                        self?.ugroupLabel.textColor = UIColor(hexRGB: "7435a0")
-                    }
-                }
-                self?.getUserThreads(completion: {
-                    self?.activityIndicator.removeFromSuperview()
-                })
+            let user = data.user
+            //avatar
+            if user?.avatar != nil {
+                self?.avatarView.kf.setImage(with: URL(string: (user?.avatar)!)!)
+            } else {
+                self?.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/2lya6uS.png")!)
             }
+            self?.avatarView.clipsToBounds = true
+            self?.avatarView.layer.cornerRadius = 25
+            
+            //user name
+            self?.unameLabel.text = user?.nickname
+            self?.unameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+            self?.unameLabel.adjustsFontForContentSizeCategory = true
+            if user?.gender == UserGender.m {
+                self?.unameLabel.textColor = UIColor(hexRGB: "22c1fe")
+            } else if user?.gender == UserGender.f {
+                self?.unameLabel.textColor = UIColor(hexRGB: "ff7aab")
+            }
+            
+            //user group
+            self?.ugroupLabel.text = "郊登仔"
+            self?.ugroupLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            self?.ugroupLabel.adjustsFontForContentSizeCategory = true
+            self?.ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
+            if user?.groups.isEmpty == false {
+               self?.ugroupLabel.text = sessionUser?.groups[0].name
+                if user?.groups[0].id == "DEVELOPER" {
+                    self?.ugroupLabel.textColor = UIColor(hexRGB: "e0561d")
+                } else if user?.groups[0].id == "ADMIN" {
+                    self?.ugroupLabel.textColor = UIColor(hexRGB: "7435a0")
+                }
+            }
+            self?.getUserThreads(completion: {
+                self?.activityIndicator.removeFromSuperview()
+            })
         }
-        let blur = UIBlurEffect(style: .systemMaterial)
+        let blur = UIBlurEffect(style: .systemChromeMaterial)
         let blurView = UIVisualEffectView()
         blurView.effect = blur
         blurView.translatesAutoresizingMaskIntoConstraints = false
@@ -206,19 +205,18 @@ class UserViewController: UITableViewController {
             NetworkActivityIndicatorManager.networkOperationStarted()
         }
         apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
-            [weak self] result,error in
-            if error == nil {
-                self?.threadsArray.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
-                if (self?.pageCount==2){
-                    self?.userThreads = self!.threadsArray
-                    //self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-                    self?.tableView.reloadData()
-                    NetworkActivityIndicatorManager.networkOperationFinished()
-                    completion()
-                } else {
-                    self?.pageCount+=1
-                    self?.getUserThreads(completion: completion)
-                }
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            self?.threadsArray.append(contentsOf: (data.threadsByUser.map {$0.fragments.threadListDetails}))
+            if (self?.pageCount==2){
+                self?.userThreads = self!.threadsArray
+                //self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+                self?.tableView.reloadData()
+                NetworkActivityIndicatorManager.networkOperationFinished()
+                completion()
+            } else {
+                self?.pageCount+=1
+                self?.getUserThreads(completion: completion)
             }
         }
     }
