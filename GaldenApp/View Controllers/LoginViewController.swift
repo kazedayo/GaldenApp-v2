@@ -8,7 +8,6 @@
 
 import UIKit
 import WebKit
-import SwiftEntryKit
 import Apollo
 
 class LoginViewController: UIViewController,WKNavigationDelegate {

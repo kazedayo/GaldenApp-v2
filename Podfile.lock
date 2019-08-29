@@ -4,12 +4,10 @@ PODS:
     - Apollo/Core (= 0.15.0)
   - Apollo/Core (0.15.0)
   - Blueprints (0.12.1)
-  - Hero (1.4.0)
   - KeychainSwift (16.0.1)
   - Kingfisher (5.7.1)
   - MarqueeLabel (4.0.0)
   - PKHUD (5.3.0)
-  - QuickLayout (3.0.0)
   - Realm (3.16.1):
     - Realm/Headers (= 3.16.1)
   - Realm/Headers (3.16.1)
@@ -20,8 +18,6 @@ PODS:
   - SKPhotoBrowser (6.1.0)
   - SnapKit (4.2.0)
   - SwiftDate (5.1.0)
-  - SwiftEntryKit (1.1.2):
-    - QuickLayout (= 3.0.0)
   - SwiftSoup (2.2.0)
   - SwiftyJSON (5.0.0)
   - SwiftyStoreKit (0.15.0)
@@ -32,7 +28,6 @@ DEPENDENCIES:
   - Alamofire
   - Apollo (from `https://github.com/apollographql/apollo-ios.git`, branch `master`)
   - Blueprints
-  - Hero
   - KeychainSwift
   - Kingfisher
   - MarqueeLabel
@@ -44,7 +39,6 @@ DEPENDENCIES:
   - SKPhotoBrowser
   - SnapKit (~> 4.2.0)
   - SwiftDate (~> 5.1.0)
-  - SwiftEntryKit
   - SwiftSoup
   - SwiftyJSON
   - SwiftyStoreKit
@@ -55,18 +49,15 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - Blueprints
-    - Hero
     - KeychainSwift
     - Kingfisher
     - MarqueeLabel
     - PKHUD
-    - QuickLayout
     - RichEditorView
     - SideMenu
     - SKPhotoBrowser
     - SnapKit
     - SwiftDate
-    - SwiftEntryKit
     - SwiftSoup
     - SwiftyJSON
     - SwiftyStoreKit
@@ -103,12 +94,10 @@ SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   Apollo: 64b98296ed4c82c4345604cc327ef732c5563e93
   Blueprints: a35723fafd8020c984e9d51817bd3c67f8d18ddc
-  Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
   KeychainSwift: 4209611373ca4a098e09b1e547eebd87c544dcc4
   Kingfisher: 176d377ad339113c99ad4980cbae687f807e20fe
   MarqueeLabel: b55b26e690b6ad41faedd95cbf5eae6f1d1735b4
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
-  QuickLayout: 07b45a72b10083fee3f095990cfed1c1e7b27f0a
   Realm: 601cacc51d8be3b17a377ef787be0f6ee0e76cf1
   RealmSwift: 486f2e09d5a8ccff63ed66e48d0846b111deb5e5
   RichEditorView: 1bbb07b87ca2d479ac29a6877014b38b8df233ef
@@ -116,13 +105,12 @@ SPEC CHECKSUMS:
   SKPhotoBrowser: 343de95d89dc7913763c5dda243cc6e606e4a168
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SwiftDate: 6329e58969a2de31cea7f1ee1143b247693196e7
-  SwiftEntryKit: 08bf114650b41d4d825924211943b6a80801e823
   SwiftSoup: 230991361c5ba249d140161860a3864a28b63860
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   SwiftyStoreKit: 033d06b6f87955405d3f844a18a7687c2438592a
   Typist: 06465ab9867782aa6c81e38f073dfc01dab73deb
   URLNavigator: 0bffc3efdeb2d97f7b5eec7ac82d290f4a099431
 
-PODFILE CHECKSUM: 0c57e7b06d3fd97786c03f13e1e62b4335a55f61
+PODFILE CHECKSUM: 063b42fb544c6ba8feed6f0ba82bb5fb0e5d34d3
 
-COCOAPODS: 1.7.1
+COCOAPODS: 1.7.5

@@ -12,7 +12,6 @@ import WebKit
 import RealmSwift
 import Kingfisher
 import SKPhotoBrowser
-import SwiftEntryKit
 import SwiftSoup
 import SwiftDate
 import SafariServices
@@ -121,7 +120,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        SwiftEntryKit.dismiss()
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "quote")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")

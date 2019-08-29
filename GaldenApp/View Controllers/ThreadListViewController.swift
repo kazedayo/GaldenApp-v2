@@ -10,7 +10,6 @@ import PKHUD
 import QuartzCore
 import SideMenu
 import RealmSwift
-import SwiftEntryKit
 import SwiftDate
 import Apollo
 

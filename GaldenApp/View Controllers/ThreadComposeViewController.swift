@@ -8,7 +8,6 @@
 
 import UIKit
 import PKHUD
-import SwiftEntryKit
 
 class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationControllerDelegate {
     

@@ -54,7 +54,6 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
             guard let data = try? result.get().data else { return }
             let channels = data.channels
             self?.channels = channels.map {$0.fragments.channelDetails}
-            print(self?.channels.count)
             //review no tomato
             if keychain.get("userKey") == nil || sessionUser?.id == "19803184133832704" {
                 self?.channels = self?.channels.filter {$0.id != "tm"}

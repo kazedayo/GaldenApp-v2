@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftEntryKit
 
 class PagePopoverTableViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
 

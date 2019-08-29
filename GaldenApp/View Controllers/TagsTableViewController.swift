@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftEntryKit
 
 class TagsTableViewController: UITableViewController {
 

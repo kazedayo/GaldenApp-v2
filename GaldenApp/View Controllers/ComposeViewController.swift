@@ -8,7 +8,6 @@
 
 import UIKit
 import PKHUD
-import SwiftEntryKit
 import RichEditorView
 import SwiftSoup
 import ImageIO

@@ -9,7 +9,6 @@
 import UIKit
 import Kingfisher
 import Apollo
-import SwiftEntryKit
 
 class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
     
@@ -131,14 +130,12 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
         let splitViewController = UISplitViewController()
         let dummyVC = UINavigationController()
         dummyVC.view.backgroundColor = .systemBackground
-        dummyVC.navigationBar.barTintColor = .systemGreen
         splitViewController.delegate = self
         splitViewController.view.backgroundColor = .systemBackground
         splitViewController.viewControllers = [navVC,dummyVC]
         splitViewController.preferredDisplayMode = .allVisible
-        splitViewController.hero.isEnabled = true
-        splitViewController.hero.modalAnimationType = .zoom
         splitViewController.modalPresentationStyle = .fullScreen
+        splitViewController.modalTransitionStyle = .flipHorizontal
         present(splitViewController, animated: true, completion: {
             //hacky fix
             //splitViewController.view.subviews.first?.removeFromSuperview()

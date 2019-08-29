@@ -7,7 +7,6 @@ target 'GaldenApp' do
 
   # Pods for GaldenApp
   pod 'KeychainSwift'
-  pod 'Hero'
   pod 'MarqueeLabel'
   pod 'PKHUD'
   pod 'Realm', git: 'https://github.com/realm/realm-cocoa.git', branch: 'tg/xcode-11-b1', submodules: true
@@ -19,7 +18,6 @@ target 'GaldenApp' do
   pod 'SwiftyStoreKit'
   pod 'SKPhotoBrowser'
   pod 'SideMenu'
-  pod 'SwiftEntryKit'
   pod 'Apollo', git: 'https://github.com/apollographql/apollo-ios.git', branch: 'master'
   pod 'SwiftSoup'
   pod 'SwiftDate', '~> 5.1.0'
