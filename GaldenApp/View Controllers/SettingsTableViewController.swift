@@ -39,25 +39,25 @@ class SettingsTableViewController: UITableViewController {
         
         clearHistoryCell.textLabel?.textColor = .systemRed
         clearHistoryCell.textLabel?.text = "重設閲讀位置記錄"
-        clearHistoryCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        clearHistoryCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         clearHistoryCell.textLabel?.adjustsFontForContentSizeCategory = true
         clearHistoryCell.accessoryType = .disclosureIndicator
         
         sourceCell.textLabel?.textColor = .label
         sourceCell.textLabel?.text = "Source"
-        sourceCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        sourceCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         sourceCell.textLabel?.adjustsFontForContentSizeCategory = true
         sourceCell.accessoryType = .disclosureIndicator
         
         iapCell.textLabel?.textColor = .label
         iapCell.textLabel?.text = "捐獻"
-        iapCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        iapCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         iapCell.textLabel?.adjustsFontForContentSizeCategory = true
         iapCell.accessoryType = .disclosureIndicator
         
         imageCell.textLabel?.textColor = .label
         imageCell.textLabel?.text = "自動載入圖片"
-        imageCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        imageCell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         imageCell.textLabel?.adjustsFontForContentSizeCategory = true
         
         if keychain.getBool("loadImage") == true {

@@ -1,20 +1,20 @@
 PODS:
-  - Alamofire (4.8.2)
-  - Apollo (0.15.0):
-    - Apollo/Core (= 0.15.0)
-  - Apollo/Core (0.15.0)
+  - Alamofire (4.9.0)
+  - Apollo (0.15.1):
+    - Apollo/Core (= 0.15.1)
+  - Apollo/Core (0.15.1)
   - Blueprints (0.12.1)
   - KeychainSwift (16.0.1)
   - Kingfisher (5.7.1)
   - MarqueeLabel (4.0.0)
   - PKHUD (5.3.0)
-  - Realm (3.16.1):
-    - Realm/Headers (= 3.16.1)
-  - Realm/Headers (3.16.1)
-  - RealmSwift (3.16.1):
-    - Realm (= 3.16.1)
+  - Realm (3.17.3):
+    - Realm/Headers (= 3.17.3)
+  - Realm/Headers (3.17.3)
+  - RealmSwift (3.17.3):
+    - Realm (= 3.17.3)
   - RichEditorView (5.0.0)
-  - SideMenu (6.2.2)
+  - SideMenu (6.2.8)
   - SKPhotoBrowser (6.1.0)
   - SnapKit (4.2.0)
   - SwiftDate (5.1.0)
@@ -32,8 +32,7 @@ DEPENDENCIES:
   - Kingfisher
   - MarqueeLabel
   - PKHUD
-  - Realm (from `https://github.com/realm/realm-cocoa.git`, branch `tg/xcode-11-b1`)
-  - RealmSwift (from `https://github.com/realm/realm-cocoa.git`, branch `tg/xcode-11-b1`)
+  - RealmSwift
   - RichEditorView
   - SideMenu
   - SKPhotoBrowser
@@ -53,6 +52,8 @@ SPEC REPOS:
     - Kingfisher
     - MarqueeLabel
     - PKHUD
+    - Realm
+    - RealmSwift
     - RichEditorView
     - SideMenu
     - SKPhotoBrowser
@@ -68,40 +69,24 @@ EXTERNAL SOURCES:
   Apollo:
     :branch: master
     :git: https://github.com/apollographql/apollo-ios.git
-  Realm:
-    :branch: tg/xcode-11-b1
-    :git: https://github.com/realm/realm-cocoa.git
-    :submodules: true
-  RealmSwift:
-    :branch: tg/xcode-11-b1
-    :git: https://github.com/realm/realm-cocoa.git
-    :submodules: true
 
 CHECKOUT OPTIONS:
   Apollo:
-    :commit: bc9bc64f3d53f6d1c68181d168e136f642972f99
+    :commit: 53245bd2a6a0b75a2cc079f0126d60bd013e3b23
     :git: https://github.com/apollographql/apollo-ios.git
-  Realm:
-    :commit: 2e58dfe78e5f641262c4c5c7e5a13f05b434c610
-    :git: https://github.com/realm/realm-cocoa.git
-    :submodules: true
-  RealmSwift:
-    :commit: 2e58dfe78e5f641262c4c5c7e5a13f05b434c610
-    :git: https://github.com/realm/realm-cocoa.git
-    :submodules: true
 
 SPEC CHECKSUMS:
-  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
-  Apollo: 64b98296ed4c82c4345604cc327ef732c5563e93
+  Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
+  Apollo: faad3e64ac3f12642757329146318e8439c8f8e5
   Blueprints: a35723fafd8020c984e9d51817bd3c67f8d18ddc
   KeychainSwift: 4209611373ca4a098e09b1e547eebd87c544dcc4
   Kingfisher: 176d377ad339113c99ad4980cbae687f807e20fe
   MarqueeLabel: b55b26e690b6ad41faedd95cbf5eae6f1d1735b4
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
-  Realm: 601cacc51d8be3b17a377ef787be0f6ee0e76cf1
-  RealmSwift: 486f2e09d5a8ccff63ed66e48d0846b111deb5e5
+  Realm: 5a1d9d47bfc101dd597668b1a8af4288a2557f6d
+  RealmSwift: b7fdc2d18616621c31df5c7a398a45a2163f8eb0
   RichEditorView: 1bbb07b87ca2d479ac29a6877014b38b8df233ef
-  SideMenu: ba47df99f8efc13848b5b67c11a88a770280ab03
+  SideMenu: d3d43c5ea84f5e9af98c17e6b9c0201f93812d53
   SKPhotoBrowser: 343de95d89dc7913763c5dda243cc6e606e4a168
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SwiftDate: 6329e58969a2de31cea7f1ee1143b247693196e7
@@ -111,6 +96,6 @@ SPEC CHECKSUMS:
   Typist: 06465ab9867782aa6c81e38f073dfc01dab73deb
   URLNavigator: 0bffc3efdeb2d97f7b5eec7ac82d290f4a099431
 
-PODFILE CHECKSUM: 063b42fb544c6ba8feed6f0ba82bb5fb0e5d34d3
+PODFILE CHECKSUM: 863491ae691b8b983e0ce76df54ac3f053aefb87
 
 COCOAPODS: 1.7.5

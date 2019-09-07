@@ -31,7 +31,7 @@ class ThreadListTableViewCell: UITableViewCell {
         backgroundColor = .systemBackground
         
         threadTitleLabel.textColor = .label
-        threadTitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        threadTitleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         threadTitleLabel.adjustsFontForContentSizeCategory = true
         threadTitleLabel.numberOfLines = 0
         contentView.addSubview(threadTitleLabel)

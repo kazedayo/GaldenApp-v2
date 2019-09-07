@@ -17,7 +17,7 @@ html {
 }
 
 body {
-    font: -apple-system-subheadline;
+    font: -apple-system-body;
     overflow-wrap: break-word;
     word-wrap: break-word;
     -webkit-tap-highlight-color: rgba(0,0,0,0);

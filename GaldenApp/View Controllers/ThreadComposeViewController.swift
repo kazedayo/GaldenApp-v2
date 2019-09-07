@@ -179,7 +179,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         tagsVC.popoverPresentationController?.delegate = self
         tagsVC.popoverPresentationController?.sourceView = tagButton
         tagsVC.popoverPresentationController?.sourceRect = tagButton.bounds
-        tagsVC.popoverPresentationController?.backgroundColor = .systemFill
+        tagsVC.popoverPresentationController?.backgroundColor = .tertiarySystemBackground
         tagsVC.preferredContentSize = CGSize(width: 200, height: 200)
         self.present(tagsVC, animated: true, completion: nil)
     }

@@ -24,7 +24,7 @@ class UserTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .systemBackground
-        unameLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        unameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         unameLabel.adjustsFontForContentSizeCategory = true
         ugroupLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         ugroupLabel.adjustsFontForContentSizeCategory = true
