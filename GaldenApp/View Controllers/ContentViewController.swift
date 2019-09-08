@@ -271,15 +271,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @objc func share() {
-        let shareView = UIActivityViewController(activityItems:["https://hkgalden.org/forum/thread/\(tID!)/\(pageNow)"],applicationActivities:nil)
-        DispatchQueue.main.asyncAfter(deadline: 0.5, execute: {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                shareView.popoverPresentationController?.sourceView = self.view
-                shareView.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.maxY, width: 0, height: 0)
-                shareView.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0) //Removes arrow as I dont want it
-            }
-            self.present(shareView, animated: true, completion: nil)
-        })
+        let shareView = UIActivityViewController(activityItems:[URL(string: "https://hkgalden.org/forum/thread/\(tID!)/\(pageNow)")!],applicationActivities:nil)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            shareView.popoverPresentationController?.sourceView = view
+            shareView.popoverPresentationController?.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.maxY, width: 0, height: 0)
+            shareView.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0) //Removes arrow as I dont want it
+        }
+        self.present(shareView, animated: true, completion: nil)
     }
     
     @objc func prevButtonPressed(_ sender: UIBarButtonItem) {

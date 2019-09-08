@@ -38,8 +38,6 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             titleTextField.smartInsertDeleteType = .no
             titleTextField.smartQuotesType = .no
             titleTextField.smartDashesType = .no
-        } else {
-            // Fallback on earlier versions
         }
         
         self.title = "發表主題"
@@ -74,6 +72,10 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
     
     override func submitButtonPressed(_ sender: UIButton) {
         self.view.endEditing(true)
+        //print("original html")
+        //print(self.contentTextView.contentHTML)
+        //print("parsed html")
+        //print(galdenParse(input: self.contentTextView.contentHTML))
         if (contentTextView.contentHTML == "" || contentTextView.contentHTML == "<br>") {
             let alert = UIAlertController.init(title: "注意", message: "內容不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
@@ -130,41 +132,6 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             self.tagButton.setTitle("選擇標籤...", for: .normal)
         })
     }
-    
-    /*override func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            keyboardHeight = keyboardSize.height
-            selectTagLabel.snp.updateConstraints {
-                (make) -> Void in
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18))
-                } else {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
-                }
-            }
-            tagButton.snp.updateConstraints {
-                (make) -> Void in
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18))
-                } else {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
-                }
-            }
-        }
-    }
-    
-    override func keyboardWillHide(notification: Notification) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            selectTagLabel.snp.updateConstraints {
-                (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
-            }
-            tagButton.snp.updateConstraints {
-                (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
-            }
-        }
-    }*/
     
     func unwindToCompose(tagName: String,tagID: String,tagColor: String) {
         self.tagID = tagID

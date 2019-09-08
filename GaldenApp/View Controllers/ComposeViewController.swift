@@ -221,16 +221,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         let doc = try! SwiftSoup.parse(contentTextView.html)
         
         //p tag hack
-        let div = try! doc.select("div")
-        if div.first() != nil {
-            try! div.first()!.before("<hr>")
-            //try! div.first()!.after("<hr>")
-        }
-        //try! div.first()!.before("<hr>")
-        //try! div.first()!.after("<hr>")
-        //try! doc.body()!.append("<br>")
-        for el in div {
-            try! el.tagName("p")
+        let p = try! doc.select("p")
+        if p.first() != nil {
+            try! p.first()!.before("<hr>")
         }
         
         //color highlight parse
@@ -377,19 +370,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         }
         
         var parsedHtml = "<div id=\"pmc\"><p>\(try! doc.body()!.html())</div>"
-        //parsedHtml = parsedHtml.replacingOccurrences(of: "<br>", with: "")
+        parsedHtml = parsedHtml.replacingOccurrences(of: "<br>", with: "")
         parsedHtml = parsedHtml.replacingOccurrences(of: "<hr>", with: "</p>")
-        
-        //remove empty p tag
-        //let parsedDoc = try! SwiftSoup.parse(parsedHtml)
-        //let p = try! parsedDoc.select("p")
-        //try! p.last()?.remove()
-        
-        //remove style for all el
-        //let el = try! doc.getAllElements()
-        //try! el.removeAttr("style")
-        
-        //parsedHtml = try! parsedDoc.body()!.html()
+        parsedHtml = parsedHtml.trimmingCharacters(in: .newlines)
         
         return parsedHtml
     }

@@ -30,7 +30,7 @@ class SideMenuViewController: UIViewController,UITableViewDelegate,UITableViewDa
         
         navigationController?.isNavigationBarHidden = true
         
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = .black
         
         tableView.backgroundColor = .clear
         tableView.delegate = self
