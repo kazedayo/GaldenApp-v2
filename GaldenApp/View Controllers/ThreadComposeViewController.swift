@@ -20,6 +20,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.setTitle("選擇標籤...", for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
         button.setTitleColor(.label, for: .normal)
         button.addTarget(self, action: #selector(tagButtonPressed(_:)), for: .touchUpInside)
         return button
@@ -33,6 +34,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         titleTextField.borderColor = .clear
         titleTextField.backgroundColor = .systemBackground
         titleTextField.attributedPlaceholder = NSAttributedString(string: "標題", attributes: [NSAttributedString.Key.foregroundColor : UIColor.secondaryLabel])
+        titleTextField.font = .preferredFont(forTextStyle: .headline)
         titleTextField.textColor = .label
         if #available(iOS 11.0, *) {
             titleTextField.smartInsertDeleteType = .no

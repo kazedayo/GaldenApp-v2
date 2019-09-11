@@ -79,7 +79,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,shareButton,flexibleSpace,nextButton]
         
         titleLabel.textColor = .label
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         titleLabel.animationDelay = 1
         titleLabel.type = .leftRight
         titleLabel.fadeLength = 5

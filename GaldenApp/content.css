@@ -1,14 +1,18 @@
 :root {
     color-scheme: light dark;
+    --comment-color: #f0f0f0;
     --button-color: #666666;
     --quote-color: #bbbbbb;
     --border-color: #bbbbbb;
+    --seperator-color: #ffffff;
 }
 @media (prefers-color-scheme: dark) {
     :root {
+        --comment-color: #202020;
         --button-color: #aaaaaa;
         --quote-color: #666666;
         --border-color: #454545;
+        --seperator-color: #000000;
     }
 }
 
@@ -75,7 +79,7 @@ div#image.usertable {
 
 div#text.usertable {
     float:left;
-    width: 85%;
+    width: 83%;
 	font: -apple-system-footnote;
 }
 
@@ -102,9 +106,11 @@ div#text.usertable {
 
 .comment {
     display: block;
-    border-top: 1px dashed var(--border-color);
+    border-top: 5px solid var(--seperator-color);
     padding-top: 10px;
     padding-bottom: 10px;
+    background-color: var(--comment-color);
+    border-radius: 10px;
 }
 
 .quoteName {
