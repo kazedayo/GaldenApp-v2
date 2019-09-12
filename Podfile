@@ -9,7 +9,8 @@ target 'GaldenApp' do
   pod 'KeychainSwift'
   pod 'MarqueeLabel'
   pod 'PKHUD'
-  pod 'RealmSwift'
+  pod 'Realm', git: 'https://github.com/realm/realm-cocoa.git', branch: 'master', submodules: true
+  pod 'RealmSwift', git: 'https://github.com/realm/realm-cocoa.git', branch: 'master', submodules: true
   pod 'SnapKit', '~> 4.2.0'
   pod 'Kingfisher'
   pod 'Blueprints'

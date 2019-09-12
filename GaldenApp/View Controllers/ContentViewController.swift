@@ -212,8 +212,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         pageVC.modalPresentationStyle = .popover
         pageVC.popoverPresentationController?.delegate = self
         pageVC.popoverPresentationController?.barButtonItem = pageButton
-        pageVC.preferredContentSize = CGSize(width: 150, height: 200)
-        pageVC.popoverPresentationController?.backgroundColor = .secondarySystemBackground
+        pageVC.preferredContentSize = CGSize(width: view.bounds.width * 0.3, height: view.bounds.height * 0.2)
         pageVC.threadID = self.tID
         pageVC.pageCount = Int(self.pageCount)
         pageVC.pageSelected = self.pageNow
