@@ -72,7 +72,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Apollo:
-    :commit: 53245bd2a6a0b75a2cc079f0126d60bd013e3b23
+    :commit: ea10e2ab0f1d03725d6f894adfd2b83a9740e81b
     :git: https://github.com/apollographql/apollo-ios.git
 
 SPEC CHECKSUMS:
