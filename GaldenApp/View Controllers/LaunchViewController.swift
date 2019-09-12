@@ -9,7 +9,6 @@
 import UIKit
 import Kingfisher
 import Apollo
-import SwiftEntryKit
 
 class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
     
@@ -26,10 +25,10 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .secondarySystemBackground
         
         logo.image = UIImage(named: "LaunchScreen")
-        logo.tintColor = .darkGray
+        logo.tintColor = .systemFill
         view.addSubview(logo)
         
         logo.snp.makeConstraints {
@@ -44,8 +43,8 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
                 let eulatTextView = UITextView()
                 eulatTextView.isEditable = false
                 eulatTextView.clipsToBounds = true
-                eulatTextView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-                eulatTextView.textColor = UIColor(hexRGB: "aaaaaa")
+                eulatTextView.backgroundColor = .systemBackground
+                eulatTextView.textColor = .systemGray
                 eulatTextView.font = UIFont.preferredFont(forTextStyle: .body)
                 eulatTextView.adjustsFontForContentSizeCategory = true
                 eulatTextView.text = try! String(contentsOfFile: Bundle.main.path(forResource: "eula", ofType: "txt")!)
@@ -91,21 +90,18 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
         if keychain.get("userKey") != nil {
             let getSessionUserQuery = GetSessionUserQuery()
             apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
-                [weak self] result,error in
-                if error == nil {
-                    if result?.data?.sessionUser == nil {
-                        keychain.delete("userKey")
-                        //reconfigure apollo
-                        apollo = Configurations.shared.configureApollo()
-                        let alert = UIAlertController(title: "Session Expired", message: "請重新登入　", preferredStyle: .alert)
-                        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-                        alert.addAction(action)
-                        self?.present(alert, animated: true, completion: nil)
-                    } else {
-                        sessionUser = result?.data?.sessionUser
-                    }
-                    self?.initControllers()
+                [weak self] result in
+                guard let data = try? result.get().data else { return }
+                if data.sessionUser == nil {
+                    keychain.delete("userKey")
+                    let alert = UIAlertController(title: "Session Expired", message: "請重新登入　", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                    alert.addAction(action)
+                    self?.present(alert, animated: true, completion: nil)
+                } else {
+                    sessionUser = data.sessionUser
                 }
+                self?.initControllers()
             }
         } else {
             initControllers()
@@ -114,7 +110,6 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
     
     func initControllers() {
         let tabBarController = UITabBarController()
-        tabBarController.extendedLayoutIncludesOpaqueBars = true
         let threadListViewController = ThreadListViewController()
         let settingsTableViewController = SettingsTableViewController.init(style: .grouped)
         let sessionUserViewController = SessionUserViewController()
@@ -130,28 +125,20 @@ class LaunchViewController: UIViewController,UISplitViewControllerDelegate {
             let controllers = [threadListViewController,loginViewController,settingsTableViewController]
             tabBarController.viewControllers = controllers
         }
-        let tabbaritems = tabBarController.tabBar.items!
-        for item in tabbaritems {
-            item.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
-        }
         let navVC = UINavigationController(rootViewController: tabBarController)
         navVC.navigationBar.prefersLargeTitles = true
         let splitViewController = UISplitViewController()
         let dummyVC = UINavigationController()
-        dummyVC.view.backgroundColor = UIColor(white:0.1,alpha:1)
-        dummyVC.navigationBar.barTintColor = UIColor(white: 0.1,alpha: 1)
-        dummyVC.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        dummyVC.navigationBar.shadowImage = UIImage()
-        dummyVC.navigationItem.largeTitleDisplayMode = .never
+        dummyVC.view.backgroundColor = .systemBackground
         splitViewController.delegate = self
-        splitViewController.view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        splitViewController.view.backgroundColor = .systemBackground
         splitViewController.viewControllers = [navVC,dummyVC]
         splitViewController.preferredDisplayMode = .allVisible
-        splitViewController.hero.isEnabled = true
-        splitViewController.hero.modalAnimationType = .zoom
+        splitViewController.modalPresentationStyle = .fullScreen
+        splitViewController.modalTransitionStyle = .flipHorizontal
         present(splitViewController, animated: true, completion: {
             //hacky fix
-            splitViewController.view.subviews.first?.removeFromSuperview()
+            //splitViewController.view.subviews.first?.removeFromSuperview()
         })
     }
     

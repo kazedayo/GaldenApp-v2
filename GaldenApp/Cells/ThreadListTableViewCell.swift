@@ -24,19 +24,19 @@ class ThreadListTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        let bgColorView = UIView()
+        /*let bgColorView = UIView()
         bgColorView.backgroundColor = UIColor(red:0.20, green:0.20, blue:0.20, alpha:1.0)
-        selectedBackgroundView = bgColorView
+        selectedBackgroundView = bgColorView*/
         
-        backgroundColor = UIColor(white: 0.15, alpha: 1)
+        backgroundColor = .systemBackground
         
-        threadTitleLabel.textColor = .lightGray
-        threadTitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        threadTitleLabel.textColor = .label
+        threadTitleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         threadTitleLabel.adjustsFontForContentSizeCategory = true
         threadTitleLabel.numberOfLines = 0
         contentView.addSubview(threadTitleLabel)
         
-        detailLabel.textColor = .darkGray
+        detailLabel.textColor = .secondaryLabel
         detailLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         detailLabel.adjustsFontForContentSizeCategory = true
         contentView.addSubview(detailLabel)

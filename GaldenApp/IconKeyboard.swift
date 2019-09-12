@@ -26,15 +26,15 @@ class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
         
         let getIconPacksQuery = GetIconPacksQuery()
         apollo.fetch(query: getIconPacksQuery,cachePolicy: .fetchIgnoringCacheData) {
-            [weak self] result,error in
-            self?.iconPack = result?.data?.installedPacks.map {$0.fragments.iconPacks}
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            self?.iconPack = data.installedPacks.map {$0.fragments.iconPacks}
             
-            let layout = HorizontalBlueprintLayout()
-            layout.itemsPerColumn = 1
+            let layout = VerticalBlueprintLayout()
             if UIDevice.current.userInterfaceIdiom == .pad {
-                layout.itemsPerRow = 5.5
+                layout.itemsPerRow = 6
             } else {
-                layout.itemsPerRow = 3.5
+                layout.itemsPerRow = 4
             }
             layout.sectionInset = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
             layout.minimumLineSpacing = 10
@@ -42,6 +42,7 @@ class IconKeyboard: UIView,UICollectionViewDelegate,UICollectionViewDataSource {
             //layout.itemSize = CGSize(width: 100, height: 50)
             
             self?.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+            //self?.collectionView.layer.cornerRadius = 10
             self?.collectionView.backgroundColor = .clear
             self?.collectionView.clipsToBounds = true
             self?.collectionView.delegate = self

@@ -9,7 +9,6 @@
 import UIKit
 import KeychainSwift
 import PKHUD
-import IQKeyboardManagerSwift
 import URLNavigator
 import SwiftyStoreKit
 import RealmSwift
@@ -18,7 +17,7 @@ import RichEditorView
 
 let navigator = Navigator()
 let keychain = KeychainSwift()
-var apollo: ApolloClient = Configurations.shared.configureApollo()
+var apollo: ApolloClient = HKGAPI.shared.client
 var sessionUser: GetSessionUserQuery.Data.SessionUser? = nil
 
 @UIApplicationMain
@@ -53,9 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         URLNavigationMap.initialize(navigator: navigator)
         
-        IQKeyboardManager.shared.enable = true
-        IQKeyboardManager.shared.enableAutoToolbar = false
-        
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
             for purchase in purchases {
                 switch purchase.transaction.transactionState {
@@ -74,29 +70,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PKHUD.sharedHUD.dimsBackground = false
         PKHUD.sharedHUD.userInteractionOnUnderlyingViewsEnabled = false
         
-        UIApplication.shared.statusBarStyle = .lightContent
-        UIApplication.shared.isStatusBarHidden = false
+        UINavigationBar.appearance().tintColor = .systemGreen
+        UIBarButtonItem.appearance().tintColor = .systemGreen
         
-        UINavigationBar.appearance().barStyle = .black
-        UINavigationBar.appearance().tintColor = UIColor(hexRGB: "#45c17c")
-        UINavigationBar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().isTranslucent = false
-        UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#45c17c")
+        UITabBar.appearance().tintColor = .systemGreen
         
-        UITabBar.appearance().barStyle = .black
-        UITabBar.appearance().isTranslucent = false
-        UITabBar.appearance().tintColor = UIColor(hexRGB: "#45c17c")
-        UITabBar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
-        UITabBar.appearance().shadowImage = UIImage()
-        UITabBar.appearance().backgroundImage = UIImage()
-        
-        UIToolbar.appearance().barStyle = .black
-        UIToolbar.appearance().barTintColor = UIColor(white: 0.15, alpha: 1)
-        UIToolbar.appearance().isTranslucent = false
-        UIToolbar.appearance().setShadowImage(UIImage(), forToolbarPosition: .any)
-        
-        UITextField.appearance().keyboardAppearance = .dark
+        UserDefaults.standard.set(["zh_HK"], forKey: "AppleLanguages")
+        UserDefaults.standard.synchronize()
         
         let root = LaunchViewController()
         window?.rootViewController = root

@@ -10,11 +10,10 @@ import PKHUD
 import QuartzCore
 import SideMenu
 import RealmSwift
-import SwiftEntryKit
 import SwiftDate
 import Apollo
 
-class ThreadListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UIPopoverPresentationControllerDelegate {
+class ThreadListViewController: UITableViewController,UIPopoverPresentationControllerDelegate {
     
     //MARK: Properties
     var threads: [Thread] = []
@@ -28,50 +27,38 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     var eof = false
     
     let realm = try! Realm()
-    let tableView = UITableView()
     let sideMenuVC = SideMenuViewController()
     let composeVC = ThreadComposeViewController()
     //lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
-    lazy var sideMenuButton = UIBarButtonItem(image: UIImage(named: "menu"),style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
-    lazy var newThread = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(newThreadButtonPressed))
+    lazy var sideMenuButton = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
+    lazy var newThread = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"),style: .plain, target: self, action: #selector(newThreadButtonPressed))
     lazy var nextPageButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
-    lazy var spinner = UIActivityIndicatorView(style: .white)
-    
-    var reloadButton = UIButton()
+    lazy var spinner = UIActivityIndicatorView(style: .large)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        composeVC.view.layoutSubviews()
-        let menuLeftNavigationController = UISideMenuNavigationController(rootViewController: sideMenuVC)
-        sideMenuVC.mainVC = self
-        SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
-        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.view, forMenu: .left)
-        SideMenuManager.default.menuPushStyle = .subMenu
-        SideMenuManager.default.menuWidth = 150
-        SideMenuManager.default.menuFadeStatusBar = false
-        
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .systemBackground
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isHidden = true
-        tableView.contentInsetAdjustmentBehavior = .automatic
-        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 10, bottom: 0, right: 0)
-        tableView.separatorColor = UIColor(white: 0.10, alpha: 1)
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorColor = .separator
         //tableView.estimatedRowHeight = 60
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
         //tableView.addGestureRecognizer(longPress)
-        view.addSubview(tableView)
         
-        tableView.snp.makeConstraints {
-            (make) -> Void in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
+        composeVC.view.layoutSubviews()
+        sideMenuVC.view.layoutSubviews()
+        let menuLeftNavigationController = SideMenuNavigationController(rootViewController: sideMenuVC)
+        sideMenuVC.mainVC = self
+        SideMenuManager.default.leftMenuNavigationController = menuLeftNavigationController
+        SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.view)
+        menuLeftNavigationController.pushStyle = .subMenu
+        menuLeftNavigationController.menuWidth = 150
+        menuLeftNavigationController.statusBarEndAlpha = 0
+        menuLeftNavigationController.navigationBar.isHidden = true
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh(refreshControl: )), for: .valueChanged)
@@ -86,10 +73,6 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         nextPageButton.addTarget(self, action: #selector(nextPage), for: .touchUpInside)
         tableView.tableFooterView = nextPageButton
         
-        reloadButton.center = self.view.center
-        reloadButton.setTitle("重新載入", for: .normal)
-        reloadButton.isHidden = true
-        reloadButton.addTarget(self, action: #selector(reloadButtonPressed(_:)), for: .touchUpInside)
         updateSequence(append: false, completion: {})
     }
     
@@ -125,17 +108,17 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
 
     // MARK: - Table view data source
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return threads.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Configure the cell...
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
         cell.threadTitleLabel.text = threads[indexPath.row].title
@@ -145,7 +128,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DispatchQueue.main.async {
             let cell = tableView.cellForRow(at: indexPath) as! ThreadListTableViewCell
             cell.setNeedsLayout()
@@ -194,7 +177,7 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
     
     @objc func channelButtonPressed(sender: UIBarButtonItem) {
         sideMenuVC.mainVC = self
-        present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
+        present(SideMenuManager.default.leftMenuNavigationController!, animated: true, completion: nil)
     }
     
     @objc func newThreadButtonPressed() {
@@ -263,42 +246,34 @@ class ThreadListViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    @objc func reloadButtonPressed(_ sender: UIButton) {
-        self.updateSequence(append: false, completion: {})
-    }
-    
     private func updateSequence(append: Bool, completion: @escaping ()->Void) {
         let getThreadsQuery = GetThreadsQuery(id: channelId, page: pageNow)
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query: getThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
-            [weak self] result, error in
-            if (error == nil) {
-                var threads = result?.data?.threadsByChannel.map {$0.fragments.threadListDetails}
-                if threads?.isEmpty ?? true {
-                    self?.eof = true
-                    completion()
-                }
-                if keychain.get("userKey") != nil {
-                    let blockedUserIds = sessionUser?.blockedUserIds
-                    threads = (threads!.filter {!(blockedUserIds?.contains($0.replies[0].author.id))!})
-                } else {
-                    //review no tomato
-                    threads = (threads!.filter {$0.tags[0].fragments.tagDetails.id != "PVAy33AYm"})
-                }
-                //convert to thread object
-                if append == false {
-                    self?.threads = []
-                }
-                for thread in threads! {
-                    let titleTrim = thread.title.trimmingCharacters(in: .whitespacesAndNewlines)
-                    self?.threads.append(Thread.init(id: thread.id,title: titleTrim, nick: thread.replies.map {$0.authorNickname}.first!, count: thread.totalReplies, date: thread.replies.map {$0.date}.last!, tag: thread.tags.map {$0.fragments.tagDetails}.first!.name, tagC: thread.tags.map {$0.fragments.tagDetails}.first!.color))
-                }
-                self?.tableView.reloadData()
-                self?.reloadButton.isHidden = true
-                self?.tableView.isHidden = false
-            } else {
-                self?.reloadButton.isHidden = false
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            var threads = data.threadsByChannel.map {$0.fragments.threadListDetails}
+            if threads.isEmpty {
+                self?.eof = true
+                completion()
             }
+            if keychain.get("userKey") != nil {
+                let blockedUserIds = sessionUser?.blockedUserIds
+                threads = (threads.filter {!(blockedUserIds?.contains($0.replies[0].author.id))!})
+            } else {
+                //review no tomato
+                threads = (threads.filter {$0.tags[0].fragments.tagDetails.id != "PVAy33AYm"})
+            }
+            //convert to thread object
+            if append == false {
+                self?.threads = []
+            }
+            for thread in threads {
+                let titleTrim = thread.title.trimmingCharacters(in: .whitespacesAndNewlines)
+                self?.threads.append(Thread.init(id: thread.id,title: titleTrim, nick: thread.replies.map {$0.authorNickname}.first!, count: thread.totalReplies, date: thread.replies.map {$0.date}.last!, tag: thread.tags.map {$0.fragments.tagDetails}.first!.name, tagC: thread.tags.map {$0.fragments.tagDetails}.first!.color))
+            }
+            self?.tableView.reloadData()
+            self?.tableView.isHidden = false
             NetworkActivityIndicatorManager.networkOperationFinished()
             completion()
         }

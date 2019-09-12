@@ -23,7 +23,7 @@ struct Thread {
         self.title = title
         self.nickName = nick
         self.count = count
-        self.date = (date.toISODate()?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.english))!
+        self.date = (date.toISODate()?.toRelative(style: RelativeFormatter.twitterStyle(),locale: Locales.english))!
         self.tagName = tag
         self.tagColor = tagC
     }

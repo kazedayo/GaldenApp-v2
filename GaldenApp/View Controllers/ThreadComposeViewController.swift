@@ -8,7 +8,6 @@
 
 import UIKit
 import PKHUD
-import SwiftEntryKit
 
 class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationControllerDelegate {
     
@@ -21,7 +20,8 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.setTitle("選擇標籤...", for: .normal)
-        button.setTitleColor(UIColor(hexRGB: "aaaaaa"), for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
+        button.setTitleColor(.label, for: .normal)
         button.addTarget(self, action: #selector(tagButtonPressed(_:)), for: .touchUpInside)
         return button
     }()
@@ -32,15 +32,14 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         titleTextField.delegate = self
         titleTextField.borderStyle = .none
         titleTextField.borderColor = .clear
-        titleTextField.backgroundColor = UIColor(white:0.15, alpha:1)
-        titleTextField.attributedPlaceholder = NSAttributedString(string: "標題", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-        titleTextField.textColor = UIColor(hexRGB: "aaaaaa")
+        titleTextField.backgroundColor = .systemBackground
+        titleTextField.attributedPlaceholder = NSAttributedString(string: "標題", attributes: [NSAttributedString.Key.foregroundColor : UIColor.secondaryLabel])
+        titleTextField.font = .preferredFont(forTextStyle: .headline)
+        titleTextField.textColor = .label
         if #available(iOS 11.0, *) {
             titleTextField.smartInsertDeleteType = .no
             titleTextField.smartQuotesType = .no
             titleTextField.smartDashesType = .no
-        } else {
-            // Fallback on earlier versions
         }
         
         self.title = "發表主題"
@@ -48,7 +47,7 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         view.addSubview(tagButton)
         titleTextField.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin).offset(10)
+            make.top.equalTo(view.snp.topMargin).offset(15)
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
         }
@@ -62,13 +61,23 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             make.top.equalTo(tagButton.snp.bottom).offset(15)
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
+        }
+        
+        stackView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(contentTextView.snp.bottomMargin).offset(15)
+            make.bottom.equalTo(view.snp.bottom).offset(-15)
+            make.leading.equalTo(view.snp.leadingMargin)
         }
         // Do any additional setup after loading the view.
     }
     
     override func submitButtonPressed(_ sender: UIButton) {
         self.view.endEditing(true)
+        //print("original html")
+        //print(self.contentTextView.contentHTML)
+        //print("parsed html")
+        //print(galdenParse(input: self.contentTextView.contentHTML))
         if (contentTextView.contentHTML == "" || contentTextView.contentHTML == "<br>") {
             let alert = UIAlertController.init(title: "注意", message: "內容不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
@@ -98,19 +107,20 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             let parsedHtml = galdenParse(input: contentTextView.contentHTML)
             let createThreadMutation = CreateThreadMutation(title: titleTextField.text!, tags: [tagID!], html: parsedHtml)
             apollo.perform(mutation: createThreadMutation) {
-                [weak self] result, error in
-                if error == nil {
+                [weak self] result in
+                switch result {
+                case .success(_):
                     HUD.flash(.success)
                     self?.dismiss(animated: true, completion: {
                         self?.contentTextView.html = ""
                         self?.titleTextField.text = ""
-                        self?.tagButton.setTitleColor(UIColor(hexRGB: "aaaaaa"), for: .normal)
+                        self?.tagButton.setTitleColor(.label, for: .normal)
                         self?.tagButton.setTitle("選擇標籤...", for: .normal)
                         self?.threadVC?.unwindToThreadListAfterNewPost()
                     })
-                } else {
+                case .failure(let error):
                     HUD.flash(.error)
-                    print(error!)
+                    print(error)
                 }
             }
         }
@@ -120,45 +130,10 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         dismiss(animated: true, completion: {
             self.contentTextView.html = ""
             self.titleTextField.text = ""
-            self.tagButton.setTitleColor(UIColor(hexRGB: "aaaaaa"), for: .normal)
+            self.tagButton.setTitleColor(.label, for: .normal)
             self.tagButton.setTitle("選擇標籤...", for: .normal)
         })
     }
-    
-    /*override func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            keyboardHeight = keyboardSize.height
-            selectTagLabel.snp.updateConstraints {
-                (make) -> Void in
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18))
-                } else {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
-                }
-            }
-            tagButton.snp.updateConstraints {
-                (make) -> Void in
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18))
-                } else {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
-                }
-            }
-        }
-    }
-    
-    override func keyboardWillHide(notification: Notification) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            selectTagLabel.snp.updateConstraints {
-                (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
-            }
-            tagButton.snp.updateConstraints {
-                (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-20)
-            }
-        }
-    }*/
     
     func unwindToCompose(tagName: String,tagID: String,tagColor: String) {
         self.tagID = tagID
@@ -173,8 +148,8 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
         tagsVC.popoverPresentationController?.delegate = self
         tagsVC.popoverPresentationController?.sourceView = tagButton
         tagsVC.popoverPresentationController?.sourceRect = tagButton.bounds
-        tagsVC.popoverPresentationController?.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tagsVC.preferredContentSize = CGSize(width: 200, height: 200)
+        tagsVC.popoverPresentationController?.permittedArrowDirections = .up
+        tagsVC.preferredContentSize = CGSize(width: view.bounds.width * 0.5, height: view.bounds.height * 0.25)
         self.present(tagsVC, animated: true, completion: nil)
     }
     

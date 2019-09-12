@@ -13,7 +13,7 @@ class SessionUserViewController: UserViewController {
     
     var blockedUsers: [GetBlockedUsersQuery.Data.BlockedUser] = []
     let segmentControl = UISegmentedControl.init(items: ["起底","封鎖名單"])
-    let refreshControl = UIRefreshControl()
+    let refControl = UIRefreshControl()
     lazy var logoutButton = UIBarButtonItem(title: "登出", style: .done, target: self, action: #selector(logoutButtonPressed(_:)))
 
     override func viewDidAppear(_ animated: Bool) {
@@ -31,8 +31,8 @@ class SessionUserViewController: UserViewController {
         tableView.register(UserTableViewCell.classForCoder(), forCellReuseIdentifier: "UserTableViewCell")
         
         //refreshcontrol
-        refreshControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
-        tableView.refreshControl = refreshControl
+        refControl.addTarget(self, action: #selector(refresh(refreshControl:)), for: .valueChanged)
+        tableView.refreshControl = refControl
         
         segmentControl.tintColor = UIColor(hexRGB: "#45c17c")
         segmentControl.selectedSegmentIndex = 0
@@ -69,18 +69,14 @@ class SessionUserViewController: UserViewController {
             let dateMap = self.userThreads[indexPath.row].replies.map {$0.date}
             let date = dateMap.last!.toISODate()
             let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan)
-            cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
             cell.threadTitleLabel.text = title
-            cell.threadTitleLabel.textColor = .lightGray
             cell.detailLabel.text = "你的回覆: \(count) // 最後一次回覆: \(relativeDate!)"
-            cell.detailLabel.textColor = .darkGray
             let tags = self.userThreads[indexPath.row].tags.map {$0.fragments.tagDetails}
             cell.tagLabel.text = "#\(tags[0].name)"
             cell.tagLabel.textColor = UIColor(hexRGB: tags[0].color)
             cellToReturn = cell
         } else if segmentControl.selectedSegmentIndex == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "UserTableViewCell") as! UserTableViewCell
-            cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
             let avatar = self.blockedUsers[indexPath.row].avatar
             let nickname = self.blockedUsers[indexPath.row].nickname
             let gender = self.blockedUsers[indexPath.row].gender
@@ -127,8 +123,9 @@ class SessionUserViewController: UserViewController {
                 action in
                 let unblockUserMutation = UnblockUserMutation(id: self.blockedUsers[indexPath.row].id)
                 apollo.perform(mutation: unblockUserMutation) {
-                    [weak self] result,error in
-                    if result?.data?.unblockUser == true {
+                    [weak self] result in
+                    guard let data = try? result.get().data else { return }
+                    if data.unblockUser == true {
                         let success = UIAlertController(title: "成功", message: "你已解除此會員封鎖", preferredStyle: .alert)
                         let ok = UIAlertAction(title: "OK", style: .cancel, handler: {
                             action in
@@ -175,15 +172,14 @@ class SessionUserViewController: UserViewController {
         let getBlockedUsersQuery = GetBlockedUsersQuery()
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query: getBlockedUsersQuery,cachePolicy: .fetchIgnoringCacheData) {
-            [weak self] result,error in
-            if error == nil {
-                self?.blockedUsers = (result?.data?.blockedUsers)!
-                sessionUser?.blockedUserIds = (result?.data?.blockedUsers.map {$0.id})!
-                //self?.tableView.reloadSections(IndexSet(integer: 0), with: .none)
-                self?.tableView.reloadData()
-                NetworkActivityIndicatorManager.networkOperationFinished()
-                completion()
-            }
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            self?.blockedUsers = data.blockedUsers
+            sessionUser?.blockedUserIds = data.blockedUsers.map {$0.id}
+            //self?.tableView.reloadSections(IndexSet(integer: 0), with: .none)
+            self?.tableView.reloadData()
+            NetworkActivityIndicatorManager.networkOperationFinished()
+            completion()
         }
     }
     

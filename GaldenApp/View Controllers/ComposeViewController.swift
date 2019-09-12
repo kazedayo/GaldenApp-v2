@@ -8,30 +8,46 @@
 
 import UIKit
 import PKHUD
-import IQKeyboardManagerSwift
-import SwiftEntryKit
 import RichEditorView
 import SwiftSoup
 import ImageIO
-import IGColorPicker
 import Alamofire
 import SwiftyJSON
+import Typist
 
-class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,RichEditorToolbarDelegate,ColorPickerViewDelegate,ColorPickerViewDelegateFlowLayout,UIImagePickerControllerDelegate {
+class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardDelegate,UINavigationControllerDelegate,RichEditorDelegate,UIImagePickerControllerDelegate {
     
     //MARK: Properties
     var topicID: Int!
     var quoteID: String?
     var contentVC: ContentViewController?
-    var keyboardHeight: CGFloat = 0
+    var iconKeyboardShowing = false
     
     let iconKeyboard = IconKeyboard()
     
     let contentTextView = RichEditorView()
-    lazy var toolbar: RichEditorToolbar = {
-        let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 55))
-        toolbar.options = [RichEditorDefaultOption.clear,RichEditorDefaultOption.image,RichEditorDefaultOption.link,RichEditorDefaultOption.textColor,RichEditorDefaultOption.bold,RichEditorDefaultOption.italic,RichEditorDefaultOption.underline,RichEditorDefaultOption.strike,RichEditorDefaultOption.alignLeft,RichEditorDefaultOption.alignCenter,RichEditorDefaultOption.alignRight,RichEditorDefaultOption.header(1),RichEditorDefaultOption.header(2),RichEditorDefaultOption.header(3)]
-        return toolbar
+    let stackView = UIStackView()
+    let keyboard = Typist()
+    lazy var imageButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "camera.on.rectangle"), for: .normal)
+        button.tintColor = .label
+        button.addTarget(self, action: #selector(imageButtonPressed(_:)), for: .touchUpInside)
+        return button
+    }()
+    lazy var linkButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "link"), for: .normal)
+        button.tintColor = .label
+        button.addTarget(self, action: #selector(linkButtonPressed(_:)), for: .touchUpInside)
+        return button
+    }()
+    lazy var iconButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "smiley"), for: .normal)
+        button.tintColor = .label
+        button.addTarget(self, action: #selector(callIconKeyboard), for: .touchUpInside)
+        return button
     }()
     
     /*override var preferredContentSize: CGSize {
@@ -46,74 +62,84 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         }
     }*/
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            contentTextView.setEditorFontColor(.label)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .systemBackground
         
         // Do any additional setup after loading the view.
         navigationController?.isNavigationBarHidden = false
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed(_:)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "發表", style: .done, target: self, action: #selector(submitButtonPressed(_:)))
         iconKeyboard.keyboardDelegate = self
-        let insertIcon = RichEditorOptionItem(image: UIImage(named: "Icon"), title: "Icon") { toolbar in
-            self.callIconKeyboard()
-            return
-        }
-        toolbar.options.insert(insertIcon, at: 0)
         
         contentTextView.webView.isOpaque = false
-        contentTextView.webView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        self.automaticallyAdjustsScrollViewInsets = false
+        contentTextView.webView.backgroundColor = .systemBackground
+        contentTextView.backgroundColor = .systemBackground
         contentTextView.webView.scrollView.clipsToBounds = true
         if #available(iOS 11.0, *) {
             contentTextView.webView.scrollView.contentInsetAdjustmentBehavior = .never
         }
-        contentTextView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        toolbar.editor = contentTextView
-        toolbar.delegate = self
         contentTextView.delegate = self
         
         view.addSubview(contentTextView)
+        
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.spacing = 15
+        stackView.addArrangedSubview(imageButton)
+        stackView.addArrangedSubview(linkButton)
+        stackView.addArrangedSubview(iconButton)
+        view.addSubview(stackView)
         
         self.title = "回覆"
         
         contentTextView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin).offset(10)
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
+            make.top.equalTo(view.snp.topMargin).offset(15)
             make.leading.equalTo(view.snp.leadingMargin).offset(0)
             make.trailing.equalTo(view.snp.trailingMargin).offset(0)
+        }
+        
+        stackView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalTo(contentTextView.snp.bottomMargin).offset(15)
+            make.bottom.equalTo(view.snp.bottom).offset(-15)
+            make.leading.equalTo(view.snp.leadingMargin)
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureKeyboard()
         contentTextView.becomeFirstResponder()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
-                                               name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
-                                               name: UIResponder.keyboardWillHideNotification, object: nil)
-        UIBarButtonItem.appearance().tintColor = UIColor.white
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(hexRGB: "#45c17c")
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(hexRGB: "#45c17c")
+        UIBarButtonItem.appearance().tintColor = .label
+        navigationItem.leftBarButtonItem?.tintColor = .systemGreen
+        navigationItem.rightBarButtonItem?.tintColor = .systemGreen
 
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
+        keyboard.clear()
         self.view.endEditing(true)
-        UIBarButtonItem.appearance().tintColor = UIColor(hexRGB: "#45c17c")
+        self.contentTextView.resignFirstResponder()
+        UIBarButtonItem.appearance().tintColor = .systemGreen
     }
     
     func richEditorDidLoad(_ editor: RichEditorView) {
         editor.placeholder = "內容"
-        editor.setEditorBackgroundColor(UIColor(white: 0.15, alpha: 1))
-        editor.setEditorFontColor(UIColor(hexRGB: "aaaaaa")!)
-        editor.inputAccessoryView = toolbar
+        //editor.setEditorBackgroundColor(.secondarySystemBackground)
+        editor.setEditorFontColor(.label)
     }
     
-    func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar) {
+    @objc func linkButtonPressed(_ button: UIButton) {
         let alert = UIAlertController(title: nil, message: "鏈結網址", preferredStyle: .alert)
         alert.addTextField {
             textfield in
@@ -122,12 +148,12 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         let link = UIAlertAction(title: "插入鏈結", style: .default, handler: {
             _ in
             let textfield = alert.textFields?.first
-            toolbar.editor?.insertComponent("<a href=\"\((textfield?.text)!)\">\((textfield?.text)!)</a>")
+            self.contentTextView.insertComponent("<a href=\"\((textfield?.text)!)\">\((textfield?.text)!)</a>")
         })
         let image = UIAlertAction(title: "插入圖片", style: .default, handler: {
             _ in
             let textfield = alert.textFields?.first
-            toolbar.editor?.insertImage((textfield?.text)!, alt: "")
+            self.contentTextView.insertImage((textfield?.text)!, alt: "")
         })
         let cancel = UIAlertAction(title: "不了", style: .cancel, handler: nil)
         alert.addAction(link)
@@ -136,39 +162,11 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         present(alert,animated: true,completion: nil)
     }
     
-    func richEditorToolbarInsertImage(_ toolbar: RichEditorToolbar) {
+    @objc func imageButtonPressed(_ button: UIButton) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
         self.present(imagePicker,animated: true,completion: nil)
-    }
-    
-    func richEditorToolbarChangeTextColor(_ toolbar: RichEditorToolbar) {
-        let colorPicker = ColorPickerView()
-        colorPicker.delegate = self
-        colorPicker.layoutDelegate = self
-        colorPicker.colors = [UIColor(hexRGB: "ffffff"),UIColor(hexRGB: "f44f44"),UIColor(hexRGB: "ff8f00"),UIColor(hexRGB: "eecc28"),UIColor(hexRGB: "f6ef1b"),UIColor(hexRGB: "c1e823"),UIColor(hexRGB: "85e41d"),UIColor(hexRGB: "64b31c"),UIColor(hexRGB: "0ad849"),UIColor(hexRGB: "0ee6b4"),UIColor(hexRGB: "22b4e0"),UIColor(hexRGB: "208ce8"),UIColor(hexRGB: "4c5aff"),UIColor(hexRGB: "8858fd"),UIColor(hexRGB: "bb7ef2"),UIColor(hexRGB: "d800ff"),UIColor(hexRGB: "ff50b0"),UIColor(hexRGB: "ffc7c7"),UIColor(hexRGB: "808080"),UIColor(hexRGB: "000000")] as! [UIColor]
-        var attributes = EntryAttributes.shared.iconEntry()
-        attributes.positionConstraints.verticalOffset = keyboardHeight-50
-        SwiftEntryKit.display(entry: colorPicker, using: attributes)
-    }
-    
-    func colorPickerView(_ colorPickerView: ColorPickerView, didSelectItemAt indexPath: IndexPath) {
-        // A color has been selected
-        self.contentTextView.setTextColor(colorPickerView.colors[indexPath.item])
-        DispatchQueue.main.asyncAfter(deadline: 0.5, execute:  {
-            SwiftEntryKit.dismiss()
-        })
-    }
-    
-    func colorPickerView(_ colorPickerView: ColorPickerView, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        // Space between cells
-        return 10
-    }
-    
-    func colorPickerView(_ colorPickerView: ColorPickerView, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        // Space between rows
-        return 10
     }
     
     override func didReceiveMemoryWarning() {
@@ -194,7 +192,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             let alert = UIAlertController.init(title: "注意", message: "內容不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
                 action in
-                self.contentTextView.resignFirstResponder()
+                //self.contentTextView.resignFirstResponder()
                 self.contentTextView.becomeFirstResponder()
             }))
             self.present(alert,animated: true,completion: nil)
@@ -203,16 +201,17 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             let parsedHtml = galdenParse(input: contentTextView.contentHTML)
             let replyThreadMutation = ReplyThreadMutation(threadId: topicID, parentId: quoteID, html: parsedHtml)
             apollo.perform(mutation: replyThreadMutation) {
-                [weak self] result, error in
-                if error == nil {
+                [weak self] result in
+                switch result {
+                case .success(_):
                     HUD.flash(.success)
                     self?.dismiss(animated: true, completion: {
                         self?.contentTextView.html = ""
                         self?.contentVC?.unwindAfterReply()
                     })
-                } else {
+                case .failure(let error):
                     HUD.flash(.error)
-                    print(error!)
+                    print(error)
                 }
             }
         }
@@ -222,16 +221,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         let doc = try! SwiftSoup.parse(contentTextView.html)
         
         //p tag hack
-        let div = try! doc.select("div")
-        if div.first() != nil {
-            try! div.first()!.before("<hr>")
-            //try! div.first()!.after("<hr>")
-        }
-        //try! div.first()!.before("<hr>")
-        //try! div.first()!.after("<hr>")
-        //try! doc.body()!.append("<br>")
-        for el in div {
-            try! el.tagName("p")
+        let p = try! doc.select("p")
+        if p.first() != nil {
+            try! p.first()!.before("<hr>")
         }
         
         //color highlight parse
@@ -378,19 +370,9 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         }
         
         var parsedHtml = "<div id=\"pmc\"><p>\(try! doc.body()!.html())</div>"
-        //parsedHtml = parsedHtml.replacingOccurrences(of: "<br>", with: "")
+        parsedHtml = parsedHtml.replacingOccurrences(of: "<br>", with: "")
         parsedHtml = parsedHtml.replacingOccurrences(of: "<hr>", with: "</p>")
-        
-        //remove empty p tag
-        //let parsedDoc = try! SwiftSoup.parse(parsedHtml)
-        //let p = try! parsedDoc.select("p")
-        //try! p.last()?.remove()
-        
-        //remove style for all el
-        //let el = try! doc.getAllElements()
-        //try! el.removeAttr("style")
-        
-        //parsedHtml = try! parsedDoc.body()!.html()
+        parsedHtml = parsedHtml.trimmingCharacters(in: .newlines)
         
         return parsedHtml
     }
@@ -400,10 +382,23 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }
     
     @objc func callIconKeyboard() {
-        //contentTextView.resignFirstResponder()
-        var attributes = EntryAttributes.shared.iconEntry()
-        attributes.positionConstraints.verticalOffset = keyboardHeight-50
-        SwiftEntryKit.display(entry: iconKeyboard, using: attributes)
+        if iconKeyboardShowing == false {
+            view.endEditing(true)
+            //contentTextView.resignFirstResponder()
+            view.addSubview(iconKeyboard)
+            iconKeyboard.snp.makeConstraints {
+                (make) -> Void in
+                make.top.equalTo(stackView.snp.bottom).offset(20)
+                make.bottom.equalTo(view.snp.bottom).offset(-20)
+                make.leading.equalTo(view.snp.leadingMargin).offset(0)
+                make.trailing.equalTo(view.snp.trailingMargin).offset(0)
+            }
+            iconKeyboardShowing = true
+        } else {
+            iconKeyboard.removeFromSuperview()
+            iconKeyboardShowing = false
+            contentTextView.becomeFirstResponder()
+        }
     }
     
     @objc func cancelButtonPressed(_ sender: UIBarButtonItem) {
@@ -412,28 +407,35 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         })
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            keyboardHeight = keyboardSize.height
-            contentTextView.snp.updateConstraints {
-                (make) -> Void in
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight+(UIScreen.main.bounds.height*0.18))
-                } else {
-                    make.bottom.equalTo(view.snp.bottomMargin).offset(-keyboardHeight)
+    func configureKeyboard() {
+        keyboard
+            .on(event: .willShow) { (options) in
+                self.stackView.snp.updateConstraints {
+                    (make) -> Void in
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        make.bottom.equalTo(self.view.snp.bottom).offset(-options.endFrame.height + (UIScreen.main.bounds.height*0.18)-15)
+                    } else {
+                        make.bottom.equalTo(self.view.snp.bottom).offset(-options.endFrame.height-15)
+                    }
                 }
             }
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: Notification) {
-        // keyboard is dismissed/hidden from the screen
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            contentTextView.snp.updateConstraints {
-                (make) -> Void in
-                make.bottom.equalTo(view.snp.bottomMargin).offset(-10)
+            .on(event: .willChangeFrame) { (options) in
+                self.stackView.snp.updateConstraints {
+                    (make) -> Void in
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        make.bottom.equalTo(self.view.snp.bottom).offset(-options.endFrame.height + (UIScreen.main.bounds.height*0.18)-15)
+                    } else {
+                        make.bottom.equalTo(self.view.snp.bottom).offset(-options.endFrame.height-15)
+                    }
+                }
             }
-        }
+            /*.on(event: .willHide) { (options) in
+                self.stackView.snp.updateConstraints {
+                    (make) -> Void in
+                    make.bottom.equalTo(self.view.snp.bottom).offset(-15)
+                }
+            }*/
+            .start()
     }
     
     func rgbToHex(color: UIColor) -> String {
@@ -482,7 +484,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     //MARK: ImagePickerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: {
-            self.contentTextView.resignFirstResponder()
             self.contentTextView.becomeFirstResponder()
         })
     }
@@ -493,8 +494,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             imageUpload(imageURL: imageURL, completion: {
                 url in
                 self.dismiss(animated: true, completion: {
-                    self.toolbar.editor?.insertImage(url, alt: "")
-                    self.contentTextView.resignFirstResponder()
+                    self.contentTextView.insertImage(url, alt: "")
                     self.contentTextView.becomeFirstResponder()
                 })
             })
@@ -515,8 +515,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             imageUpload(imageURL: imagePath!, completion: {
                 url in
                 self.dismiss(animated: true, completion: {
-                    self.toolbar.editor?.insertImage(url, alt: "")
-                    self.contentTextView.resignFirstResponder()
+                    self.contentTextView.insertImage(url, alt: "")
+                    //self.contentTextView.resignFirstResponder()
                     self.contentTextView.becomeFirstResponder()
                 })
             })

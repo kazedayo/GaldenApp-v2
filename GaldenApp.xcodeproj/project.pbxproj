@@ -16,7 +16,6 @@
 		424A470C2073493E005795A6 /* ThreadListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F02073493C005795A6 /* ThreadListTableViewCell.swift */; };
 		424A470E2073493E005795A6 /* ChannelListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F22073493C005795A6 /* ChannelListTableViewCell.swift */; };
 		424A470F2073493E005795A6 /* PagePopoverTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */; };
-		424A47102073493E005795A6 /* PageSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F42073493C005795A6 /* PageSelectViewController.swift */; };
 		424A47112073493E005795A6 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F52073493C005795A6 /* History.swift */; };
 		424A47132073493E005795A6 /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F72073493C005795A6 /* ComposeViewController.swift */; };
 		424A47152073493E005795A6 /* IconKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A46F92073493D005795A6 /* IconKeyboard.swift */; };
@@ -70,7 +69,6 @@
 		424A46F02073493C005795A6 /* ThreadListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadListTableViewCell.swift; sourceTree = "<group>"; };
 		424A46F22073493C005795A6 /* ChannelListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelListTableViewCell.swift; sourceTree = "<group>"; };
 		424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagePopoverTableViewController.swift; sourceTree = "<group>"; };
-		424A46F42073493C005795A6 /* PageSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageSelectViewController.swift; sourceTree = "<group>"; };
 		424A46F52073493C005795A6 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		424A46F72073493C005795A6 /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
 		424A46F92073493D005795A6 /* IconKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconKeyboard.swift; sourceTree = "<group>"; };
@@ -155,7 +153,6 @@
 				42CDE187214F4FEE00793A8D /* LoginViewController.swift */,
 				424A47012073493E005795A6 /* LaunchViewController.swift */,
 				424A46F32073493C005795A6 /* PagePopoverTableViewController.swift */,
-				424A46F42073493C005795A6 /* PageSelectViewController.swift */,
 				42A1C80F2140A3C000C0C511 /* SettingsTableViewController.swift */,
 				424A47022073493E005795A6 /* ThreadListViewController.swift */,
 			);
@@ -385,7 +382,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "APOLLO_FRAMEWORK_PATH=\"$(eval find $FRAMEWORK_SEARCH_PATHS -name \"Apollo.framework\" -maxdepth 1)\"\n\nif [ -z \"$APOLLO_FRAMEWORK_PATH\" ]; then\necho \"error: Couldn't find Apollo.framework in FRAMEWORK_SEARCH_PATHS; make sure to add the framework to your project.\"\nexit 1\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}\"\n$APOLLO_FRAMEWORK_PATH/check-and-run-apollo-cli.sh codegen:generate --queries=\"$(find . -name '*.graphql')\" --schema=schema.json API.swift\n";
+			shellScript = "SCRIPT_PATH=\"${PODS_ROOT}/Apollo/scripts\"\ncd \"${SRCROOT}/${TARGET_NAME}\"\n\"${SCRIPT_PATH}\"/check-and-run-apollo-cli.sh codegen:generate --target=swift --includes=./**/*.graphql --localSchemaFile=\"schema.json\" API.swift\n";
 		};
 		605FDEF159E9C61A58332B0A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -436,22 +433,15 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GaldenApp/Pods-GaldenApp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Apollo/Apollo.framework",
 				"${BUILT_PRODUCTS_DIR}/Blueprints/Blueprints.framework",
-				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
-				"${BUILT_PRODUCTS_DIR}/IGColorPicker/IGColorPicker.framework",
-				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
-				"${BUILT_PRODUCTS_DIR}/M13Checkbox/M13Checkbox.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/QuickLayout/QuickLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RichEditorView/RichEditorView.framework",
@@ -459,28 +449,21 @@
 				"${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftDate/SwiftDate.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftEntryKit/SwiftEntryKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyStoreKit/SwiftyStoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Typist/Typist.framework",
 				"${BUILT_PRODUCTS_DIR}/URLNavigator/URLNavigator.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Apollo.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Blueprints.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IGColorPicker.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/M13Checkbox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QuickLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RichEditorView.framework",
@@ -488,10 +471,10 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SideMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftDate.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftEntryKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyStoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Typist.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLNavigator.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -521,7 +504,6 @@
 				42CDE188214F4FEE00793A8D /* LoginViewController.swift in Sources */,
 				42964F212085CF12000FA349 /* NetworkActivityIndicatorManager.swift in Sources */,
 				424A470E2073493E005795A6 /* ChannelListTableViewCell.swift in Sources */,
-				424A47102073493E005795A6 /* PageSelectViewController.swift in Sources */,
 				42EF97BF21B55D2200EB08BC /* Thread.swift in Sources */,
 				423E272D207458ED00F267CA /* IconCollectionViewCell.swift in Sources */,
 				42029C68207A44610001E142 /* URLNavigationMap.swift in Sources */,
@@ -692,10 +674,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2019091101;
 				DEVELOPMENT_TEAM = R3W953ED69;
 				INFOPLIST_FILE = GaldenApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = hk.1080.green;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -722,10 +706,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2019091101;
 				DEVELOPMENT_TEAM = R3W953ED69;
 				INFOPLIST_FILE = GaldenApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = hk.1080.green;
 				PRODUCT_NAME = "$(TARGET_NAME)";

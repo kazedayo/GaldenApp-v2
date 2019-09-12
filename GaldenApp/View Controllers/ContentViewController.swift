@@ -12,7 +12,6 @@ import WebKit
 import RealmSwift
 import Kingfisher
 import SKPhotoBrowser
-import SwiftEntryKit
 import SwiftSoup
 import SwiftDate
 import SafariServices
@@ -41,13 +40,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     lazy var replyButton = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(replyButtonPressed))
     lazy var shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
     lazy var pageButton = UIBarButtonItem(title: "撈緊...", style: .plain, target: self, action: #selector(pageButtonPressed))
-    lazy var prevButton = UIBarButtonItem(image: UIImage(named: "previous"), style: .plain, target: self, action: #selector(prevButtonPressed(_:)))
-    lazy var nextButton = UIBarButtonItem(image: UIImage(named: "next"), style: .plain, target: self, action: #selector(nextButtonPressed(_:)))
+    lazy var prevButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(prevButtonPressed(_:)))
+    lazy var nextButton = UIBarButtonItem(image: UIImage(systemName: "chevron.right"), style: .plain, target: self, action: #selector(nextButtonPressed(_:)))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.largeTitleDisplayMode = .never
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .systemBackground
         
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
@@ -57,12 +56,11 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         config.preferences.javaScriptEnabled = true
         config.processPool = WKProcessPool()
         webView = WKWebView(frame: self.view.bounds, configuration: config)
-        webView.isOpaque = false
-        webView.backgroundColor = .clear
+        webView.backgroundColor = .systemBackground
         //user agent spoof for icon
-        webView.customUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"
+        //webView.customUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"
         webView.navigationDelegate = self
-        webView.scrollView.contentInsetAdjustmentBehavior = .never
+        webView.scrollView.contentInsetAdjustmentBehavior = .automatic
         webView.scrollView.delegate = self
         view.addSubview(webView)
         
@@ -71,18 +69,17 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         navigationItem.largeTitleDisplayMode = .never
         navigationController?.delegate = self
         navigationController?.isToolbarHidden = false
-        navigationController?.navigationBar.isTranslucent = false
         
         prevButton.isEnabled = false
         nextButton.isEnabled = false
         replyButton.isEnabled = false
         pageButton.isEnabled = false
-        pageButton.tintColor = .white
+        pageButton.tintColor = .label
         shareButton.isEnabled = false
         toolbarItems = [prevButton,flexibleSpace,replyButton,flexibleSpace,pageButton,flexibleSpace,shareButton,flexibleSpace,nextButton]
         
-        titleLabel.textColor = .white
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        titleLabel.textColor = .label
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         titleLabel.animationDelay = 1
         titleLabel.type = .leftRight
         titleLabel.fadeLength = 5
@@ -97,8 +94,8 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         
         webView.snp.makeConstraints {
             (make) -> Void in
-            make.top.equalTo(view.snp.topMargin)
-            make.bottom.equalTo(view.snp.bottomMargin)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
@@ -123,7 +120,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        SwiftEntryKit.dismiss()
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "quote")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "block")
         self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "refresh")
@@ -176,12 +172,14 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func blockButtonPressed(id: String) {
         let blockUserMutation = BlockUserMutation(id: id)
         apollo.perform(mutation: blockUserMutation) {
-            [weak self] result,error in
-            if result?.data?.blockUser == true {
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            if data.blockUser == true {
                 let getSessionUserQuery = GetSessionUserQuery()
                 apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
-                    [weak self] result, error in
-                    sessionUser = result?.data?.sessionUser
+                    [weak self] result in
+                    guard let data = try? result.get().data else { return }
+                    sessionUser = data.sessionUser
                     let alert = UIAlertController(title: "成功", message: "你已封鎖此會員", preferredStyle: .alert)
                     let action = UIAlertAction(title: "OK", style: .cancel, handler: {
                         action in
@@ -214,8 +212,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         pageVC.modalPresentationStyle = .popover
         pageVC.popoverPresentationController?.delegate = self
         pageVC.popoverPresentationController?.barButtonItem = pageButton
-        pageVC.preferredContentSize = CGSize(width: 150, height: 200)
-        pageVC.popoverPresentationController?.backgroundColor = UIColor(white: 0.15, alpha: 0.5)
+        pageVC.preferredContentSize = CGSize(width: view.bounds.width * 0.3, height: view.bounds.height * 0.2)
         pageVC.threadID = self.tID
         pageVC.pageCount = Int(self.pageCount)
         pageVC.pageSelected = self.pageNow
@@ -273,15 +270,13 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     @objc func share() {
-        let shareView = UIActivityViewController(activityItems:["https://hkgalden.org/forum/thread/\(tID!)/\(pageNow)"],applicationActivities:nil)
-        DispatchQueue.main.asyncAfter(deadline: 0.5, execute: {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                shareView.popoverPresentationController?.sourceView = self.view
-                shareView.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.maxY, width: 0, height: 0)
-                shareView.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0) //Removes arrow as I dont want it
-            }
-            self.present(shareView, animated: true, completion: nil)
-        })
+        let shareView = UIActivityViewController(activityItems:[URL(string: "https://hkgalden.org/forum/thread/\(tID!)/\(pageNow)")!],applicationActivities:nil)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            shareView.popoverPresentationController?.sourceView = view
+            shareView.popoverPresentationController?.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.maxY, width: 0, height: 0)
+            shareView.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0) //Removes arrow as I dont want it
+        }
+        self.present(shareView, animated: true, completion: nil)
     }
     
     @objc func prevButtonPressed(_ sender: UIBarButtonItem) {
@@ -331,33 +326,32 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         }
         let getThreadContentQuery = GetThreadContentQuery(id: tID, sorting: .dateAsc, page: pageNow)
         apollo.fetch(query: getThreadContentQuery,cachePolicy: .fetchIgnoringCacheData) {
-            [weak self] result,error in
-            if error == nil {
-                var contentHTML: String?
-                guard let thread = result?.data?.thread else { return }
-                let totalPage = ceil(Double(thread.totalReplies)/50.0)
-                //print(thread.totalReplies)
-                //print(totalPage)
-                self?.pageCount = totalPage
-                self?.totalReplies = thread.totalReplies
-                
-                DispatchQueue.main.async {
-                    let titleTrim = thread.title.trimmingCharacters(in: .whitespacesAndNewlines)
-                    self?.titleLabel.text = titleTrim
-                    self?.navigationItem.titleView = self?.titleLabel
-                    self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
-                    self?.buttonLogic()
-                }
-                
-                contentHTML = self?.constructComments(thread: thread)
-                if (self?.pageNow==Int(totalPage)) {
-                    contentHTML?.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
-                }
-                
-                let threadHTML = "<html><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://rawcdn.githack.com/kazedayo/js_for_GaldenApp/5954e3b3859ebd54e3bfa1be38d2d856f36d6b87/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
-                
-                self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            var contentHTML: String?
+            guard let thread = data.thread else { return }
+            let totalPage = ceil(Double(thread.totalReplies)/50.0)
+            //print(thread.totalReplies)
+            //print(totalPage)
+            self?.pageCount = totalPage
+            self?.totalReplies = thread.totalReplies
+            
+            DispatchQueue.main.async {
+                let titleTrim = thread.title.trimmingCharacters(in: .whitespacesAndNewlines)
+                self?.titleLabel.text = titleTrim
+                self?.navigationItem.titleView = self?.titleLabel
+                self?.pageButton.title = "第\(self?.pageNow ?? 1)頁"
+                self?.buttonLogic()
             }
+            
+            contentHTML = self?.constructComments(thread: thread)
+            if (self?.pageNow==Int(totalPage)) {
+                contentHTML?.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
+            }
+            
+            let threadHTML = "<html lang=\"zh-Hant\"><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://rawcdn.githack.com/kazedayo/js_for_GaldenApp/5954e3b3859ebd54e3bfa1be38d2d856f36d6b87/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
+            
+            self?.webView.loadHTMLString(threadHTML, baseURL: Bundle.main.bundleURL)
         }
     }
     
@@ -616,7 +610,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     })
                 } else {
                     NetworkActivityIndicatorManager.networkOperationFinished()
-                    webView.isHidden = false
+                    DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
+                        webView.isHidden = false
+                    })
                 }
             }
         })
@@ -625,7 +621,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if navigationAction.navigationType == .linkActivated {
             if (navigationAction.request.url?.absoluteString.contains("hkgalden.org"))! {
-                navigator.pushURL(navigationAction.request.url!)
+                navigationController?.pushViewController(navigator.viewController(for: navigationAction.request.url!)!, animated: true)
                 decisionHandler(.cancel)
             } else {
                 let url = navigationAction.request.url
@@ -636,8 +632,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     UIApplication.shared.openURL(url!)
                 }*/
                 let sfVC = SFSafariViewController(url: url!)
-                sfVC.preferredControlTintColor = UIColor(hexRGB: "#45c17c")
-                sfVC.preferredBarTintColor = .black
+                sfVC.preferredControlTintColor = .systemGreen
                 present(sfVC, animated: true, completion: nil)
                 decisionHandler(.cancel)
             }

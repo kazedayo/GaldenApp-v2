@@ -8,7 +8,6 @@
 
 import UIKit
 import WebKit
-import SwiftEntryKit
 import Apollo
 
 class LoginViewController: UIViewController,WKNavigationDelegate {
@@ -25,12 +24,12 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .systemBackground
         webView.navigationDelegate = self
         
         let label = UILabel()
         label.text = "未登入，請先登入"
-        label.textColor = .lightGray
+        label.textColor = .systemGray
         view.addSubview(label)
         
         label.snp.makeConstraints {
@@ -69,19 +68,16 @@ class LoginViewController: UIViewController,WKNavigationDelegate {
         let urlStr = navigationAction.request.url?.absoluteString
         if (urlStr?.contains("http://localhost/callback"))! {
             let userKey = urlStr!.replacingOccurrences(of: "http://localhost/callback?token=", with: "")
-            //print(userKey)
             keychain.set(userKey, forKey: "userKey")
-            //reconfigure apollo
-            apollo = Configurations.shared.configureApollo()
             let getSessionUserQuery = GetSessionUserQuery()
             apollo.fetch(query: getSessionUserQuery,cachePolicy: .fetchIgnoringCacheData) {
-                [weak self] result,error in
-                sessionUser = result?.data?.sessionUser
+                [weak self] result in
+                guard let data = try? result.get().data else { return }
+                sessionUser = data.sessionUser
                 self?.dismiss(animated: true, completion: nil)
                 var controllers = (self?.tabBarController?.viewControllers)!
                 let sessionUserViewController = SessionUserViewController()
                 sessionUserViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
-                sessionUserViewController.tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
                 controllers[1] = sessionUserViewController
                 self?.tabBarController?.setViewControllers(controllers, animated: false)
             }

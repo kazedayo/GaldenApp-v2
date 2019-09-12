@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import SwiftDate
 
-class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class UserViewController: UITableViewController {
     
     var threadsArray: [ThreadListDetails] = []
     var userThreads: [ThreadListDetails] = []
@@ -21,24 +21,20 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     let unameLabel = UILabel()
     let ugroupLabel = UILabel()
     let headerView = UIView()
-    let tableView = UITableView()
     let activityIndicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        view.backgroundColor = .systemBackground
         navigationItem.title = "起底"
         
-        tableView.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1)
-        tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 10, bottom: 0, right: 0)
-        tableView.separatorColor = UIColor(white: 0.10, alpha: 1)
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorColor = .separator
         tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
-        view.addSubview(tableView)
         
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
@@ -49,57 +45,68 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let getUserQuery = GetUserQuery(id: uid)
         NetworkActivityIndicatorManager.networkOperationStarted()
         apollo.fetch(query: getUserQuery) {
-            [weak self] result, error in
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
             NetworkActivityIndicatorManager.networkOperationFinished()
-            if error == nil {
-                let user = result?.data?.user
-                //avatar
-                if user?.avatar != nil {
-                    self?.avatarView.kf.setImage(with: URL(string: (user?.avatar)!)!)
-                } else {
-                    self?.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/2lya6uS.png")!)
-                }
-                self?.avatarView.clipsToBounds = true
-                self?.avatarView.layer.cornerRadius = 25
-                
-                //user name
-                self?.unameLabel.text = user?.nickname
-                self?.unameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-                self?.unameLabel.adjustsFontForContentSizeCategory = true
-                if user?.gender == UserGender.m {
-                    self?.unameLabel.textColor = UIColor(hexRGB: "22c1fe")
-                } else if user?.gender == UserGender.f {
-                    self?.unameLabel.textColor = UIColor(hexRGB: "ff7aab")
-                }
-                
-                //user group
-                self?.ugroupLabel.text = "郊登仔"
-                self?.ugroupLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-                self?.ugroupLabel.adjustsFontForContentSizeCategory = true
-                self?.ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
-                if user?.groups.isEmpty == false {
-                   self?.ugroupLabel.text = sessionUser?.groups[0].name
-                    if user?.groups[0].id == "DEVELOPER" {
-                        self?.ugroupLabel.textColor = UIColor(hexRGB: "e0561d")
-                    } else if user?.groups[0].id == "ADMIN" {
-                        self?.ugroupLabel.textColor = UIColor(hexRGB: "7435a0")
-                    }
-                }
-                self?.getUserThreads(completion: {
-                    self?.activityIndicator.removeFromSuperview()
-                })
+            let user = data.user
+            //avatar
+            if user?.avatar != nil {
+                self?.avatarView.kf.setImage(with: URL(string: (user?.avatar)!)!)
+            } else {
+                self?.avatarView.kf.setImage(with: URL(string: "https://i.imgur.com/2lya6uS.png")!)
             }
+            self?.avatarView.clipsToBounds = true
+            self?.avatarView.layer.cornerRadius = 25
+            
+            //user name
+            self?.unameLabel.text = user?.nickname
+            self?.unameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+            self?.unameLabel.adjustsFontForContentSizeCategory = true
+            if user?.gender == UserGender.m {
+                self?.unameLabel.textColor = UIColor(hexRGB: "22c1fe")
+            } else if user?.gender == UserGender.f {
+                self?.unameLabel.textColor = UIColor(hexRGB: "ff7aab")
+            }
+            
+            //user group
+            self?.ugroupLabel.text = "郊登仔"
+            self?.ugroupLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            self?.ugroupLabel.adjustsFontForContentSizeCategory = true
+            self?.ugroupLabel.textColor = UIColor(hexRGB: "aaaaaa")
+            if user?.groups.isEmpty == false {
+               self?.ugroupLabel.text = sessionUser?.groups[0].name
+                if user?.groups[0].id == "DEVELOPER" {
+                    self?.ugroupLabel.textColor = UIColor(hexRGB: "e0561d")
+                } else if user?.groups[0].id == "ADMIN" {
+                    self?.ugroupLabel.textColor = UIColor(hexRGB: "7435a0")
+                }
+            }
+            self?.getUserThreads(completion: {
+                self?.activityIndicator.removeFromSuperview()
+            })
         }
-        
+        let blur = UIBlurEffect(style: .systemChromeMaterial)
+        let blurView = UIVisualEffectView()
+        blurView.effect = blur
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.addSubview(blurView)
         headerView.addSubview(avatarView)
         headerView.addSubview(unameLabel)
         headerView.addSubview(ugroupLabel)
-        headerView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        headerView.backgroundColor = .clear
         
         activityIndicator.snp.makeConstraints {
             (make) -> Void in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
+        }
+        
+        blurView.snp.makeConstraints {
+            (make) -> Void in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
         }
         
         avatarView.snp.makeConstraints {
@@ -124,14 +131,6 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.trailing.equalToSuperview().offset(-10)
         }
         
-        tableView.snp.makeConstraints {
-            (make) -> Void in
-            make.top.equalTo(view.snp.top)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom)
-        }
-        
         // Do any additional setup after loading the view.
     }
     
@@ -149,37 +148,37 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.navigationController?.isToolbarHidden = true
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return headerView
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 90
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userThreads.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThreadListTableViewCell") as! ThreadListTableViewCell
         let title = userThreads[indexPath.row].title.trimmingCharacters(in: .whitespacesAndNewlines)
         let count = userThreads[indexPath.row].totalReplies
         let dateMap = userThreads[indexPath.row].replies.map {$0.date}
         let date = dateMap.last!.toISODate()
-        let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.chineseTaiwan)
-        cell.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        let relativeDate = date?.toRelative(since: DateInRegion(), style: RelativeFormatter.twitterStyle(), locale: Locales.english)
+        cell.backgroundColor = .systemBackground
         cell.threadTitleLabel.text = title
-        cell.threadTitleLabel.textColor = .lightGray
+        cell.threadTitleLabel.textColor = .label
         cell.detailLabel.text = "你的回覆: \(count) // 最後一次回覆: \(relativeDate!)"
-        cell.detailLabel.textColor = .darkGray
+        cell.detailLabel.textColor = .secondaryLabel
         let tags = userThreads[indexPath.row].tags.map {$0.fragments.tagDetails}
         cell.tagLabel.text = "#\(tags[0].name)"
         cell.tagLabel.textColor = UIColor(hexRGB: tags[0].color)
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let contentVC = ContentViewController()
         let selectedThread = userThreads[indexPath.row].id
         contentVC.tID = selectedThread
@@ -206,20 +205,18 @@ class UserViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             NetworkActivityIndicatorManager.networkOperationStarted()
         }
         apollo.fetch(query:getUserThreadsQuery,cachePolicy: .fetchIgnoringCacheData) {
-            [weak self] result,error in
-            if error == nil {
-                self?.threadsArray.append(contentsOf: (result?.data?.threadsByUser.map {$0.fragments.threadListDetails})!)
-                if (self?.pageCount==2){
-                    self?.userThreads = self!.threadsArray
-                    //self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-                    self?.tableView.reloadData()
-                    NetworkActivityIndicatorManager.networkOperationFinished()
-                    self?.tableView.isHidden = false
-                    completion()
-                } else {
-                    self?.pageCount+=1
-                    self?.getUserThreads(completion: completion)
-                }
+            [weak self] result in
+            guard let data = try? result.get().data else { return }
+            self?.threadsArray.append(contentsOf: (data.threadsByUser.map {$0.fragments.threadListDetails}))
+            if (self?.pageCount==2){
+                self?.userThreads = self!.threadsArray
+                //self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+                self?.tableView.reloadData()
+                NetworkActivityIndicatorManager.networkOperationFinished()
+                completion()
+            } else {
+                self?.pageCount+=1
+                self?.getUserThreads(completion: completion)
             }
         }
     }

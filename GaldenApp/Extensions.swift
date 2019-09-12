@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import SwiftEntryKit
-import Hero
 import Apollo
 
 extension String {
@@ -140,102 +138,33 @@ enum NavigationType {
     case reply
 }
 
-class EntryAttributes {
-    static let shared = EntryAttributes()
+class HKGAPI {
+  static let shared = HKGAPI()
+  
+  // Configure the network transport to use the singleton as the delegate.
+  private lazy var networkTransport = HTTPNetworkTransport(
+    url: URL(string: "https://hkgalden.org/_")!,
+    delegate: self
+  )
     
-    public func iconEntry() -> EKAttributes {
-        var attributes = EKAttributes()
-        attributes.position = .bottom
-        var widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.95)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.7)
-        }
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.constant(value: 125)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
-        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
-        attributes.positionConstraints.keyboardRelation = keyboardRelation
-        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-        attributes.displayDuration = .infinity
-        attributes.screenInteraction = .dismiss
-        attributes.entryInteraction = .forward
-        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-        attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.25, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
-        //attributes.exitAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
-        return attributes
-    }
-    
-    public func centerEntry() -> EKAttributes {
-        var attributes = EKAttributes()
-        attributes.position = .center
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.85)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        let offset = EKAttributes.PositionConstraints.KeyboardRelation.Offset(bottom: 10, screenEdgeResistance: 20)
-        let keyboardRelation = EKAttributes.PositionConstraints.KeyboardRelation.bind(offset: offset)
-        attributes.positionConstraints.keyboardRelation = keyboardRelation
-        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-        attributes.displayDuration = .infinity
-        attributes.screenInteraction = .absorbTouches
-        attributes.entryInteraction = .forward
-        attributes.screenBackground = .visualEffect(style: .dark)
-        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-        attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
-        return attributes
-    }
-    
-    public func centerEntryZoom() -> EKAttributes {
-        var attributes = EKAttributes()
-        attributes.position = .center
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.75)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.5)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        attributes.displayDuration = .infinity
-        attributes.screenInteraction = .dismiss
-        attributes.entryInteraction = .forward
-        attributes.screenBackground = .visualEffect(style: .dark)
-        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-        attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 0.5, to: 1, duration: 0.25))
-        attributes.exitAnimation = .init(translate: nil, scale: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.25, duration: 0.25), fade: EKAttributes.Animation.RangeAnimation.init(from: 1, to: 0.25, duration: 0.25))
-        return attributes
-    }
-    
-    public func bottomEntry() -> EKAttributes {
-        var attributes = EKAttributes()
-        attributes.position = .bottom
-        let widthConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.9)
-        let heightConstraint = EKAttributes.PositionConstraints.Edge.ratio(value: 0.3)
-        attributes.positionConstraints.size = .init(width: widthConstraint, height: heightConstraint)
-        attributes.positionConstraints.verticalOffset = 20
-        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-        attributes.displayDuration = .infinity
-        attributes.screenInteraction = .dismiss
-        attributes.entryInteraction = .forward
-        attributes.screenBackground = .visualEffect(style: .dark)
-        attributes.entryBackground = .color(color: UIColor(hexRGB: "#262626")!)
-        attributes.shadow = .active(with: .init(color: .black, opacity: 0.3, radius: 10, offset: .zero))
-        attributes.roundCorners = .all(radius: 10)
-        attributes.entranceAnimation = .init(translate: EKAttributes.Animation.Translate.init(duration: 0.5, anchorPosition: .bottom, delay: 0, spring: EKAttributes.Animation.Spring.init(damping: 1, initialVelocity: 0)), scale: nil, fade: nil)
-        return attributes
-    }
+  // Use the configured network transport in your client.
+  private(set) lazy var client = ApolloClient(networkTransport: self.networkTransport)
 }
 
-class Configurations {
-    static let shared = Configurations()
-    
-    func configureApollo() -> ApolloClient {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["Authorization": "Bearer \(keychain.get("userKey") ?? "")"] // Replace `<token>`
-        
-        let url = URL(string: "https://hkgalden.org/_")!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+// MARK: - Pre-flight delegate
+
+extension HKGAPI: HTTPNetworkTransportPreflightDelegate {
+
+  func networkTransport(_ networkTransport: HTTPNetworkTransport,
+                          shouldSend request: URLRequest) -> Bool {
+    // If there's an authenticated user, send the request. If not, don't.
+    return true
+  }
+  
+  func networkTransport(_ networkTransport: HTTPNetworkTransport,
+                        willSend request: inout URLRequest) {
+    if (keychain.get("userKey") != nil) {
+        request.addValue("Bearer \(keychain.get("userKey")!)", forHTTPHeaderField: "Authorization")
     }
+  }
 }
