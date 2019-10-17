@@ -28,7 +28,6 @@ class ThreadListViewController: UITableViewController,UIPopoverPresentationContr
     
     let realm = try! Realm()
     let sideMenuVC = SideMenuViewController()
-    let composeVC = ThreadComposeViewController()
     //lazy var longPress = UILongPressGestureRecognizer(target: self, action: #selector(jumpToPage(_:)))
     lazy var sideMenuButton = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),style: .plain, target: self, action: #selector(channelButtonPressed(sender:)))
     lazy var newThread = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"),style: .plain, target: self, action: #selector(newThreadButtonPressed))
@@ -49,7 +48,6 @@ class ThreadListViewController: UITableViewController,UIPopoverPresentationContr
         tableView.register(ThreadListTableViewCell.classForCoder(), forCellReuseIdentifier: "ThreadListTableViewCell")
         //tableView.addGestureRecognizer(longPress)
         
-        composeVC.view.layoutSubviews()
         sideMenuVC.view.layoutSubviews()
         let menuLeftNavigationController = SideMenuNavigationController(rootViewController: sideMenuVC)
         sideMenuVC.mainVC = self
@@ -182,6 +180,7 @@ class ThreadListViewController: UITableViewController,UIPopoverPresentationContr
     
     @objc func newThreadButtonPressed() {
         if keychain.get("userKey") != nil {
+            let composeVC = ThreadComposeViewController()
             let composeNavVC = UINavigationController(rootViewController: composeVC)
             composeVC.threadVC = self
             composeNavVC.modalPresentationStyle = .formSheet

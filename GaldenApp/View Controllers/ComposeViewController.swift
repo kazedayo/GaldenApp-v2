@@ -98,8 +98,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         stackView.addArrangedSubview(iconButton)
         view.addSubview(stackView)
         
-        self.title = "回覆"
-        
         contentTextView.snp.makeConstraints {
             (make) -> Void in
             make.top.equalTo(view.snp.topMargin).offset(15)
@@ -118,7 +116,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureKeyboard()
-        contentTextView.becomeFirstResponder()
         UIBarButtonItem.appearance().tintColor = .label
         navigationItem.leftBarButtonItem?.tintColor = .systemGreen
         navigationItem.rightBarButtonItem?.tintColor = .systemGreen
@@ -129,7 +126,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         super.viewWillDisappear(animated)
         keyboard.clear()
         self.view.endEditing(true)
-        self.contentTextView.resignFirstResponder()
         UIBarButtonItem.appearance().tintColor = .systemGreen
     }
     
@@ -148,7 +144,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         let link = UIAlertAction(title: "插入鏈結", style: .default, handler: {
             _ in
             let textfield = alert.textFields?.first
-            self.contentTextView.insertComponent("<a href=\"\((textfield?.text)!)\">\((textfield?.text)!)</a>")
+            self.contentTextView.insertLink((textfield?.text)!, title: (textfield?.text)!)
         })
         let image = UIAlertAction(title: "插入圖片", style: .default, handler: {
             _ in
@@ -192,8 +188,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
             let alert = UIAlertController.init(title: "注意", message: "內容不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
                 action in
-                //self.contentTextView.resignFirstResponder()
-                self.contentTextView.becomeFirstResponder()
             }))
             self.present(alert,animated: true,completion: nil)
         } else {
@@ -218,12 +212,14 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }
     
     func galdenParse(input: String) -> String {
-        let doc = try! SwiftSoup.parse(contentTextView.html)
+        let doc = try! SwiftSoup.parse(input)
         
         //p tag hack
         let p = try! doc.select("p")
         if p.first() != nil {
             try! p.first()!.before("<hr>")
+        } else {
+            try! doc.append("<hr>")
         }
         
         //color highlight parse
@@ -378,7 +374,7 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     }
     
     func keyWasTapped(character: String) {
-        contentTextView.insertComponent(character)
+        contentTextView.insertHTML(character)
     }
     
     @objc func callIconKeyboard() {
@@ -397,7 +393,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         } else {
             iconKeyboard.removeFromSuperview()
             iconKeyboardShowing = false
-            contentTextView.becomeFirstResponder()
         }
     }
     
@@ -484,7 +479,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     //MARK: ImagePickerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: {
-            self.contentTextView.becomeFirstResponder()
         })
     }
     
@@ -495,7 +489,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                 url in
                 self.dismiss(animated: true, completion: {
                     self.contentTextView.insertImage(url, alt: "")
-                    self.contentTextView.becomeFirstResponder()
                 })
             })
         } else {
@@ -516,8 +509,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
                 url in
                 self.dismiss(animated: true, completion: {
                     self.contentTextView.insertImage(url, alt: "")
-                    //self.contentTextView.resignFirstResponder()
-                    self.contentTextView.becomeFirstResponder()
                 })
             })
         }

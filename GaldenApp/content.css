@@ -90,15 +90,22 @@ div#text.usertable {
 }
 
 .refresh-button {
-	background: url(https://i.imgur.com/i3fPsTh.png);
-	background-size: cover;
-	border: 0px;
-	width: 35px;
-	height: 35px;
+  padding: 15px 20px;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
 }
 
-.refresh-button:active {
-	transform: scale(0.9,0.9);
+.refresh-button:hover {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
 
 .usertable {
@@ -111,7 +118,7 @@ div#text.usertable {
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: var(--comment-color);
-    border-radius: 10px;
+    /*border-radius: 10px;*/
 }
 
 .quoteName {
