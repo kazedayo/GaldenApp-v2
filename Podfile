@@ -21,7 +21,7 @@ target 'GaldenApp' do
   pod 'Apollo', git: 'https://github.com/apollographql/apollo-ios.git', branch: 'master'
   pod 'SwiftSoup'
   pod 'SwiftDate', '~> 5.1.0'
-  pod 'RichEditorView'
+  pod 'RichEditorView', git: 'https://github.com/cbess/RichEditorView.git', branch: 'master'
   pod 'Alamofire'
   pod 'SwiftyJSON'
   pod 'Typist'

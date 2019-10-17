@@ -82,24 +82,18 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
             let alert = UIAlertController.init(title: "注意", message: "內容不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
                 action in
-                self.contentTextView.resignFirstResponder()
-                self.contentTextView.becomeFirstResponder()
             }))
             self.present(alert,animated: true,completion: nil)
         } else if (titleTextField.text == "") {
             let alert = UIAlertController.init(title: "注意", message: "標題不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
                 action in
-                self.contentTextView.resignFirstResponder()
-                self.contentTextView.becomeFirstResponder()
             }))
             self.present(alert,animated: true,completion: nil)
         } else if tagID == nil {
             let alert = UIAlertController.init(title: "注意", message: "請選擇標籤", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {
                 action in
-                self.contentTextView.resignFirstResponder()
-                self.contentTextView.becomeFirstResponder()
             }))
             self.present(alert,animated: true,completion: nil)
         } else {

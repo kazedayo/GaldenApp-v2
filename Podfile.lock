@@ -1,24 +1,26 @@
 PODS:
   - Alamofire (4.9.0)
-  - Apollo (0.15.1):
-    - Apollo/Core (= 0.15.1)
-  - Apollo/Core (0.15.1)
-  - Blueprints (0.12.1)
+  - Apollo (0.16.0):
+    - Apollo/Core (= 0.16.0)
+  - Apollo/Core (0.16.0)
+  - Blueprints (0.13.1)
   - KeychainSwift (16.0.1)
-  - Kingfisher (5.7.1)
+  - Kingfisher (5.8.1):
+    - Kingfisher/Core (= 5.8.1)
+  - Kingfisher/Core (5.8.1)
   - MarqueeLabel (4.0.0)
   - PKHUD (5.3.0)
-  - Realm (3.17.3):
-    - Realm/Headers (= 3.17.3)
-  - Realm/Headers (3.17.3)
-  - RealmSwift (3.17.3):
-    - Realm (= 3.17.3)
-  - RichEditorView (5.0.0)
-  - SideMenu (6.2.8)
+  - Realm (3.19.0):
+    - Realm/Headers (= 3.19.0)
+  - Realm/Headers (3.19.0)
+  - RealmSwift (3.19.0):
+    - Realm (= 3.19.0)
+  - RichEditorView (4.0)
+  - SideMenu (6.4.3)
   - SKPhotoBrowser (6.1.0)
   - SnapKit (4.2.0)
   - SwiftDate (5.1.0)
-  - SwiftSoup (2.2.0)
+  - SwiftSoup (2.2.1)
   - SwiftyJSON (5.0.0)
   - SwiftyStoreKit (0.15.0)
   - Typist (1.4.2)
@@ -34,7 +36,7 @@ DEPENDENCIES:
   - PKHUD
   - Realm (from `https://github.com/realm/realm-cocoa.git`, branch `master`)
   - RealmSwift (from `https://github.com/realm/realm-cocoa.git`, branch `master`)
-  - RichEditorView
+  - RichEditorView (from `https://github.com/cbess/RichEditorView.git`, branch `master`)
   - SideMenu
   - SKPhotoBrowser
   - SnapKit (~> 4.2.0)
@@ -53,7 +55,6 @@ SPEC REPOS:
     - Kingfisher
     - MarqueeLabel
     - PKHUD
-    - RichEditorView
     - SideMenu
     - SKPhotoBrowser
     - SnapKit
@@ -76,41 +77,47 @@ EXTERNAL SOURCES:
     :branch: master
     :git: https://github.com/realm/realm-cocoa.git
     :submodules: true
+  RichEditorView:
+    :branch: master
+    :git: https://github.com/cbess/RichEditorView.git
 
 CHECKOUT OPTIONS:
   Apollo:
-    :commit: 63f5263ee3a718d274cbbd707fa1f09356bb9b80
+    :commit: 73a85c9e226f8d4cf5b197baddd01dd76ede030f
     :git: https://github.com/apollographql/apollo-ios.git
   Realm:
-    :commit: 8ed9590320d52c539d35e2e5fe191af3a1ceb781
+    :commit: 6d52751b9c9aa7e6e6b8413721543133a05ad79e
     :git: https://github.com/realm/realm-cocoa.git
     :submodules: true
   RealmSwift:
-    :commit: 8ed9590320d52c539d35e2e5fe191af3a1ceb781
+    :commit: 6d52751b9c9aa7e6e6b8413721543133a05ad79e
     :git: https://github.com/realm/realm-cocoa.git
     :submodules: true
+  RichEditorView:
+    :commit: 99126468f06c6d6a3a7ce97702338786ffe167ed
+    :git: https://github.com/cbess/RichEditorView.git
 
 SPEC CHECKSUMS:
   Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
-  Apollo: faad3e64ac3f12642757329146318e8439c8f8e5
-  Blueprints: a35723fafd8020c984e9d51817bd3c67f8d18ddc
+  Apollo: ad9ce2008f88fce57c062aa4853364b7927355c8
+  Blueprints: ddd6ab1e455c98471aaef2fdd0b09b5f9b53af5b
   KeychainSwift: 4209611373ca4a098e09b1e547eebd87c544dcc4
-  Kingfisher: 176d377ad339113c99ad4980cbae687f807e20fe
+  Kingfisher: de969e451c81ca6c07a454bc36fea84b8b08c3c7
   MarqueeLabel: b55b26e690b6ad41faedd95cbf5eae6f1d1735b4
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
-  Realm: 5a1d9d47bfc101dd597668b1a8af4288a2557f6d
-  RealmSwift: b7fdc2d18616621c31df5c7a398a45a2163f8eb0
-  RichEditorView: 1bbb07b87ca2d479ac29a6877014b38b8df233ef
-  SideMenu: d3d43c5ea84f5e9af98c17e6b9c0201f93812d53
+  Realm: 995d585bcf699aaff226715886c849a29dd3d07f
+  RealmSwift: 35f284a537989f2187b413e5917091948cb87a3f
+  RichEditorView: bfd51ac5faf49f2d4d98b650947380fd486a86ae
+  SideMenu: 6540fa7a055b3728c006cec7d97e3a38cdac4874
   SKPhotoBrowser: 343de95d89dc7913763c5dda243cc6e606e4a168
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SwiftDate: 6329e58969a2de31cea7f1ee1143b247693196e7
-  SwiftSoup: 230991361c5ba249d140161860a3864a28b63860
+  SwiftSoup: a91d3c96ecb6f8f13005552ef60f9075aae4a7f3
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   SwiftyStoreKit: 033d06b6f87955405d3f844a18a7687c2438592a
   Typist: 06465ab9867782aa6c81e38f073dfc01dab73deb
   URLNavigator: 0bffc3efdeb2d97f7b5eec7ac82d290f4a099431
 
-PODFILE CHECKSUM: c08f165b1fa308208134932b7896c8b490ccbb03
+PODFILE CHECKSUM: c3e4b05c923906b0713d9dd31d4ab8f551d1228b
 
 COCOAPODS: 1.7.5

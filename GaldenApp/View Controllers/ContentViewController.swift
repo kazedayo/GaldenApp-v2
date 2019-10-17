@@ -35,7 +35,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     private var webView: WKWebView!
     
     let activityIndicator = UIActivityIndicatorView()
-    let composeVC = ComposeViewController()
     lazy var flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
     lazy var replyButton = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(replyButtonPressed))
     lazy var shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
@@ -51,7 +50,6 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
         
-        composeVC.view.layoutSubviews()
         let config = WKWebViewConfiguration()
         config.preferences.javaScriptEnabled = true
         config.processPool = WKProcessPool()
@@ -160,6 +158,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     func quoteButtonPressed(id: String) {
+        let composeVC = ComposeViewController()
         let composeNav = UINavigationController(rootViewController: composeVC)
         composeNav.modalPresentationStyle = .formSheet
         composeVC.title = "引用回覆"
@@ -223,6 +222,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     @objc func replyButtonPressed() {
         if keychain.get("userKey") != nil {
+            let composeVC = ComposeViewController()
             let composeNav = UINavigationController(rootViewController: composeVC)
             composeVC.title = "回覆"
             composeVC.topicID = self.tID
@@ -315,7 +315,9 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     }
     
     private func updateSequence() {
-        webView.isHidden = true
+        if (navType != .refresh) {
+            webView.isHidden = true
+        }
         activityIndicator.isHidden = false
         NetworkActivityIndicatorManager.networkOperationStarted()
         //if reply is next page
@@ -346,7 +348,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
             
             contentHTML = self?.constructComments(thread: thread)
             if (self?.pageNow==Int(totalPage)) {
-                contentHTML?.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\"></button></div>")
+                contentHTML?.append("<div class=\"refresh\"><button class=\"refresh-button\" onclick=\"window.webkit.messageHandlers.refresh.postMessage('refresh requested')\">F5</button></div>")
             }
             
             let threadHTML = "<html lang=\"zh-Hant\"><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no\"><link rel=\"stylesheet\" href=\"content.css\"><script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script><script src=\"https://rawcdn.githack.com/kazedayo/js_for_GaldenApp/5954e3b3859ebd54e3bfa1be38d2d856f36d6b87/GaldenApp.js\"></script></head><body>\(contentHTML ?? "")<script src=\"https://cdn.jsdelivr.net/blazy/latest/blazy.min.js\"></script></body></html>"
