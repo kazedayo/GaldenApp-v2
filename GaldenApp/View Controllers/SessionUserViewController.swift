@@ -163,7 +163,6 @@ class SessionUserViewController: UserViewController {
         var controllers = tabBarController?.viewControllers
         let loginViewController = LoginViewController()
         loginViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "user"), tag: 1)
-        loginViewController.tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
         controllers![1] = loginViewController
         tabBarController?.setViewControllers(controllers, animated: false)
     }

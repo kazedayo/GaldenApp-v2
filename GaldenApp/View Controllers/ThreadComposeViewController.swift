@@ -74,10 +74,10 @@ class ThreadComposeViewController: ComposeViewController,UIPopoverPresentationCo
     
     override func submitButtonPressed(_ sender: UIButton) {
         self.view.endEditing(true)
-        //print("original html")
-        //print(self.contentTextView.contentHTML)
-        //print("parsed html")
-        //print(galdenParse(input: self.contentTextView.contentHTML))
+        /*print("original html")
+        print(self.contentTextView.contentHTML)
+        print("parsed html")
+        print(galdenParse(input: self.contentTextView.contentHTML))*/
         if (contentTextView.contentHTML == "" || contentTextView.contentHTML == "<br>") {
             let alert = UIAlertController.init(title: "注意", message: "內容不可爲空", preferredStyle: .alert)
             alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: {

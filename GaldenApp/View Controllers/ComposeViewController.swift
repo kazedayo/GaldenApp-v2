@@ -62,13 +62,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         }
     }*/
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            contentTextView.setEditorFontColor(.label)
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -119,7 +112,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
         UIBarButtonItem.appearance().tintColor = .label
         navigationItem.leftBarButtonItem?.tintColor = .systemGreen
         navigationItem.rightBarButtonItem?.tintColor = .systemGreen
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -131,8 +123,8 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     
     func richEditorDidLoad(_ editor: RichEditorView) {
         editor.placeholder = "內容"
-        //editor.setEditorBackgroundColor(.secondarySystemBackground)
         editor.setEditorFontColor(.label)
+        editor.becomeFirstResponder()
     }
     
     @objc func linkButtonPressed(_ button: UIButton) {
@@ -380,7 +372,6 @@ class ComposeViewController: UIViewController, UITextFieldDelegate,IconKeyboardD
     @objc func callIconKeyboard() {
         if iconKeyboardShowing == false {
             view.endEditing(true)
-            //contentTextView.resignFirstResponder()
             view.addSubview(iconKeyboard)
             iconKeyboard.snp.makeConstraints {
                 (make) -> Void in

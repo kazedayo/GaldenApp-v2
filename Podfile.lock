@@ -1,30 +1,30 @@
 PODS:
-  - Alamofire (4.9.0)
-  - Apollo (0.16.0):
-    - Apollo/Core (= 0.16.0)
-  - Apollo/Core (0.16.0)
+  - Alamofire (4.9.1)
+  - Apollo (0.21.0):
+    - Apollo/Core (= 0.21.0)
+  - Apollo/Core (0.21.0)
   - Blueprints (0.13.1)
-  - KeychainSwift (16.0.1)
-  - Kingfisher (5.8.1):
-    - Kingfisher/Core (= 5.8.1)
-  - Kingfisher/Core (5.8.1)
-  - MarqueeLabel (4.0.0)
+  - KeychainSwift (19.0.0)
+  - Kingfisher (5.12.0):
+    - Kingfisher/Core (= 5.12.0)
+  - Kingfisher/Core (5.12.0)
+  - MarqueeLabel (4.0.1)
   - PKHUD (5.3.0)
-  - Realm (3.19.0):
-    - Realm/Headers (= 3.19.0)
-  - Realm/Headers (3.19.0)
-  - RealmSwift (3.19.0):
-    - Realm (= 3.19.0)
+  - Realm (4.3.0):
+    - Realm/Headers (= 4.3.0)
+  - Realm/Headers (4.3.0)
+  - RealmSwift (4.3.0):
+    - Realm (= 4.3.0)
   - RichEditorView (4.0)
-  - SideMenu (6.4.3)
+  - SideMenu (6.4.7)
   - SKPhotoBrowser (6.1.0)
   - SnapKit (4.2.0)
   - SwiftDate (5.1.0)
-  - SwiftSoup (2.2.1)
+  - SwiftSoup (2.3.0)
   - SwiftyJSON (5.0.0)
   - SwiftyStoreKit (0.15.0)
   - Typist (1.4.2)
-  - URLNavigator (2.2.0)
+  - URLNavigator (2.3.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -48,7 +48,7 @@ DEPENDENCIES:
   - URLNavigator
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - Alamofire
     - Blueprints
     - KeychainSwift
@@ -83,41 +83,41 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Apollo:
-    :commit: 73a85c9e226f8d4cf5b197baddd01dd76ede030f
+    :commit: c0843e61c5bb8232a483ed62a4d2ee4d98f18364
     :git: https://github.com/apollographql/apollo-ios.git
   Realm:
-    :commit: 6d52751b9c9aa7e6e6b8413721543133a05ad79e
+    :commit: 5fad072e714486c37275373d3f202f54bb5658a9
     :git: https://github.com/realm/realm-cocoa.git
     :submodules: true
   RealmSwift:
-    :commit: 6d52751b9c9aa7e6e6b8413721543133a05ad79e
+    :commit: 5fad072e714486c37275373d3f202f54bb5658a9
     :git: https://github.com/realm/realm-cocoa.git
     :submodules: true
   RichEditorView:
-    :commit: 99126468f06c6d6a3a7ce97702338786ffe167ed
+    :commit: 71b8d8d28217a78e1bcc8ed1018aced9dd98060e
     :git: https://github.com/cbess/RichEditorView.git
 
 SPEC CHECKSUMS:
-  Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
-  Apollo: ad9ce2008f88fce57c062aa4853364b7927355c8
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  Apollo: 56a0aa81b744bf2810a8277e705f155c91ac9055
   Blueprints: ddd6ab1e455c98471aaef2fdd0b09b5f9b53af5b
-  KeychainSwift: 4209611373ca4a098e09b1e547eebd87c544dcc4
-  Kingfisher: de969e451c81ca6c07a454bc36fea84b8b08c3c7
-  MarqueeLabel: b55b26e690b6ad41faedd95cbf5eae6f1d1735b4
+  KeychainSwift: a06190cf933ad46b1e0abc3d77d29c06331715c7
+  Kingfisher: dc6e0f53bb5b12c3e75bedb0e01bbd7a640eea69
+  MarqueeLabel: d24e821159667c93064ea3042ccf1875ca94db6b
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
-  Realm: 995d585bcf699aaff226715886c849a29dd3d07f
-  RealmSwift: 35f284a537989f2187b413e5917091948cb87a3f
-  RichEditorView: bfd51ac5faf49f2d4d98b650947380fd486a86ae
-  SideMenu: 6540fa7a055b3728c006cec7d97e3a38cdac4874
+  Realm: 9357c3589555793e1860a7104a7412bca4a48d99
+  RealmSwift: 402f1e379a8ef82c635313037b043f0f06de880c
+  RichEditorView: 89d214ab2b434f8e87c96287c1bec7e04ea7f485
+  SideMenu: 928a015669c3afc201e1fe3a87f1b0bc8993a664
   SKPhotoBrowser: 343de95d89dc7913763c5dda243cc6e606e4a168
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SwiftDate: 6329e58969a2de31cea7f1ee1143b247693196e7
-  SwiftSoup: a91d3c96ecb6f8f13005552ef60f9075aae4a7f3
+  SwiftSoup: d78683f7ea0ae5733225a9e1d3bee5b256449df4
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   SwiftyStoreKit: 033d06b6f87955405d3f844a18a7687c2438592a
   Typist: 06465ab9867782aa6c81e38f073dfc01dab73deb
-  URLNavigator: 0bffc3efdeb2d97f7b5eec7ac82d290f4a099431
+  URLNavigator: 2593c0e2d293732ec5c44503cf54dceba1a68085
 
 PODFILE CHECKSUM: c3e4b05c923906b0713d9dd31d4ab8f551d1228b
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.4

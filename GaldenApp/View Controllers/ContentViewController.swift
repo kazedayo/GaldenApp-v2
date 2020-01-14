@@ -28,7 +28,7 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     var pageHTML: String!
     var convertedHTML: String!
     var navType: NavigationType = .normal
-    var scrollPosition: String?
+    var scrollPosition: Int!
     var sender: String?
     var comments: [CommentsRecursive]?
     var titleLabel = MarqueeLabel()
@@ -198,9 +198,15 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
     
     func f5buttonPressed() {
         self.navType = .refresh
-        self.webView.evaluateJavaScript("$(\".comment\").last().attr(\"id\")", completionHandler: {
+        /*self.webView.evaluateJavaScript("$(\".comment\").last().attr(\"id\")", completionHandler: {
             result,error in
             let position = result as! String
+            self.scrollPosition = position
+            self.updateSequence()
+        })*/
+        self.webView.evaluateJavaScript("$(\"body\").scrollTop()", completionHandler: {
+            result,error in
+            let position = result as! Int
             self.scrollPosition = position
             self.updateSequence()
         })
@@ -591,12 +597,16 @@ class ContentViewController: UIViewController,UIPopoverPresentationControllerDel
                     self.navType = .normal
                 })
             case .refresh:
-                webView.evaluateJavaScript("$(\"#\((self.scrollPosition!))\").get(0).scrollIntoView();", completionHandler: {
+                /*webView.evaluateJavaScript("$(\"#\((self.scrollPosition!))\").get(0).scrollIntoView();", completionHandler: {
                     result,error in
                     NetworkActivityIndicatorManager.networkOperationFinished()
                     DispatchQueue.main.asyncAfter(deadline: 0.2, execute: {
                         webView.isHidden = false
                     })
+                    self.navType = .normal*/
+                webView.evaluateJavaScript("$(\"body\").scrollTop(\(self.scrollPosition!));", completionHandler: {
+                    result,error in
+                    NetworkActivityIndicatorManager.networkOperationFinished()
                     self.navType = .normal
                 })
             case .normal:

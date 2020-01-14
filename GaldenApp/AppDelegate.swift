@@ -13,7 +13,6 @@ import URLNavigator
 import SwiftyStoreKit
 import RealmSwift
 import Apollo
-import RichEditorView
 
 let navigator = Navigator()
 let keychain = KeychainSwift()

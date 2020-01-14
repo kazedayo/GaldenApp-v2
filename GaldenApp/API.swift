@@ -1,6 +1,7 @@
 //  This file was automatically generated and should not be edited.
 
 import Apollo
+import Foundation
 
 public enum ReplySorting: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
   public typealias RawValue = String
@@ -88,11 +89,13 @@ public enum UserGender: RawRepresentable, Equatable, Hashable, CaseIterable, Apo
 }
 
 public final class BlockUserMutation: GraphQLMutation {
-  /// mutation BlockUser($id: String!) {
-  ///   blockUser(id: $id)
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "mutation BlockUser($id: String!) { blockUser(id: $id) }"
+    """
+    mutation BlockUser($id: String!) {
+      blockUser(id: $id)
+    }
+    """
 
   public let operationName = "BlockUser"
 
@@ -135,11 +138,13 @@ public final class BlockUserMutation: GraphQLMutation {
 }
 
 public final class UnblockUserMutation: GraphQLMutation {
-  /// mutation UnblockUser($id: String!) {
-  ///   unblockUser(id: $id)
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "mutation UnblockUser($id: String!) { unblockUser(id: $id) }"
+    """
+    mutation UnblockUser($id: String!) {
+      unblockUser(id: $id)
+    }
+    """
 
   public let operationName = "UnblockUser"
 
@@ -182,14 +187,16 @@ public final class UnblockUserMutation: GraphQLMutation {
 }
 
 public final class ReplyThreadMutation: GraphQLMutation {
-  /// mutation ReplyThread($threadId: Int!, $parentId: String, $html: String!) {
-  ///   replyThread(threadId: $threadId, parentId: $parentId, html: $html) {
-  ///     __typename
-  ///     ...CommentsRecursive
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "mutation ReplyThread($threadId: Int!, $parentId: String, $html: String!) { replyThread(threadId: $threadId, parentId: $parentId, html: $html) { __typename ...CommentsRecursive } }"
+    """
+    mutation ReplyThread($threadId: Int!, $parentId: String, $html: String!) {
+      replyThread(threadId: $threadId, parentId: $parentId, html: $html) {
+        __typename
+        ...CommentsRecursive
+      }
+    }
+    """
 
   public let operationName = "ReplyThread"
 
@@ -288,11 +295,13 @@ public final class ReplyThreadMutation: GraphQLMutation {
 }
 
 public final class CreateThreadMutation: GraphQLMutation {
-  /// mutation CreateThread($title: String!, $tags: [String!]!, $html: String!) {
-  ///   createThread(title: $title, tags: $tags, html: $html)
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "mutation CreateThread($title: String!, $tags: [String!]!, $html: String!) { createThread(title: $title, tags: $tags, html: $html) }"
+    """
+    mutation CreateThread($title: String!, $tags: [String!]!, $html: String!) {
+      createThread(title: $title, tags: $tags, html: $html)
+    }
+    """
 
   public let operationName = "CreateThread"
 
@@ -339,14 +348,16 @@ public final class CreateThreadMutation: GraphQLMutation {
 }
 
 public final class GetChannelListQuery: GraphQLQuery {
-  /// query GetChannelList {
-  ///   channels {
-  ///     __typename
-  ///     ...ChannelDetails
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "query GetChannelList { channels { __typename ...ChannelDetails } }"
+    """
+    query GetChannelList {
+      channels {
+        __typename
+        ...ChannelDetails
+      }
+    }
+    """
 
   public let operationName = "GetChannelList"
 
@@ -434,14 +445,16 @@ public final class GetChannelListQuery: GraphQLQuery {
 }
 
 public final class GetThreadsQuery: GraphQLQuery {
-  /// query GetThreads($id: String!, $page: Int!) {
-  ///   threadsByChannel(channelId: $id, page: $page) {
-  ///     __typename
-  ///     ...ThreadListDetails
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "query GetThreads($id: String!, $page: Int!) { threadsByChannel(channelId: $id, page: $page) { __typename ...ThreadListDetails } }"
+    """
+    query GetThreads($id: String!, $page: Int!) {
+      threadsByChannel(channelId: $id, page: $page) {
+        __typename
+        ...ThreadListDetails
+      }
+    }
+    """
 
   public let operationName = "GetThreads"
 
@@ -538,14 +551,16 @@ public final class GetThreadsQuery: GraphQLQuery {
 }
 
 public final class GetUserThreadsQuery: GraphQLQuery {
-  /// query GetUserThreads($id: String!, $page: Int!) {
-  ///   threadsByUser(userId: $id, page: $page) {
-  ///     __typename
-  ///     ...ThreadListDetails
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "query GetUserThreads($id: String!, $page: Int!) { threadsByUser(userId: $id, page: $page) { __typename ...ThreadListDetails } }"
+    """
+    query GetUserThreads($id: String!, $page: Int!) {
+      threadsByUser(userId: $id, page: $page) {
+        __typename
+        ...ThreadListDetails
+      }
+    }
+    """
 
   public let operationName = "GetUserThreads"
 
@@ -642,25 +657,27 @@ public final class GetUserThreadsQuery: GraphQLQuery {
 }
 
 public final class GetThreadContentQuery: GraphQLQuery {
-  /// query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {
-  ///   thread(id: $id, sorting: $sorting, page: $page) {
-  ///     __typename
-  ///     id
-  ///     title
-  ///     totalReplies
-  ///     replies {
-  ///       __typename
-  ///       ...CommentsRecursive
-  ///     }
-  ///     tags {
-  ///       __typename
-  ///       name
-  ///       color
-  ///     }
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) { thread(id: $id, sorting: $sorting, page: $page) { __typename id title totalReplies replies { __typename ...CommentsRecursive } tags { __typename name color } } }"
+    """
+    query GetThreadContent($id: Int!, $sorting: ReplySorting!, $page: Int!) {
+      thread(id: $id, sorting: $sorting, page: $page) {
+        __typename
+        id
+        title
+        totalReplies
+        replies {
+          __typename
+          ...CommentsRecursive
+        }
+        tags {
+          __typename
+          name
+          color
+        }
+      }
+    }
+    """
 
   public let operationName = "GetThreadContent"
 
@@ -883,22 +900,24 @@ public final class GetThreadContentQuery: GraphQLQuery {
 }
 
 public final class GetBlockedUsersQuery: GraphQLQuery {
-  /// query GetBlockedUsers {
-  ///   blockedUsers {
-  ///     __typename
-  ///     id
-  ///     nickname
-  ///     avatar
-  ///     gender
-  ///     groups {
-  ///       __typename
-  ///       id
-  ///       name
-  ///     }
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "query GetBlockedUsers { blockedUsers { __typename id nickname avatar gender groups { __typename id name } } }"
+    """
+    query GetBlockedUsers {
+      blockedUsers {
+        __typename
+        id
+        nickname
+        avatar
+        gender
+        groups {
+          __typename
+          id
+          name
+        }
+      }
+    }
+    """
 
   public let operationName = "GetBlockedUsers"
 
@@ -1058,23 +1077,25 @@ public final class GetBlockedUsersQuery: GraphQLQuery {
 }
 
 public final class GetSessionUserQuery: GraphQLQuery {
-  /// query GetSessionUser {
-  ///   sessionUser {
-  ///     __typename
-  ///     id
-  ///     nickname
-  ///     avatar
-  ///     gender
-  ///     groups {
-  ///       __typename
-  ///       id
-  ///       name
-  ///     }
-  ///     blockedUserIds
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "query GetSessionUser { sessionUser { __typename id nickname avatar gender groups { __typename id name } blockedUserIds } }"
+    """
+    query GetSessionUser {
+      sessionUser {
+        __typename
+        id
+        nickname
+        avatar
+        gender
+        groups {
+          __typename
+          id
+          name
+        }
+        blockedUserIds
+      }
+    }
+    """
 
   public let operationName = "GetSessionUser"
 
@@ -1244,22 +1265,24 @@ public final class GetSessionUserQuery: GraphQLQuery {
 }
 
 public final class GetUserQuery: GraphQLQuery {
-  /// query GetUser($id: String!) {
-  ///   user(id: $id) {
-  ///     __typename
-  ///     id
-  ///     nickname
-  ///     avatar
-  ///     gender
-  ///     groups {
-  ///       __typename
-  ///       id
-  ///       name
-  ///     }
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "query GetUser($id: String!) { user(id: $id) { __typename id nickname avatar gender groups { __typename id name } } }"
+    """
+    query GetUser($id: String!) {
+      user(id: $id) {
+        __typename
+        id
+        nickname
+        avatar
+        gender
+        groups {
+          __typename
+          id
+          name
+        }
+      }
+    }
+    """
 
   public let operationName = "GetUser"
 
@@ -1426,14 +1449,16 @@ public final class GetUserQuery: GraphQLQuery {
 }
 
 public final class GetIconPacksQuery: GraphQLQuery {
-  /// query GetIconPacks {
-  ///   installedPacks {
-  ///     __typename
-  ///     ...IconPacks
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this operation.
   public let operationDefinition =
-    "query GetIconPacks { installedPacks { __typename ...IconPacks } }"
+    """
+    query GetIconPacks {
+      installedPacks {
+        __typename
+        ...IconPacks
+      }
+    }
+    """
 
   public let operationName = "GetIconPacks"
 
@@ -1521,20 +1546,22 @@ public final class GetIconPacksQuery: GraphQLQuery {
 }
 
 public struct IconPacks: GraphQLFragment {
-  /// fragment IconPacks on SmileyPack {
-  ///   __typename
-  ///   id
-  ///   title
-  ///   smilies {
-  ///     __typename
-  ///     id
-  ///     alt
-  ///     width
-  ///     height
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this fragment.
   public static let fragmentDefinition =
-    "fragment IconPacks on SmileyPack { __typename id title smilies { __typename id alt width height } }"
+    """
+    fragment IconPacks on SmileyPack {
+      __typename
+      id
+      title
+      smilies {
+        __typename
+        id
+        alt
+        width
+        height
+      }
+    }
+    """
 
   public static let possibleTypes = ["SmileyPack"]
 
@@ -1660,17 +1687,19 @@ public struct IconPacks: GraphQLFragment {
 }
 
 public struct ChannelDetails: GraphQLFragment {
-  /// fragment ChannelDetails on Channel {
-  ///   __typename
-  ///   id
-  ///   name
-  ///   tags {
-  ///     __typename
-  ///     ...TagDetails
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this fragment.
   public static let fragmentDefinition =
-    "fragment ChannelDetails on Channel { __typename id name tags { __typename ...TagDetails } }"
+    """
+    fragment ChannelDetails on Channel {
+      __typename
+      id
+      name
+      tags {
+        __typename
+        ...TagDetails
+      }
+    }
+    """
 
   public static let possibleTypes = ["Channel"]
 
@@ -1783,14 +1812,16 @@ public struct ChannelDetails: GraphQLFragment {
 }
 
 public struct TagDetails: GraphQLFragment {
-  /// fragment TagDetails on Tag {
-  ///   __typename
-  ///   id
-  ///   name
-  ///   color
-  /// }
+  /// The raw GraphQL definition of this fragment.
   public static let fragmentDefinition =
-    "fragment TagDetails on Tag { __typename id name color }"
+    """
+    fragment TagDetails on Tag {
+      __typename
+      id
+      name
+      color
+    }
+    """
 
   public static let possibleTypes = ["Tag"]
 
@@ -1849,27 +1880,29 @@ public struct TagDetails: GraphQLFragment {
 }
 
 public struct ThreadListDetails: GraphQLFragment {
-  /// fragment ThreadListDetails on Thread {
-  ///   __typename
-  ///   id
-  ///   title
-  ///   replies {
-  ///     __typename
-  ///     author {
-  ///       __typename
-  ///       id
-  ///     }
-  ///     authorNickname
-  ///     date
-  ///   }
-  ///   totalReplies
-  ///   tags {
-  ///     __typename
-  ///     ...TagDetails
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this fragment.
   public static let fragmentDefinition =
-    "fragment ThreadListDetails on Thread { __typename id title replies { __typename author { __typename id } authorNickname date } totalReplies tags { __typename ...TagDetails } }"
+    """
+    fragment ThreadListDetails on Thread {
+      __typename
+      id
+      title
+      replies {
+        __typename
+        author {
+          __typename
+          id
+        }
+        authorNickname
+        date
+      }
+      totalReplies
+      tags {
+        __typename
+        ...TagDetails
+      }
+    }
+    """
 
   public static let possibleTypes = ["Thread"]
 
@@ -2096,28 +2129,30 @@ public struct ThreadListDetails: GraphQLFragment {
 }
 
 public struct CommentsRecursive: GraphQLFragment {
-  /// fragment CommentsRecursive on Reply {
-  ///   __typename
-  ///   ...CommentFields
-  ///   parent {
-  ///     __typename
-  ///     ...CommentFields
-  ///     parent {
-  ///       __typename
-  ///       ...CommentFields
-  ///       parent {
-  ///         __typename
-  ///         ...CommentFields
-  ///         parent {
-  ///           __typename
-  ///           ...CommentFields
-  ///         }
-  ///       }
-  ///     }
-  ///   }
-  /// }
+  /// The raw GraphQL definition of this fragment.
   public static let fragmentDefinition =
-    "fragment CommentsRecursive on Reply { __typename ...CommentFields parent { __typename ...CommentFields parent { __typename ...CommentFields parent { __typename ...CommentFields parent { __typename ...CommentFields } } } } }"
+    """
+    fragment CommentsRecursive on Reply {
+      __typename
+      ...CommentFields
+      parent {
+        __typename
+        ...CommentFields
+        parent {
+          __typename
+          ...CommentFields
+          parent {
+            __typename
+            ...CommentFields
+            parent {
+              __typename
+              ...CommentFields
+            }
+          }
+        }
+      }
+    }
+    """
 
   public static let possibleTypes = ["Reply"]
 
@@ -2409,29 +2444,31 @@ public struct CommentsRecursive: GraphQLFragment {
 }
 
 public struct CommentFields: GraphQLFragment {
-  /// fragment CommentFields on Reply {
-  ///   __typename
-  ///   id
-  ///   floor
-  ///   author {
-  ///     __typename
-  ///     id
-  ///     avatar
-  ///     nickname
-  ///     gender
-  ///     groups {
-  ///       __typename
-  ///       id
-  ///       name
-  ///     }
-  ///   }
-  ///   authorNickname
-  ///   parentId
-  ///   content
-  ///   date
-  /// }
+  /// The raw GraphQL definition of this fragment.
   public static let fragmentDefinition =
-    "fragment CommentFields on Reply { __typename id floor author { __typename id avatar nickname gender groups { __typename id name } } authorNickname parentId content date }"
+    """
+    fragment CommentFields on Reply {
+      __typename
+      id
+      floor
+      author {
+        __typename
+        id
+        avatar
+        nickname
+        gender
+        groups {
+          __typename
+          id
+          name
+        }
+      }
+      authorNickname
+      parentId
+      content
+      date
+    }
+    """
 
   public static let possibleTypes = ["Reply"]
 
