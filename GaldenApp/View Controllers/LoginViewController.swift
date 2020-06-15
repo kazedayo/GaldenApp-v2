@@ -26,7 +26,7 @@ class LoginViewController: UIViewController,WKNavigationDelegate,WKUIDelegate {
         view.backgroundColor = .systemBackground
         webView.navigationDelegate = self
         webView.uiDelegate = self
-        let url = URL(string: "https://hkgalden.org/oauth/v1/authorize?client_id=15897154848030720.apis.hkgalden.org")
+        let url = URL(string: "https://hkgalden.org/oauth/v1/authorize?client_id=/*YOUR OWN ID*/")
         let request = URLRequest(url: url!)
         webView.load(request)
         view.addSubview(webView)
